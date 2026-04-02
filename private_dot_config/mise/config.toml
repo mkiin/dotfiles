@@ -1,0 +1,33 @@
+[tools]
+# ランタイム・ビルドツール
+bun = "latest"
+rust = "latest"
+uv = "latest"
+deno = "latest"
+
+# インフラ・バックエンド系統
+supabase = "latest"
+
+# neovim系統
+neovim = "0.11"
+
+# CLIユーティリティ
+ripgrep = "latest"
+fd = "latest"
+fzf = "latest"
+bat = "latest"
+eza = "latest"
+jq = "latest"
+delta = "latest"
+zoxide = "latest"
+lazygit = "latest"
+lazydocker = "latest"
+gh = "latest"
+claude-code = "latest"
+
+# シェルユーティリティ
+shellcheck = "latest"
+shfmt = "latest"
+starship = "latest"
+"github:rossmacarthur/sheldon" = "latest"
+chezmoi = "latest"
