@@ -224,7 +224,7 @@ cmsync() {
 
     echo "commit: $msg"
     git commit -m "$msg"
-    git push
+    git push -u origin main
     cd - > /dev/null
     echo "sync完了"
 }
