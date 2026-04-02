@@ -173,6 +173,62 @@ claude_cleanup() {
     fi
 }
 
+# --- chezmoi 運用メモ ---
+# 1. 設定ファイルを直接編集 (例: ~/.config/ghostty/config.ghostty)
+# 2. cmaa  → 変更を自動検出してchezmoiソースに取り込み
+# 3. cmcd  → chezmoiソースディレクトリに移動
+# 4. git add & commit & push
+#
+# その他: cmd=差分確認, cmap=ソース→実ファイル反映, cme=ソース側を編集
+# cmsync → 変更検出・add・commit・push を一発で実行
+# 新マシン: chezmoi init --apply mkiin
+cmaa() {
+    local files=()
+    while IFS= read -r line; do
+        local fpath_="${line:3}"
+        [[ -n "$fpath_" ]] && files+=("$HOME/$fpath_")
+    done < <(chezmoi status 2>/dev/null)
+
+    if [[ ${#files[@]} -eq 0 ]]; then
+        echo "変更なし"
+        return 0
+    fi
+
+    echo "追加するファイル:"
+    printf "  %s\n" "${files[@]}"
+    chezmoi add "${files[@]}"
+    echo "done"
+}
+
+cmsync() {
+    # 1. 変更検出 & chezmoi add
+    cmaa || return 1
+
+    # 2. chezmoi ソースで git commit & push
+    local src="$HOME/.local/share/chezmoi"
+    cd "$src" || return 1
+
+    git add -A
+    local changed
+    changed=$(git diff --cached --name-only)
+    if [[ -z "$changed" ]]; then
+        echo "コミットする変更なし"
+        cd - > /dev/null
+        return 0
+    fi
+
+    # 変更ファイルからコミットメッセージ生成
+    local names
+    names=$(echo "$changed" | sed 's|private_dot_config/||g; s|dot_||g' | xargs -I{} basename {} | sort -u | paste -sd ", " -)
+    local msg="update: $names"
+
+    echo "commit: $msg"
+    git commit -m "$msg"
+    git push
+    cd - > /dev/null
+    echo "sync完了"
+}
+
 # --- Docker オンデマンド運用 ---
 dk-start() {
     if systemctl is-active --quiet docker; then
