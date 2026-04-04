@@ -31,12 +31,12 @@ fullscreen = true
 # title
 
 # 背景
-# background-opacity = 0.9
-# background-opacity-cells = true
-# background-image
-# background-image-opacity
+background-opacity = 0.7
+background-opacity-cells = true
+# background-image = /home/mkiin/Pictures/wallpaper/1351993.jpeg
+# background-image-opacity = 0.1
 # background-image-position
-# background-image-fit
+background-image-fit = cover
 # background-image-repeat
 background-blur = true
 

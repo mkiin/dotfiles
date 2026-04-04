@@ -1,3 +1,6 @@
 [[index]]
 url = "https://ftp.jaist.ac.jp/pub/PyPI/simple/"
 default = true
+
+[[index]]
+url = "https://pypi.org/simple/"
