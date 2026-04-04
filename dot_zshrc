@@ -326,3 +326,7 @@ alias open='explorer.exe .'
 alias c.="code ."
 alias cr="code -r ."
 source <(fzf --zsh)
+
+# カーソルをブロックに固定
+zle-line-init() { echo -ne '\e[2 q' }
+zle -N zle-line-init

@@ -1,5 +1,11 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
+[character]
+vimcmd_symbol = "[❯](bold green)"
+vimcmd_replace_one_symbol = "[❯](bold green)"
+vimcmd_replace_symbol = "[❯](bold green)"
+vimcmd_visual_symbol = "[❯](bold green)"
+
 [aws]
 symbol = " "
 

@@ -1,26 +1,21 @@
 [Hotkey]
+# 入力メソッドの切り替え
+TriggerKeys=
 # トリガーキーを押すたびに切り替える
-EnumerateWithTriggerKeys=True
+EnumerateWithTriggerKeys=False
 # 次の入力メソッドに切り替える
 EnumerateForwardKeys=
 # 前の入力メソッドに切り替える
 EnumerateBackwardKeys=
 # 切り替え時は第1入力メソッドをスキップする
 EnumerateSkipFirst=False
-
-[Hotkey/TriggerKeys]
-0=Control+space
-1=Zenkaku_Hankaku
-2=Hangul
+# 次の入力メソッドグループに切り替える
+EnumerateGroupForwardKeys=
+# 前の入力メソッドグループに切り替える
+EnumerateGroupBackwardKeys=
 
 [Hotkey/AltTriggerKeys]
 0=Shift_L
-
-[Hotkey/EnumerateGroupForwardKeys]
-0=Super+space
-
-[Hotkey/EnumerateGroupBackwardKeys]
-0=Shift+Super+space
 
 [Hotkey/ActivateKeys]
 0=Alt+Alt_R

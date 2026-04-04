@@ -1,13 +1,49 @@
-# テーマ
-theme = Kanagawa Dragon
-
 # フォント
 font-family = JetBrainsMono Nerd Font
 font-size = 14
 
+# テーマ
+theme = Kanagawa Dragon
+
+# カーソル
+cursor-style = block
+cursor-style-blink = true
+cursor-opacity = 1
+cursor-click-to-move = false
+# adjust-cursor-thickness
+# adjust-cursor-height
+
 # ウィンドウ
-window-decoration = none
+window-decoration=client
+# window-padding-x
+# window-padding-y
+window-padding-balance = true
+window-padding-color = extend
+# window-width
+# window-height
+# window-position-x
+# window-position-y
+window-theme = ghostty
+window-show-tab-bar = never
+# window-title-font-family 
+# maximize = true
 fullscreen = true
+# title
+
+# 背景
+# background-opacity = 0.9
+# background-opacity-cells = true
+# background-image
+# background-image-opacity
+# background-image-position
+# background-image-fit
+# background-image-repeat
+background-blur = true
+
+# 分割タブ
+unfocused-split-opacity = 1
+# unfocused-split-fill
+window-new-tab-position = end
 
 # キーバインド
 keybind = ctrl+shift+k=goto_split:up
