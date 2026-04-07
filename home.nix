@@ -62,6 +62,12 @@ in
     "pip/pip.conf".source = mkOutOfStoreSymlink "${dotDir}/pip/pip.conf";
     "wezterm/wezterm.lua".source = mkOutOfStoreSymlink "${dotDir}/wezterm/wezterm.lua";
     "nvim".source = mkOutOfStoreSymlink "${dotDir}/nvim";
+    "environment.d/fcitx5.conf".text = ''
+      GTK_IM_MODULE=fcitx
+      QT_IM_MODULE=fcitx
+      XMODIFIERS=@im=fcitx
+      INPUT_METHOD=fcitx
+    '';
   };
 
   home.sessionVariables = {
