@@ -18,12 +18,6 @@ export PATH="$HOME/.local/share/mise/shims:$PATH"
 export EDITOR="nvim"
 export VISUAL="nvim"
 
-# fcitx5 (入力メソッド)
-export GTK_IM_MODULE=fcitx
-export QT_IM_MODULE=fcitx
-export XMODIFIERS=@im=fcitx
-export INPUT_METHOD=fcitx
-
 # starship
 export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
 

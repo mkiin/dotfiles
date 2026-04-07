@@ -29,6 +29,11 @@ in
     shellcheck
     shfmt
 
+    # 入力メソッド
+    fcitx5
+    fcitx5-mozc
+    fcitx5-gtk
+
     # ターミナル
     ghostty
 
@@ -62,6 +67,9 @@ in
     "pip/pip.conf".source = mkOutOfStoreSymlink "${dotDir}/pip/pip.conf";
     "wezterm/wezterm.lua".source = mkOutOfStoreSymlink "${dotDir}/wezterm/wezterm.lua";
     "nvim".source = mkOutOfStoreSymlink "${dotDir}/nvim";
+    "fcitx5/config".source = mkOutOfStoreSymlink "${dotDir}/fcitx5/config";
+    "fcitx5/profile".source = mkOutOfStoreSymlink "${dotDir}/fcitx5/profile";
+    "fcitx5/conf/notifications.conf".source = mkOutOfStoreSymlink "${dotDir}/fcitx5/conf/notifications.conf";
     "environment.d/fcitx5.conf".text = ''
       GTK_IM_MODULE=fcitx
       QT_IM_MODULE=fcitx
@@ -71,10 +79,6 @@ in
   };
 
   home.sessionVariables = {
-    GTK_IM_MODULE = "fcitx";
-    QT_IM_MODULE = "fcitx";
-    XMODIFIERS = "@im=fcitx";
-    INPUT_METHOD = "fcitx";
   };
 
   programs.home-manager.enable = true;
