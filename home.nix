@@ -29,11 +29,18 @@ in
     shellcheck
     shfmt
 
+    # ターミナル
+    ghostty
+
     # 基本ツール
     git
     curl
     wget
+    zip
     unzip
+    zsh
+    gnupg
+    openssh
   ];
 
   # dotfiles の配置
