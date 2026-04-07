@@ -1,0 +1,60 @@
+# フォント
+font-family = JetBrainsMono Nerd Font
+font-size = 14
+
+# テーマ
+theme = Snazzy
+
+# カーソル
+cursor-style = block
+cursor-style-blink = true
+cursor-opacity = 1
+cursor-click-to-move = false
+# adjust-cursor-thickness
+# adjust-cursor-height
+
+# ウィンドウ
+window-decoration=client
+# window-padding-x
+# window-padding-y
+window-padding-balance = true
+window-padding-color = extend
+# window-width
+# window-height
+# window-position-x
+# window-position-y
+window-theme = ghostty
+window-show-tab-bar = never
+# window-title-font-family 
+# maximize = true
+fullscreen = true
+# title
+
+# 背景
+background-opacity = 1.0
+background-opacity-cells = true
+# background-image = /home/mkiin/Pictures/wallpaper/1351993.jpeg
+# background-image-opacity = 0.1
+# background-image-position
+background-image-fit = cover
+# background-image-repeat
+background-blur = true
+
+# 分割タブ
+unfocused-split-opacity = 1
+# unfocused-split-fill
+window-new-tab-position = end
+
+# キーバインド
+keybind = ctrl+shift+k=goto_split:up
+keybind = ctrl+shift+j=goto_split:down
+keybind = ctrl+shift+h=goto_split:left
+keybind = ctrl+shift+l=goto_split:right
+keybind = ctrl+shift+w=close_surface
+keybind = ctrl+alt+h=resize_split:left,20
+keybind = ctrl+alt+j=resize_split:down,20
+keybind = ctrl+alt+k=resize_split:up,20
+keybind = ctrl+alt+l=resize_split:right,20
+keybind = ctrl+shift+[=jump_to_prompt:-1
+keybind = ctrl+shift+]=jump_to_prompt:1
+keybind = f11=toggle_fullscreen

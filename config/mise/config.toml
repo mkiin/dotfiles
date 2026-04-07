@@ -1,0 +1,13 @@
+[tools]
+# ランタイム・ビルドツール（mise に残す）
+bun = "latest"
+rust = "latest"
+uv = "latest"
+deno = "latest"
+node = "24"
+
+# インフラ・バックエンド系統
+supabase = "latest"
+
+# Claude Code
+claude-code = "latest"

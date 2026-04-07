@@ -1,0 +1,251 @@
+# ============================================
+# Zsh設定 (.zshrc)
+# ============================================
+
+# --------------------------------------------
+# 履歴設定
+# --------------------------------------------
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt EXTENDED_HISTORY
+setopt SHARE_HISTORY
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_REDUCE_BLANKS
+setopt APPEND_HISTORY
+
+# --------------------------------------------
+# 基本設定
+# --------------------------------------------
+setopt AUTO_CD
+setopt AUTO_PUSHD
+setopt PUSHD_IGNORE_DUPS
+
+# --------------------------------------------
+# Home Manager 環境変数
+# --------------------------------------------
+. "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+
+# --------------------------------------------
+# mise (ランタイムマネージャー)
+# --------------------------------------------
+eval "$($HOME/.local/bin/mise activate zsh)"
+
+# --------------------------------------------
+# zoxide で cdを上書き
+# --------------------------------------------
+eval "$(zoxide init zsh --cmd cd)"
+
+# --------------------------------------------
+# fzfの初期設定
+# --------------------------------------------
+source <(fzf --zsh)
+
+# --------------------------------------------
+# Emacsキーバインドを使う
+# --------------------------------------------
+bindkey -e
+
+# --------------------------------------------
+# 補完設定
+# --------------------------------------------
+autoload -Uz compinit && compinit
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+zstyle ':completion:*' menu select
+
+# --------------------------------------------
+# 色設定
+# --------------------------------------------
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+fi
+
+# --------------------------------------------
+# Sheldon (プラグインマネージャー)
+# --------------------------------------------
+ABBR_QUIET=1
+eval "$(sheldon source)"
+
+# --------------------------------------------
+# Starship (プロンプト)
+# --------------------------------------------
+eval "$(starship init zsh)"
+
+# --------------------------------------------
+# VSCode Server 自動クリーンアップ
+# --------------------------------------------
+vscode_cleanup() {
+    local VSCODE_DIR="$HOME/.vscode-server"
+    local RETENTION_DAYS=3
+
+    [[ ! -d "$VSCODE_DIR" ]] && return 0
+
+    [[ -d "$VSCODE_DIR/data/CachedExtensionVSIXs" ]] && \
+        find "$VSCODE_DIR/data/CachedExtensionVSIXs" -mindepth 1 -delete 2>/dev/null
+
+    if [[ -d "$VSCODE_DIR/data/logs" ]]; then
+        local cutoff_date=$(date -d "${RETENTION_DAYS} days ago" +%Y%m%d)
+        for dir in "$VSCODE_DIR/data/logs"/202*; do
+            [[ -d "$dir" ]] || continue
+            local dir_date="${dir##*/}"
+            dir_date="${dir_date:0:8}"
+            [[ "$dir_date" -lt "$cutoff_date" ]] && rm -rf "$dir" 2>/dev/null
+        done
+    fi
+
+    [[ -d "$VSCODE_DIR/data/User/workspaceStorage" ]] && \
+        find "$VSCODE_DIR/data/User/workspaceStorage" -maxdepth 1 -type d -mtime +${RETENTION_DAYS} ! -name workspaceStorage -exec rm -rf {} \; 2>/dev/null
+
+    if [[ -d "$VSCODE_DIR/data/User/History" ]]; then
+        find "$VSCODE_DIR/data/User/History" -type f -mtime +${RETENTION_DAYS} -delete 2>/dev/null
+        find "$VSCODE_DIR/data/User/History" -type d -empty -delete 2>/dev/null
+    fi
+
+    [[ -d "$VSCODE_DIR/data/CachedExtensions" ]] && \
+        find "$VSCODE_DIR/data/CachedExtensions" -mindepth 1 -delete 2>/dev/null
+    [[ -d "$VSCODE_DIR/data/CachedProfilesData" ]] && \
+        find "$VSCODE_DIR/data/CachedProfilesData" -type f -mtime +${RETENTION_DAYS} -delete 2>/dev/null
+
+    if [[ -d "$VSCODE_DIR/data/clp" ]]; then
+        ls -t "$VSCODE_DIR/data/clp" 2>/dev/null | tail -n +3 | while read dir; do
+            rm -rf "$VSCODE_DIR/data/clp/$dir" 2>/dev/null
+        done
+    fi
+
+    if [[ -d "$VSCODE_DIR/bin" ]]; then
+        ls -t "$VSCODE_DIR/bin" 2>/dev/null | tail -n +2 | while read dir; do
+            [[ -d "$VSCODE_DIR/bin/$dir" ]] && rm -rf "$VSCODE_DIR/bin/$dir" 2>/dev/null
+        done
+    fi
+
+    if [[ -f "$VSCODE_DIR/extensions/.obsolete" ]] && command -v jaq &>/dev/null; then
+        jaq -r 'to_entries[] | select(.value == true) | .key' "$VSCODE_DIR/extensions/.obsolete" 2>/dev/null | while read ext; do
+            [[ -d "$VSCODE_DIR/extensions/$ext" ]] && rm -rf "$VSCODE_DIR/extensions/$ext" 2>/dev/null
+        done
+        echo "{}" > "$VSCODE_DIR/extensions/.obsolete"
+    fi
+}
+
+# --------------------------------------------
+# Claude Code / Serena 自動クリーンアップ
+# --------------------------------------------
+claude_cleanup() {
+    local CLAUDE_DIR="$HOME/.claude"
+    local SERENA_DIR="$HOME/.serena"
+    local RETENTION_DAYS=7
+
+    if [[ -d "$CLAUDE_DIR" ]]; then
+        for dir in debug shell-snapshots todos session-env file-history statsig cache; do
+            [[ -d "$CLAUDE_DIR/$dir" ]] && find "$CLAUDE_DIR/$dir" -mindepth 1 -mtime +${RETENTION_DAYS} -delete 2>/dev/null
+            [[ -d "$CLAUDE_DIR/$dir" ]] && find "$CLAUDE_DIR/$dir" -type d -empty -delete 2>/dev/null
+        done
+        [[ -d "$CLAUDE_DIR/todos" ]] && find "$CLAUDE_DIR/todos" -type f -size 2c -delete 2>/dev/null
+        [[ -f "$CLAUDE_DIR/history.jsonl" ]] && rm -f "$CLAUDE_DIR/history.jsonl" 2>/dev/null
+        [[ -f "$CLAUDE_DIR/stats-cache.json" ]] && rm -f "$CLAUDE_DIR/stats-cache.json" 2>/dev/null
+        [[ -f "$HOME/.claude.json.backup" ]] && rm -f "$HOME/.claude.json.backup" 2>/dev/null
+    fi
+
+    if [[ -d "$SERENA_DIR/logs" ]]; then
+        local cutoff_date=$(date -d "${RETENTION_DAYS} days ago" +%Y-%m-%d)
+        for dir in "$SERENA_DIR/logs"/20*(N); do
+            [[ -d "$dir" ]] || continue
+            local dir_date="${dir##*/}"
+            [[ "$dir_date" < "$cutoff_date" ]] && rm -rf "$dir" 2>/dev/null
+        done
+    fi
+}
+
+# --- Docker オンデマンド運用 ---
+dk-start() {
+    if systemctl is-active --quiet docker; then
+        return 0
+    fi
+    echo "Wake up Docker..."
+    sudo service docker start
+    while ! docker info > /dev/null 2>&1; do
+        printf "."
+        sleep 1
+    done
+    echo "\nDocker is ready."
+}
+
+dk-stop() {
+    sudo systemctl stop docker.socket
+    sudo systemctl stop docker.service
+    echo "Docker stopped."
+}
+
+dk-clean() {
+    dk-stop
+    sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'
+    echo "Cache cleared."
+}
+
+lazydocker() {
+    dk-start
+    command lazydocker "$@"
+    dk-stop
+}
+
+# シェル起動時にバックグラウンドで実行
+(vscode_cleanup &>/dev/null &)
+(claude_cleanup &>/dev/null &)
+
+# --------------------------------------------
+# エイリアス
+# --------------------------------------------
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias cls="clear"
+alias sz="source ~/.zshrc"
+alias ls="eza --icons"
+alias ll="eza -alF --icons --git"
+alias la="eza -a --icons"
+alias l="eza -F --icons"
+alias tree="eza --tree --icons"
+alias grep="grep --color=auto"
+alias gs="git status"
+alias ga="git add"
+alias gc="git commit"
+alias gp="git push"
+alias gl="git log --oneline --graph"
+alias gd="git diff"
+alias gco="git checkout"
+alias gb="git branch"
+alias c.="code ."
+alias cr="code -r ."
+alias vim="nvim"
+alias lg="lazygit"
+alias pn="pnpm"
+alias open='explorer.exe .'
+alias nvc="cd ~/.config/nvim"
+
+# --------------------------------------------
+# 略語 (zsh-abbr)
+# --------------------------------------------
+abbr ..="cd .."
+abbr ...="cd ../.."
+abbr ....="cd ../../.."
+abbr cls="clear"
+abbr sz="source ~/.zshrc"
+abbr l="eza -F --icons"
+abbr tree="eza --tree --icons"
+abbr gs="git status"
+abbr ga="git add"
+abbr gc="git commit"
+abbr gp="git push"
+abbr gl="git log --oneline --graph"
+abbr gd="git diff"
+abbr gco="git checkout"
+abbr gb="git branch"
+abbr lg="lazygit"
+abbr pn="pnpm"
+abbr nvc="cd ~/.config/nvim"
+abbr ai="claude"
+abbr aid="claude --dangerously-skip-permissions"
+
+# カーソルをブロックに固定
+zle-line-init() { echo -ne '\e[2 q' }
+zle -N zle-line-init
