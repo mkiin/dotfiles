@@ -4,3 +4,7 @@ default = true
 
 [[index]]
 url = "https://pypi.org/simple/"
+
+[[index]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cu128"

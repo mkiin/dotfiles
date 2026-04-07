@@ -1,9 +1,8 @@
 return {
-	-- LazyVimのcolorschemeをoshicolorに設定
 	{
 		"LazyVim/LazyVim",
 		opts = {
-			colorscheme = "oshicolor",
+			colorscheme = "tokyonight",
 		},
 	},
 	-- カラースキームプラグイン
@@ -31,7 +30,6 @@ return {
 		},
 	},
 
-	-- 他に使いたいテーマがあれば追加
 	{ "folke/tokyonight.nvim", lazy = false },
 	{ "catppuccin/nvim", name = "catppuccin", lazy = false },
 	{ "rose-pine/neovim", name = "rose-pine", lazy = false },
@@ -43,7 +41,6 @@ return {
 		config = function()
 			require("themery").setup({
 				themes = {
-					"oshicolor",
 					"kanagawa-dragon",
 					"kanagawa-wave",
 					"kanagawa-lotus",

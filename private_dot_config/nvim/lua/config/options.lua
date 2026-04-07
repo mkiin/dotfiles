@@ -109,3 +109,15 @@ end
 vim.g.lazyvim_picker = "snacks"
 vim.g.lazyvim_blink_main = false
 vim.g.snacks_animate = false
+
+-- ========================================
+-- 背景透過（ターミナルとの隙間を防止）
+-- ========================================
+vim.api.nvim_create_autocmd("ColorScheme", {
+	callback = function()
+		vim.api.nvim_set_hl(0, "Normal", { bg = "NONE" })
+		vim.api.nvim_set_hl(0, "NormalNC", { bg = "NONE" })
+		vim.api.nvim_set_hl(0, "SignColumn", { bg = "NONE" })
+		vim.api.nvim_set_hl(0, "EndOfBuffer", { fg = "NONE", bg = "NONE" })
+	end,
+})

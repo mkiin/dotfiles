@@ -9,9 +9,7 @@ return {
 						icon = "󰚩 ",
 						key = "c",
 						desc = "Claude Code (danger)",
-						action = function()
-							require("sidekick.cli").toggle({ name = "claude-danger", focus = true })
-						end,
+						action = "<cmd>lua require('sidekick.cli').toggle({name='claude-danger', focus=true})<cr>",
 					}
 					break
 				end
@@ -78,17 +76,13 @@ return {
 			{
 				"R",
 				mode = { "n", "o", "x" },
-				function()
-					require("flash").jump()
-				end,
+				"<cmd>lua require('flash').jump()<cr>",
 				desc = "Flash",
 			},
 			{
 				"S",
 				mode = { "n", "o", "x" },
-				function()
-					require("flash").treesitter()
-				end,
+				"<cmd>lua require('flash').treesitter()<cr>",
 				desc = "Flash Treesitter",
 			},
 		},

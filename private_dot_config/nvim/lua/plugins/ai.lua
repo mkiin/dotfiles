@@ -26,6 +26,7 @@ return {
 		},
 		keys = {
 			{ "<leader>ap", false },
+			{ "<C-b>", false },
 			{
 				"<leader>aa",
 				function()

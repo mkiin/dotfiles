@@ -3,7 +3,7 @@ font-family = JetBrainsMono Nerd Font
 font-size = 14
 
 # テーマ
-theme = Kanagawa Dragon
+theme = Snazzy
 
 # カーソル
 cursor-style = block
@@ -31,7 +31,7 @@ fullscreen = true
 # title
 
 # 背景
-background-opacity = 0.7
+background-opacity = 1.0
 background-opacity-cells = true
 # background-image = /home/mkiin/Pictures/wallpaper/1351993.jpeg
 # background-image-opacity = 0.1
