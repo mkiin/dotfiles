@@ -54,6 +54,7 @@ in
     "uv/uv.toml".source = mkOutOfStoreSymlink "${dotDir}/uv/uv.toml";
     "pip/pip.conf".source = mkOutOfStoreSymlink "${dotDir}/pip/pip.conf";
     "wezterm/wezterm.lua".source = mkOutOfStoreSymlink "${dotDir}/wezterm/wezterm.lua";
+    "nvim".source = mkOutOfStoreSymlink "${dotDir}/nvim";
   };
 
   home.sessionVariables = {
