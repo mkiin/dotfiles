@@ -81,5 +81,15 @@ in
   home.sessionVariables = {
   };
 
+  # ディレクトリ構成の初期化
+  home.activation.createDirectories = config.lib.dag.entryAfter [ "writeBoundary" ] ''
+    mkdir -p ~/personal/apps
+    mkdir -p ~/personal/tools
+    mkdir -p ~/personal/experiments
+    mkdir -p ~/learning/courses
+    mkdir -p ~/learning/books
+    mkdir -p ~/learning/practice
+  '';
+
   programs.home-manager.enable = true;
 }
