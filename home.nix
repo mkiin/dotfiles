@@ -29,11 +29,6 @@ in
     shellcheck
     shfmt
 
-    # 入力メソッド
-    fcitx5
-    fcitx5-mozc
-    fcitx5-gtk
-
     # 基本ツール
     git
     curl

@@ -32,9 +32,9 @@ Nix + Home Manager でユーザー環境を宣言的に管理する。
 
 | 管理ツール | 管理対象 |
 |---|---|
-| **Nix (Home Manager)** | CLIツール、設定ファイル、日本語入力環境 |
+| **Nix (Home Manager)** | CLIツール、設定ファイル |
+| **pacman** | 日本語入力（fcitx5 + mozc）、Docker、フォント、システム基盤 |
 | **mise** | 言語ランタイム（node, bun, deno, rust, uv）、supabase, claude-code |
-| **apt** | Docker、build-essential/gcc、フォント、ca-certificates 等のシステム基盤 |
 
 ## 新しい PC でのセットアップ（3ステップ）
 
@@ -64,18 +64,26 @@ nix run home-manager/master -- switch --flake .
 ```
 
 これで以下が一括セットアップされる:
-- 全 CLI ツール（ripgrep, fzf, neovim, ghostty 等）
+- 全 CLI ツール（ripgrep, fzf, neovim 等）
 - 全設定ファイル（.zshrc, .gitconfig, nvim 等）
-- 日本語入力（fcitx5 + mozc）の環境変数
+- fcitx5 の設定ファイル配置と環境変数
 
-### 4. mise をインストール（ランタイム用）
+### 4. pacman でシステム連携が必要なパッケージをインストール
+
+非 NixOS では nix の fcitx5/ghostty はシステムの GTK/Qt と統合できないため、pacman で入れる。
+
+```bash
+sudo pacman -S fcitx5 fcitx5-mozc fcitx5-gtk fcitx5-qt fcitx5-configtool ghostty
+```
+
+### 5. mise をインストール（ランタイム用）
 
 ```bash
 curl https://mise.run | sh
 mise install
 ```
 
-### 5. 再ログイン
+### 6. 再ログイン
 
 fcitx5 の環境変数（`environment.d/fcitx5.conf`）はセッション起動時に読まれるため、
 ログアウト → ログインが必要。
@@ -145,9 +153,14 @@ home-manager generations
 |---|---|
 | CLIユーティリティ | ripgrep, fd, fzf, bat, eza, jq, delta, zoxide, lazygit, lazydocker, gh, starship, sheldon, neovim |
 | シェルユーティリティ | shellcheck, shfmt |
-| 入力メソッド | fcitx5, fcitx5-mozc, fcitx5-gtk |
-| ターミナル | ghostty |
 | 基本ツール | git, curl, wget, zip, unzip, zsh, gnupg, openssh |
+
+## pacman 管理パッケージ一覧
+
+| カテゴリ | パッケージ |
+|---|---|
+| 入力メソッド | fcitx5, fcitx5-mozc, fcitx5-gtk, fcitx5-qt, fcitx5-configtool |
+| ターミナル | ghostty |
 
 ## mise 管理パッケージ一覧
 
