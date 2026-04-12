@@ -34,9 +34,6 @@ in
     fcitx5-mozc
     fcitx5-gtk
 
-    # ターミナル
-    ghostty
-
     # 基本ツール
     git
     curl
