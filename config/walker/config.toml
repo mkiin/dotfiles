@@ -1,0 +1,49 @@
+# Walker 最小構成設定
+# Walker 同梱の default layout / item XML を使う。
+# 色だけ matugen と連動 (themes/matugen/style.css 経由)。
+
+force_keyboard_focus = false
+close_when_open = true
+click_to_close = true
+# デフォルトは walker 同梱 default theme (通常ランチャー = 縦リスト小アイコン)。
+# 壁紙セレクタは keybind 側で `--theme matugen` を明示指定して filmstrip に切替。
+# walker は 1 theme = 1 layout の制約なので、用途別に CLI で theme を使い分ける運用。
+theme = "default"
+
+# "activate / Return" 等の hint を消す
+hide_action_hints = true
+hide_return_action = true
+
+[shell]
+exclusive_zone = 0
+layer = "overlay"
+# anchor を全て false にすると、Hyprland が surface をモニタ中央に自動配置する。
+# GtkWindow の natural size (BoxWrapper サイズ) がそのまま surface size に反映される。
+# Trade-off: click_to_close は surface 内のクリックだけ発火。画面外(デスクトップ)クリックは
+# surface に届かないため閉じない。Esc か Super+W 再押下で閉じる運用になる。
+anchor_top = false
+anchor_bottom = false
+anchor_left = false
+anchor_right = false
+
+[providers]
+# 通常起動 (default theme) 時のランチャー provider。desktopapplications で縦リスト表示。
+# 壁紙セレクタは keybind で `--theme matugen --provider menus:wallselect` を明示指定し、
+# default theme の影響を受けないよう CLI 側で完全分離する。
+default = ["desktopapplications"]
+empty = ["desktopapplications"]
+max_results = 50
+
+# [columns] は設定しない。
+# ここに値を入れると handle_grid_setting が set_is_grid(c > 1) を true に強制する。
+# ListView では set_max_columns は no-op だが is_grid 状態だけ true になり、
+# renderer が grid_items map (bundled GtkImage) を使ってしまう。
+# ListView を使う以上、is_grid=false を維持する必要がある = columns 設定しない。
+
+[keybinds]
+close = ["Escape"]
+# 縦リスト (default theme / launcher) と横 filmstrip (matugen theme / wallselect) 兼用。
+# walker の next/previous は selection index の ±1 を orientation 非依存に呼ぶので、
+# Down/Up + Right/Left を両方バインドしておけば両方のレイアウトで動く。
+next = ["Down", "Right"]
+previous = ["Up", "Left"]

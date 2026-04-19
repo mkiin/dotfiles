@@ -1,12 +1,42 @@
 # Matugen 設定
 # 壁紙から色を抽出し、各 consumer の設定ファイルを生成する。
 # `matugen image <path>` で全テンプレートを評価。
+#
+# ── 命名規則 ──
+# テンプレートファイル: ~/.config/matugen/templates/<app>-<subject>.<ext>
+#   例: waybar-colors.css, rofi-colors.rasi, hyprland-colors.conf
+# セクション名: [templates.<app>]
+# 出力先: 各アプリの設定ディレクトリ直下、<subject>.<ext> で配置
+#   例: ~/.config/waybar/CSS/colors.css, ~/.config/rofi/colors.rasi
+#
+# ── 追加予定 ──
+# wlogout, rofi, hyprland, hyprlock, zen, ファイルマネージャー
+# (各テンプレを config/matugen/templates/ に追加したら [templates.*] セクションを足す)
 
 [config]
-# デフォルトのモード
 default_mode = "dark"
 
 [templates.waybar]
 # 50個 matugen トークンをそのまま loop-export + 固定状態色
 input_path = "~/.config/matugen/templates/waybar-colors.css"
 output_path = "~/.config/waybar/CSS/colors.css"
+# colors.css 自体の in-place 書き込みは GIO FileMonitor に拾われない (実測)。
+# 代わりに style.css を in-place truncate+rewrite する一手間で CHANGES_DONE_HINT を
+# 発火させ、waybar の reload_style_on_change 経由で CSS だけ再読させる。
+# SIGUSR2 (surface 完全再生成 → exclusive_zone 一瞬消失 → 全タイル window 再レイアウト)
+# と違い surface は維持されるため、バーの瞬間空白もタイル window のガクつきも出ない。
+post_hook = "~/.config/awww/scripts/waybar-reload-css.sh"
+
+[templates.wlogout]
+input_path = "~/.config/matugen/templates/wlogout-colors.css"
+output_path = "~/.config/wlogout/colors.css"
+
+[templates.hyprland]
+input_path = "~/.config/matugen/templates/hyprland-colors.conf"
+output_path = "~/.config/hypr/colors.conf"
+
+[templates.walker]
+input_path = "~/.config/matugen/templates/walker-colors.css"
+# theme dir 内に出力し、style.css から相対 @import できるようにする (portability 向上)
+output_path = "~/.config/walker/themes/matugen/colors.css"
+

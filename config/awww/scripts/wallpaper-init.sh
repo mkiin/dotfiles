@@ -9,7 +9,9 @@ WALLPAPER="${HOME}/pictures/wallpaper/1297749.jpg"
 # 既にデーモンが socket を掴んでいるかは `awww query` の可否で判定する
 # （pgrep はプロセス名バリエーションやゾンビで誤判定することがある）
 if ! awww query >/dev/null 2>&1; then
-    awww-daemon &
+    # awww-daemon の stdout/stderr は /dev/null に捨てる (terminal に流れないように)
+    awww-daemon >/dev/null 2>&1 &
+    disown
     # socket 作成まで最大 5秒待機
     for _ in $(seq 1 50); do
         awww query >/dev/null 2>&1 && break

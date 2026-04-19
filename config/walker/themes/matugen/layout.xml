@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  壁紙セレクタ layout (参照デザイン準拠、横 filmstrip)。
+  検索バー: prefix label + separator + input の複合構造。
+  カード gap は CSS 側で row に margin-right を打って透過ギャップを作る。
+-->
+<interface>
+  <requires lib="gtk" version="4.0"></requires>
+  <object class="GtkWindow" id="Window">
+    <style>
+      <class name="window"></class>
+    </style>
+    <property name="resizable">false</property>
+    <child>
+      <object class="GtkBox" id="BoxWrapper">
+        <style>
+          <class name="box-wrapper"></class>
+        </style>
+        <property name="orientation">vertical</property>
+        <property name="hexpand">false</property>
+        <property name="vexpand">false</property>
+        <property name="width-request">1140</property>
+        <child>
+          <object class="GtkBox" id="Box">
+            <property name="orientation">vertical</property>
+            <property name="spacing">16</property>
+
+            <child>
+              <object class="GtkBox" id="SearchContainer">
+                <style>
+                  <class name="search-container"></class>
+                </style>
+                <property name="orientation">horizontal</property>
+                <property name="hexpand">true</property>
+                <property name="spacing">14</property>
+                <child>
+                  <object class="GtkLabel" id="SearchPrefix">
+                    <style>
+                      <class name="search-prefix"></class>
+                    </style>
+                    <property name="label">Select Wallpaper</property>
+                    <property name="xalign">0</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSeparator" id="SearchSeparator">
+                    <style>
+                      <class name="search-separator"></class>
+                    </style>
+                    <property name="orientation">vertical</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="Input">
+                    <style>
+                      <class name="input"></class>
+                    </style>
+                    <property name="hexpand">true</property>
+                    <property name="placeholder-text">Search wallpapers...</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+
+            <child>
+              <object class="GtkBox" id="ContentContainer">
+                <property name="orientation">horizontal</property>
+                <property name="hexpand">true</property>
+
+                <child>
+                  <object class="GtkLabel" id="ElephantHint">
+                    <property name="visible">false</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="Placeholder">
+                    <property name="visible">false</property>
+                  </object>
+                </child>
+
+                <child>
+                  <object class="GtkScrolledWindow" id="Scroll">
+                    <style>
+                      <class name="scroll"></class>
+                    </style>
+                    <property name="hexpand">true</property>
+                    <property name="min-content-height">230</property>
+                    <property name="max-content-height">230</property>
+                    <property name="hscrollbar-policy">automatic</property>
+                    <property name="vscrollbar-policy">never</property>
+                    <property name="kinetic-scrolling">false</property>
+                    <child>
+                      <object class="GtkListView" id="List">
+                        <style>
+                          <class name="list"></class>
+                        </style>
+                        <property name="orientation">horizontal</property>
+                        <property name="can_focus">false</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+
+                <child>
+                  <object class="GtkBox" id="Preview">
+                    <property name="visible">false</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+
+            <child>
+              <object class="GtkBox" id="Keybinds">
+                <property name="visible">false</property>
+                <child>
+                  <object class="GtkBox" id="GlobalKeybinds"/>
+                </child>
+                <child>
+                  <object class="GtkBox" id="ItemKeybinds"/>
+                </child>
+              </object>
+            </child>
+
+            <child>
+              <object class="GtkLabel" id="Error">
+                <property name="visible">false</property>
+              </object>
+            </child>
+
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

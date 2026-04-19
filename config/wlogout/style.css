@@ -1,5 +1,7 @@
-/* Wlogout: BlackNode 風デザイン */
+/* Wlogout: BlackNode 風デザイン (matugen 連動) */
 /* 起動は launch.sh で -b 6 --margin-top/bottom を渡して中央帯状にする前提 */
+
+@import "colors.css";
 
 * {
   background-image: none;
@@ -8,15 +10,15 @@
   font-weight: bold;
 }
 
-/* ウィンドウは完全透過 */
+/* ウィンドウは完全透過 (裏の壁紙を見せるオーバーレイ) */
 window {
   background-color: rgba(0, 0, 0, 0);
 }
 
 /* ボタン基底: 連結用の負マージンでピル帯を作る */
 button {
-  color: #cdd6f4;
-  background-color: rgba(30, 30, 46, 0.92);
+  color: @on_surface;
+  background-color: @surface;
   outline-style: none;
   border: 2px solid transparent;
   border-radius: 0;
@@ -38,43 +40,61 @@ button {
 
 /* :focus 単体は通常状態と同じに（起動時 Lock のハイライトを消す） */
 button:focus {
-  color: #cdd6f4;
-  background-color: rgba(30, 30, 46, 0.92);
+  color: @on_surface;
+  background-color: @surface;
   border-color: transparent;
   background-size: 30%;
 }
 
-/* ホバー: 青背景 + 文字非表示 + アイコン拡大 */
+/* ホバー: アクセント色 + 文字非表示 + アイコン拡大 */
 button:hover {
-  background-color: rgba(137, 180, 250, 0.90);
-  border-color: #89b4fa;
+  background-color: @primary;
+  border-color: @primary;
   color: transparent;
   background-size: 45%;
 }
 
-/* 左端・右端で帯全体をピル型に */
+/* 左端・右端で帯全体をピル型に。hover時は -hover.png に差し替え。 */
 #lock {
   background-image: image(url("./icons/lock.png"));
   border-radius: 70px 0 0 70px;
+}
+#lock:hover {
+  background-image: image(url("./icons/lock-hover.png"));
 }
 
 #suspend {
   background-image: image(url("./icons/sleep.png"));
 }
+#suspend:hover {
+  background-image: image(url("./icons/sleep-hover.png"));
+}
 
 #reboot {
   background-image: image(url("./icons/restart.png"));
+}
+#reboot:hover {
+  background-image: image(url("./icons/restart-hover.png"));
 }
 
 #shutdown {
   background-image: image(url("./icons/power.png"));
 }
+#shutdown:hover {
+  background-image: image(url("./icons/power-hover.png"));
+}
 
 #logout {
   background-image: image(url("./icons/logout.png"));
+}
+#logout:hover {
+  background-image: image(url("./icons/logout-hover.png"));
 }
 
 #hibernate {
   background-image: image(url("./icons/hibernate.png"));
   border-radius: 0 70px 70px 0;
+}
+#hibernate:hover {
+  background-image: image(url("./icons/hibernate-hover.png"));
 }

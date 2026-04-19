@@ -1,0 +1,10 @@
+/*
+ * Wlogout 色定義 (matugen 生成)
+ * 壁紙から Material Design 3 パレットを抽出し、全トークンを @define-color として露出する。
+ * style.css 側で @import "colors.css" して @surface / @primary / @on_surface 等を参照する。
+ * 半透明が必要な箇所は style.css で alpha(@name, 0.92) のように被せる。
+ */
+
+<* for name, value in colors *>
+@define-color {{name}} {{value.default.hex}};
+<* endfor *>

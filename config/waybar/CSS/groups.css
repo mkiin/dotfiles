@@ -7,8 +7,8 @@
 #hollow-right-1,
 #hollow-right-2,
 #hollow-right-3 {
-  background: @surface ;
-  border: 2px solid @surface_container;
+  background: @inverse_on_surface;
+  border: 1px solid @surface_container;
   border-radius: 18px;
   padding: 5px 8px;
   margin: 0 4px;
