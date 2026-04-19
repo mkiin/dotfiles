@@ -1,5 +1,6 @@
 [tools]
 # ランタイム・ビルドツール（mise に残す）
+go = "latest"
 bun = "latest"
 rust = "latest"
 uv = "latest"

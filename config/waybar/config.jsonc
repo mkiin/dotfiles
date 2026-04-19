@@ -1,0 +1,104 @@
+{
+  "include": [
+    "~/.config/waybar/Modules/clock.jsonc",
+    "~/.config/waybar/Modules/workspaces.jsonc",
+    "~/.config/waybar/Modules/cpu.jsonc",
+    "~/.config/waybar/Modules/memory.jsonc",
+    "~/.config/waybar/Modules/temperature.jsonc",
+    "~/.config/waybar/Modules/power.jsonc",
+    "~/.config/waybar/Modules/pulseaudio.jsonc",
+    "~/.config/waybar/Modules/network.jsonc",
+    "~/.config/waybar/Modules/bluetooth.jsonc",
+    "~/.config/waybar/Modules/weather.jsonc",
+    "~/.config/waybar/Modules/notification.jsonc",
+    "~/.config/waybar/Modules/idle_inhibitor.jsonc",
+    "~/.config/waybar/Modules/separator.jsonc",
+    "~/.config/waybar/Modules/mpris.jsonc",
+    "~/.config/waybar/Modules/apps/*.jsonc"
+  ],
+  "layer": "top",
+  "position": "top",
+  "height": 36,
+  "margin-left": 15,
+  "margin-right": 15,
+  "margin-top": 10,
+  "margin-bottom": 0,
+  "spacing": 15,
+  "reload_style_on_change": true,
+
+  "modules-left": [
+    "group/gf-workspaces",
+    "group/gf-notification",
+    "group/gf-media"
+  ],
+
+  "modules-center": [
+    "group/gf-datetime"
+  ],
+
+  "modules-right": [
+    "group/gf-net-audio",
+    "group/gf-hardware",
+    "group/gf-power"
+  ],
+
+  "group/gf-net-audio": {
+    "orientation": "horizontal",
+    "modules": [
+      "group/gn-audio",
+      "custom/separator-line",
+      "group/gn-connections"
+    ]
+  },
+
+  "group/gf-datetime": {
+    "orientation": "horizontal",
+    "modules": ["clock", "custom/separator-line", "custom/weather"]
+  },
+
+  "group/gn-audio": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 500,
+      "children-class": "pulseaudio",
+      "click-to-reveal": true,
+      "transition-left-to-right": true
+    },
+    "modules": ["pulseaudio", "pulseaudio#microphone"]
+  },
+
+  "group/gn-connections": {
+    "orientation": "horizontal",
+    "modules": ["network", "bluetooth"]
+  },
+
+  "group/gf-hardware": {
+    "orientation": "horizontal",
+    "modules": ["cpu", "temperature", "memory"]
+  },
+
+  "group/gf-power": {
+    "orientation": "horizontal",
+    "modules": ["custom/power"]
+  },
+
+  "group/gf-notification": {
+    "orientation": "horizontal",
+    "modules": ["custom/swaync", "custom/discord", "idle_inhibitor"]
+  },
+
+  "group/gf-media": {
+    "orientation": "horizontal",
+    "modules": ["mpris"]
+  },
+
+  "group/gf-workspaces": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 300,
+      "click-to-reveal": true,
+      "transition-left-to-right": true
+    },
+    "modules": ["hyprland/workspaces", "hyprland/workspaces#sub"]
+  }
+}

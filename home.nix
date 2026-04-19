@@ -24,10 +24,16 @@ in
     starship
     sheldon
     neovim
+    mise
 
     # シェルユーティリティ
     shellcheck
     shfmt
+
+    # Hyprland 周辺ツール
+    matugen
+    awww  # 壁紙エンジン (旧名 swww)
+    wallust
 
     # 基本ツール
     git
@@ -59,6 +65,13 @@ in
     "pip/pip.conf".source = mkOutOfStoreSymlink "${dotDir}/pip/pip.conf";
     "wezterm/wezterm.lua".source = mkOutOfStoreSymlink "${dotDir}/wezterm/wezterm.lua";
     "nvim".source = mkOutOfStoreSymlink "${dotDir}/nvim";
+    "hypr".source = mkOutOfStoreSymlink "${dotDir}/hypr";
+    "matugen".source = mkOutOfStoreSymlink "${dotDir}/matugen";
+    "quickshell".source = mkOutOfStoreSymlink "${dotDir}/quickshell";
+    "waybar".source = mkOutOfStoreSymlink "${dotDir}/waybar";
+    "swaync".source = mkOutOfStoreSymlink "${dotDir}/swaync";
+    "rofi".source = mkOutOfStoreSymlink "${dotDir}/rofi";
+    "wlogout".source = mkOutOfStoreSymlink "${dotDir}/wlogout";
     "fcitx5/config".source = mkOutOfStoreSymlink "${dotDir}/fcitx5/config";
     "fcitx5/profile".source = mkOutOfStoreSymlink "${dotDir}/fcitx5/profile";
     "fcitx5/conf/notifications.conf".source = mkOutOfStoreSymlink "${dotDir}/fcitx5/conf/notifications.conf";

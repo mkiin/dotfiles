@@ -1,0 +1,12 @@
+{
+  "bluetooth": {
+    "format": " ",
+    "format-disabled": "󰂲 ",
+    "format-connected": "󰂱 ",
+    "tooltip-format": "󰂯 {controller_alias} | {status}",
+    "tooltip-format-connected": "{device_enumerate}",
+    "tooltip-format-enumerate-connected": "󰂱 {device_alias} 󰂄{device_battery_percentage}%",
+    "on-click": "bluetoothctl power toggle",
+    "on-click-right": "blueman-manager"
+  }
+}

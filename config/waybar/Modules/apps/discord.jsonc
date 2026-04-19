@@ -1,0 +1,8 @@
+{
+  "custom/discord": {
+    "format": "",
+    "tooltip-format": "Discord 起動",
+    "on-click": "discord || vesktop",
+    "exec-if": "which discord || which vesktop"
+  }
+}

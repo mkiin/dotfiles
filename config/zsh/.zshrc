@@ -30,7 +30,7 @@ setopt PUSHD_IGNORE_DUPS
 # --------------------------------------------
 # mise (ランタイムマネージャー)
 # --------------------------------------------
-eval "$($HOME/.local/bin/mise activate zsh)"
+eval "$(mise activate zsh)"
 
 # --------------------------------------------
 # zoxide で cdを上書き
@@ -221,6 +221,7 @@ alias lg="lazygit"
 alias pn="pnpm"
 alias open='explorer.exe .'
 alias nvc="cd ~/.config/nvim"
+alias qs-restart="pkill -9 quickshell; nohup quickshell &>/dev/null & disown"
 
 # --------------------------------------------
 # 略語 (zsh-abbr)
@@ -245,6 +246,7 @@ abbr pn="pnpm"
 abbr nvc="cd ~/.config/nvim"
 abbr ai="claude"
 abbr aid="claude --dangerously-skip-permissions"
+abbr aia="claude --enable-auto-mode"
 
 # カーソルをブロックに固定
 zle-line-init() { echo -ne '\e[2 q' }

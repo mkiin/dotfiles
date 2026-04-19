@@ -26,19 +26,19 @@ window-padding-color = extend
 window-theme = ghostty
 window-show-tab-bar = never
 # window-title-font-family 
-# maximize = true
-fullscreen = true
+maximize = true
+# fullscreen = true
 # title
 
 # 背景
-background-opacity = 1.0
+background-opacity = 0.95
 background-opacity-cells = true
-# background-image = /home/mkiin/Pictures/wallpaper/1351993.jpeg
+# background-image
 # background-image-opacity = 0.1
 # background-image-position
-background-image-fit = cover
+# background-image-fit = cover
 # background-image-repeat
-background-blur = true
+# background-blur = true
 
 # 分割タブ
 unfocused-split-opacity = 1

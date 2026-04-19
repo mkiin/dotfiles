@@ -1,0 +1,27 @@
+{
+  "mpris": {
+    "format": "{player_icon} {dynamic}",
+    "format-paused": "{status_icon} {dynamic}",
+    "dynamic-order": ["artist", "title"],
+    "dynamic-separator": " - ",
+    "player-icons": {
+      "default": "<span foreground='#cba6f7'>󰝚 </span>",
+      "spotify": "<span foreground='#1db954'>󰓇 </span>",
+      "firefox": "<span foreground='#ff7139'> </span>",
+      "chromium": "<span foreground='#4285f4'> </span>",
+      "zen": "<span foreground='#a29bfe'> </span>",
+      "brave": "<span foreground='#fb542b'> </span>",
+      "vlc": "<span foreground='#ff8800'>󰕼 </span>",
+      "mpv": "<span foreground='#89b4fa'>󰐹 </span>"
+    },
+    "status-icons": {
+      "playing": "<span foreground='#a6e3a1'> </span>",
+      "paused": "<span foreground='#b4befe'>󰏤 </span>",
+      "stopped": "<span foreground='#6c7086'> </span>"
+    },
+    "tooltip-format": "{status_icon} {player}\n{dynamic}",
+    "tooltip-format-paused": "{status_icon} {player}\n{dynamic}",
+    "min-length": 5,
+    "max-length": 18
+  }
+}

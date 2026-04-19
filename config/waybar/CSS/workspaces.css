@@ -1,0 +1,38 @@
+@import "colors.css";
+
+#workspaces {
+  background-color: transparent;
+  padding: 5px 8px;
+  border-radius: 18px;
+  border: 1px solid @background_alt;
+}
+
+#workspaces button {
+  min-width: 50px;
+  padding: 0 6px;
+  margin: 0;
+  font-size: 13px;
+  border-radius: 999px;
+  color: transparent;
+  background-color: @background;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+#workspaces button + button {
+  margin-left: 6px;
+}
+
+#workspaces button.active {
+  background-color: @color4;
+  color: @background;
+}
+
+#workspaces button:hover {
+  background-color: @selected_bg;
+  color: @foreground;
+}
+
+#workspaces button.urgent {
+  background-color: @color1;
+  color: @background;
+}

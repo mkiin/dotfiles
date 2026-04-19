@@ -76,6 +76,22 @@ nix run home-manager/master -- switch --flake .
 sudo pacman -S fcitx5 fcitx5-mozc fcitx5-gtk fcitx5-qt fcitx5-configtool ghostty
 ```
 
+### 5. pacman でデスクトップ環境ツールをインストール
+
+Wayland/GUI 依存のため Nix ではなく pacman で管理する。
+
+```bash
+sudo pacman -S waybar swaync rofi-wayland wlogout awww hyprlock hypridle hyprshot
+```
+
+### 6. pacman で GUIアプリをインストール
+
+NixのDiscordはfcitx5(IME)・カーソルテーマ・フォントとの連携で問題が出るため pacman で管理する。
+
+```bash
+sudo pacman -S discord
+```
+
 ### 5. mise をインストール（ランタイム用）
 
 ```bash
@@ -83,7 +99,7 @@ curl https://mise.run | sh
 mise install
 ```
 
-### 6. 再ログイン
+### 7. 再ログイン
 
 fcitx5 の環境変数（`environment.d/fcitx5.conf`）はセッション起動時に読まれるため、
 ログアウト → ログインが必要。
@@ -161,6 +177,15 @@ home-manager generations
 |---|---|
 | 入力メソッド | fcitx5, fcitx5-mozc, fcitx5-gtk, fcitx5-qt, fcitx5-configtool |
 | ターミナル | ghostty |
+| デスクトップバー | waybar |
+| 通知/コントロールセンター | swaync |
+| ランチャー | rofi-wayland |
+| 電源メニュー | wlogout |
+| 壁紙 | awww |
+| ロック画面 | hyprlock |
+| アイドル管理 | hypridle |
+| スクリーンショット | hyprshot |
+| GUIアプリ | discord (NixはIME/カーソル/フォント連携で問題が出るため) |
 
 ## mise 管理パッケージ一覧
 

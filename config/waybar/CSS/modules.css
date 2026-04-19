@@ -1,0 +1,69 @@
+@import "colors.css";
+
+/* ============================================
+   単純モジュール共通: 余白だけを持つ
+   ============================================ */
+#clock,
+#custom-weather,
+#cpu,
+#temperature,
+#memory,
+#network,
+#bluetooth,
+#pulseaudio,
+#pulseaudio-microphone,
+#custom-swaync,
+#custom-discord,
+#idle_inhibitor,
+#custom-power,
+#mpris {
+  padding: 0 6px;
+}
+
+/* ============================================
+   状態別スタイル
+   ============================================ */
+
+/* 温度: 閾値 */
+#temperature.warning {
+  color: @color3;
+}
+#temperature.critical {
+  color: @color1;
+}
+
+/* 音量 */
+#pulseaudio.muted {
+  color: @foreground_dim;
+}
+
+/* ネットワーク */
+#network.disconnected,
+#network.disabled {
+  color: @color1;
+}
+
+/* Bluetooth */
+#bluetooth.disabled,
+#bluetooth.off {
+  color: @foreground_dim;
+}
+#bluetooth.connected {
+  color: @color2;
+}
+
+/* アイドル抑制 */
+#idle_inhibitor.activated {
+  color: @color3;
+}
+
+/* 区切り線 */
+#custom-separator-line {
+  color: @foreground_dim;
+  padding: 0 8px;
+}
+
+#waybar #custom-power {
+  padding: 0px 0px 2px 5px;
+}
+

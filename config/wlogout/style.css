@@ -1,0 +1,71 @@
+/* Wlogout: BlackNode 風デザイン */
+/* 起動は launch.sh で -b 6 --margin-top/bottom を渡して中央帯状にする前提 */
+
+* {
+  background-image: none;
+  font-family: "JetBrainsMono Nerd Font", "Noto Sans CJK JP", sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* ウィンドウは完全透過 */
+window {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+/* ボタン基底: 連結用の負マージンでピル帯を作る */
+button {
+  color: #cdd6f4;
+  background-color: rgba(30, 30, 46, 0.92);
+  outline-style: none;
+  border: 2px solid transparent;
+  border-radius: 0;
+  margin: -0.15em;
+  padding: 1.2rem;
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 30%;
+  text-shadow: none;
+  box-shadow: none;
+
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    background-size 0.3s ease;
+}
+
+button:hover,
+button:focus {
+  background-color: rgba(137, 180, 250, 0.90);
+  color: #1e1e2e;
+  border-color: #89b4fa;
+  background-size: 45%;
+}
+
+/* 左端・右端で帯全体をピル型に */
+#lock {
+  background-image: image(url("./icons/lock.png"));
+  border-radius: 70px 0 0 70px;
+}
+
+#suspend {
+  background-image: image(url("./icons/sleep.png"));
+}
+
+#reboot {
+  background-image: image(url("./icons/restart.png"));
+}
+
+#shutdown {
+  background-image: image(url("./icons/power.png"));
+}
+
+#logout {
+  background-image: image(url("./icons/logout.png"));
+}
+
+#hibernate {
+  background-image: image(url("./icons/hibernate.png"));
+  border-radius: 0 70px 70px 0;
+}

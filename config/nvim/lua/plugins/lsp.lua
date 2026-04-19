@@ -39,6 +39,7 @@ return {
 				typescriptreact = { "oxfmt" },
 				json = { "oxfmt" },
 				vue = { "oxfmt" },
+				jsonc = { "deno_fmt" },
 			},
 		},
 	},

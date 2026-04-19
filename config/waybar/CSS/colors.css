@@ -1,0 +1,21 @@
+/* Catppuccin Mocha 固定色（後でMatugen/wallustで上書き予定） */
+@define-color background      #1e1e2e;
+@define-color background_alt  #181825;
+@define-color foreground      #cdd6f4;
+@define-color foreground_dim  #a6adc8;
+@define-color selected_bg     #313244;
+@define-color border          #45475a;
+
+@define-color color1  #f38ba8; /* red */
+@define-color color2  #a6e3a1; /* green */
+@define-color color3  #f9e2af; /* yellow */
+@define-color color4  #89b4fa; /* blue */
+@define-color color5  #cba6f7; /* mauve */
+@define-color color6  #94e2d5; /* teal */
+@define-color color7  #f5c2e7; /* pink */
+@define-color color8  #fab387; /* peach */
+
+@define-color active_tab_background @color4;
+@define-color urgent  @color1;
+@define-color warning @color3;
+@define-color critical @color1;

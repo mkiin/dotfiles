@@ -35,6 +35,15 @@ return {
 	},
 	{
 		"nvim-neo-tree/neo-tree.nvim",
+		keys = {
+			{
+				"<leader>o",
+				function()
+					require("neo-tree.command").execute({ focus = true })
+				end,
+				desc = "Focus NeoTree",
+			},
+		},
 		opts = {
 			filesystem = {
 				filtered_items = {
