@@ -67,6 +67,7 @@ in
     "nvim".source = mkOutOfStoreSymlink "${dotDir}/nvim";
     "hypr".source = mkOutOfStoreSymlink "${dotDir}/hypr";
     "matugen".source = mkOutOfStoreSymlink "${dotDir}/matugen";
+    "awww".source = mkOutOfStoreSymlink "${dotDir}/awww";
     "quickshell".source = mkOutOfStoreSymlink "${dotDir}/quickshell";
     "waybar".source = mkOutOfStoreSymlink "${dotDir}/waybar";
     "swaync".source = mkOutOfStoreSymlink "${dotDir}/swaync";

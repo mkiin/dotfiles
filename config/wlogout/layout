@@ -1,6 +1,6 @@
 {
     "label" : "lock",
-    "action" : "hyprlock",
+    "action" : "hyprctl dispatch exec hyprlock",
     "text" : "Lock",
     "keybind" : "l"
 }
@@ -12,19 +12,19 @@
 }
 {
     "label" : "reboot",
-    "action" : "systemctl reboot",
+    "action" : "hyprshutdown --vt 2 -t 'Restarting...' -p 'systemctl reboot'",
     "text" : "Reboot",
     "keybind" : "r"
 }
 {
     "label" : "shutdown",
-    "action" : "systemctl poweroff",
+    "action" : "hyprshutdown --vt 2 -t 'Shutting down...' -p 'systemctl poweroff'",
     "text" : "Shutdown",
     "keybind" : "s"
 }
 {
     "label" : "logout",
-    "action" : "loginctl terminate-user $USER",
+    "action" : "hyprshutdown --vt 2",
     "text" : "Logout",
     "keybind" : "e"
 }

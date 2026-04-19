@@ -1,21 +1,21 @@
 @import "colors.css";
 
-#workspaces {
-  background-color: transparent;
-  padding: 5px 8px;
-  border-radius: 18px;
-  border: 1px solid @background_alt;
-}
-
 #workspaces button {
-  min-width: 50px;
-  padding: 0 6px;
+  min-width: 20px;
+  padding: 0;
   margin: 0;
   font-size: 13px;
   border-radius: 999px;
-  color: transparent;
-  background-color: @background;
-  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  color: @on_surface;
+  background: @surface;
+  background-image: none;
+  box-shadow: none;
+  text-shadow: none;
+  border: none;
+  transition:
+    min-width 0.35s cubic-bezier(0.33, 1, 0.68, 1),
+    background-color 0.25s ease-out,
+    color 0.25s ease-out;
 }
 
 #workspaces button + button {
@@ -23,16 +23,27 @@
 }
 
 #workspaces button.active {
-  background-color: @color4;
-  color: @background;
+  min-width: 42px;
+  background: @primary;
+  background-image: none;
+  color: @on_primary;
 }
 
 #workspaces button:hover {
-  background-color: @selected_bg;
-  color: @foreground;
+  min-width: 42px;
+  background: @surface_container_high;
+  background-image: none;
+  color: @on_surface;
+}
+
+#workspaces button.active:hover {
+  background: @primary;
+  background-image: none;
+  color: @on_primary;
 }
 
 #workspaces button.urgent {
-  background-color: @color1;
-  color: @background;
+  background: @state_critical;
+  background-image: none;
+  color: @surface;
 }

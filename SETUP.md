@@ -92,14 +92,71 @@ NixのDiscordはfcitx5(IME)・カーソルテーマ・フォントとの連携�
 sudo pacman -S discord
 ```
 
-### 5. mise をインストール（ランタイム用）
+### 6.5. AUR で hyprshutdown をインストール（NVIDIA+SDDM対応）
+
+NVIDIA + SDDM 環境では `hyprctl dispatch exit` や `loginctl terminate-user` だとログアウト時に画面が戻らない。
+公式推奨の `hyprshutdown` を AUR から導入し、`--vt 2` で TTY 切替を行うことで解消する。
+
+```bash
+paru -S hyprshutdown
+```
+
+さらに `hyprshutdown --vt N` が `sudo chvt N` を内部で呼ぶため、パスワードなしで実行できるよう sudoers を設定する:
+
+```bash
+echo "$USER ALL=(ALL) NOPASSWD: /usr/bin/chvt" | sudo tee /etc/sudoers.d/chvt
+sudo chmod 440 /etc/sudoers.d/chvt
+```
+
+wlogout の logout アクションは `hyprshutdown --vt 2` を使用している (config/wlogout/layout)。
+
+### 6.6. SDDM テーマをデプロイ（Astronaut）
+
+SDDM は root 権限のグリーターのため、テーマは `/usr/share/sddm/themes/` に置く必要がある。
+home-manager では管理不可なので手動で配置する。
+
+```bash
+# テーマ本体を /usr/share/sddm/themes/astronaut にコピー
+sudo cp -r ~/personal/dotfiles/config/sddm/themes/astronaut /usr/share/sddm/themes/
+```
+
+テーマ切替は `/etc/sddm.conf` の `[Theme] Current=` を `astronaut` に変更する。
+dropin (`/etc/sddm.conf.d/*.conf`) は SDDM 0.21 で期待通り上書きされないケースがあったため、直接編集が確実:
+
+```bash
+sudo sed -i 's/^Current=.*/Current=astronaut/' /etc/sddm.conf
+```
+
+### 6.7. SDDM のマルチモニター配置（Xsetup）
+
+SDDM は X11 で動くため、Hyprland の `monitors.conf`（Wayland）を参照しない。
+xrandr を Xsetup フックで実行して配置を再現する。
+
+```bash
+# xrandr をインストール（SDDM の X セッション用）
+sudo pacman -S xorg-xrandr
+
+# Xsetup スクリプトを配置
+sudo cp ~/personal/dotfiles/config/sddm/scripts/Xsetup /usr/share/sddm/scripts/Xsetup
+sudo chmod +x /usr/share/sddm/scripts/Xsetup
+```
+
+出力名が変わった場合は `journalctl -u sddm` で `xrandr:` エラーを確認し、
+スクリプト内のモニター名を調整する。
+
+### 6.8. SDDM 反映
+
+テーマ更新時（色や背景を変えた時）も同じ `cp -r` を再実行する。
+反映確認は SDDM を再起動: `sudo systemctl restart sddm`（**現在のセッションが落ちる**ため再ログイン覚悟）。
+
+### 7. mise をインストール（ランタイム用）
 
 ```bash
 curl https://mise.run | sh
 mise install
 ```
 
-### 7. 再ログイン
+### 8. 再ログイン
 
 fcitx5 の環境変数（`environment.d/fcitx5.conf`）はセッション起動時に読まれるため、
 ログアウト → ログインが必要。

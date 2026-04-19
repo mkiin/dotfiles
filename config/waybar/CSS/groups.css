@@ -1,16 +1,15 @@
 @import "colors.css";
 
-/* gf-*: 枠付きグループ（トップレベル） */
-#gf-notification,
-#gf-media,
-#gf-datetime,
-#gf-net-audio,
-#gf-hardware,
-#gf-power {
-  background: transparent;
-  border: 1px solid @background_alt;
+#hollow-left-1,
+#hollow-left-2,
+#hollow-left-3,
+#hollow-center-1,
+#hollow-right-1,
+#hollow-right-2,
+#hollow-right-3 {
+  background: @surface ;
+  border: 2px solid @surface_container;
   border-radius: 18px;
   padding: 5px 8px;
   margin: 0 4px;
 }
-

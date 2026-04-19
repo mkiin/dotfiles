@@ -1,0 +1,12 @@
+# Matugen 設定
+# 壁紙から色を抽出し、各 consumer の設定ファイルを生成する。
+# `matugen image <path>` で全テンプレートを評価。
+
+[config]
+# デフォルトのモード
+default_mode = "dark"
+
+[templates.waybar]
+# 50個 matugen トークンをそのまま loop-export + 固定状態色
+input_path = "~/.config/matugen/templates/waybar-colors.css"
+output_path = "~/.config/waybar/CSS/colors.css"

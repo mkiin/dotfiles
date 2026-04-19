@@ -32,14 +32,23 @@ button {
   transition:
     background-color 0.3s ease,
     border-color 0.3s ease,
-    background-size 0.3s ease;
+    background-size 0.3s ease,
+    color 0.3s ease;
 }
 
-button:hover,
+/* :focus 単体は通常状態と同じに（起動時 Lock のハイライトを消す） */
 button:focus {
+  color: #cdd6f4;
+  background-color: rgba(30, 30, 46, 0.92);
+  border-color: transparent;
+  background-size: 30%;
+}
+
+/* ホバー: 青背景 + 文字非表示 + アイコン拡大 */
+button:hover {
   background-color: rgba(137, 180, 250, 0.90);
-  color: #1e1e2e;
   border-color: #89b4fa;
+  color: transparent;
   background-size: 45%;
 }
 

@@ -26,44 +26,43 @@
 
 /* 温度: 閾値 */
 #temperature.warning {
-  color: @color3;
+  color: @state_warning;
 }
 #temperature.critical {
-  color: @color1;
+  color: @state_critical;
 }
 
 /* 音量 */
 #pulseaudio.muted {
-  color: @foreground_dim;
+  color: @on_surface_variant;
 }
 
 /* ネットワーク */
 #network.disconnected,
 #network.disabled {
-  color: @color1;
+  color: @state_critical;
 }
 
 /* Bluetooth */
 #bluetooth.disabled,
 #bluetooth.off {
-  color: @foreground_dim;
+  color: @on_surface_variant;
 }
 #bluetooth.connected {
-  color: @color2;
+  color: @state_success;
 }
 
 /* アイドル抑制 */
 #idle_inhibitor.activated {
-  color: @color3;
+  color: @state_warning;
 }
 
 /* 区切り線 */
 #custom-separator-line {
-  color: @foreground_dim;
+  color: @on_surface_variant;
   padding: 0 8px;
 }
 
 #waybar #custom-power {
   padding: 0px 0px 2px 5px;
 }
-

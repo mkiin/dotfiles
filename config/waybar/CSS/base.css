@@ -17,5 +17,5 @@ window#waybar {
 
 /* 全モジュール共通: 文字色のみ。padding/marginは各モジュールの責任 */
 #waybar .module {
-  color: @foreground;
+  color: @on_surface;
 }

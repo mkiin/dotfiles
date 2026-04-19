@@ -22,6 +22,6 @@
     "tooltip-format": "{status_icon} {player}\n{dynamic}",
     "tooltip-format-paused": "{status_icon} {player}\n{dynamic}",
     "min-length": 5,
-    "max-length": 18
+    "max-length": 35
   }
 }

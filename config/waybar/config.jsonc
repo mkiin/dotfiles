@@ -27,36 +27,66 @@
   "reload_style_on_change": true,
 
   "modules-left": [
-    "group/gf-workspaces",
-    "group/gf-notification",
-    "group/gf-media"
+    "group/hollow-left-1",
+    "group/hollow-left-2",
+    "group/hollow-left-3"
   ],
 
   "modules-center": [
-    "group/gf-datetime"
+    "group/hollow-center-1"
   ],
 
   "modules-right": [
-    "group/gf-net-audio",
-    "group/gf-hardware",
-    "group/gf-power"
+    "group/hollow-right-1",
+    "group/hollow-right-2",
+    "group/hollow-right-3"
   ],
 
-  "group/gf-net-audio": {
-    "orientation": "horizontal",
-    "modules": [
-      "group/gn-audio",
-      "custom/separator-line",
-      "group/gn-connections"
-    ]
+  "group/hollow-left-1": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 300,
+      "click-to-reveal": true,
+      "transition-left-to-right": true
+    },
+    "modules": ["hyprland/workspaces", "hyprland/workspaces#sub"]
   },
 
-  "group/gf-datetime": {
+  "group/hollow-left-2": {
+    "orientation": "horizontal",
+    "modules": ["custom/swaync", "custom/discord", "idle_inhibitor"]
+  },
+
+  "group/hollow-left-3": {
+    "orientation": "horizontal",
+    "modules": ["mpris"]
+  },
+
+  "group/hollow-center-1": {
     "orientation": "horizontal",
     "modules": ["clock", "custom/separator-line", "custom/weather"]
   },
 
-  "group/gn-audio": {
+  "group/hollow-right-1": {
+    "orientation": "horizontal",
+    "modules": [
+      "group/hollow-nest-1",
+      "custom/separator-line",
+      "group/hollow-nest-2"
+    ]
+  },
+
+  "group/hollow-right-2": {
+    "orientation": "horizontal",
+    "modules": ["cpu", "temperature", "memory"]
+  },
+
+  "group/hollow-right-3": {
+    "orientation": "horizontal",
+    "modules": ["custom/power"]
+  },
+
+  "group/hollow-nest-1": {
     "orientation": "inherit",
     "drawer": {
       "transition-duration": 500,
@@ -67,38 +97,8 @@
     "modules": ["pulseaudio", "pulseaudio#microphone"]
   },
 
-  "group/gn-connections": {
+  "group/hollow-nest-2": {
     "orientation": "horizontal",
     "modules": ["network", "bluetooth"]
-  },
-
-  "group/gf-hardware": {
-    "orientation": "horizontal",
-    "modules": ["cpu", "temperature", "memory"]
-  },
-
-  "group/gf-power": {
-    "orientation": "horizontal",
-    "modules": ["custom/power"]
-  },
-
-  "group/gf-notification": {
-    "orientation": "horizontal",
-    "modules": ["custom/swaync", "custom/discord", "idle_inhibitor"]
-  },
-
-  "group/gf-media": {
-    "orientation": "horizontal",
-    "modules": ["mpris"]
-  },
-
-  "group/gf-workspaces": {
-    "orientation": "inherit",
-    "drawer": {
-      "transition-duration": 300,
-      "click-to-reveal": true,
-      "transition-left-to-right": true
-    },
-    "modules": ["hyprland/workspaces", "hyprland/workspaces#sub"]
   }
 }
