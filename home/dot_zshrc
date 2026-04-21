@@ -23,11 +23,6 @@ setopt AUTO_PUSHD
 setopt PUSHD_IGNORE_DUPS
 
 # --------------------------------------------
-# Home Manager 環境変数
-# --------------------------------------------
-. "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
-
-# --------------------------------------------
 # mise (ランタイムマネージャー)
 # --------------------------------------------
 eval "$(mise activate zsh)"

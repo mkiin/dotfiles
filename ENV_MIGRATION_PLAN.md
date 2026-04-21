@@ -33,6 +33,7 @@ Nix home-manager を廃止し、dotfiles は chezmoi、パッケージは pacman
 - `hyprland`, `hyprlock`, `hypridle`, `hyprshot`
 - `waybar`, `swaync`, `rofi-wayland`, `wlogout`, `awww`, `quickshell`
 - `walker` (CachyOS 公式リポジトリにあることを確認済)
+- `matugen` (extra/matugen 4.1.0 確認済)
 - `ghostty`, `sddm`, `uwsm`
 
 **日本語入力**
@@ -49,11 +50,10 @@ Nix home-manager を廃止し、dotfiles は chezmoi、パッケージは pacman
 公式に無いものだけ最小限に。
 
 - `elephant-all-bin` (Walker の backend、21プロバイダ全部入りパッケージ)
-- `matugen`
 - `wallust`
 - `hyprshutdown` (必要なら)
 
-> 確認済: walker と sheldon は CachyOS 公式 repo にある → AUR 不要
+> 確認済: walker, sheldon, matugen は CachyOS 公式 repo にある → AUR 不要
 
 ### 2.3 mise (現状維持)
 
@@ -86,12 +86,13 @@ Nix home-manager を廃止し、dotfiles は chezmoi、パッケージは pacman
 | `shelly` | CachyOS 独自 GUI、ターミナル運用で不要 |
 | `paru` | yay に置換 |
 
-**Nix / rustup 系**
+**Nix 一式**
 
 | パッケージ | 理由 |
 |---|---|
 | Nix + home-manager 一式 | 廃止。`~/.nix-profile/`, `/nix/store`, `result`, `flake.nix`, `flake.lock`, `home.nix` を除去 |
-| `rustup` (`~/.cargo/bin`, `~/.rustup/`) | mise の `rust = "latest"` と重複 |
+
+> 注: `rustup` (`~/.cargo/bin`, `~/.rustup/`) は削除しない。mise の rust プラグインは rustup のラッパーで、`~/.local/share/mise/installs/rust/1.95.0` は `~/.cargo/bin` への symlink。削除すると mise rust も壊れる。層構造(mise=UI, rustup=実体)として併存が正解。
 
 **保持するもの(判断済)**
 
@@ -182,7 +183,8 @@ mise install
 | `walker` | Nix HM (flake input) | pacman (CachyOS 公式 repo) |
 | `elephant` | Nix HM (flake input) | yay (`elephant-all-bin`) |
 | `sheldon` | Nix HM | pacman |
-| `matugen` / `wallust` | Nix HM | yay (AUR) |
+| `matugen` | Nix HM | pacman (CachyOS 公式 repo) |
+| `wallust` | Nix HM | yay (AUR) |
 | AURヘルパー | paru (未使用) | yay |
 | ランタイム / 開発ツール | mise | mise (変更なし) |
 | GUIアプリ | pacman + flatpak | pacman + flatpak (変更なし) |
