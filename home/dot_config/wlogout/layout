@@ -12,19 +12,19 @@
 }
 {
     "label" : "reboot",
-    "action" : "systemctl reboot",
+    "action" : "hyprshutdown --post-cmd 'systemctl reboot'",
     "text" : "Reboot",
     "keybind" : "r"
 }
 {
     "label" : "shutdown",
-    "action" : "systemctl poweroff",
+    "action" : "hyprshutdown --post-cmd 'systemctl poweroff'",
     "text" : "Shutdown",
     "keybind" : "s"
 }
 {
     "label" : "logout",
-    "action" : "hyprctl dispatch exit",
+    "action" : "hyprshutdown --vt 2",
     "text" : "Logout",
     "keybind" : "e"
 }
