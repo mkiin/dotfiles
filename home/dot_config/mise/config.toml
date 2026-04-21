@@ -1,5 +1,5 @@
 [tools]
-# ランタイム・ビルドツール（mise に残す）
+# --- 言語ランタイム・ビルドツール ---
 go = "latest"
 bun = "latest"
 rust = "latest"
@@ -7,8 +7,30 @@ uv = "latest"
 deno = "latest"
 node = "24"
 
-# インフラ・バックエンド系統
+# --- インフラ・バックエンド ---
 supabase = "latest"
 
-# Claude Code
+# --- AI ---
 claude-code = "latest"
+
+# --- CLI ユーティリティ (cross-platform) ---
+# pacman 依存グラフから独立させて cascade 事故を回避。
+# CachyOS では baseline の pacman 版と併存するが、mise shim が PATH 優先で勝つ。
+# WSL / Mac ではこの config.toml 1つで CLI 全部揃う。
+ripgrep = "latest"
+fd = "latest"
+bat = "latest"
+eza = "latest"
+jq = "latest"
+fzf = "latest"
+zoxide = "latest"
+lazygit = "latest"
+lazydocker = "latest"
+gh = "latest"
+starship = "latest"
+"aqua:rossmacarthur/sheldon" = "latest"
+neovim = "latest"
+shellcheck = "latest"
+shfmt = "latest"
+chezmoi = "latest"
+"github:dandavison/delta" = "latest"

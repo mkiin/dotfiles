@@ -35,11 +35,14 @@ CachyOS + Hyprland のデスクトップ環境を chezmoi で再現する。
 │       ├── wezterm/
 │       └── wlogout/
 ├── packages/            # パッケージ宣言ファイル
-│   ├── pacman.txt       # pacman -Qqen スナップショット (208)
-│   ├── aur.txt          # pacman -Qqem スナップショット
+│   ├── cachyos-baseline.txt  # CachyOS インストール直後のパッケージ (~1075)
+│   ├── pacman.txt       # baseline 除外済のユーザ選択パッケージ (~30)
+│   ├── aur.txt          # AUR (yay) インストール一覧
 │   └── flatpak.txt      # flatpak list スナップショット
+├── hooks/
+│   └── 99-sync-user-packages.hook  # pacman hook (自動 snapshot)
 ├── scripts/
-│   └── sync-packages.sh # packages/ を現在の状態で更新
+│   └── sync-packages.sh # packages/ を現在の状態で更新 (hook から自動実行)
 ├── config/sddm/         # chezmoi 管理外 (root 権限で手動コピー)
 ├── ENV_MIGRATION_PLAN.md
 ├── DESKTOP_SPEC.md
@@ -83,12 +86,29 @@ sourceDir = "/home/mkiin/personal/dotfiles/home"
 
 ### 4. パッケージを復元
 
+`packages/pacman.txt` は CachyOS baseline (1075 個) を除外した
+ユーザ選択 (~30 個) のみ。CachyOS Hyprland edition を同じ profile でインストール
+してあれば、baseline の差分だけ追加すれば再現できる。
+
 ```bash
 cd ~/personal/dotfiles
 sudo pacman -S --needed - < packages/pacman.txt
 yay -S --needed - < packages/aur.txt
 flatpak install $(cat packages/flatpak.txt)
 ```
+
+### 4.1 pacman hook を有効化
+
+install / remove のたびに `packages/*.txt` を自動で最新化するフックをデプロイ:
+
+```bash
+sudo install -m 644 -o root -g root \
+  hooks/99-sync-user-packages.hook \
+  /etc/pacman.d/hooks/99-sync-user-packages.hook
+```
+
+> 以降、`sudo pacman -S foo` / `yay -S bar` で自動的に `packages/pacman.txt` /
+> `packages/aur.txt` が更新される。手動の `./scripts/sync-packages.sh` は不要。
 
 ### 5. mise と言語ランタイム
 

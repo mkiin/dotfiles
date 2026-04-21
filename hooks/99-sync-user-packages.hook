@@ -1,0 +1,11 @@
+[Trigger]
+Operation = Install
+Operation = Remove
+Operation = Upgrade
+Type = Package
+Target = *
+
+[Action]
+Description = Sync dotfiles package snapshots (user additions only, baseline excluded)
+When = PostTransaction
+Exec = /bin/sh -c "sudo -u mkiin /home/mkiin/personal/dotfiles/scripts/sync-packages.sh >/dev/null 2>&1 || :"
