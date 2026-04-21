@@ -3,3 +3,5 @@ hyprland-wiki/
 wiki/
 .claude/settings.local.json
 config/nvim/docs-repo/
+nix-docs/
+official-example
