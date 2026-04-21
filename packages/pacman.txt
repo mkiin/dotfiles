@@ -50,6 +50,7 @@ efitools
 egl-wayland
 ethtool
 exfatprogs
+eza
 f2fs-tools
 fastfetch
 fcitx5
