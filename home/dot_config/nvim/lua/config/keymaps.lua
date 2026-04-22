@@ -98,3 +98,15 @@ map("n", "V", function()
 		vim.cmd("normal! V")
 	end
 end, { noremap = true, silent = true })
+
+-- mo: markdown viewer
+require("util.mo").setup()
+map("n", "<leader>mp", function()
+	require("util.mo").preview()
+end, { desc = "mo: preview buffer" })
+map("n", "<leader>mP", function()
+	require("util.mo").preview_with_group()
+end, { desc = "mo: preview with group" })
+map("n", "<leader>mw", function()
+	require("util.mo").watch_toggle()
+end, { desc = "mo: toggle watch (git repo)" })
