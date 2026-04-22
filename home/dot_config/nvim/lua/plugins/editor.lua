@@ -43,6 +43,13 @@ return {
 				end,
 				desc = "Focus NeoTree",
 			},
+			{
+				"<leader>fe",
+				function()
+					require("neo-tree.command").execute({ toggle = true, dir = vim.uv.cwd() })
+				end,
+				desc = "Explorer NeoTree (cwd)",
+			},
 		},
 		opts = {
 			filesystem = {

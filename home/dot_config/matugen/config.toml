@@ -25,7 +25,7 @@ output_path = "~/.config/waybar/CSS/colors.css"
 # 発火させ、waybar の reload_style_on_change 経由で CSS だけ再読させる。
 # SIGUSR2 (surface 完全再生成 → exclusive_zone 一瞬消失 → 全タイル window 再レイアウト)
 # と違い surface は維持されるため、バーの瞬間空白もタイル window のガクつきも出ない。
-post_hook = "~/.config/awww/scripts/waybar-reload-css.sh"
+post_hook = "~/.config/hypr/scripts/waybar-reload-css.sh"
 
 [templates.wlogout]
 input_path = "~/.config/matugen/templates/wlogout-colors.css"
