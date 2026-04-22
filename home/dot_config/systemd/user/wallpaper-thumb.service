@@ -1,0 +1,9 @@
+[Unit]
+Description=Regenerate Walker wallpaper thumbnails
+# 壁紙ディレクトリ変更時に wallpaper-thumb.path から triggered。
+
+[Service]
+Type=oneshot
+ExecStart=%h/.config/hypr/scripts/wallpaper-thumb.sh
+# 暴走防止: 1分以上かかるサムネ生成は異常
+TimeoutStartSec=60

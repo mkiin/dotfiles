@@ -1,0 +1,11 @@
+[Unit]
+Description=Watch wallpaper directory for thumbnail regeneration
+
+[Path]
+# PathChanged = 書き込み完了 (close) 時に発火。
+# PathModified は書き込み中でも発火するため、ダウンロード中に走りすぎる。
+PathChanged=%h/pictures/wallpaper
+Unit=wallpaper-thumb.service
+
+[Install]
+WantedBy=default.target
