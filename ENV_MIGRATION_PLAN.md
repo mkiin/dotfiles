@@ -124,7 +124,7 @@ Nix home-manager を廃止し、dotfiles は chezmoi、パッケージは pacman
 ## 3. dotfiles 管理 (chezmoi)
 
 - ソース: `~/.local/share/chezmoi/` (デフォルト)
-- リポジトリ: 現 `~/personal/dotfiles` の中身を chezmoi 構造に移行
+- リポジトリ: 現 `~/dotfiles` の中身を chezmoi 構造に移行
 - 現在 `config/*` に実体がある運用(mkOutOfStoreSymlink経由)から、chezmoi の `dot_*` / `private_*` 命名規則ベースに置き換え
 - テンプレート機能は当面使わない(マルチOS対応が必要になった時だけ)
 

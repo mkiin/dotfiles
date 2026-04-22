@@ -6,7 +6,7 @@ CachyOS + Hyprland のデスクトップ環境を chezmoi で再現する。
 ## 構成概要
 
 ```
-~/personal/dotfiles/
+~/dotfiles/
 ├── home/                # chezmoi sourceDir (dotfiles 本体)
 │   ├── dot_gitconfig    → ~/.gitconfig
 │   ├── dot_npmrc        → ~/.npmrc
@@ -81,7 +81,7 @@ chezmoi が `~/.local/share/chezmoi` ではなく本リポジトリを直接 sou
 `home/.chezmoi.toml.tmpl` で管理する(未整備なら手動で `~/.config/chezmoi/chezmoi.toml` に下記を配置):
 
 ```toml
-sourceDir = "/home/mkiin/personal/dotfiles/home"
+sourceDir = "/home/mkiin/dotfiles/home"
 ```
 
 ### 4. パッケージを復元
@@ -91,7 +91,7 @@ sourceDir = "/home/mkiin/personal/dotfiles/home"
 してあれば、baseline の差分だけ追加すれば再現できる。
 
 ```bash
-cd ~/personal/dotfiles
+cd ~/dotfiles
 sudo pacman -S --needed - < packages/pacman.txt
 yay -S --needed - < packages/aur.txt
 flatpak install $(cat packages/flatpak.txt)
@@ -123,8 +123,8 @@ mise install
 SDDM は root 権限で動くため chezmoi 管理外。
 
 ```bash
-sudo cp -r ~/personal/dotfiles/config/sddm/themes/astronaut /usr/share/sddm/themes/
-sudo cp ~/personal/dotfiles/config/sddm/scripts/Xsetup /usr/share/sddm/scripts/Xsetup
+sudo cp -r ~/dotfiles/config/sddm/themes/astronaut /usr/share/sddm/themes/
+sudo cp ~/dotfiles/config/sddm/scripts/Xsetup /usr/share/sddm/scripts/Xsetup
 sudo chmod +x /usr/share/sddm/scripts/Xsetup
 sudo sed -i 's/^Current=.*/Current=astronaut/' /etc/sddm.conf
 ```
@@ -159,7 +159,7 @@ chezmoi の source を直接編集するのが確実:
 ```bash
 chezmoi edit ~/.zshrc        # エディタで開く
 # もしくは直接 repo を編集
-$EDITOR ~/personal/dotfiles/home/dot_zshrc
+$EDITOR ~/dotfiles/home/dot_zshrc
 chezmoi apply                # ~/.zshrc に反映
 ```
 
@@ -168,7 +168,7 @@ chezmoi apply                # ~/.zshrc に反映
 ### 変更を git に記録
 
 ```bash
-cd ~/personal/dotfiles
+cd ~/dotfiles
 git add -A
 git commit -m "update zshrc"
 git push
@@ -346,7 +346,7 @@ rm -rf ~/.local/share/mise ~/.config/mise
 sudo pacman -Rns $(pacman -Qqe | grep -v -f <(pacman -Qqg base base-devel))
 
 # dotfiles
-cd ~/personal/dotfiles && git clean -xdf
+cd ~/dotfiles && git clean -xdf
 ```
 
 ---
