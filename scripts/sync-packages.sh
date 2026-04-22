@@ -24,10 +24,5 @@ pacman -Qqem > "$OUT_DIR/aur.txt" 2>/dev/null || true
 # 空ファイル保証
 touch "$OUT_DIR/aur.txt"
 
-# flatpak
-if command -v flatpak >/dev/null 2>&1; then
-  flatpak list --app --columns=application > "$OUT_DIR/flatpak.txt" 2>/dev/null || :
-fi
-
 echo "[sync-packages] wrote:"
 wc -l "$OUT_DIR"/*.txt

@@ -2,7 +2,6 @@ awww
 cava
 chezmoi
 discord
-flatpak
 hypridle
 hyprlock
 hyprshot
@@ -16,5 +15,7 @@ ttf-jetbrains-mono-nerd
 walker
 waybar
 wlogout
+xdg-desktop-portal-gtk
 xorg-xrandr
 yay
+zen-browser-bin

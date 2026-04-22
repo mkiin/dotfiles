@@ -12,7 +12,7 @@ Nix home-manager を廃止し、dotfiles は chezmoi、パッケージは pacman
 | AUR (非公式) | **yay** | 公式リポジトリに無いもの。`paru` → `yay` に置換 |
 | 言語ランタイム / 開発ツール | **mise** | 現状維持 |
 | dotfiles | **chezmoi** | 設定ファイルの配置・テンプレート化 |
-| GUIアプリ(一部) | **flatpak** | Zen ブラウザなど。現状維持 |
+| GUIアプリ | **pacman / yay** | Zen は cachyos repo の `zen-browser-bin`、flatpak は廃止 |
 
 ---
 
@@ -60,10 +60,10 @@ Nix home-manager を廃止し、dotfiles は chezmoi、パッケージは pacman
 - **ランタイム**: `node (24)`, `bun`, `deno`, `rust`, `go`, `uv`
 - **開発ツール**: `supabase`, `claude-code`
 
-### 2.4 flatpak (現状維持)
+### 2.4 flatpak (廃止)
 
-- Zen ブラウザ
-- 付随ランタイム (Freedesktop / Mesa / NVIDIA GL / VAAPI / codecs)
+Zen を pacman (`cachyos/zen-browser-bin`) に移行したため flatpak 自体を撤去。
+以降の新環境構築では flatpak はインストールしない。
 
 ### 2.5 削除対象
 
@@ -142,8 +142,7 @@ chezmoi 自体にはパッケージ宣言機能がないため、git で管理�
 dotfiles/
 ├── packages/
 │   ├── pacman.txt    # pacman -Qqen (明示導入 & 公式リポジトリ由来)
-│   ├── aur.txt       # pacman -Qqem (明示導入 & foreign = AUR)
-│   └── flatpak.txt   # flatpak list --app --columns=application
+│   └── aur.txt       # pacman -Qqem (明示導入 & foreign = AUR)
 └── scripts/
     └── sync-packages.sh   # 現状をダンプして packages/ 以下を更新
 ```
@@ -159,7 +158,6 @@ sudo pacman -S chezmoi yay
 # 2. パッケージ復元
 sudo pacman -S --needed - < packages/pacman.txt
 yay -S --needed - < packages/aur.txt
-flatpak install $(cat packages/flatpak.txt)
 
 # 3. dotfiles 配置
 chezmoi init --apply git@github.com:mkiin/dotfiles.git
@@ -187,7 +185,7 @@ mise install
 | `wallust` | Nix HM | yay (AUR) |
 | AURヘルパー | paru (未使用) | yay |
 | ランタイム / 開発ツール | mise | mise (変更なし) |
-| GUIアプリ | pacman + flatpak | pacman + flatpak (変更なし) |
+| GUIアプリ | pacman + flatpak | pacman のみ (flatpak 廃止、Zen は pacman 側へ) |
 | パッケージ宣言管理 | `home.nix` | `packages/*.txt` + `mise/config.toml` |
 
 ---
@@ -195,7 +193,7 @@ mise install
 ## 6. SETUP.md の扱い
 
 現行 SETUP.md は Nix 前提のため、移行完了後に全面書き換え。
-新手順は「OSインストール → pacman → yay → flatpak → chezmoi → mise」の順。
+新手順は「OSインストール → pacman → yay → chezmoi → mise」の順。
 
 ---
 
@@ -210,7 +208,7 @@ mise install
 
 ## 8. 移行の実行順(ドラフト)
 
-1. 現状のパッケージリストをスナップショット (`pacman -Qqen`, `pacman -Qqem`, `flatpak list`, `mise ls`)
+1. 現状のパッケージリストをスナップショット (`pacman -Qqen`, `pacman -Qqem`, `mise ls`)
 2. Nix HM にしかない必要なパッケージを pacman / yay で先に入れる(git, ripgrep 等は既に pacman にもあるので実質 matugen/wallust/elephant-all-bin が対象)
 3. dotfiles を chezmoi 形式に移行(別ブランチで作業)
 4. Nix home-manager をアンインストール (`home-manager uninstall` → `/nix/nix-installer uninstall`)
