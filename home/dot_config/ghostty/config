@@ -45,6 +45,12 @@ unfocused-split-opacity = 1
 # unfocused-split-fill
 window-new-tab-position = end
 
+# 警告ダイアログ抑制
+# ウィンドウ/タブ/スプリットを閉じる時の確認を出さない
+confirm-close-surface = false
+# 改行や制御文字を含むペーストの警告を出さない
+clipboard-paste-protection = false
+
 # キーバインド
 keybind = ctrl+shift+k=goto_split:up
 keybind = ctrl+shift+j=goto_split:down
