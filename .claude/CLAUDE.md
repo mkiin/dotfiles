@@ -60,6 +60,32 @@ For multi-step tasks, state a brief plan:
 
 Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
 
+## 5. Dotfiles Workflow (chezmoi)
+
+**This repo is managed by chezmoi. Edit the chezmoi source only, then sync — do NOT dual-edit.**
+
+Files under `home/dot_config/...` are the chezmoi source. chezmoi materializes them into `~/.config/...` on `apply`. Naming translation rules:
+
+- `dot_foo` → `.foo` (hidden file/dir)
+- `executable_foo.sh` → `foo.sh` with mode 0755
+- Other names pass through as-is
+
+### Required flow
+
+1. Edit the source only: `dotfiles/home/dot_config/<path>`
+2. `chezmoi diff` — preview what will change in the live tree (expected: non-empty diff reflecting your edit)
+3. `chezmoi apply` — sync live files from source
+4. `chezmoi diff` — re-run to confirm zero diff (source and live are now identical)
+
+### Forbidden
+
+- ❌ Editing `~/.config/<path>` and `dotfiles/home/dot_config/<path>` separately in the same change. This creates drift and muddies the source-of-truth.
+- ❌ Skipping `chezmoi diff` before `apply`. Always preview first so surprises are caught before the live tree mutates.
+
+### Exception
+
+Live-only experiments (testing a value before committing to source) are fine, but must be either reverted or propagated to source before the task is considered done. No half-applied state should outlive the session.
+
 ---
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
