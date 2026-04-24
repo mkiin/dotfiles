@@ -35,4 +35,13 @@ matugen_pid=$!
 wait "$awww_pid" || echo "[wallpaper.sh] awww img failed" >&2
 wait "$matugen_pid" || echo "[wallpaper.sh] matugen failed" >&2
 
-hyprctl reload || echo "[wallpaper.sh] hyprctl reload failed" >&2
+# bed-mode 中は hyprctl reload を抑制 (monitors.conf がデフォルト = 3枚なので、
+# reload するとモニター構成が崩壊し awww トランジションも中断される)。
+# Hyprland の colors.conf は次回 reload まで古いままになるが、waybar は matugen の
+# post_hook で CSS を自動更新するので主要な視覚要素は追従する。
+mode="$(cat "${XDG_RUNTIME_DIR:-/tmp}/hypr-monitor-mode" 2>/dev/null || echo desk)"
+if [ "$mode" = "bed" ]; then
+    echo "[wallpaper.sh] bed-mode: skipping hyprctl reload to preserve monitor state" >&2
+else
+    hyprctl reload || echo "[wallpaper.sh] hyprctl reload failed" >&2
+fi
