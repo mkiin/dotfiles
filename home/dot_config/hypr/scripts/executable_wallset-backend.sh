@@ -35,8 +35,22 @@ matugen_pid=$!
 wait "$awww_pid" || echo "[wallset-backend] awww img failed" >&2
 wait "$matugen_pid" || echo "[wallset-backend] matugen failed" >&2
 
-# matugen が書き換えた colors.conf だけを外科的に再 source する。
-# hyprctl reload (全 config 再読込) だと monitors.conf も効いてしまい、
-# bed-mode 中の動的モニター構成が吹き飛ぶ。source keyword なら色だけ更新できる。
-hyprctl keyword source "$HOME/.config/hypr/colors.conf" \
-  || echo "[wallset-backend] colors.conf re-source failed" >&2
+# モード切替時に同じ壁紙を再適用するための last 状態を更新。
+# bed-mode.sh / desk-mode.sh が `awww restore` ではなく本ファイルの画像を `awww img`
+# で焼き直すことで、disable 中だった側のモニターにも同じ壁紙が乗る。
+echo "$img" > "$HOME/.cache/last_wallpaper"
+
+# 全 config を reload する。
+# Hyprland は $variable を parse 時に値置換するため、colors.conf だけを source しても
+# `col.active_border = $primary $tertiary` 等の既評価ルールには新色が伝播しない。
+# 全 reload で初めて全ファイルが再評価され、border 色等が新しい matugen palette を反映する。
+#
+# bed-mode が吹き飛ばないのは monitors.conf を分割した仕掛けで担保:
+#   monitors.conf → monitors-active.conf → 現モードの定義 (bed/desk-mode.sh が書換)
+hyprctl reload \
+  || echo "[wallset-backend] hyprctl reload failed" >&2
+
+# 通知 (shared notify helper)
+source "$HOME/.config/scripts/notify.sh"
+notify --app "wallset" --icon "preferences-desktop-wallpaper" \
+       "Wallpaper changed" "$(basename "$img")"

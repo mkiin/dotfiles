@@ -54,20 +54,21 @@ CachyOS + Hyprland (Wayland) を前提とした個人 dotfiles のアーキテ�
 ### 1. Source of Truth = config ファイル
 
 各 `~/.config/<app>/` のファイル(monitors.conf, keybinds.conf, …)が**唯一の真**。
-**runtime の変更は `hyprctl keyword` 等で「config ファイルを書き換えずに動的に重ねる」** スタイルに統一。再起動 / 再ログインで必ず config の真の状態に戻る。
+**runtime の変更は `hyprctl keyword` 等で「config ファイルを書き換えずに動的に重ねる」** スタイルが基本。例外は monitor mode (desk/bed): モード切替時に `monitors-active.conf` を書き換えて状態を永続化する。
 
 ### 2. 自動 reload は OFF
 
 `misc:disable_autoreload = true` を hyprland.conf に明示。matugen が color テンプレを生成して config ファイルに書き出しても、Hyprland が勝手に全 reload しない。reload は **明示呼び出し**(`hyprctl reload` / `hyprctl keyword source <file>`)に限定される。
 
-これにより「runtime に動的に重ねた状態 (例: bed-mode のモニター構成)」が壁紙変更等のファイル書き出しで吹き飛ばない。
+「いつ reload するか」を完全に制御することで、壁紙変更パイプライン等の意図された reload 以外で構成が動くのを防ぐ。
 
-### 3. ベッド / デスクモードの 2 状態
+### 3. ベッド / デスクモードの 2 状態 + 永続化
 
-- **desk-mode**: 3 枚 (DP-1/DP-2/DP-3)。monitors.conf 上の真の状態。
-- **bed-mode**: 1 枚 (HDMI-A-1)。動的に重ねる一時状態。
+- **desk-mode**: 3 枚 (DP-1/DP-2/DP-3)。`monitors-desk.conf` で定義。
+- **bed-mode**: 1 枚 (HDMI-A-1)。`monitors-bed.conf` で定義。
 - 切替: `Super+Shift+D` / `Super+Shift+B`
 - ws ナビゲーション: `Super+I/O` (e-1/e+1) は両モード共通
+- **永続化**: `monitors-active.conf` がどちらの定義を source するかを保持し、`hyprctl reload` 後も現モードが維持される。bed/desk-mode.sh がモード切替時にこのファイルを書き換える。
 
 ### 4. テーマパイプライン: 壁紙が真
 
@@ -90,10 +91,10 @@ CachyOS + Hyprland (Wayland) を前提とした個人 dotfiles のアーキテ�
   └─▶ wallset-backend.sh
         ├─ awww img <new>      (見た目を更新)
         ├─ matugen image <new> (色テンプレを生成)
-        └─ hyprctl keyword source colors.conf  (Hyprland 色だけ外科的反映)
+        └─ hyprctl reload      (全 config 再評価 → border 等の $variable も更新)
 ```
 
-**重要**: 壁紙パイプラインは monitor 構成に一切触らない。bed-mode 中に壁紙を変えても bed-mode が維持される(`disable_autoreload` の効果)。
+**重要**: 壁紙変更時の `hyprctl reload` は monitors.conf も再評価するが、`monitors.conf → monitors-active.conf` の間接経由で **現モードの定義が再読込される** ため、bed-mode 中に壁紙を変えても bed-mode が維持される。
 
 ## 関連ドキュメント
 

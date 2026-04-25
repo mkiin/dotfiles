@@ -1,33 +1,36 @@
 #!/usr/bin/env bash
-# モニター構成 + ワークスペース所有権をまとめて切替。
-# 1 つの --batch に入れることで:
-#   - モニター重複チェックは末状態で評価される(中間の overlap を無視)
-#   - HDMI-A-1 の modeset を DP-* disable より先に発行し信号断を回避
-#   - workspace ルールも同じトランザクションで HDMI-A-1 へ付け替え
-# persistent:true で ws 1-4 を常在化 → Super+I/O (e-1/e+1) が全 ws を巡回できる。
-hyprctl --batch "\
-keyword monitor HDMI-A-1,1920x1080@144,0x0,1 ; \
-keyword monitor DP-3,disable ; \
-keyword monitor DP-2,disable ; \
-keyword monitor DP-1,disable"
+# bed-mode 切替: HDMI-A-1 だけ有効化、DP-* 無効化。
+#
+# monitor / workspace の定義は monitors-bed.conf に一元化済み。
+# このスクリプトは「どのモードか」を active.conf に書いて reload するだけ。
+#   1. monitors-active.conf を bed 向けに書換 → 永続化
+#   2. hyprctl reload → 全 config 再評価 (monitor 切替 + workspace rule refresh)
+#   3. layer surface 再構築 (Hyprland のバグ workaround、後述)
 
-# workspace 1-4 を HDMI-A-1 上で実体化する。
-# monitors.conf の rule は ws 1-3 を DP-* にピン留めしているため `hyprctl keyword workspace`
-# では runtime のモニター割当を上書きできない。代わりに dispatch workspace で visit すると
-# Hyprland は home monitor が disable 中でも現在有効な HDMI-A-1 に ws を作成する。
-orig_ws=$(hyprctl activeworkspace -j 2>/dev/null | jq -r '.id // 1')
-for n in 1 2 3 4; do
-    hyprctl dispatch workspace "$n" >/dev/null
+echo "source = ~/.config/hypr/monitors-bed.conf" > "$HOME/.config/hypr/monitors-active.conf"
+hyprctl reload
+
+# awww-daemon が reload 後の monitor 構成を認識するまで待つ (最大 1 秒)。
+# hyprctl reload は async なので、戻った直後に awww img を打つと
+# 新規 enable された output が awww-daemon の view に未到達で取りこぼされ、
+# 一部モニタだけ壁紙が更新されない race が起きる。
+expected=$(hyprctl monitors -j 2>/dev/null | jq 'length')
+for _ in {1..10}; do
+    (( $(awww query 2>/dev/null | wc -l) == expected )) && break
+    sleep 0.1
 done
-hyprctl dispatch workspace "$orig_ws"
 
-# カーソルを HDMI-A-1 へ、DPMS スタンバイしていたら叩き起こす
-hyprctl dispatch focusmonitor HDMI-A-1
-hyprctl dispatch dpms on HDMI-A-1
-
-# モニター位置変更で layer surface (awww の壁紙・waybar) が旧座標に取り残される
-# ため、レイヤーを作り直す
-awww restore >/dev/null 2>&1 || true
+# Hyprland はモニター位置変更を layer surface に伝播しない既知バグがあるため、
+# awww (壁紙) と waybar の layer は手動で作り直す。
+# `awww restore` だと disable 中だったモニターは過去のキャッシュが残ってモード間で
+# 壁紙が割れるため、~/.cache/last_wallpaper を明示適用してモード間同期する。
+# transition-type none で瞬時 (モード切替なのでアニメ不要)。
+LAST="$HOME/.cache/last_wallpaper"
+if [[ -f "$LAST" ]] && [[ -r "$(<"$LAST")" ]]; then
+    awww img --transition-type none "$(<"$LAST")" >/dev/null 2>&1 || true
+else
+    awww restore >/dev/null 2>&1 || true
+fi
 pkill -x waybar 2>/dev/null
 uwsm app -- waybar >/dev/null 2>&1 &
 disown

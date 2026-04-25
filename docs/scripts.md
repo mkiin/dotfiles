@@ -85,12 +85,14 @@
 1. `awww img <image>` を非同期起動 (3 秒トランジション)
 2. `matugen image <image> --source-color-index 0` を非同期起動
 3. 両方の `wait` で完了を待つ
-4. `hyprctl keyword source ~/.config/hypr/colors.conf` で Hyprland 枠色だけ外科的反映
+4. `~/.cache/last_wallpaper` に画像パスを記録 (mode 切替時の壁紙同期用)
+5. `hyprctl reload` で全 config を再評価 → border 等の `$variable` 参照箇所が新色を反映
 
 **ポイント**:
 - `matugen --source-color-index 0` 必須: matugen 4.0+ は対話 UI がデフォルトで TTY 無し呼び出しでは失敗する。`0` (最頻色) 固定で対話回避。
 - `awww` の transition パラメータ: `--transition-fps 120` `--transition-duration 3` `--transition-step 90` `--transition-bezier .23,1,.32,1` (144Hz モニター + NVIDIA 多モニター環境向けに stutter 抑制チューニング済み)
-- **`hyprctl reload` は使わない**。`monitors.conf` も読み直されて bed-mode が吹き飛ぶため。`source` keyword で colors.conf だけ再読込する。
+- **`hyprctl reload` を使う理由**: Hyprland は `$variable` を parse 時に値置換するので、`colors.conf` だけ再 source しても `col.active_border = $primary $tertiary` 等の既評価ルールには新色が伝播しない。全 reload で初めて全ファイルが再評価され border 色等が更新される。
+- **bed-mode が吹き飛ばないのは monitors.conf の分割が担保**: `monitors.conf → monitors-active.conf → 現モードの定義` という間接経由で reload 後も現モードが維持される。
 
 **矛盾対応**:
 - matugen の `[templates.waybar]` には `post_hook = "~/.config/hypr/scripts/waybar-reload-css.sh"` が設定されているので、wallset-backend.sh から waybar に直接シグナルを送る必要はない。
@@ -133,20 +135,18 @@
 
 **呼ばれ方**: `Super+Shift+B`。CLI 直叩きも可。
 
-**動作**:
-1. `hyprctl --batch` で atomically:
-   - HDMI-A-1 を `1920x1080@144,0x0` で enable
-   - DP-3, DP-2, DP-1 を disable
-2. `hyprctl dispatch focusmonitor HDMI-A-1` でカーソルを寄せる
-3. `hyprctl dispatch dpms on HDMI-A-1` で DPMS スタンバイ保険
-4. ws 1-4 を `dispatch workspace N` で HDMI-A-1 に visit して実体化
-5. `awww restore` + waybar 再起動で layer surface を新位置で作り直す
+**動作** (4 ステップ):
+1. `monitors-active.conf` に `source = monitors-bed.conf` を書き込んで永続化
+2. `hyprctl reload` で全 config 再評価 → monitor 切替 + workspace rule 適用 + 既存 ws の reassign を Hyprland が一括処理
+3. **awww-daemon が reload 後の monitor 構成を認識するまでポーリング待ち** (最大 1 秒)
+4. layer surface (waybar / awww) を手動再構築 (Hyprland のバグ workaround)
 
 **設計のキモ**:
-- **--batch の atomicity**: 重複チェックは末状態のみで評価。HDMI-A-1 modeset を batch 先頭に置いて DRM レベルでも先行発行 → 信号断回避。
-- **monitors.conf を書き換えない**: 動的に runtime だけ変える。`hyprctl reload` で必ず desk-mode に戻る。
-- **dispatch でワークスペース実体化**: `hyprctl keyword workspace ...` では config の rule (ws 1→DP-3 等) を上書きできない。dispatch すると home monitor が disable でも現在有効なモニターに ws を作れる。
-- **layer 再構築**: Hyprland はモニター位置変更を layer surface に伝播しない既知バグがあるため、awww (壁紙) と waybar の layer は手動で作り直す。
+- **monitor/workspace 定義は monitors-bed.conf に一元化**: スクリプトは「どのモードか」を active.conf に書くだけで、具体的な monitor 設定や ws rule は持たない。設定変更したい時は monitors-bed.conf を編集すれば自動で次回切替に反映される。
+- **`hyprctl reload` 一発で済む**: 旧版は `--batch keyword monitor` (即時 monitor 切替) + workspace dispatch ループ + focus/dpms 補正を持っていたが、reload が同じ事を一括でやる (monitor 設定、persistent:true による空 ws の auto-materialize、focus 自動補正)。reload は monitor 重複や signal 断も Hyprland 側で吸収するので --batch 相当の atomicity も不要。
+- **awww 認識待ちのポーリングが必須**: `hyprctl reload` は async で、戻り値の直後に `awww img` を打つと awww-daemon の view にまだ新規 enable monitor が来ておらず取りこぼされる (例: bed→desk 直後 DP-2 だけ更新されて DP-1/3 が古いキャッシュのまま)。`awww query` の monitor 数 = `hyprctl monitors` の数になるまで 100ms 単位で待つ。
+- **layer 再構築は必須**: Hyprland はモニター位置変更を layer surface に伝播しない既知バグがあるため、awww (壁紙) と waybar の layer だけは reload では復活せず、手動再起動が必要。
+- **モード間壁紙同期**: awww-daemon は per-monitor で壁紙キャッシュを持つため、`awww restore` だと disable 中だったモニターは過去のキャッシュが残ってモード間で壁紙が割れる。`~/.cache/last_wallpaper` (wallset-backend.sh が更新) を明示適用することで両モードに同じ壁紙が乗る。`--transition-type none` でモード切替の即時性を担保。
 
 ---
 
@@ -156,19 +156,21 @@
 
 **呼ばれ方**: `Super+Shift+D`。
 
-**動作**:
-1. `hyprctl --batch` で DP-3/DP-2/DP-1 enable + HDMI-A-1 disable
-2. `awww restore` + waybar 再起動
+**動作** (4 ステップ、bed-mode.sh と完全対称):
+1. `monitors-active.conf` に `source = monitors-desk.conf` を書き込んで永続化
+2. `hyprctl reload` で全 config 再評価 → 既存 ws 1-3 が DP-3/2/1 へ自動 reassign される
+3. awww-daemon が新 monitor 構成を認識するまでポーリング待ち
+4. layer surface (waybar / awww) を手動再構築
 
-**ポイント**: monitors.conf の workspace rule (ws 1-3 が DP-* に persistent でピン留め) が真なので、ws の戻りは Hyprland 側で自動。スクリプトは monitor 切替と layer 再構築だけに専念。
+**ポイント**: bed-mode.sh とほぼ同じ。違いは active.conf に書く参照先 (bed か desk か) だけ。具体的な monitor / workspace 設定は monitors-desk.conf 側に集約。
 
 ## 削除済み / 統合された機構 (歴史メモ)
 
 | 項目 | 何だった | なぜ消えた |
 |---|---|---|
-| state file (`hypr-monitor-mode`) | wallset-backend.sh が bed/desk を判別する状態ファイル | `disable_autoreload = true` 1 行で問題が消え、不要になった |
 | 動的 hjkl rebind | bed-mode で `hjkl` を ws 移動に振り替え、desk で movefocus に戻す | `Super+I/O` をグローバルにすることで「モードでキー意味が変わる」負債を排除 |
-| `hyprctl reload` (in wallset-backend.sh) | 壁紙変更後に全 config 再読込 | `hyprctl keyword source colors.conf` の外科的 reload に置換 |
+| `hyprctl keyword source colors.conf` (外科的 reload) | 壁紙変更時に colors.conf だけ再 source して全 reload を回避 | `$variable` の textual substitution により `col.active_border` 等の既評価ルールに新色が伝播しない問題が判明。monitors.conf を分割して mode-aware にした上で `hyprctl reload` (全 reload) に戻した |
+| bed/desk-mode.sh の `hyprctl --batch keyword monitor` + workspace dispatch ループ + focus/dpms 補正 | 外科的 reload 時代の名残。monitor だけ runtime で動かしたい時の atomicity 確保や、空 ws を visit して実体化、フォーカスの後始末などを手動でやっていた | `monitors-active.conf` 経由の `hyprctl reload` 設計に切替 → reload が monitor 切替・persistent ws 実体化・focus 補正を一括処理するため不要に。スクリプトは active.conf 書換 + reload + layer rebuild の 3 ステップに簡素化 |
 
 ## 関連ドキュメント
 

@@ -1,20 +1,10 @@
 {
   "hyprland/workspaces": {
-    "format": "{icon}",
-    "format-icons": {
-      "1": "1",
-      "2": "2",
-      "3": "3",
-      "4": "4",
-      "default": "*"
-    },
+    "format": "{name}",
     "all-outputs": true,
     "active-only": false,
     "on-click": "activate",
-    "ignore-workspaces": ["^1[1-3]$", "^2[1-3]$", "^3[1-3]$", "^4[1-3]$"],
-    "persistent-workspaces": {
-      "*": [1, 2, 3, 4]
-    }
+    "ignore-workspaces": ["^1[1-3]$", "^2[1-3]$", "^3[1-3]$", "^4[1-3]$"]
   },
   "hyprland/workspaces#sub": {
     "format": "{icon}",

@@ -57,7 +57,10 @@ home/dot_config/
 ├── hypr/                       # Hyprland 本体
 │   ├── hyprland.conf           # メインエントリ + source 順序
 │   ├── env.conf                # Hyprland セッション env (NVIDIA, IME 等)
-│   ├── monitors.conf           # モニター構成 (desk-mode の真)
+│   ├── monitors.conf           # entry: monitors-active.conf を source するだけ
+│   ├── monitors-desk.conf      # desk-mode のモニター (DP-3/2/1) + workspace 1-3 定義
+│   ├── monitors-bed.conf       # bed-mode のモニター (HDMI-A-1) + workspace 1-10 を全て HDMI-A-1 にピン留め
+│   ├── monitors-active.conf    # ⚙️  現モード状態 (bed/desk-mode.sh が書換、chezmoi create_ で初回生成)
 │   ├── input.conf              # 入力デバイス
 │   ├── keybinds.conf           # キーバインド全て
 │   ├── cursor.conf             # カーソル
@@ -116,6 +119,10 @@ home/dot_config/
 
 - 壁紙ごとの色味は壁紙を変更すれば追従する (matugen 自動)
 - テンプレ自体を変えたいときは `home/dot_config/matugen/templates/<app>-colors.<ext>` を編集
+
+## ⚙️ マークの意味
+
+`⚙️` は **runtime 状態ファイル**。chezmoi の `create_` プレフィックス管理で、初回 apply 時に default 値で生成された後は、chezmoi は touch しない。スクリプトが内容を書き換えて状態を保持する。`chezmoi diff` には差分として現れない。
 
 ## ランタイム生成ファイル (chezmoi 管理外)
 

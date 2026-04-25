@@ -40,8 +40,8 @@
                 │                 │   in-place rewrite) │                 │
                 │                 │                     │                 │
                 ▼                 ▼                     ▼                 ▼
-         hyprctl keyword    waybar の          walker 起動時       wlogout 起動時
-         source colors.conf  reload_style_     に新色を読込         に新色を読込
+         hyprctl reload     waybar の          walker 起動時       wlogout 起動時
+         (全 config 再評価)  reload_style_     に新色を読込         に新色を読込
                 │            on_change で
                 │            CSS だけ live
                 ▼            reload (surface 維持)
@@ -98,19 +98,24 @@ Hyprland 起動
 
 Waybar のみ **`post_hook = "~/.config/hypr/scripts/waybar-reload-css.sh"`** を持つ。詳細は [scripts.md](./scripts.md#waybar-reload-csssh) 参照。
 
-## Hyprland への色適用が「外科的」である理由
+## Hyprland への色適用が `hyprctl reload` (全 reload) である理由
 
-Hyprland は `misc:disable_autoreload = true` で **config 自動 reload を無効化**している。matugen が `colors.conf` を書き換えても、Hyprland は何もしない。
+Hyprland は `misc:disable_autoreload = true` で **config 自動 reload を無効化**している。matugen が `colors.conf` を書き換えても、Hyprland は何もしない。`wallset-backend.sh` が最後に明示的に `hyprctl reload` を叩いて全 config を再評価する。
 
-`wallset-backend.sh` は最後に明示的に `hyprctl keyword source ~/.config/hypr/colors.conf` を叩いて、**colors.conf だけを再 source** する。これが「外科的 reload」。
+なぜ部分 reload (`hyprctl keyword source colors.conf`) では駄目か:
 
-なぜ全 reload (`hyprctl reload`) を避けるか:
+- Hyprland は `$variable` を **parse 時にテキスト置換** する (参照ではなく値コピー)
+- `appearance/general.conf` の `col.active_border = $primary $tertiary` は最初の load で `$primary` の当時の値が焼き込まれる
+- `colors.conf` だけを再 source しても **変数定義は更新されるが、すでに評価済みの `col.active_border` は古い値のまま**
+- 全 reload で `appearance/general.conf` も再評価されて初めて新しい `$primary` が border に伝播する
 
-- `hyprctl reload` は `monitors.conf` も再評価する
-- `monitors.conf` は **desk-mode の真**(HDMI-A-1 disable, DP-* enable)
-- **bed-mode** 中(=runtime で動的に重ねた状態)に reload すると、bed-mode が吹き飛んで desk-mode に戻ってしまう
+なぜ全 reload しても bed-mode が吹き飛ばないか:
 
-色だけを source する方式なら monitor 構成は無傷。
+- `monitors.conf` は **entry only** で、`monitors-active.conf` を source するだけ
+- `monitors-active.conf` は **runtime 状態ファイル**。`bed-mode.sh` / `desk-mode.sh` がモード切替時にこのファイルを書き換え、現モードの sub-config (`monitors-bed.conf` / `monitors-desk.conf`) を source するように仕向ける
+- 全 reload 時、Hyprland は `monitors.conf → monitors-active.conf → 現モードの定義` の順に読むため、現モードの monitor + workspace 定義が再現される
+
+詳細は [architecture.md](./architecture.md#3-ベッド--デスクモードの-2-状態--永続化) も参照。
 
 ## Waybar の CSS reload trick
 
@@ -134,13 +139,13 @@ Walker と Wlogout は常駐プロセスでないため再起動が必要なケ�
 
 ## bed-mode との独立性
 
-壁紙変更パイプラインは **monitor 構成に一切触らない**。
+壁紙変更パイプラインは `hyprctl reload` で全 config を再評価するが、**現モード状態は保持される**:
 
-- ❌ wallset-backend.sh は `hyprctl reload` を呼ばない (`hyprctl keyword source` のみ)
-- ❌ matugen は `monitors.conf` を書かない
-- ❌ Hyprland autoreload は無効化済み
+- ✅ `monitors.conf` が `monitors-active.conf` を source する間接構造により、reload 後も現モードの monitor 定義が再現
+- ❌ matugen は monitor 系ファイルを一切書かない (色 template のみ)
+- ❌ Hyprland autoreload は無効化済み (reload は `hyprctl reload` の明示呼び出しのみ)
 
-結果、bed-mode 中に壁紙を変更しても bed-mode が維持される。これが今日確立した最重要の設計不変量。
+結果、bed-mode 中に壁紙を変更しても bed-mode が維持される。「mode は永続化された状態」「色は壁紙から派生する」という 2 軸が独立して reload に耐える。
 
 ## 関連ドキュメント
 

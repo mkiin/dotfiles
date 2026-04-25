@@ -1,7 +1,6 @@
 #!/bin/sh
 # SDDM X11 モニター配置設定
-# Hyprland の monitors.conf と同じレイアウトを xrandr で再現する
-# ログイン画面が映る位置は --primary を付けたモニター
+# ログイン画面を DP-2 (1440p デスク中央) に固定する。
 #
 # 物理配置: [DP-3] [DP-2] [DP-1] [HDMI-A-1]    ← Hyprland (Wayland) 名
 #           [DP-4] [DP-2] [DP-0] [HDMI-0]      ← X11 名（NVIDIA proprietary）
@@ -9,19 +8,25 @@
 #
 # NVIDIA proprietary driver の X11 と Wayland では出力名が異なる。
 # 出力名の確認は /var/log/sddm-xsetup.log の xrandr --query 結果を参照。
-# 認識失敗時は `xrandr` のエラーは無視され、デフォルト配置で続行する。
+#
+# DP-2 以外を `--off` することで:
+#   - SDDM の Screen 0 サイズが DP-2 (2560x1440) ちょうどに縮む
+#   - astronaut テーマの `Screen.height`/`Screen.ScreenWidth` が DP-2 サイズに合う
+#   - login 画面が DP-2 だけに表示され、他モニターに伸びない
+# login 後 Hyprland が起動すると monitors-active.conf 経由で desk/bed の構成が
+# 一から適用され、他モニターも復帰する。
 
 LOG=/tmp/sddm-xsetup.log
 {
     echo "=== $(date) ==="
     echo "--- xrandr --query ---"
     xrandr --query
-    echo "--- applying layout ---"
+    echo "--- applying layout (DP-2 only) ---"
     xrandr \
-        --output DP-4   --mode 1920x1080 --pos 0x0 \
-        --output DP-2   --mode 2560x1440 --pos 1920x0 --primary \
-        --output DP-0   --mode 1920x1080 --pos 4480x0 \
-        --output HDMI-0 --mode 1920x1080 --pos 6400x0
+        --output DP-2   --mode 2560x1440 --pos 0x0 --primary \
+        --output DP-4   --off \
+        --output DP-0   --off \
+        --output HDMI-0 --off
     echo "--- xrandr exit code: $? ---"
     echo "--- post-apply xrandr --query ---"
     xrandr --query
