@@ -185,7 +185,6 @@ lazydocker() {
 
 # シェル起動時にバックグラウンドで実行
 (vscode_cleanup &>/dev/null &)
-(claude_cleanup &>/dev/null &)
 
 # --------------------------------------------
 # エイリアス
