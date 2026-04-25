@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # 壁紙切替 API (単一責任、連鎖を全部ここで持つ)
-#   wallpaper.sh <image>
+#   wallset-backend <image>
 #
 # 連鎖: awww img + matugen image (並行) → hyprctl reload
 # waybar は matugen の post_hook (waybar-reload-css.sh) で style.css を in-place rewrite、
@@ -10,7 +10,7 @@
 
 set -euo pipefail
 
-img="${1:?usage: wallpaper.sh <image>}"
+img="${1:?usage: wallset-backend <image>}"
 
 # awww と matugen は同じ画像ファイルを読むだけで互いに独立 → 並行化で短縮。
 # transition 調整 (144Hz モニター前提、NVIDIA + 多モニター環境で stutter 抑制):
@@ -32,11 +32,11 @@ awww_pid=$!
 matugen image "$img" --source-color-index 0 &
 matugen_pid=$!
 
-wait "$awww_pid" || echo "[wallpaper.sh] awww img failed" >&2
-wait "$matugen_pid" || echo "[wallpaper.sh] matugen failed" >&2
+wait "$awww_pid" || echo "[wallset-backend] awww img failed" >&2
+wait "$matugen_pid" || echo "[wallset-backend] matugen failed" >&2
 
 # matugen が書き換えた colors.conf だけを外科的に再 source する。
 # hyprctl reload (全 config 再読込) だと monitors.conf も効いてしまい、
 # bed-mode 中の動的モニター構成が吹き飛ぶ。source keyword なら色だけ更新できる。
 hyprctl keyword source "$HOME/.config/hypr/colors.conf" \
-  || echo "[wallpaper.sh] colors.conf re-source failed" >&2
+  || echo "[wallset-backend] colors.conf re-source failed" >&2

@@ -61,7 +61,7 @@ function GetEntries()
 					Value = path,
 					Icon = icon, -- 絶対パス → Walker が GdkTexture 化して GtkPicture に描画
 					Actions = {
-						activate = home .. "/.config/hypr/scripts/wallpaper.sh " .. ShellEscape(path),
+						activate = home .. "/.config/hypr/scripts/wallset-backend.sh " .. ShellEscape(path),
 					},
 				})
 			end
