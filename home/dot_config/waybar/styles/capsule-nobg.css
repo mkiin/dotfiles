@@ -1,8 +1,12 @@
-/*
- * Capsule Style for Waybar
- * A modern and minimalist style with capsule-like modules.
- */
+/* ============================================================
+   Capsule Style for Waybar (capsule-nobg variant)
+   Modern minimalist look with pill-shaped modules.
+   ============================================================ */
 
+
+/* ============================================================
+   Global Reset & Base
+   ============================================================ */
 * {
     border: none;
     border-radius: 0;
@@ -14,38 +18,68 @@
 }
 
 window#waybar {
-    /* slightly transparent background */
     background-color: alpha(@background-matugen, 0);
     color: @foreground;
     border-radius: 12px;
 }
 
 
-
-.modules-center {
-    background-color: @surface_container;
-    border-radius: 20px
-}
-
-/* .modules-right の大枠は #right-cluster に移行。
- * modules-right 配下の clock と custom/power を独立カプセル化するため、
- * .modules-right 自体は素通しに。 */
-
-#right-cluster {
+/* ============================================================
+   Cluster Wrappers
+   `group/<name>#cluster` config syntax adds the .cluster class
+   to the group widget. Single rule covers every cluster group.
+   ============================================================ */
+.cluster {
     background-color: @surface_container;
     border-radius: 20px;
-    padding: 0px 12px;
-    margin: 0px 4px;
+    padding: 0px 4px;
+    margin: 0px 5px;
     color: @tertiary_fixed_dim;
 }
 
+.modules-center {
+    background-color: @surface_container;
+    border-radius: 20px;
+}
+
+/* Inside a cluster, individual modules drop their own pill bg
+   so the cluster's single background owns the visual frame.
+   Tighter horizontal padding so neighbours read as one merged group. */
+.cluster #clock,
+.cluster #pulseaudio,
+.cluster #network,
+.cluster #bluetooth,
+.cluster #cpu,
+.cluster #memory,
+.cluster #idle_inhibitor,
+.cluster #temperature,
+.cluster #tray,
+.cluster #window,
+.cluster #custom-pacman,
+.cluster #custom-aur,
+.cluster #custom-mise,
+.cluster #custom-swaync {
+    background-color: transparent;
+    border-radius: 0;
+    margin: 0;
+    padding: 0 6px;
+}
 
 
-/* General module styling */
+/* ============================================================
+   Default Module Capsule
+   Each module renders as its own pill with uniform padding.
+   ============================================================ */
 #clock,
 #pulseaudio,
 #network,
 #bluetooth,
+#cpu,
+#memory,
+#idle_inhibitor,
+#temperature,
+#tray,
+#window,
 #custom-power,
 #custom-weather,
 #custom-nix,
@@ -53,8 +87,7 @@ window#waybar {
 #custom-pacman,
 #custom-aur,
 #custom-mise,
-#temperature,
-#window {
+#custom-swaync {
     background-color: @surface_container;
     border-radius: 20px;
     padding: 0px 12px;
@@ -63,46 +96,29 @@ window#waybar {
 }
 
 
-/* Unified center */
-
-#custom-temperature {
-    margin: 0px 15px;
-}
-
-#tray {
-    padding: 0px 12px;
-}
-#custom-swaync {
-
-    padding: 0px 12px;
-}
-
-#backlight {
-    margin: 0px 5px;
-
-    padding: 0px 12px;
-}
-#custom-light{
-    margin: 0px 0px;
-
+/* ============================================================
+   Window (hide empty pill when no window focused)
+   ============================================================ */
+window#waybar.empty #window {
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
 }
 
 
-
-
-/* Workspaces */
+/* ============================================================
+   Workspaces
+   ============================================================ */
 #workspaces {
     padding: 0px 6px;
     min-width: 20px;
     margin: 0px;
-
 }
 
 #workspaces button {
     min-width: 20px;
-    /* padding: 0px 4px; */
     margin: 5px 3px;
-    color: @surface_container_highest; /* Inactive workspace color */
+    color: @surface_container_highest;
     background-color: @surface_container_highest;
     border-radius: 20px;
     transition:
@@ -110,13 +126,12 @@ window#waybar {
         color      0.25s cubic-bezier(0.4, 0.0, 0.2, 1),
         box-shadow 0.25s cubic-bezier(0.4, 0.0, 0.2, 1),
         min-width  0.25s cubic-bezier(0.4, 0.0, 0.2, 1);
-
 }
+
 #workspaces button.active {
     color: @on_primary_fixed;
     background-color: @color4;
     min-width: 50px;
-    /* padding: 0px 8px; */
     box-shadow: 0 0 5px alpha(@primary, 0.0);
 }
 
@@ -130,40 +145,24 @@ window#waybar {
     color: @background;
 }
 
-/* Specific modules */
+
+/* ============================================================
+   Clock
+   ============================================================ */
 #clock {
     color: @on_primary;
-    background-color: @color3; /* Different color for clock */
-}
-
-#backlight {
-    color: @surface_color;
-    margin: 0px;
-    border-radius: 0px;
+    background-color: @color3;
 }
 
 
-
-
-#custom-nix {
-  color: @on_surface;
-  font-size:20px;
-  padding-right: 16px;
-}
-
-
+/* ============================================================
+   Audio (Pulseaudio, Cava)
+   ============================================================ */
 #pulseaudio {
     color: @tertiary;
-    padding-right: 20px;
-    margin: 0px;
-    border-radius: 0px 20px 20px 0px;
 }
 
 #pulseaudio.muted {
-    color: @color4;
-}
-
-#temperature.critical {
     color: @color4;
 }
 
@@ -173,19 +172,11 @@ window#waybar {
 }
 
 
-#bluetooth {
-       padding: 0px 12px;
-}
-#custom-power {
-    color: @color4;
-    background-color: @color0;
-    border-radius: 20px;
-    margin-right: 5px;
-}
-
+/* ============================================================
+   Network
+   ============================================================ */
 #network {
     color: @error;
-    padding: 0px 16px;
 }
 
 #network.wifi {
@@ -208,11 +199,56 @@ window#waybar {
     color: @color8;
 }
 
-#cpu, #memory, #idle_inhibitor {
-    padding: 0px 12px;
+
+/* ============================================================
+   System Stats (CPU, Memory, Idle Inhibitor, Temperature)
+   ============================================================ */
+#idle_inhibitor.activated {
+    color: @color4;
 }
 
-/* Battery styles */
+#temperature.critical {
+    color: @color4;
+}
+
+
+/* ============================================================
+   Tray & Notifications
+   ============================================================ */
+#custom-swaync.dnd-none,
+#custom-swaync.dnd-notification,
+#custom-swaync.dnd-inhibited-none,
+#custom-swaync.dnd-inhibited-notification {
+    color: @color4;
+}
+
+
+/* ============================================================
+   Power & Launcher
+   ============================================================ */
+#custom-power {
+    color: @color4;
+    background-color: @color0;
+    border-radius: 20px;
+    margin-right: 5px;
+}
+
+#custom-nix {
+    color: @on_surface;
+    font-size: 20px;
+    padding-right: 16px;
+}
+
+
+/* ============================================================
+   Backlight & Battery (laptop, currently unused)
+   ============================================================ */
+/*
+#backlight {
+    color: @surface_color;
+    margin: 0px;
+    border-radius: 0px;
+}
 
 #battery {
     background-color: rgb(80, 136, 80);
@@ -223,10 +259,7 @@ window#waybar {
     padding: 0px 5px;
     font-size: 10px;
     border-radius: 6px;
-
 }
-
-
 
 #battery.warning {
     color: @error;
@@ -237,7 +270,6 @@ window#waybar {
     color: @on_error;
 }
 
-/* optional: add blinking animation when critical */
 #battery.critical:not(.charging) {
     animation: blink 1s linear infinite;
 }
@@ -245,13 +277,4 @@ window#waybar {
 @keyframes blink {
     to { color: transparent; }
 }
-
-
-/* pkg-update drawer: pacman をデフォ表示、aur/mise は hover/click で展開 */
-#pkg-update {
-    background-color: @surface_container;
-    border-radius: 20px;
-    padding: 0px 4px;
-    margin: 0px 5px;
-    color: @tertiary_fixed_dim;
-}
+*/
