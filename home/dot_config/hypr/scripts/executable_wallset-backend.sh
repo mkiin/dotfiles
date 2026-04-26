@@ -2,11 +2,14 @@
 # 壁紙切替 API (単一責任、連鎖を全部ここで持つ)
 #   wallset-backend <image>
 #
-# 連鎖: awww img + matugen image (並行) → hyprctl reload
+# 連鎖: awww img + matugen image + wallust run (並行) → hyprctl reload
 # waybar は matugen の post_hook (waybar-reload-css.sh) で style.css を in-place rewrite、
 # reload_style_on_change 経由で CSS だけ再読させる。surface 維持なのでタイル window が
 # ガクつかない (SIGUSR2 は Client::reset() で surface 再生成するためガクつく)。
-# matugen / hyprctl が失敗しても壁紙変更自体は成功扱いで継続。
+# matugen は Material Design 3 トークン (@primary 等) を出力、wallust は Pywal 系 16 色
+# パレット (@color0..15) を出力。両方 colors-waybar.css と colors.css に書き出されて
+# style.css の @import チェーンを通じて waybar に反映される。
+# matugen / wallust / hyprctl が失敗しても壁紙変更自体は成功扱いで継続。
 
 set -euo pipefail
 
@@ -32,8 +35,14 @@ awww_pid=$!
 matugen image "$img" --source-color-index 0 &
 matugen_pid=$!
 
-wait "$awww_pid" || echo "[wallset-backend] awww img failed" >&2
+# wallust: 16 色 Pywal 系パレット → ~/.config/waybar/colors-waybar.css
+# noro 系 style プリセットが要求する @color0..15 トークンを供給する。
+wallust run "$img" --quiet &
+wallust_pid=$!
+
+wait "$awww_pid"    || echo "[wallset-backend] awww img failed" >&2
 wait "$matugen_pid" || echo "[wallset-backend] matugen failed" >&2
+wait "$wallust_pid" || echo "[wallset-backend] wallust failed" >&2
 
 # モード切替時に同じ壁紙を再適用するための last 状態を更新。
 # bed-mode.sh / desk-mode.sh が `awww restore` ではなく本ファイルの画像を `awww img`

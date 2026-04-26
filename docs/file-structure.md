@@ -97,6 +97,10 @@ home/dot_config/
 │       ├── wallpaper-thumb.path        # 壁紙ディレクトリ監視
 │       └── wallpaper-thumb.service     # サムネ再生成 (oneshot)
 ├── uv/
+├── wallust/                    # 16 色 Pywal 系パレット生成器 (matugen と並列)
+│   ├── wallust.toml            # backend / palette / templates 設定
+│   └── templates/
+│       └── waybar.css          # @color0..15 + @cursor/@background/@foreground
 ├── walker/                     # Launcher GUI
 │   ├── config.toml
 │   └── themes/

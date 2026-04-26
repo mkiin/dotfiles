@@ -2,6 +2,7 @@ awww
 cava
 chezmoi
 discord
+fontforge
 hypridle
 hyprlock
 hyprshot

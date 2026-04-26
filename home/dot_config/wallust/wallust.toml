@@ -1,0 +1,20 @@
+# Wallust config
+# 壁紙画像から 16 色 (Pywal 系) パレットを抽出。matugen の Material Design 3 トークンとは
+# 別系統の色味が手に入る (鮮やかなアクセント色など、@color0..15 として CSS で参照)。
+
+# 色抽出アルゴリズム。"wal" は Pywal 互換 (彩度高めの 16 色が出る)。
+backend = "wal"
+
+# 色空間 (lab = perceptual に近く、コントラスト出やすい)
+color_space = "lab"
+
+# 背景色との読みやすさを担保する (低コントラスト時に色を自動調整)
+check_contrast = true
+
+# 彩度ブースト 0 = しない (パレット本来の色を保持)
+saturation = 0
+
+[templates]
+# waybar 用 CSS パレット (@color0..15 + @background, @foreground, @cursor)。
+# noro-dotfiles の style プリセット群が前提とするトークンセット。
+waybar = { template = "waybar.css", target = "~/.config/waybar/colors-waybar.css" }

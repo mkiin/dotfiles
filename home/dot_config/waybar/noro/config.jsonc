@@ -4,24 +4,18 @@
     "margin": "10 8 -5 8",
     "reload_style_on_change": true,
     "modules-left": [
-        "custom/archlinux",
-        "custom/pacman",
-        "custom/aur",
-        "custom/mise",
+        "clock",
         "network",
         "bluetooth",
         "hyprland/window"
     ],
     "modules-center": [
         "hyprland/workspaces",
-        "clock",
-        "custom/weather"
+        "pulseaudio"
     ],
     "modules-right": [
         "cava",
-        "pulseaudio",
         "group/sysstats",
-        "idle_inhibitor",
         "custom/swaync",
         "tray"
     ],
@@ -29,13 +23,13 @@
         "orientation": "horizontal",
         "drawer": {
             "transition-duration": 500,
-            "children-class": "not-cpu",
+            "children-class": "not-memory",
             "transition-left-to-right": false
         },
         "modules": [
             "cpu",
-            "temperature",
-            "memory"
+            "memory",
+            "idle_inhibitor"
         ]
     },
     "idle_inhibitor": {
@@ -47,12 +41,12 @@
     },
     "cpu": {
         "interval": 10,
-        "format": " {usage}%",
+        "format": "{usage}% ",
         "tooltip": false
     },
     "memory": {
         "interval": 30,
-        "format": " {}%",
+        "format": "{}% ",
         "tooltip-format": "{used:0.1f}G/{total:0.1f}G"
     },
     "custom/nix": {
@@ -75,8 +69,8 @@
         "format-charging": "{capacity}% "
     },
     "clock": {
-        "format": " {:%H:%M}",
-        "format-alt": "󰸗 {:%A, %B %d, %Y}",
+        "format": "{:%H:%M}  ",
+        "format-alt": "{:%A, %B %d, %Y (%R)}  ",
         "tooltip-format": "<tt><small>{calendar}</small></tt>",
         "calendar": {
             "mode": "year",
@@ -113,8 +107,8 @@
         "separate-outputs": true
     },
     "pulseaudio": {
-        "format": "{icon} {volume}%",
-        "format-bluetooth": "{icon} {volume}%",
+        "format": "{volume}% {icon}",
+        "format-bluetooth": "{volume}% {icon}",
         "format-muted": "",
         "format-icons": {
             "alsa_output.pci-0000_00_1f.3.analog-stereo": "",
@@ -147,8 +141,8 @@
     },
     "network": {
         "format": "{ifname}",
-        "format-wifi": "",
-        "format-ethernet": "󰊗",
+        "format-wifi": "{essid} ",
+        "format-ethernet": "{ipaddr}/{cidr} 󰊗",
         "format-disconnected": "", //An empty format will hide the module.
         "tooltip-format": "{ifname} via {gwaddr} 󰊗",
         "tooltip-format-wifi": "{essid} ({signalStrength}%) ",
@@ -211,24 +205,12 @@
         }
     },
     "custom/swaync": {
-    "tooltip": true,
-    "format": "{icon}",
-    "format-icons": {
-      "notification": "󱅫",
-      "none": "󰂜",
-      "dnd-notification": "󰂠",
-      "dnd-none": "󰪓",
-      "inhibited-notification": "󰂛",
-      "inhibited-none": "󰪑",
-      "dnd-inhibited-notification": "󰂛",
-      "dnd-inhibited-none": "󰪑"
-    },
-    "return-type": "json",
-    "exec-if": "which swaync-client",
-    "exec": "swaync-client -swb",
-    "on-click": "swaync-client -t -sw",
-    "on-click-right": "swaync-client -d -sw",
-    "escape": true
+        "format": "{icon}",
+        "format-icons": {
+            "default": "󰂚"
+        },
+        "tooltip": false,
+        "on-click": "swaync-client -t"
     },
     "custom/temperature": {
         "format": "{icon} ",
@@ -249,51 +231,5 @@
         ],
         "on-scroll-up": "bash ~/.config/waybar/scripts/waybar-light-controls/light_control.sh up",
         "on-scroll-down": "bash ~/.config/waybar/scripts/waybar-light-controls/light_control.sh down"
-    },
-    "custom/archlinux": {
-        "format": "",
-        "tooltip": "Launch app launcher (walker)",
-        "on-click": "walker"
-    },
-
-    "custom/pacman": {
-        "format": "󰚰 {}",
-        "tooltip-format": "Pacman official updates: {}\nClick to upgrade",
-        "exec": "~/.config/waybar/Scripts/pacman-update.sh",
-        "interval": 1800,
-        "on-click": "ghostty -e bash -c 'sudo pacman -Syu; echo; read -p \"press enter to close...\"'",
-        "format-icons": ["󰚰"]
-    },
-
-    "custom/aur": {
-        "format": " {}",
-        "tooltip-format": "AUR updates: {}\nClick to upgrade",
-        "exec": "~/.config/waybar/Scripts/aur-update.sh",
-        "interval": 1800,
-        "on-click": "ghostty -e bash -c 'yay -Sua; echo; read -p \"press enter to close...\"'"
-    },
-
-    "custom/mise": {
-        "format": "󰖓 {}",
-        "tooltip-format": "Mise outdated tools: {}\nClick to upgrade",
-        "exec": "~/.config/waybar/Scripts/mise-update.sh",
-        "interval": 1800,
-        "on-click": "ghostty -e bash -c 'mise upgrade; echo; read -p \"press enter to close...\"'"
-    },
-
-    "custom/weather": {
-        "format": "{}",
-        "tooltip": true,
-        "return-type": "json",
-        "exec": "~/.config/waybar/Scripts/weather/weather.sh",
-        "interval": 900
-    },
-
-    "temperature": {
-        "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
-        "interval": 5,
-        "critical-threshold": 80,
-        "format": "󰔏 {temperatureC}°C",
-        "format-critical": "󰔏 {temperatureC}°C "
     }
 }

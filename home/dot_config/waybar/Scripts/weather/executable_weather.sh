@@ -33,10 +33,10 @@ if [ -z "${ENTRY}" ]; then
   DESC="Unknown (code: ${CODE})"
 else
   if [ "${IS_DAY}" = "1" ]; then
-    ICON=$(echo "${ENTRY}" | jq -r '."icon-emoji"')
+    ICON=$(echo "${ENTRY}" | jq -r '."icon-nerd"')
     DESC=$(echo "${ENTRY}" | jq -r '.day')
   else
-    ICON=$(echo "${ENTRY}" | jq -r '."icon-emoji-night"')
+    ICON=$(echo "${ENTRY}" | jq -r '."icon-nerd-night"')
     DESC=$(echo "${ENTRY}" | jq -r '.night')
   fi
 fi

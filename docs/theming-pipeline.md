@@ -78,11 +78,13 @@ Hyprland 起動
 
 ## 各色生成ツール
 
+色生成ツールは **2 系統並列** で走る (matugen + wallust)。それぞれ別の色空間/思想で壁紙からパレットを抽出するので、style 側で使い分けできる。
+
 ### matugen
 
 | 項目 | 値 |
 |---|---|
-| 役割 | Material You 3 パレットを画像から抽出 |
+| 役割 | Material You 3 パレットを画像から抽出 (落ち着いた `@primary`/`@secondary`/`@tertiary` 系) |
 | 設定 | `~/.config/matugen/config.toml` |
 | テンプレ | `~/.config/matugen/templates/<app>-<subject>.<ext>` |
 | 出力先 | 各 consumer の設定ディレクトリ直下 |
@@ -92,11 +94,27 @@ Hyprland 起動
 | App | Input template | Output |
 |---|---|---|
 | Hyprland | `templates/hyprland-colors.conf` | `~/.config/hypr/colors.conf` |
-| Waybar | `templates/waybar-colors.css` | `~/.config/waybar/CSS/colors.css` |
+| Waybar (旧) | `templates/waybar-colors.css` | `~/.config/waybar/CSS/colors.css` |
+| Waybar (anom 系) | `templates/waybar-colors.css` | `~/.config/waybar/colors.css` |
 | Walker | `templates/walker-colors.css` | `~/.config/walker/themes/matugen/colors.css` |
 | Wlogout | `templates/wlogout-colors.css` | `~/.config/wlogout/colors.css` |
 
 Waybar のみ **`post_hook = "~/.config/hypr/scripts/waybar-reload-css.sh"`** を持つ。詳細は [scripts.md](./scripts.md#waybar-reload-csssh) 参照。
+
+### wallust
+
+| 項目 | 値 |
+|---|---|
+| 役割 | Pywal 系 16 色パレット (`@color0..15`) を画像から抽出 (鮮やかな vivid 系アクセント) |
+| 設定 | `~/.config/wallust/wallust.toml` |
+| テンプレ | `~/.config/wallust/templates/<name>.<ext>` |
+| 出力先 | `target` で指定 (chezmoi 管理外、runtime 生成) |
+
+| App | Template | Output |
+|---|---|---|
+| Waybar (noro 系 style 用) | `templates/waybar.css` | `~/.config/waybar/colors-waybar.css` |
+
+`backend = "wal"` で Pywal 互換の色抽出アルゴリズム。matugen と独立に走るので「matugen が落ち着きすぎて欲しい鮮やかさが出ない」を補完する役割。noro-dotfiles の style プリセット群が前提とする `@color1` (赤系)、`@color3` (黄系) 等のアクセント色は wallust から来る。
 
 ## Hyprland への色適用が `hyprctl reload` (全 reload) である理由
 
@@ -152,3 +170,4 @@ Walker と Wlogout は常駐プロセスでないため再起動が必要なケ�
 - [Architecture](./architecture.md) — システム全体像
 - [File Structure](./file-structure.md) — ファイルレイアウト
 - [Scripts Reference](./scripts.md) — 各スクリプトの実装詳細
+- [Waybar Styling Pitfalls](./waybar-styling-pitfalls.md) — GTK4 Adwaita デフォの hover/focus 装飾を消す reset パターン (どの style 採用しても entry 側に常備推奨)

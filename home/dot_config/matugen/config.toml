@@ -27,6 +27,12 @@ output_path = "~/.config/waybar/CSS/colors.css"
 # と違い surface は維持されるため、バーの瞬間空白もタイル window のガクつきも出ない。
 post_hook = "~/.config/hypr/scripts/waybar-reload-css.sh"
 
+[templates.waybar-anom]
+# anom-style style.css 用の colors.css。`@import 'colors.css'` で同階層を参照する想定。
+# 入力は waybar 用と共通テンプレート (matugen トークンを @define-color で全列挙) を流用。
+input_path = "~/.config/matugen/templates/waybar-colors.css"
+output_path = "~/.config/waybar/colors.css"
+
 [templates.wlogout]
 input_path = "~/.config/matugen/templates/wlogout-colors.css"
 output_path = "~/.config/wlogout/colors.css"

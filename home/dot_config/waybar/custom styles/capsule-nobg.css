@@ -1,0 +1,236 @@
+/*
+ * Capsule Style for Waybar
+ * A modern and minimalist style with capsule-like modules.
+ */
+
+* {
+    border: none;
+    border-radius: 0;
+    font-family: "JetBrainsMono Nerd Font", "Iosevka Nerd Font", "Font Awesome 6 Free";
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+    min-height: 1px;
+}
+
+window#waybar {
+    /* slightly transparent background */
+    background-color: alpha(@background-matugen, 0);
+    color: @foreground;
+    border-radius: 12px;
+}
+
+
+
+.modules-center {
+    background-color: @surface_container;
+    border-radius: 20px
+}
+
+.modules-right{
+    background-color: @surface_container;
+    border-radius: 20px;
+    padding: 0px 12px;
+    margin: 0px 4px;
+    color: @tertiary_fixed_dim;
+}
+
+
+
+/* General module styling */
+#clock,
+#pulseaudio,
+#network,
+#custom-power,
+#custom-weather,
+#custom-nix{
+    background-color: @surface_container;
+    border-radius: 20px;
+    padding: 0px 12px;
+    margin: 0px 5px;
+    color: @tertiary_fixed_dim;
+}
+
+
+/* Unified center */
+
+#custom-temperature {
+    margin: 0px 15px;
+}
+
+#tray {
+    padding: 0px 12px;
+}
+#custom-swaync {
+
+    padding: 0px 12px;
+}
+
+#backlight {
+    margin: 0px 5px;
+
+    padding: 0px 12px;
+}
+#custom-light{
+    margin: 0px 0px;
+
+}
+
+
+
+
+/* Workspaces */
+#workspaces {
+    padding: 0px 6px;
+    min-width: 20px;
+    margin: 0px;
+
+}
+
+#workspaces button {
+    min-width: 20px;
+    /* padding: 0px 4px; */
+    margin: 5px 3px;
+    color: @surface_container_highest; /* Inactive workspace color */
+    background-color: @surface_container_highest;
+    border-radius: 20px;
+    transition:
+        background 0.25s cubic-bezier(0.4, 0.0, 0.2, 1),
+        color      0.25s cubic-bezier(0.4, 0.0, 0.2, 1),
+        box-shadow 0.25s cubic-bezier(0.4, 0.0, 0.2, 1),
+        min-width  0.25s cubic-bezier(0.4, 0.0, 0.2, 1);
+
+}
+#workspaces button.active {
+    color: @on_primary_fixed;
+    background-color: @color4;
+    min-width: 50px;
+    /* padding: 0px 8px; */
+    box-shadow: 0 0 5px alpha(@primary, 0.0);
+}
+
+#workspaces button:hover {
+    background-color: @color1;
+    color: @foreground;
+}
+
+#workspaces button.urgent {
+    background-color: @color4;
+    color: @background;
+}
+
+/* Specific modules */
+#clock {
+    color: @on_primary;
+    background-color: @color3; /* Different color for clock */
+}
+
+#backlight {
+    color: @surface_color;
+    margin: 0px;
+    border-radius: 0px;
+}
+
+
+
+
+#custom-nix {
+  color: @on_surface;
+  font-size:20px;
+  padding-right: 16px;
+}
+
+
+#pulseaudio {
+    color: @tertiary;
+    padding-right: 20px;
+    margin: 0px;
+    border-radius: 0px 20px 20px 0px;
+}
+
+#pulseaudio.muted {
+    color: @color4;
+}
+
+#temperature.critical {
+    color: @color4;
+}
+
+#cava {
+    color: @color6;
+    margin: 0px 20px;
+}
+
+
+#bluetooth {
+       padding: 0px 12px;
+}
+#custom-power {
+    color: @color4;
+    background-color: @color0;
+    border-radius: 20px;
+    margin-right: 5px;
+}
+
+#network {
+    color: @error;
+    padding: 0px 16px;
+}
+
+#network.wifi {
+    color: @error;
+}
+
+#network.ethernet {
+    color: @color3;
+}
+
+#network.disconnected {
+    color: @color4;
+}
+
+#network.linked {
+    color: @color3;
+}
+
+#network.disabled {
+    color: @color8;
+}
+
+#cpu, #memory, #idle_inhibitor {
+    padding: 0px 12px;
+}
+
+/* Battery styles */
+
+#battery {
+    background-color: rgb(80, 136, 80);
+    margin: 7px;
+    color: @on_primary;
+    min-height: 2px;
+    min-width: 20px;
+    padding: 0px 5px;
+    font-size: 10px;
+    border-radius: 6px;
+
+}
+
+
+
+#battery.warning {
+    color: @error;
+    background-color: @error;
+}
+
+#battery.critical {
+    color: @on_error;
+}
+
+/* optional: add blinking animation when critical */
+#battery.critical:not(.charging) {
+    animation: blink 1s linear infinite;
+}
+
+@keyframes blink {
+    to { color: transparent; }
+}
