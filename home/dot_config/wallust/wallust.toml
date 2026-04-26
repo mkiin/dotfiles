@@ -18,3 +18,7 @@ saturation = 0
 # waybar 用 CSS パレット (@color0..15 + @background, @foreground, @cursor)。
 # noro-dotfiles の style プリセット群が前提とするトークンセット。
 waybar = { template = "waybar.css", target = "~/.config/waybar/colors-waybar.css" }
+
+# ghostty 用テーマ (palette = N=#hex, background, foreground, cursor-color)。
+# `theme = wallust` で `~/.config/ghostty/themes/wallust` を読む仕組み。
+ghostty = { template = "ghostty.conf", target = "~/.config/ghostty/themes/wallust" }
