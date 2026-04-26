@@ -11,7 +11,9 @@
 Name = "wallselect"
 NamePretty = "Wallpaper Selector"
 Icon = "preferences-desktop-wallpaper"
-Cache = true
+-- Cache = false 必須。true にすると elephant が GetEntries() の結果をメモリキャッシュし、
+-- 新規ダウンロードした壁紙が elephant 再起動まで一覧に出ない (omarchy も false で運用)。
+Cache = false
 HideFromProviderlist = true
 SearchName = true
 Description = "pictures/wallpaper 直下の画像から壁紙を選ぶ"
