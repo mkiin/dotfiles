@@ -7,6 +7,11 @@
 #   2. hyprctl reload → 全 config 再評価 (monitor 切替 + workspace rule refresh)
 #   3. layer surface 再構築 (Hyprland のバグ workaround、後述)
 
+# 切替前: 現在の active ws を覚えておき、切替後にそこへ戻す (モード非依存)。
+PREV_WS=$(hyprctl activeworkspace -j 2>/dev/null \
+    | jq -r 'select(.id > 0) | .id' 2>/dev/null) || PREV_WS=1
+[[ "$PREV_WS" =~ ^[0-9]+$ ]] || PREV_WS=1
+
 echo "source = ~/.config/hypr/monitors-bed.conf" > "$HOME/.config/hypr/monitors-active.conf"
 hyprctl reload
 
@@ -34,3 +39,6 @@ fi
 pkill -x waybar 2>/dev/null
 uwsm app -- waybar >/dev/null 2>&1 &
 disown
+
+# 切替後: 切替前にいた ws へ復帰。
+hyprctl dispatch workspace "$PREV_WS" >/dev/null 2>&1 || true
