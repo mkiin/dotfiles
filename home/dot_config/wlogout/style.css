@@ -1,100 +1,106 @@
-/* Wlogout: BlackNode 風デザイン (matugen 連動) */
-/* 起動は launch.sh で -b 6 --margin-top/bottom を渡して中央帯状にする前提 */
+/* ============================================================
+   Wlogout (quiet-fracture inspired, matugen-driven)
+   3x2 grid of pill buttons over a dim overlay.
+   ============================================================ */
 
 @import "colors.css";
 
+
+/* ============================================================
+   Global Reset & Base
+   ============================================================ */
 * {
-  background-image: none;
-  font-family: "JetBrainsMono Nerd Font", "Noto Sans CJK JP", sans-serif;
-  font-size: 16px;
-  font-weight: bold;
+    background-image: none;
+    font-family: "JetBrainsMono Nerd Font", "Noto Sans CJK JP", sans-serif;
+    font-size: 20px;
 }
 
-/* ウィンドウは完全透過 (裏の壁紙を見せるオーバーレイ) */
+
+/* ============================================================
+   Window Overlay
+   ============================================================ */
 window {
-  background-color: rgba(0, 0, 0, 0);
+    background-color: alpha(@background, 0.45);
 }
 
-/* ボタン基底: 連結用の負マージンでピル帯を作る */
+
+/* ============================================================
+   Button Base
+   ============================================================ */
 button {
-  color: @on_surface;
-  background-color: @surface;
-  outline-style: none;
-  border: 2px solid transparent;
-  border-radius: 0;
-  margin: -0.15em;
-  padding: 1.2rem;
+    color: @inverse_surface;
+    background-color: alpha(@surface, 0.5);
+    border-radius: 20px;
+    margin: 10px;
+    padding: 0;
 
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 30%;
-  text-shadow: none;
-  box-shadow: none;
+    border-color: @inverse_surface;
+    border-style: solid;
+    border-width: 0;
+    outline-style: none;
 
-  transition:
-    background-color 0.3s ease,
-    border-color 0.3s ease,
-    background-size 0.3s ease,
-    color 0.3s ease;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 20%;
+
+    box-shadow: none;
+    text-shadow: none;
+
+    transition: all 0.3s cubic-bezier(.55, 0.0, .28, 1.682);
 }
 
-/* :focus 単体は通常状態と同じに（起動時 Lock のハイライトを消す） */
+button:hover,
 button:focus {
-  color: @on_surface;
-  background-color: @surface;
-  border-color: transparent;
-  background-size: 30%;
+    background-color: @on_secondary_fixed_variant;
+    background-size: 30%;
 }
 
-/* ホバー: アクセント色 + 文字非表示 + アイコン拡大 */
-button:hover {
-  background-color: @primary;
-  border-color: @primary;
-  color: transparent;
-  background-size: 45%;
+button span {
+    font-size: 1.2em;
 }
 
-/* 左端・右端で帯全体をピル型に。hover時は -hover.png に差し替え。 */
+
+/* ============================================================
+   Icon Bindings
+   ============================================================ */
 #lock {
-  background-image: image(url("./icons/lock.png"));
-  border-radius: 70px 0 0 70px;
+    background-image: image(url("./icons/lock.png"));
 }
 #lock:hover {
-  background-image: image(url("./icons/lock-hover.png"));
+    background-image: image(url("./icons/lock-hover.png"));
 }
 
 #suspend {
-  background-image: image(url("./icons/sleep.png"));
+    background-image: image(url("./icons/sleep.png"));
 }
 #suspend:hover {
-  background-image: image(url("./icons/sleep-hover.png"));
+    background-image: image(url("./icons/sleep-hover.png"));
 }
 
 #reboot {
-  background-image: image(url("./icons/restart.png"));
+    background-image: image(url("./icons/restart.png"));
 }
 #reboot:hover {
-  background-image: image(url("./icons/restart-hover.png"));
+    background-image: image(url("./icons/restart-hover.png"));
 }
 
 #shutdown {
-  background-image: image(url("./icons/power.png"));
+    background-image: image(url("./icons/power.png"));
 }
 #shutdown:hover {
-  background-image: image(url("./icons/power-hover.png"));
+    background-image: image(url("./icons/power-hover.png"));
 }
 
 #logout {
-  background-image: image(url("./icons/logout.png"));
+    background-image: image(url("./icons/logout.png"));
 }
 #logout:hover {
-  background-image: image(url("./icons/logout-hover.png"));
+    background-image: image(url("./icons/logout-hover.png"));
 }
 
 #hibernate {
-  background-image: image(url("./icons/hibernate.png"));
-  border-radius: 0 70px 70px 0;
+    background-image: image(url("./icons/hibernate.png"));
 }
 #hibernate:hover {
-  background-image: image(url("./icons/hibernate-hover.png"));
+    background-image: image(url("./icons/hibernate-hover.png"));
 }
