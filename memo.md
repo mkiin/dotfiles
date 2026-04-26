@@ -5,3 +5,12 @@
 - networkはアイコン単体にしますか。wifiの強度変化は採用
 - temeratureのアイコンが表示されていません。BlackNodeのものを採用する
 
+Q3. swayncでいきます
+
+Q4. (%R)はいらない
+
+Q5. calendarは後に触る
+
+A. でいきます
+
+

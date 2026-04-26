@@ -2,7 +2,7 @@
  * 3 つの @import を順に適用する薄いファイル:
  *   1. matugen 生成 (Material Design 3 トークン: @primary, @surface_* 等)
  *   2. wallust 生成 (Pywal 16 色パレット: @color0..15, @cursor)
- *   3. custom styles/ から選んだ 1 つ (具体的な見た目)
+ *   3. styles/ から選んだ 1 つ (具体的な見た目)
  *
  * style 切替は最後の @import 行を変えるだけ。再起動 or `pkill -SIGUSR2 waybar`
  * で反映。
@@ -10,7 +10,7 @@
 
 @import "colors.css";
 @import "colors-waybar.css";
-@import "custom styles/capsule-nobg.css";
+@import "styles/capsule-nobg.css";
 
 /* GTK4 Adwaita 既定の button :hover/:focus-visible で発生する装飾を全部無効化。
  * waybar のような layer-shell 上ではアプリと違って focus indicator が不要で、

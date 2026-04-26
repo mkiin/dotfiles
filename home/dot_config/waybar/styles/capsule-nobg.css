@@ -27,7 +27,11 @@ window#waybar {
     border-radius: 20px
 }
 
-.modules-right{
+/* .modules-right の大枠は #right-cluster に移行。
+ * modules-right 配下の clock と custom/power を独立カプセル化するため、
+ * .modules-right 自体は素通しに。 */
+
+#right-cluster {
     background-color: @surface_container;
     border-radius: 20px;
     padding: 0px 12px;
@@ -41,9 +45,16 @@ window#waybar {
 #clock,
 #pulseaudio,
 #network,
+#bluetooth,
 #custom-power,
 #custom-weather,
-#custom-nix{
+#custom-nix,
+#custom-archlinux,
+#custom-pacman,
+#custom-aur,
+#custom-mise,
+#temperature,
+#window {
     background-color: @surface_container;
     border-radius: 20px;
     padding: 0px 12px;
@@ -233,4 +244,14 @@ window#waybar {
 
 @keyframes blink {
     to { color: transparent; }
+}
+
+
+/* pkg-update drawer: pacman をデフォ表示、aur/mise は hover/click で展開 */
+#pkg-update {
+    background-color: @surface_container;
+    border-radius: 20px;
+    padding: 0px 4px;
+    margin: 0px 5px;
+    color: @tertiary_fixed_dim;
 }
