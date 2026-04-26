@@ -20,12 +20,11 @@ default_mode = "dark"
 # 50個 matugen トークンをそのまま loop-export + 固定状態色
 input_path = "~/.config/matugen/templates/waybar-colors.css"
 output_path = "~/.config/waybar/CSS/colors.css"
-# colors.css 自体の in-place 書き込みは GIO FileMonitor に拾われない (実測)。
-# 代わりに style.css を in-place truncate+rewrite する一手間で CHANGES_DONE_HINT を
-# 発火させ、waybar の reload_style_on_change 経由で CSS だけ再読させる。
-# SIGUSR2 (surface 完全再生成 → exclusive_zone 一瞬消失 → 全タイル window 再レイアウト)
-# と違い surface は維持されるため、バーの瞬間空白もタイル window のガクつきも出ない。
-post_hook = "~/.config/hypr/scripts/waybar-reload-css.sh"
+# 注意: ここに post_hook で waybar-reload-css.sh を仕込まない。matugen は
+# wallust より先に終わる傾向にあり、post_hook で先行 reload してしまうと
+# その時点で wallust 側 colors-waybar.css がまだ古いままで waybar に取り込まれ、
+# `@color3` (ethernet 色) や tray の wallust 由来色が更新されない race が起きる。
+# 代わりに wallset-backend.sh の `wait` 後に明示的に reload-css を呼ぶ。
 
 [templates.waybar-anom]
 # anom-style style.css 用の colors.css。`@import 'colors.css'` で同階層を参照する想定。

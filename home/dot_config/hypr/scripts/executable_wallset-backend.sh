@@ -44,6 +44,12 @@ wait "$awww_pid"    || echo "[wallset-backend] awww img failed" >&2
 wait "$matugen_pid" || echo "[wallset-backend] matugen failed" >&2
 wait "$wallust_pid" || echo "[wallset-backend] wallust failed" >&2
 
+# matugen + wallust の両方が完了してから waybar reload を走らせる。
+# matugen 側の post_hook で reload してしまうと wallust 完了前に発火し、
+# `@color3` / tray など wallust 由来の色が古いまま固定される race が起きる。
+"$HOME/.config/hypr/scripts/waybar-reload-css.sh" \
+  || echo "[wallset-backend] waybar-reload-css failed" >&2
+
 # モード切替時に同じ壁紙を再適用するための last 状態を更新。
 # bed-mode.sh / desk-mode.sh が `awww restore` ではなく本ファイルの画像を `awww img`
 # で焼き直すことで、disable 中だった側のモニターにも同じ壁紙が乗る。
