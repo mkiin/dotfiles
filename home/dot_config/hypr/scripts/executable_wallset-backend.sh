@@ -29,10 +29,13 @@ awww img "$img" \
   --transition-bezier .23,1,.32,1 &
 awww_pid=$!
 
-# --source-color-index 0: matugen 4.0.0 以降 `image` は上位 5 色から対話選択する UI が
-# デフォルト有効化されており、TTY 無しの呼び出し (walker activate, hyprland exec 等) で
-# dialoguer が `not a terminal` を返して失敗する。index 0 (最頻色) 固定で対話回避。
-matugen image "$img" --source-color-index 0 &
+# source-color-index: matugen は画像から上位 5 色 (0-4) を抽出。0 = 最頻色固定だと
+# 同じ壁紙で常に同じ palette になり面白みがないので 0-3 でランダム化、抽出色が少なく
+# 指定 index が無い画像 (=単色寄り) の時は 0 fallback。明示指定で TTY 不要の対話 UI も
+# 回避 (walker activate / hyprland exec 経由でも dialoguer エラーにならない)。
+SOURCE_IDX=$((RANDOM % 4))
+( matugen image "$img" --source-color-index "$SOURCE_IDX" 2>/dev/null \
+  || matugen image "$img" --source-color-index 0 ) &
 matugen_pid=$!
 
 # wallust: 16 色 Pywal 系パレット → ~/.config/waybar/colors-waybar.css
