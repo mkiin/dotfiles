@@ -1,0 +1,1182 @@
+{
+  "100": {
+    "name": "晴",
+    "category": "100",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_sunny",
+    "glyph_night": "nf-weather-night_clear",
+    "codepoint_day": "U+E30D",
+    "codepoint_night": "U+E32B"
+  },
+  "101": {
+    "name": "晴時々曇",
+    "category": "100",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_cloudy",
+    "glyph_night": "nf-weather-night_alt_cloudy",
+    "codepoint_day": "U+E302",
+    "codepoint_night": "U+E37E"
+  },
+  "102": {
+    "name": "晴一時雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E308",
+    "codepoint_night": "U+E325"
+  },
+  "103": {
+    "name": "晴時々雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E308",
+    "codepoint_night": "U+E325"
+  },
+  "104": {
+    "name": "晴一時雪",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_snow",
+    "glyph_night": "nf-weather-night_alt_snow",
+    "codepoint_day": "U+E30A",
+    "codepoint_night": "U+E327"
+  },
+  "105": {
+    "name": "晴時々雪",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_snow",
+    "glyph_night": "nf-weather-night_alt_snow",
+    "codepoint_day": "U+E30A",
+    "codepoint_night": "U+E327"
+  },
+  "106": {
+    "name": "晴一時雨か雪",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E306",
+    "codepoint_night": "U+E323"
+  },
+  "107": {
+    "name": "晴時々雨か雪",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E306",
+    "codepoint_night": "U+E323"
+  },
+  "108": {
+    "name": "晴一時雨か雷雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_storm_showers",
+    "glyph_night": "nf-weather-night_alt_storm_showers",
+    "codepoint_day": "U+E30E",
+    "codepoint_night": "U+E329"
+  },
+  "110": {
+    "name": "晴後時々曇",
+    "category": "100",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_cloudy",
+    "glyph_night": "nf-weather-night_alt_cloudy",
+    "codepoint_day": "U+E302",
+    "codepoint_night": "U+E37E"
+  },
+  "111": {
+    "name": "晴後曇",
+    "category": "100",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_cloudy",
+    "glyph_night": "nf-weather-night_alt_cloudy",
+    "codepoint_day": "U+E302",
+    "codepoint_night": "U+E37E"
+  },
+  "112": {
+    "name": "晴後一時雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E308",
+    "codepoint_night": "U+E325"
+  },
+  "113": {
+    "name": "晴後時々雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E308",
+    "codepoint_night": "U+E325"
+  },
+  "114": {
+    "name": "晴後雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E308",
+    "codepoint_night": "U+E325"
+  },
+  "115": {
+    "name": "晴後一時雪",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_snow",
+    "glyph_night": "nf-weather-night_alt_snow",
+    "codepoint_day": "U+E30A",
+    "codepoint_night": "U+E327"
+  },
+  "116": {
+    "name": "晴後時々雪",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_snow",
+    "glyph_night": "nf-weather-night_alt_snow",
+    "codepoint_day": "U+E30A",
+    "codepoint_night": "U+E327"
+  },
+  "117": {
+    "name": "晴後雪",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_snow",
+    "glyph_night": "nf-weather-night_alt_snow",
+    "codepoint_day": "U+E30A",
+    "codepoint_night": "U+E327"
+  },
+  "118": {
+    "name": "晴後雨か雪",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E306",
+    "codepoint_night": "U+E323"
+  },
+  "119": {
+    "name": "晴後雨か雷雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_storm_showers",
+    "glyph_night": "nf-weather-night_alt_storm_showers",
+    "codepoint_day": "U+E30E",
+    "codepoint_night": "U+E329"
+  },
+  "120": {
+    "name": "晴朝夕一時雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_sprinkle",
+    "glyph_night": "nf-weather-night_alt_sprinkle",
+    "codepoint_day": "U+E30B",
+    "codepoint_night": "U+E328"
+  },
+  "121": {
+    "name": "晴朝の内一時雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_sprinkle",
+    "glyph_night": "nf-weather-night_alt_sprinkle",
+    "codepoint_day": "U+E30B",
+    "codepoint_night": "U+E328"
+  },
+  "122": {
+    "name": "晴夕方一時雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_sprinkle",
+    "glyph_night": "nf-weather-night_alt_sprinkle",
+    "codepoint_day": "U+E30B",
+    "codepoint_night": "U+E328"
+  },
+  "123": {
+    "name": "晴山沿い雷雨",
+    "category": "100",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_storm_showers",
+    "glyph_night": "nf-weather-night_alt_storm_showers",
+    "codepoint_day": "U+E30E",
+    "codepoint_night": "U+E329"
+  },
+  "124": {
+    "name": "晴山沿い雪",
+    "category": "100",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_snow",
+    "glyph_night": "nf-weather-night_alt_snow",
+    "codepoint_day": "U+E30A",
+    "codepoint_night": "U+E327"
+  },
+  "125": {
+    "name": "晴午後は雷雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_storm_showers",
+    "glyph_night": "nf-weather-night_alt_storm_showers",
+    "codepoint_day": "U+E30E",
+    "codepoint_night": "U+E329"
+  },
+  "126": {
+    "name": "晴昼頃から雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E308",
+    "codepoint_night": "U+E325"
+  },
+  "127": {
+    "name": "晴夕方から雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E308",
+    "codepoint_night": "U+E325"
+  },
+  "128": {
+    "name": "晴夜は雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E308",
+    "codepoint_night": "U+E325"
+  },
+  "130": {
+    "name": "朝の内霧後晴",
+    "category": "100",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_fog",
+    "glyph_night": "nf-weather-night_fog",
+    "codepoint_day": "U+E303",
+    "codepoint_night": "U+E346"
+  },
+  "131": {
+    "name": "晴明け方霧",
+    "category": "100",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_fog",
+    "glyph_night": "nf-weather-night_fog",
+    "codepoint_day": "U+E303",
+    "codepoint_night": "U+E346"
+  },
+  "132": {
+    "name": "晴朝夕曇",
+    "category": "100",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_cloudy",
+    "glyph_night": "nf-weather-night_alt_cloudy",
+    "codepoint_day": "U+E302",
+    "codepoint_night": "U+E37E"
+  },
+  "140": {
+    "name": "晴時々雨で雷を伴う",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_thunderstorm",
+    "glyph_night": "nf-weather-night_alt_thunderstorm",
+    "codepoint_day": "U+E30F",
+    "codepoint_night": "U+E32A"
+  },
+  "160": {
+    "name": "晴一時雪か雨",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E306",
+    "codepoint_night": "U+E323"
+  },
+  "170": {
+    "name": "晴時々雪か雨",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E306",
+    "codepoint_night": "U+E323"
+  },
+  "181": {
+    "name": "晴後雪か雨",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E306",
+    "codepoint_night": "U+E323"
+  },
+  "200": {
+    "name": "曇",
+    "category": "200",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-cloudy",
+    "glyph_night": "nf-weather-cloudy",
+    "codepoint_day": "U+E312",
+    "codepoint_night": "U+E312"
+  },
+  "201": {
+    "name": "曇時々晴",
+    "category": "200",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_cloudy",
+    "glyph_night": "nf-weather-night_alt_partly_cloudy",
+    "codepoint_day": "U+E302",
+    "codepoint_night": "U+E379"
+  },
+  "202": {
+    "name": "曇一時雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E318",
+    "codepoint_night": "U+E325"
+  },
+  "203": {
+    "name": "曇時々雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E318",
+    "codepoint_night": "U+E325"
+  },
+  "204": {
+    "name": "曇一時雪",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-snow",
+    "glyph_night": "nf-weather-night_alt_snow",
+    "codepoint_day": "U+E31A",
+    "codepoint_night": "U+E327"
+  },
+  "205": {
+    "name": "曇時々雪",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-snow",
+    "glyph_night": "nf-weather-night_alt_snow",
+    "codepoint_day": "U+E31A",
+    "codepoint_night": "U+E327"
+  },
+  "206": {
+    "name": "曇一時雨か雪",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E316",
+    "codepoint_night": "U+E323"
+  },
+  "207": {
+    "name": "曇時々雨か雪",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E316",
+    "codepoint_night": "U+E323"
+  },
+  "208": {
+    "name": "曇一時雨か雷雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-storm_showers",
+    "glyph_night": "nf-weather-night_alt_storm_showers",
+    "codepoint_day": "U+E31C",
+    "codepoint_night": "U+E329"
+  },
+  "209": {
+    "name": "霧",
+    "category": "200",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-fog",
+    "glyph_night": "nf-weather-night_fog",
+    "codepoint_day": "U+E313",
+    "codepoint_night": "U+E346"
+  },
+  "210": {
+    "name": "曇後時々晴",
+    "category": "200",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_cloudy",
+    "glyph_night": "nf-weather-night_alt_partly_cloudy",
+    "codepoint_day": "U+E302",
+    "codepoint_night": "U+E379"
+  },
+  "211": {
+    "name": "曇後晴",
+    "category": "200",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_sunny",
+    "glyph_night": "nf-weather-night_clear",
+    "codepoint_day": "U+E30D",
+    "codepoint_night": "U+E32B"
+  },
+  "212": {
+    "name": "曇後一時雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E318",
+    "codepoint_night": "U+E325"
+  },
+  "213": {
+    "name": "曇後時々雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E318",
+    "codepoint_night": "U+E325"
+  },
+  "214": {
+    "name": "曇後雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E318",
+    "codepoint_night": "U+E325"
+  },
+  "215": {
+    "name": "曇後一時雪",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-snow",
+    "glyph_night": "nf-weather-night_alt_snow",
+    "codepoint_day": "U+E31A",
+    "codepoint_night": "U+E327"
+  },
+  "216": {
+    "name": "曇後時々雪",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-snow",
+    "glyph_night": "nf-weather-night_alt_snow",
+    "codepoint_day": "U+E31A",
+    "codepoint_night": "U+E327"
+  },
+  "217": {
+    "name": "曇後雪",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-snow",
+    "glyph_night": "nf-weather-night_alt_snow",
+    "codepoint_day": "U+E31A",
+    "codepoint_night": "U+E327"
+  },
+  "218": {
+    "name": "曇後雨か雪",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E316",
+    "codepoint_night": "U+E323"
+  },
+  "219": {
+    "name": "曇後雨か雷雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-storm_showers",
+    "glyph_night": "nf-weather-night_alt_storm_showers",
+    "codepoint_day": "U+E31C",
+    "codepoint_night": "U+E329"
+  },
+  "220": {
+    "name": "曇朝夕一時雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-sprinkle",
+    "glyph_night": "nf-weather-night_alt_sprinkle",
+    "codepoint_day": "U+E31B",
+    "codepoint_night": "U+E328"
+  },
+  "221": {
+    "name": "曇朝の内一時雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-sprinkle",
+    "glyph_night": "nf-weather-night_alt_sprinkle",
+    "codepoint_day": "U+E31B",
+    "codepoint_night": "U+E328"
+  },
+  "222": {
+    "name": "曇夕方一時雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-sprinkle",
+    "glyph_night": "nf-weather-night_alt_sprinkle",
+    "codepoint_day": "U+E31B",
+    "codepoint_night": "U+E328"
+  },
+  "223": {
+    "name": "曇日中時々晴",
+    "category": "200",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_cloudy",
+    "glyph_night": "nf-weather-night_alt_partly_cloudy",
+    "codepoint_day": "U+E302",
+    "codepoint_night": "U+E379"
+  },
+  "224": {
+    "name": "曇昼頃から雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E318",
+    "codepoint_night": "U+E325"
+  },
+  "225": {
+    "name": "曇夕方から雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E318",
+    "codepoint_night": "U+E325"
+  },
+  "226": {
+    "name": "曇夜は雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E318",
+    "codepoint_night": "U+E325"
+  },
+  "228": {
+    "name": "曇昼頃から雪",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-snow",
+    "glyph_night": "nf-weather-night_alt_snow",
+    "codepoint_day": "U+E31A",
+    "codepoint_night": "U+E327"
+  },
+  "229": {
+    "name": "曇夕方から雪",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-snow",
+    "glyph_night": "nf-weather-night_alt_snow",
+    "codepoint_day": "U+E31A",
+    "codepoint_night": "U+E327"
+  },
+  "230": {
+    "name": "曇夜は雪",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-snow",
+    "glyph_night": "nf-weather-night_alt_snow",
+    "codepoint_day": "U+E31A",
+    "codepoint_night": "U+E327"
+  },
+  "231": {
+    "name": "曇海上海岸は霧か霧雨",
+    "category": "200",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-fog",
+    "glyph_night": "nf-weather-night_fog",
+    "codepoint_day": "U+E313",
+    "codepoint_night": "U+E346"
+  },
+  "240": {
+    "name": "曇時々雨で雷を伴う",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-thunderstorm",
+    "glyph_night": "nf-weather-night_alt_thunderstorm",
+    "codepoint_day": "U+E31D",
+    "codepoint_night": "U+E32A"
+  },
+  "250": {
+    "name": "曇時々雪で雷を伴う",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_snow_thunderstorm",
+    "glyph_night": "nf-weather-night_alt_snow_thunderstorm",
+    "codepoint_day": "U+E365",
+    "codepoint_night": "U+E367"
+  },
+  "260": {
+    "name": "曇一時雪か雨",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E316",
+    "codepoint_night": "U+E323"
+  },
+  "270": {
+    "name": "曇時々雪か雨",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E316",
+    "codepoint_night": "U+E323"
+  },
+  "281": {
+    "name": "曇後雪か雨",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E316",
+    "codepoint_night": "U+E323"
+  },
+  "300": {
+    "name": "雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E318",
+    "codepoint_night": "U+E325"
+  },
+  "301": {
+    "name": "雨時々晴",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E308",
+    "codepoint_night": "U+E325"
+  },
+  "302": {
+    "name": "雨時々止む",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-showers",
+    "glyph_night": "nf-weather-night_alt_showers",
+    "codepoint_day": "U+E319",
+    "codepoint_night": "U+E326"
+  },
+  "303": {
+    "name": "雨時々雪",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E316",
+    "codepoint_night": "U+E323"
+  },
+  "304": {
+    "name": "雨か雪",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E316",
+    "codepoint_night": "U+E323"
+  },
+  "306": {
+    "name": "大雨",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-showers",
+    "glyph_night": "nf-weather-night_alt_showers",
+    "codepoint_day": "U+E319",
+    "codepoint_night": "U+E326"
+  },
+  "308": {
+    "name": "雨で暴風を伴う",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain_wind",
+    "glyph_night": "nf-weather-night_alt_rain_wind",
+    "codepoint_day": "U+E317",
+    "codepoint_night": "U+E324"
+  },
+  "309": {
+    "name": "雨一時雪",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E316",
+    "codepoint_night": "U+E323"
+  },
+  "311": {
+    "name": "雨後晴",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E318",
+    "codepoint_night": "U+E325"
+  },
+  "313": {
+    "name": "雨後曇",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E318",
+    "codepoint_night": "U+E325"
+  },
+  "314": {
+    "name": "雨後時々雪",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E316",
+    "codepoint_night": "U+E323"
+  },
+  "315": {
+    "name": "雨後雪",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E318",
+    "codepoint_night": "U+E325"
+  },
+  "316": {
+    "name": "雨か雪後晴",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E316",
+    "codepoint_night": "U+E323"
+  },
+  "317": {
+    "name": "雨か雪後曇",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E316",
+    "codepoint_night": "U+E323"
+  },
+  "320": {
+    "name": "朝の内雨後晴",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E318",
+    "codepoint_night": "U+E325"
+  },
+  "321": {
+    "name": "朝の内雨後曇",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E318",
+    "codepoint_night": "U+E325"
+  },
+  "322": {
+    "name": "雨朝晩一時雪",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E316",
+    "codepoint_night": "U+E323"
+  },
+  "323": {
+    "name": "雨昼頃から晴",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E318",
+    "codepoint_night": "U+E325"
+  },
+  "324": {
+    "name": "雨夕方から晴",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E318",
+    "codepoint_night": "U+E325"
+  },
+  "325": {
+    "name": "雨夜は晴",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain",
+    "glyph_night": "nf-weather-night_alt_rain",
+    "codepoint_day": "U+E318",
+    "codepoint_night": "U+E325"
+  },
+  "326": {
+    "name": "雨夕方から雪",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E316",
+    "codepoint_night": "U+E323"
+  },
+  "327": {
+    "name": "雨夜は雪",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E316",
+    "codepoint_night": "U+E323"
+  },
+  "328": {
+    "name": "雨一時強く降る",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-showers",
+    "glyph_night": "nf-weather-night_alt_showers",
+    "codepoint_day": "U+E319",
+    "codepoint_night": "U+E326"
+  },
+  "329": {
+    "name": "雨一時みぞれ",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-sleet",
+    "glyph_night": "nf-weather-night_alt_sleet",
+    "codepoint_day": "U+E3AD",
+    "codepoint_night": "U+E3AC"
+  },
+  "340": {
+    "name": "雪か雨",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E316",
+    "codepoint_night": "U+E323"
+  },
+  "350": {
+    "name": "雨で雷を伴う",
+    "category": "300",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-thunderstorm",
+    "glyph_night": "nf-weather-night_alt_thunderstorm",
+    "codepoint_day": "U+E31D",
+    "codepoint_night": "U+E32A"
+  },
+  "361": {
+    "name": "雪か雨後晴",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E316",
+    "codepoint_night": "U+E323"
+  },
+  "371": {
+    "name": "雪か雨後曇",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E316",
+    "codepoint_night": "U+E323"
+  },
+  "400": {
+    "name": "雪",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-snow",
+    "glyph_night": "nf-weather-night_alt_snow",
+    "codepoint_day": "U+E31A",
+    "codepoint_night": "U+E327"
+  },
+  "401": {
+    "name": "雪時々晴",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_snow",
+    "glyph_night": "nf-weather-night_alt_snow",
+    "codepoint_day": "U+E30A",
+    "codepoint_night": "U+E327"
+  },
+  "402": {
+    "name": "雪時々止む",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-snow",
+    "glyph_night": "nf-weather-night_alt_snow",
+    "codepoint_day": "U+E31A",
+    "codepoint_night": "U+E327"
+  },
+  "403": {
+    "name": "雪時々雨",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E316",
+    "codepoint_night": "U+E323"
+  },
+  "405": {
+    "name": "大雪",
+    "category": "400",
+    "icon_day": "󰼶",
+    "icon_night": "󰼶",
+    "glyph_day": "nf-md-weather_snowy_heavy",
+    "glyph_night": "nf-md-weather_snowy_heavy",
+    "codepoint_day": "U+F0F36",
+    "codepoint_night": "U+F0F36"
+  },
+  "406": {
+    "name": "風雪強い",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-snow_wind",
+    "glyph_night": "nf-weather-night_alt_snow_wind",
+    "codepoint_day": "U+E35E",
+    "codepoint_night": "U+E361"
+  },
+  "407": {
+    "name": "暴風雪",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-snow_wind",
+    "glyph_night": "nf-weather-night_alt_snow_wind",
+    "codepoint_day": "U+E35E",
+    "codepoint_night": "U+E361"
+  },
+  "409": {
+    "name": "雪一時雨",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E316",
+    "codepoint_night": "U+E323"
+  },
+  "411": {
+    "name": "雪後晴",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-snow",
+    "glyph_night": "nf-weather-night_alt_snow",
+    "codepoint_day": "U+E31A",
+    "codepoint_night": "U+E327"
+  },
+  "413": {
+    "name": "雪後曇",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-snow",
+    "glyph_night": "nf-weather-night_alt_snow",
+    "codepoint_day": "U+E31A",
+    "codepoint_night": "U+E327"
+  },
+  "414": {
+    "name": "雪後雨",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E316",
+    "codepoint_night": "U+E323"
+  },
+  "420": {
+    "name": "朝の内雪後晴",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-snow",
+    "glyph_night": "nf-weather-night_alt_snow",
+    "codepoint_day": "U+E31A",
+    "codepoint_night": "U+E327"
+  },
+  "421": {
+    "name": "朝の内雪後曇",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-snow",
+    "glyph_night": "nf-weather-night_alt_snow",
+    "codepoint_day": "U+E31A",
+    "codepoint_night": "U+E327"
+  },
+  "422": {
+    "name": "雪昼頃から雨",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E316",
+    "codepoint_night": "U+E323"
+  },
+  "423": {
+    "name": "雪夕方から雨",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain_mix",
+    "glyph_night": "nf-weather-night_alt_rain_mix",
+    "codepoint_day": "U+E316",
+    "codepoint_night": "U+E323"
+  },
+  "425": {
+    "name": "雪一時強く降る",
+    "category": "400",
+    "icon_day": "󰼶",
+    "icon_night": "󰼶",
+    "glyph_day": "nf-md-weather_snowy_heavy",
+    "glyph_night": "nf-md-weather_snowy_heavy",
+    "codepoint_day": "U+F0F36",
+    "codepoint_night": "U+F0F36"
+  },
+  "426": {
+    "name": "雪後みぞれ",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-sleet",
+    "glyph_night": "nf-weather-night_alt_sleet",
+    "codepoint_day": "U+E3AD",
+    "codepoint_night": "U+E3AC"
+  },
+  "427": {
+    "name": "雪一時みぞれ",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-sleet",
+    "glyph_night": "nf-weather-night_alt_sleet",
+    "codepoint_day": "U+E3AD",
+    "codepoint_night": "U+E3AC"
+  },
+  "450": {
+    "name": "雪で雷を伴う",
+    "category": "400",
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-day_snow_thunderstorm",
+    "glyph_night": "nf-weather-night_alt_snow_thunderstorm",
+    "codepoint_day": "U+E365",
+    "codepoint_night": "U+E367"
+  }
+}

@@ -12,12 +12,7 @@
 @import "colors-waybar.css";
 @import "styles/capsule-nobg.css";
 
-/* GTK4 Adwaita 既定の button :hover/:focus-visible で発生する装飾を全部無効化。
- * waybar のような layer-shell 上ではアプリと違って focus indicator が不要で、
- * 残ると以下の症状になる:
- *   - 白い輪郭リング (outline / box-shadow)
- *   - 白いグラデーション (background-image: linear-gradient で背景を白く重ねてくる)
- *   - 文字影 (text-shadow) */
+/* GTK4 Adwaita 既定の button :hover/:focus-visible で発生する装飾を全部無効化 */
 button {
     box-shadow: none;
     outline: none;
