@@ -1,34 +1,11 @@
-# Matugen 設定
-# 壁紙から色を抽出し、各 consumer の設定ファイルを生成する。
-# `matugen image <path>` で全テンプレートを評価。
-#
-# ── 命名規則 ──
-# テンプレートファイル: ~/.config/matugen/templates/<app>-<subject>.<ext>
-#   例: waybar-colors.css, rofi-colors.rasi, hyprland-colors.conf
-# セクション名: [templates.<app>]
-# 出力先: 各アプリの設定ディレクトリ直下、<subject>.<ext> で配置
-#   例: ~/.config/waybar/CSS/colors.css, ~/.config/rofi/colors.rasi
-#
-# ── 追加予定 ──
-# wlogout, rofi, hyprland, hyprlock, zen, ファイルマネージャー
-# (各テンプレを config/matugen/templates/ に追加したら [templates.*] セクションを足す)
-
 [config]
 default_mode = "dark"
 
 [templates.waybar]
-# 50個 matugen トークンをそのまま loop-export + 固定状態色
 input_path = "~/.config/matugen/templates/waybar-colors.css"
 output_path = "~/.config/waybar/CSS/colors.css"
-# 注意: ここに post_hook で waybar-reload-css.sh を仕込まない。matugen は
-# wallust より先に終わる傾向にあり、post_hook で先行 reload してしまうと
-# その時点で wallust 側 colors-waybar.css がまだ古いままで waybar に取り込まれ、
-# `@color3` (ethernet 色) や tray の wallust 由来色が更新されない race が起きる。
-# 代わりに wallset-backend.sh の `wait` 後に明示的に reload-css を呼ぶ。
 
 [templates.waybar-anom]
-# anom-style style.css 用の colors.css。`@import 'colors.css'` で同階層を参照する想定。
-# 入力は waybar 用と共通テンプレート (matugen トークンを @define-color で全列挙) を流用。
 input_path = "~/.config/matugen/templates/waybar-colors.css"
 output_path = "~/.config/waybar/colors.css"
 
@@ -36,12 +13,14 @@ output_path = "~/.config/waybar/colors.css"
 input_path = "~/.config/matugen/templates/wlogout-colors.css"
 output_path = "~/.config/wlogout/colors.css"
 
+[templates.swaync]
+input_path = "~/.config/matugen/templates/swaync-colors.css"
+output_path = "~/.config/swaync/colors.css"
+
 [templates.hyprland]
 input_path = "~/.config/matugen/templates/hyprland-colors.conf"
 output_path = "~/.config/hypr/colors.conf"
 
 [templates.walker]
 input_path = "~/.config/matugen/templates/walker-colors.css"
-# theme dir 内に出力し、style.css から相対 @import できるようにする (portability 向上)
 output_path = "~/.config/walker/themes/matugen/colors.css"
-

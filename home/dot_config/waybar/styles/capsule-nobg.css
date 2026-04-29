@@ -97,6 +97,24 @@ window#waybar {
 
 
 /* ============================================================
+   Tooltip
+   pill 美学に揃えた matugen-driven tooltip。Adwaita 既定リセットは
+   style.css 側で行う前提で、ここでは色・形状・余白だけ指定。
+   ============================================================ */
+tooltip {
+    background-color: @surface_container;
+    border: 1px solid @outline_variant;
+    border-radius: 12px;
+    padding: 6px 8px;
+}
+
+tooltip label {
+    color: @tertiary_fixed_dim;
+    padding: 2px 4px;
+}
+
+
+/* ============================================================
    Window (hide empty pill when no window focused)
    ============================================================ */
 window#waybar.empty #window {

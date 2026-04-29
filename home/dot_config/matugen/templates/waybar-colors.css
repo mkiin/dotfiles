@@ -1,13 +1,7 @@
-/*
- * Waybar 色定義 (matugen 生成)
- * 壁紙から Material Design 3 パレットを抽出し、全トークンを @define-color として露出する。
- */
-
 <* for name, value in colors *>
 @define-color {{name}} {{value.default.hex}};
 <* endfor *>
 
-/* 状態色（壁紙非追従の固定値） */
 @define-color state_success  #a6e3a1;
 @define-color state_warning  #f9e2af;
 @define-color state_critical #f38ba8;

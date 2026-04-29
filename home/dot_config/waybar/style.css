@@ -27,3 +27,16 @@ button:focus-visible {
     outline: none;
     background-image: none;
 }
+
+/* GTK4 Adwaita 既定の tooltip 装飾 (linear-gradient の background-image,
+ * text-shadow, box-shadow) を全 style 共通でリセット。色・角丸・padding は
+ * 個別 style ファイル側で当てる。 */
+tooltip {
+    background-image: none;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+tooltip label {
+    background-image: none;
+}

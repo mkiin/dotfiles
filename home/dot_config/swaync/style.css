@@ -1,0 +1,218 @@
+/* ============================================================
+   SwayNotificationCenter (matugen 駆動 / waybar pill 美学に揃える)
+   通知ポップアップとコントロールセンターの両方をここで制御。
+   colors.css は matugen が生成する。
+   ============================================================ */
+
+@import "colors.css";
+
+
+/* ============================================================
+   Global Reset & Base
+   ============================================================ */
+* {
+    font-family: "JetBrainsMono Nerd Font", "Noto Sans CJK JP", sans-serif;
+    font-size: 14px;
+    background-image: none;
+    text-shadow: none;
+    box-shadow: none;
+}
+
+
+/* ============================================================
+   Notification Popup (右上に出てくる単発通知)
+   ============================================================ */
+.notification-row {
+    background: transparent;
+    margin: 0;
+    padding: 0;
+}
+
+.notification-background .notification {
+    background-color: alpha(@surface_container, 0.92);
+    border: 1px solid @outline_variant;
+    border-radius: 16px;
+    margin: 8px 12px;
+    padding: 0;
+}
+
+.notification-content {
+    background: transparent;
+    padding: 12px 14px;
+    border-radius: 16px;
+    color: @on_surface;
+}
+
+.notification-content .summary {
+    font-weight: bold;
+    color: @on_surface;
+}
+
+.notification-content .body {
+    color: @on_surface_variant;
+    margin-top: 2px;
+}
+
+.notification-content .time {
+    color: @outline;
+    font-size: 12px;
+    margin-left: 8px;
+}
+
+.notification-content .app-name {
+    color: @outline;
+    font-size: 12px;
+}
+
+.notification-content image {
+    border-radius: 8px;
+    margin-right: 10px;
+}
+
+/* 閉じるボタン */
+.close-button {
+    background-color: alpha(@surface_container_high, 0.6);
+    color: @on_surface;
+    border-radius: 50%;
+    margin: 6px;
+    padding: 0;
+    min-width: 24px;
+    min-height: 24px;
+    border: none;
+}
+
+.close-button:hover {
+    background-color: @primary;
+    color: @on_primary;
+}
+
+/* 重要度ごとの左 border でアクセント */
+.notification-background .notification.critical {
+    border-left: 3px solid @error;
+}
+
+.notification-background .notification.low {
+    border-left: 3px solid @outline_variant;
+}
+
+
+/* ============================================================
+   Control Center (パネル全体)
+   ============================================================ */
+.control-center {
+    background-color: alpha(@surface, 0.92);
+    border: 1px solid @outline_variant;
+    border-radius: 20px;
+    margin: 8px;
+    padding: 12px;
+    color: @on_surface;
+}
+
+.control-center-list {
+    background: transparent;
+    padding: 0;
+}
+
+.control-center-list-placeholder {
+    color: @outline;
+    opacity: 0.5;
+    font-size: 16px;
+    padding: 32px 0;
+}
+
+/* CC 内の通知個別カード */
+.control-center .notification-row .notification {
+    background-color: @surface_container;
+    border: 1px solid @outline_variant;
+    border-radius: 12px;
+    margin: 4px 0;
+}
+
+.control-center .notification-row .notification:hover {
+    background-color: @surface_container_high;
+}
+
+
+/* ============================================================
+   Notification Center Header (Do Not Disturb トグル等)
+   ============================================================ */
+.widget-title {
+    color: @on_surface;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 0 8px 0;
+}
+
+.widget-title button {
+    background-color: alpha(@surface_container_high, 0.5);
+    color: @on_surface;
+    border-radius: 12px;
+    border: none;
+    padding: 4px 12px;
+}
+
+.widget-title button:hover {
+    background-color: @primary;
+    color: @on_primary;
+}
+
+
+/* ============================================================
+   DND (Do Not Disturb)
+   ============================================================ */
+.widget-dnd {
+    color: @on_surface;
+    margin: 6px 0;
+    font-size: 14px;
+}
+
+.widget-dnd > switch {
+    background-color: @surface_container_high;
+    border: 1px solid @outline_variant;
+    border-radius: 12px;
+}
+
+.widget-dnd > switch:checked {
+    background-color: @primary;
+    border-color: @primary;
+}
+
+.widget-dnd > switch slider {
+    background-color: @on_surface;
+    border-radius: 12px;
+}
+
+
+/* ============================================================
+   Notification Action Buttons
+   ============================================================ */
+.notification-action {
+    background-color: alpha(@surface_container_high, 0.6);
+    color: @on_surface;
+    border: 1px solid @outline_variant;
+    border-radius: 8px;
+    padding: 4px 10px;
+    margin: 4px 4px 0 0;
+}
+
+.notification-action:hover {
+    background-color: @primary;
+    color: @on_primary;
+}
+
+
+/* ============================================================
+   Buttons (Clear All, etc.)
+   ============================================================ */
+button {
+    background-color: alpha(@surface_container_high, 0.5);
+    color: @on_surface;
+    border-radius: 12px;
+    border: none;
+    padding: 6px 14px;
+}
+
+button:hover {
+    background-color: @primary;
+    color: @on_primary;
+}
