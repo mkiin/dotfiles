@@ -8,3 +8,4 @@ elephant-runner-bin
 elephant-windows-bin
 hyprshutdown
 wallust
+youtube-music-for-desktop-bin
