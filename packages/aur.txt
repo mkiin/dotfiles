@@ -6,5 +6,5 @@ elephant-menus-bin
 elephant-providerlist-bin
 elephant-runner-bin
 elephant-windows-bin
-hyprshutdown-git
+hyprshutdown
 wallust
