@@ -18,8 +18,8 @@
 }
 
 window#waybar {
-    background-color: alpha(@background-matugen, 0);
-    color: @foreground;
+    background-color: transparent;
+    color: @on_surface;
     border-radius: 12px;
 }
 
@@ -34,7 +34,7 @@ window#waybar {
     border-radius: 20px;
     padding: 0px 4px;
     margin: 0px 5px;
-    color: @tertiary_fixed_dim;
+    color: @on_surface;
 }
 
 .modules-center {
@@ -92,7 +92,7 @@ window#waybar {
     border-radius: 20px;
     padding: 0px 12px;
     margin: 0px 5px;
-    color: @tertiary_fixed_dim;
+    color: @on_surface;
 }
 
 
@@ -109,7 +109,7 @@ tooltip {
 }
 
 tooltip label {
-    color: @tertiary_fixed_dim;
+    color: @on_surface;
     padding: 2px 4px;
 }
 
@@ -148,19 +148,19 @@ window#waybar.empty #window {
 
 #workspaces button.active {
     color: @on_primary_fixed;
-    background-color: @color4;
+    background-color: @primary;
     min-width: 50px;
     box-shadow: 0 0 5px alpha(@primary, 0.0);
 }
 
 #workspaces button:hover {
-    background-color: @color1;
-    color: @foreground;
+    background-color: @secondary_container;
+    color: @on_secondary_container;
 }
 
 #workspaces button.urgent {
-    background-color: @color4;
-    color: @background;
+    background-color: @error;
+    color: @on_error;
 }
 
 
@@ -169,23 +169,19 @@ window#waybar.empty #window {
    ============================================================ */
 #clock {
     color: @on_primary;
-    background-color: @color3;
+    background-color: @primary;
 }
 
 
 /* ============================================================
    Audio (Pulseaudio, Cava)
    ============================================================ */
-#pulseaudio {
-    color: @tertiary;
-}
-
 #pulseaudio.muted {
-    color: @color4;
+    color: @primary;
 }
 
 #cava {
-    color: @color6;
+    color: @tertiary;
     margin: 0px 20px;
 }
 
@@ -202,19 +198,19 @@ window#waybar.empty #window {
 }
 
 #network.ethernet {
-    color: @color3;
+    color: @primary;
 }
 
 #network.disconnected {
-    color: @color4;
+    color: @error;
 }
 
 #network.linked {
-    color: @color3;
+    color: @primary;
 }
 
 #network.disabled {
-    color: @color8;
+    color: @on_surface_variant;
 }
 
 
@@ -222,11 +218,11 @@ window#waybar.empty #window {
    System Stats (CPU, Memory, Idle Inhibitor, Temperature)
    ============================================================ */
 #idle_inhibitor.activated {
-    color: @color4;
+    color: @primary;
 }
 
 #temperature.critical {
-    color: @color4;
+    color: @error;
 }
 
 
@@ -237,7 +233,7 @@ window#waybar.empty #window {
 #custom-swaync.dnd-notification,
 #custom-swaync.dnd-inhibited-none,
 #custom-swaync.dnd-inhibited-notification {
-    color: @color4;
+    color: @primary;
 }
 
 
@@ -245,8 +241,8 @@ window#waybar.empty #window {
    Power & Launcher
    ============================================================ */
 #custom-power {
-    color: @color4;
-    background-color: @color0;
+    color: @on_primary_container;
+    background-color: @primary_container;
     border-radius: 20px;
     margin-right: 5px;
 }
