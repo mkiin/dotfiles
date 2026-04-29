@@ -1,218 +1,201 @@
-/* ============================================================
-   SwayNotificationCenter (matugen 駆動 / waybar pill 美学に揃える)
-   通知ポップアップとコントロールセンターの両方をここで制御。
-   colors.css は matugen が生成する。
-   ============================================================ */
+/* SwayNotificationCenter — anom-dotfiles 由来の MD3 token 駆動デザイン
+ * (matugen が ~/.config/swaync/colors.css を生成、それを @import で読込) */
 
 @import "colors.css";
 
-
-/* ============================================================
-   Global Reset & Base
-   ============================================================ */
 * {
-    font-family: "JetBrainsMono Nerd Font", "Noto Sans CJK JP", sans-serif;
-    font-size: 14px;
-    background-image: none;
-    text-shadow: none;
-    box-shadow: none;
+  font-family: "JetBrainsMono Nerd Font";
+  font-size: 14px;
 }
 
-
-/* ============================================================
-   Notification Popup (右上に出てくる単発通知)
-   ============================================================ */
-.notification-row {
-    background: transparent;
-    margin: 0;
-    padding: 0;
+/* swaync の通知 focus 時に出る Adwaita 既定の装飾を消す。
+ *   1. .notification-row:focus の background (灰色) — control-center で通知の外側にはみ出す
+ *   2. .notification-default-action (内側 button) の Adwaita :focus-visible outline (青アクセント色) */
+.notification-row,
+.notification-row:focus,
+.notification-row:focus-visible,
+.notification-row:focus-within,
+.notification-group,
+.notification-group:focus,
+.notification-group:focus-visible,
+.notification-group:focus-within {
+  background: transparent;
+  outline: none;
+  box-shadow: none;
 }
 
-.notification-background .notification {
-    background-color: alpha(@surface_container, 0.92);
-    border: 1px solid @outline_variant;
-    border-radius: 16px;
-    margin: 8px 12px;
-    padding: 0;
+*:focus,
+*:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.notification {
+  border-radius: 12px;
+  padding: 2px;
+  margin: 3px;
+  background-color: alpha(@on_secondary_fixed, 0.8);
 }
 
 .notification-content {
-    background: transparent;
-    padding: 12px 14px;
-    border-radius: 16px;
-    color: @on_surface;
+  padding: 2px;
 }
 
-.notification-content .summary {
-    font-weight: bold;
-    color: @on_surface;
+.notification-title {
+  font-weight: 600;
+  font-size: 11px;
+  color: @on_primary_container;
 }
 
-.notification-content .body {
-    color: @on_surface_variant;
-    margin-top: 2px;
+.notification-body {
+  font-size: 10px;
+  color: alpha(@on_secondary_fixed, 0.85);
+  border-radius: 14px;
 }
 
-.notification-content .time {
-    color: @outline;
-    font-size: 12px;
-    margin-left: 8px;
+.notification-action {
+  border-radius: 8px;
+  padding: 2px 3px;
+  margin: 1px;
+  font-size: 10px;
 }
 
-.notification-content .app-name {
-    color: @outline;
-    font-size: 12px;
+.notification-icon {
+  margin-right: 8px;
 }
 
-.notification-content image {
-    border-radius: 8px;
-    margin-right: 10px;
-}
-
-/* 閉じるボタン */
-.close-button {
-    background-color: alpha(@surface_container_high, 0.6);
-    color: @on_surface;
-    border-radius: 50%;
-    margin: 6px;
-    padding: 0;
-    min-width: 24px;
-    min-height: 24px;
-    border: none;
-}
-
-.close-button:hover {
-    background-color: @primary;
-    color: @on_primary;
-}
-
-/* 重要度ごとの左 border でアクセント */
-.notification-background .notification.critical {
-    border-left: 3px solid @error;
-}
-
-.notification-background .notification.low {
-    border-left: 3px solid @outline_variant;
-}
-
-
-/* ============================================================
-   Control Center (パネル全体)
-   ============================================================ */
 .control-center {
-    background-color: alpha(@surface, 0.92);
-    border: 1px solid @outline_variant;
-    border-radius: 20px;
-    margin: 8px;
-    padding: 12px;
-    color: @on_surface;
+  border-radius: 14px;
+  padding: 10px;
+  background-color: alpha(@on_secondary_fixed, 0.7);
+  border: 1px solid alpha(@on_tertiary_container, 0.06);
 }
 
 .control-center-list {
-    background: transparent;
-    padding: 0;
+  margin-top: 6px;
+  border-radius: 14px;
 }
 
-.control-center-list-placeholder {
-    color: @outline;
-    opacity: 0.5;
-    font-size: 16px;
-    padding: 32px 0;
-}
-
-/* CC 内の通知個別カード */
-.control-center .notification-row .notification {
-    background-color: @surface_container;
-    border: 1px solid @outline_variant;
-    border-radius: 12px;
-    margin: 4px 0;
-}
-
-.control-center .notification-row .notification:hover {
-    background-color: @surface_container_high;
-}
-
-
-/* ============================================================
-   Notification Center Header (Do Not Disturb トグル等)
-   ============================================================ */
 .widget-title {
-    color: @on_surface;
-    font-size: 16px;
-    font-weight: bold;
-    margin: 0 0 8px 0;
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 6px;
 }
 
-.widget-title button {
-    background-color: alpha(@surface_container_high, 0.5);
-    color: @on_surface;
-    border-radius: 12px;
-    border: none;
-    padding: 4px 12px;
-}
-
-.widget-title button:hover {
-    background-color: @primary;
-    color: @on_primary;
-}
-
-
-/* ============================================================
-   DND (Do Not Disturb)
-   ============================================================ */
 .widget-dnd {
-    color: @on_surface;
-    margin: 6px 0;
-    font-size: 14px;
+  border-radius: 10px;
+  padding: 6px;
 }
 
-.widget-dnd > switch {
-    background-color: @surface_container_high;
-    border: 1px solid @outline_variant;
-    border-radius: 12px;
-}
-
-.widget-dnd > switch:checked {
-    background-color: @primary;
-    border-color: @primary;
-}
-
-.widget-dnd > switch slider {
-    background-color: @on_surface;
-    border-radius: 12px;
-}
-
-
-/* ============================================================
-   Notification Action Buttons
-   ============================================================ */
-.notification-action {
-    background-color: alpha(@surface_container_high, 0.6);
-    color: @on_surface;
-    border: 1px solid @outline_variant;
-    border-radius: 8px;
-    padding: 4px 10px;
-    margin: 4px 4px 0 0;
-}
-
-.notification-action:hover {
-    background-color: @primary;
-    color: @on_primary;
-}
-
-
-/* ============================================================
-   Buttons (Clear All, etc.)
-   ============================================================ */
 button {
-    background-color: alpha(@surface_container_high, 0.5);
-    color: @on_surface;
-    border-radius: 12px;
-    border: none;
-    padding: 6px 14px;
+  border-radius: 8px;
+  padding: 4px 6px;
+  font-size: 10px;
 }
 
-button:hover {
-    background-color: @primary;
-    color: @on_primary;
+/* MPRIS (now-playing) */
+.widget-mpris {
+  margin: 6px 2px;
+  padding: 8px;
+  border-radius: 14px;
+  background-color: alpha(@on_primary_container, 0.07);
+  border: 1px solid alpha(@on_tertiary_container, 0.05);
+}
+
+.widget-mpris-player {
+  padding: 4px;
+  margin: 2px;
+}
+
+.widget-mpris-album-art {
+  border-radius: 12px;
+  margin-right: 10px;
+}
+
+.widget-mpris-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: @on_primary_container;
+}
+
+.widget-mpris-subtitle {
+  font-size: 10px;
+  color: alpha(@on_secondary_fixed, 0.85);
+}
+
+.widget-mpris button {
+  border-radius: 999px;
+  min-width: 28px;
+  min-height: 28px;
+  background-color: alpha(@on_primary_container, 0.07);
+  border: 1px solid alpha(@on_tertiary_container, 0.05);
+}
+
+.widget-mpris button:hover {
+  background-color: alpha(@inverse_surface, 0.16);
+}
+
+
+/* Volume slider */
+.widget-volume {
+  margin: 6px 2px 10px 2px;
+}
+
+.widget-volume scale {
+  min-height: 1px;
+}
+
+.widget-volume trough {
+  min-height: 4px;
+  border-radius: 999px;
+  background-color: alpha(@on_primary_container, 0.48);
+}
+
+.widget-volume highlight {
+  min-height: 4px;
+  border-radius: 999px;
+  background-color: @on_primary_container;
+}
+
+.widget-volume slider {
+  min-width: 10px;
+  min-height: 10px;
+  border-radius: 999px;
+}
+
+.widget-buttons-grid button {
+  min-width: 44px;
+  min-height: 34px;
+  margin: 4px;
+  border-radius: 12px;
+
+  background-color: alpha(@on_primary_container, 0.07);
+  border: 1px solid alpha(@on_tertiary_container, 0.05);
+}
+
+.widget-buttons-grid button:hover {
+  background-color: alpha(@inverse_surface, 0.16);
+}
+
+.empty {
+  margin-top: 24px;
+  opacity: 0.55;
+}
+
+.empty label {
+  font-size: 10px;
+}
+
+.notification.low progressbar {
+  min-height: 4px;
+  border-radius: 10px;
+}
+
+.notification.low progressbar trough {
+  min-height: 4px;
+  padding: 0;
+}
+
+.notification.low progressbar progress {
+  min-height: 4px;
 }
