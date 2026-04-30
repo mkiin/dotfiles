@@ -67,7 +67,7 @@
 .control-center {
   border-radius: 14px;
   padding: 10px;
-  background-color: alpha(@on_secondary_fixed, 0.7);
+  background-color: alpha(@on_secondary_fixed, 0.92);
   border: 1px solid alpha(@on_tertiary_container, 0.06);
 }
 
