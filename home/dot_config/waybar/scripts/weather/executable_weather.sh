@@ -93,7 +93,7 @@ fi
 #   letter_spacing: 負値=詰める、正値=広げる (icon と温度の隙間調整)
 # icon と温度の間は U+2003 (em space, 1em 幅) で固定。半角スペース 1 個では狭く、
 # letter_spacing は pt 単位なので 14px font だと響きが弱い。
-TEXT="<span rise='-2048'>${ICON}</span>  ${DISPLAY_TEMP:-?}°C"
+TEXT="${ICON} ${DISPLAY_TEMP:-?}°C"
 
 # tooltip 構築
 TOOLTIP="${LABEL}\n今日: ${TODAY_DESC:-?}"
