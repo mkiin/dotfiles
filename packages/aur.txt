@@ -7,5 +7,5 @@ elephant-providerlist-bin
 elephant-runner-bin
 elephant-windows-bin
 hyprshutdown
+pear-desktop-bin
 wallust
-youtube-music-for-desktop-bin
