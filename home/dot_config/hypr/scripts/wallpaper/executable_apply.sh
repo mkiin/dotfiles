@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-img="${1:?usage: wallset-backend <image>}"
+img="${1:?usage: apply.sh <image>}"
 
 awww img "$img" \
   --transition-type grow \
@@ -22,19 +22,19 @@ matugen_pid=$!
 wallust run "$img" --quiet &
 wallust_pid=$!
 
-wait "$awww_pid" || echo "[wallset-backend] awww img failed" >&2
-wait "$matugen_pid" || echo "[wallset-backend] matugen failed" >&2
-wait "$wallust_pid" || echo "[wallset-backend] wallust failed" >&2
+wait "$awww_pid" || echo "[wallpaper/apply] awww img failed" >&2
+wait "$matugen_pid" || echo "[wallpaper/apply] matugen failed" >&2
+wait "$wallust_pid" || echo "[wallpaper/apply] wallust failed" >&2
 
 # matugen の post_hook で reload すると wallust 完了前に走り、@color3 等が古いまま固定される race になる
-"$HOME/.config/hypr/scripts/waybar-reload-css.sh" ||
-  echo "[wallset-backend] waybar-reload-css failed" >&2
+"$HOME/.config/hypr/scripts/waybar/reload-css.sh" ||
+  echo "[wallpaper/apply] waybar/reload-css failed" >&2
 
 echo "$img" >"$HOME/.cache/last_wallpaper"
 
 # Hyprland の $variable は parse 時に値置換されるため、border 等の既評価ルールに新色を伝播するには全 reload が必要 (colors.conf 単体 source では不十分)
 hyprctl reload ||
-  echo "[wallset-backend] hyprctl reload failed" >&2
+  echo "[wallpaper/apply] hyprctl reload failed" >&2
 
 source "$HOME/.config/scripts/notify.sh"
 notify --app "wallset" --icon "preferences-desktop-wallpaper" \

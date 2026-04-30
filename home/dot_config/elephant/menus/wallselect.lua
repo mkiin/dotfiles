@@ -43,7 +43,7 @@ function GetEntries()
 			.. " 2>/dev/null | sort"
 	)
 
-	-- サムネキャッシュ: wallpaper-thumb.sh が生成する 416x234 JPEG。
+	-- サムネキャッシュ: wallpaper/thumb.sh が生成する 416x234 JPEG。
 	-- XDG_CACHE_HOME 標準、未設定時は ~/.cache にフォールバック。
 	local cache_home = os.getenv("XDG_CACHE_HOME") or (home .. "/.cache")
 	local thumb_dir = cache_home .. "/wallpaper-thumbs"
@@ -63,7 +63,7 @@ function GetEntries()
 					Value = path,
 					Icon = icon, -- 絶対パス → Walker が GdkTexture 化して GtkPicture に描画
 					Actions = {
-						activate = home .. "/.config/hypr/scripts/wallset-backend.sh " .. ShellEscape(path),
+						activate = home .. "/.config/hypr/scripts/wallpaper/apply.sh " .. ShellEscape(path),
 					},
 				})
 			end

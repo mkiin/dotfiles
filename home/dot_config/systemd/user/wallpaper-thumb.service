@@ -4,6 +4,6 @@ Description=Regenerate Walker wallpaper thumbnails
 
 [Service]
 Type=oneshot
-ExecStart=%h/.config/hypr/scripts/wallpaper-thumb.sh
+ExecStart=%h/.config/hypr/scripts/wallpaper/thumb.sh
 # 暴走防止: 1分以上かかるサムネ生成は異常
 TimeoutStartSec=60

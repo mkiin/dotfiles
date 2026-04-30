@@ -3,12 +3,12 @@ set -euo pipefail
 
 WALLPAPER_DIR="${WALLPAPER_DIR:-${HOME}/pictures/wallpaper}"
 LAST_FILE="${HOME}/.cache/last_wallpaper"
-BACKEND="${HOME}/.config/hypr/scripts/wallset-backend.sh"
+APPLY="${HOME}/.config/hypr/scripts/wallpaper/apply.sh"
 
 mapfile -t FILES < <(fd --max-depth 1 --type f -e jpg -e jpeg -e png -e webp . "$WALLPAPER_DIR" 2>/dev/null | sort)
 
 if [[ ${#FILES[@]} -eq 0 ]]; then
-  echo "[wallset-pick-random] no images in $WALLPAPER_DIR" >&2
+  echo "[wallpaper/pick] no images in $WALLPAPER_DIR" >&2
   exit 1
 fi
 
@@ -24,4 +24,4 @@ else
   done
 fi
 
-exec "$BACKEND" "$PICK"
+exec "$APPLY" "$PICK"
