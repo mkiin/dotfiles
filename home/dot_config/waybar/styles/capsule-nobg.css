@@ -58,11 +58,17 @@ window#waybar {
 .cluster #custom-pacman,
 .cluster #custom-aur,
 .cluster #custom-mise,
-.cluster #custom-swaync {
+.cluster #custom-swaync,
+.cluster #custom-separator {
     background-color: transparent;
     border-radius: 0;
     margin: 0;
     padding: 0 6px;
+}
+
+/* cluster 内モジュール間の縦線 separator */
+#custom-separator {
+    color: @outline;
 }
 
 
@@ -234,6 +240,17 @@ window#waybar.empty #window {
 #custom-swaync.dnd-inhibited-none,
 #custom-swaync.dnd-inhibited-notification {
     color: @primary;
+}
+
+
+/* ============================================================
+   Package Updates (pacman / aur / mise)
+   script が更新検知時に class=has-updates を付ける → tertiary 色で目立たせる
+   ============================================================ */
+#custom-pacman.has-updates,
+#custom-aur.has-updates,
+#custom-mise.has-updates {
+    color: @tertiary;
 }
 
 

@@ -762,12 +762,12 @@
   "306": {
     "name": "大雨",
     "category": "300",
-    "icon_day": "",
-    "icon_night": "",
-    "glyph_day": "nf-weather-showers",
-    "glyph_night": "nf-weather-night_alt_showers",
-    "codepoint_day": "U+E319",
-    "codepoint_night": "U+E326"
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-rain_wind",
+    "glyph_night": "nf-weather-night_alt_rain_wind",
+    "codepoint_day": "U+E317",
+    "codepoint_night": "U+E324"
   },
   "308": {
     "name": "雨で暴風を伴う",
@@ -1032,12 +1032,12 @@
   "405": {
     "name": "大雪",
     "category": "400",
-    "icon_day": "󰼶",
-    "icon_night": "󰼶",
-    "glyph_day": "nf-md-weather_snowy_heavy",
-    "glyph_night": "nf-md-weather_snowy_heavy",
-    "codepoint_day": "U+F0F36",
-    "codepoint_night": "U+F0F36"
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-snow_wind",
+    "glyph_night": "nf-weather-night_alt_snow_wind",
+    "codepoint_day": "U+E35E",
+    "codepoint_night": "U+E361"
   },
   "406": {
     "name": "風雪強い",
@@ -1142,12 +1142,12 @@
   "425": {
     "name": "雪一時強く降る",
     "category": "400",
-    "icon_day": "󰼶",
-    "icon_night": "󰼶",
-    "glyph_day": "nf-md-weather_snowy_heavy",
-    "glyph_night": "nf-md-weather_snowy_heavy",
-    "codepoint_day": "U+F0F36",
-    "codepoint_night": "U+F0F36"
+    "icon_day": "",
+    "icon_night": "",
+    "glyph_day": "nf-weather-snow_wind",
+    "glyph_night": "nf-weather-night_alt_snow_wind",
+    "codepoint_day": "U+E35E",
+    "codepoint_night": "U+E361"
   },
   "426": {
     "name": "雪後みぞれ",
