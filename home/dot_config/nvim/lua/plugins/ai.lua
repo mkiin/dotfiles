@@ -15,6 +15,9 @@ return {
 					["claude-danger"] = {
 						cmd = { "claude", "--dangerously-skip-permissions" },
 					},
+					["claude-auto"] = {
+						cmd = { "claude", "--enable-auto-mode" },
+					},
 				},
 			},
 			nes = {
@@ -30,9 +33,9 @@ return {
 			{
 				"<leader>aa",
 				function()
-					require("sidekick.cli").toggle({ name = "claude", focus = true })
+					require("sidekick.cli").toggle({ name = "claude-auto", focus = true })
 				end,
-				desc = "Sidekick Toggle Claude (通常モード)",
+				desc = "Sidekick Toggle Claude (自動モード)",
 			},
 			{
 				"<leader>aA",
