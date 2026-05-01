@@ -3,3 +3,4 @@
 .config/walker/themes/matugen/colors.css
 .config/waybar/CSS/colors.css
 .config/wlogout/colors.css
+.config/nvim/lazy-lock.json
