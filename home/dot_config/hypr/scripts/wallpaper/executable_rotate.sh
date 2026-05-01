@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -uo pipefail
 
-INTERVAL="${WALLPAPER_INTERVAL:-1800}"
+INTERVAL="${WALLPAPER_INTERVAL:-900}"
 PICKER="${HOME}/.config/hypr/scripts/wallpaper/pick.sh"
 
 while :; do

@@ -1,9 +1,9 @@
 /* ============================================================
-   Wlogout (quiet-fracture inspired, matugen-driven)
+   Wlogout (quiet-fracture inspired, wallust-driven)
    3x2 grid of pill buttons over a dim overlay.
    ============================================================ */
 
-@import "colors.css";
+@import "../waybar/colors-waybar.css";
 
 
 /* ============================================================
@@ -28,13 +28,13 @@ window {
    Button Base
    ============================================================ */
 button {
-    color: @inverse_surface;
-    background-color: alpha(@surface, 0.5);
+    color: @foreground;
+    background-color: alpha(@color0, 0.5);
     border-radius: 20px;
     margin: 10px;
     padding: 0;
 
-    border-color: @inverse_surface;
+    border-color: @foreground;
     border-style: solid;
     border-width: 0;
     outline-style: none;
@@ -50,7 +50,7 @@ button {
 }
 
 button:hover {
-    background-color: @on_secondary_fixed_variant;
+    background-color: @color13;
     background-size: 30%;
 }
 
