@@ -32,14 +32,14 @@ maximize = true
 # title
 
 # 背景
-background-opacity = 0.95
+background-opacity = 0.55
 background-opacity-cells = true
 # background-image
 # background-image-opacity = 0.1
 # background-image-position
 # background-image-fit = cover
 # background-image-repeat
-# background-blur = true
+background-blur = true
 
 # 分割タブ
 unfocused-split-opacity = 1

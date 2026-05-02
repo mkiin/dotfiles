@@ -291,7 +291,7 @@
     "return-type": "json",
     "interval": 1800,
     "signal": 8,
-    "on-click": "ghostty -e bash -c 'sudo pacman -Syu; rm -f ~/.cache/waybar/pkg-pacman.json; pkill -RTMIN+8 waybar; echo; read -p \"press enter to close...\"'",
+    "on-click": "ghostty -e ~/.config/waybar/scripts/pkg-update/pacman-upgrade.sh",
     "format-icons": ["󰮯"]
   },
 
@@ -302,7 +302,7 @@
     "return-type": "json",
     "interval": 1800,
     "signal": 9,
-    "on-click": "ghostty -e bash -c 'yay -Sua; rm -f ~/.cache/waybar/pkg-aur.json; pkill -RTMIN+9 waybar; echo; read -p \"press enter to close...\"'"
+    "on-click": "ghostty -e ~/.config/waybar/scripts/pkg-update/aur-upgrade.sh"
   },
 
   "custom/mise": {
@@ -312,7 +312,7 @@
     "return-type": "json",
     "interval": 1800,
     "signal": 10,
-    "on-click": "ghostty -e bash -c 'mise upgrade; rm -f ~/.cache/waybar/pkg-mise.json; pkill -RTMIN+10 waybar; echo; read -p \"press enter to close...\"'"
+    "on-click": "ghostty -e ~/.config/waybar/scripts/pkg-update/mise-upgrade.sh"
   },
 
   "custom/weather": {

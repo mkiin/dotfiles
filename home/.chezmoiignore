@@ -4,3 +4,6 @@
 .config/waybar/CSS/colors.css
 .config/wlogout/colors.css
 .config/nvim/lazy-lock.json
+
+# fcitx5 が runtime で書き換える (HiddenNotifications の順序が頻繁に入れ替わる)
+.config/fcitx5/conf/notifications.conf
