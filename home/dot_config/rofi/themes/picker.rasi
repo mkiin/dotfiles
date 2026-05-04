@@ -1,0 +1,102 @@
+/**
+ * 汎用ピッカーテーマ (keybinds / clipboard / emoji 等の縦リスト)
+ * - show-icons: false (アイコン空白なし)
+ * - kb-custom-1 等のカスタム binding なし (Left/Right は通常 cursor/grid 移動)
+ */
+
+@import "common.rasi"
+
+configuration {
+    show-icons: false;
+}
+
+window {
+    transparency:                "real";
+    location:                    center;
+    anchor:                      center;
+    fullscreen:                  false;
+    width:                       720px;
+    margin:                      0px;
+    padding:                     0px;
+    border:                      0px;
+    cursor:                      "default";
+    background-color:            transparent;
+}
+
+mainbox {
+    enabled:                     true;
+    spacing:                     12px;
+    margin:                      0px;
+    padding:                     16px;
+    border:                      0px;
+    border-radius:               16px;
+    background-color:            @background;
+    children:                    [ "inputbar", "listview" ];
+}
+
+inputbar {
+    enabled:                     true;
+    spacing:                     8px;
+    padding:                     10px 14px;
+    border-radius:               8px;
+    background-color:            @background-alt;
+    text-color:                  @foreground;
+    children:                    [ "prompt", "entry" ];
+}
+
+prompt {
+    enabled:                     true;
+    background-color:            transparent;
+    text-color:                  @selected;
+    font:                        "JetBrains Mono Nerd Font Bold 12";
+}
+
+entry {
+    enabled:                     true;
+    background-color:            transparent;
+    text-color:                  @foreground;
+    cursor:                      text;
+    placeholder:                 "Search...";
+    placeholder-color:           @foreground;
+}
+
+listview {
+    enabled:                     true;
+    columns:                     1;
+    lines:                       12;
+    cycle:                       false;
+    scrollbar:                   false;
+    layout:                      vertical;
+    spacing:                     4px;
+    background-color:            transparent;
+    cursor:                      "default";
+}
+
+element {
+    enabled:                     true;
+    padding:                     8px 12px;
+    border:                      0px;
+    border-radius:               10px;
+    background-color:            transparent;
+    text-color:                  @foreground;
+    cursor:                      pointer;
+}
+
+element-text {
+    background-color:            transparent;
+    text-color:                  inherit;
+    cursor:                      inherit;
+    vertical-align:              0.5;
+    horizontal-align:            0.0;
+}
+
+element normal.normal,
+element alternate.normal {
+    background-color:            transparent;
+    text-color:                  @foreground;
+}
+
+element selected.normal {
+    background-color:            @selected;
+    text-color:                  @selected-fg;
+}

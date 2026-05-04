@@ -4,36 +4,62 @@ set -euo pipefail
 LOG="$HOME/.cache/wallpaper-apply.log"
 log() { printf '[%s pid=%d pick] %s\n' "$(date +%FT%T.%3N)" "$$" "$*" >>"$LOG"; }
 
-WALLPAPER_DIR="${WALLPAPER_DIR:-${HOME}/pictures/wallpaper}"
-LAST_FILE="${HOME}/.cache/last_wallpaper"
-APPLY="${HOME}/.config/hypr/scripts/wallpaper/apply.sh"
+WALLPAPER_DIR="${WALLPAPER_DIR:-$HOME/pictures/wallpaper}"
+SCHEDULE="$HOME/.config/hyprctl/wallpaper-schedule.txt"
+CACHE="$HOME/.cache/wallpaper-shuffled.txt"
+APPLY="$HOME/.config/hypr/scripts/wallpaper/apply.sh"
+STATE="$HOME/.config/hypr/scripts/hyprctl-state"
 
-mapfile -t FILES < <(fd --max-depth 1 --type f -e jpg -e jpeg -e png -e webp . "$WALLPAPER_DIR" 2>/dev/null | sort)
+regenerate_cache() {
+  declare -a SRC=()
+  if [[ -f "$SCHEDULE" ]]; then
+    while IFS= read -r line; do
+      [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
+      [[ "$line" == "~/"* ]] && line="${HOME}/${line#~/}"
+      if [[ -f "$line" ]]; then
+        SRC+=("$line")
+      else
+        log "skip missing: $line"
+      fi
+    done < "$SCHEDULE"
+    log "schedule loaded count=${#SRC[@]}"
+  fi
 
-log "=== pick start dir=$WALLPAPER_DIR candidates=${#FILES[@]}"
+  if [[ ${#SRC[@]} -eq 0 ]]; then
+    mapfile -t SRC < <(fd --max-depth 1 --type f -e jpg -e jpeg -e png -e webp . "$WALLPAPER_DIR" 2>/dev/null | sort)
+    log "fallback dir listing count=${#SRC[@]}"
+  fi
 
-if [[ ${#FILES[@]} -eq 0 ]]; then
-  log "ERROR no images"
-  echo "[wallpaper/pick] no images in $WALLPAPER_DIR" >&2
-  exit 1
+  if [[ ${#SRC[@]} -eq 0 ]]; then
+    log "ERROR no images for cache"
+    return 1
+  fi
+
+  mkdir -p "$(dirname "$CACHE")"
+  printf '%s\n' "${SRC[@]}" | shuf > "$CACHE"
+  "$STATE" set WALLPAPER_PLAYLIST_INDEX 0
+  log "cache regenerated and shuffled count=${#SRC[@]}"
+}
+
+if [[ ! -s "$CACHE" ]]; then
+  regenerate_cache || { echo "[wallpaper/pick] no images" >&2; exit 1; }
 fi
 
-LAST=""
-[[ -f "$LAST_FILE" ]] && LAST=$(<"$LAST_FILE")
-log "last=$LAST"
+mapfile -t LIST < "$CACHE"
 
-if [[ ${#FILES[@]} -eq 1 ]]; then
-  PICK="${FILES[0]}"
-  log "single candidate, forced PICK=$PICK"
-else
-  attempts=0
-  while :; do
-    attempts=$((attempts + 1))
-    PICK="${FILES[RANDOM % ${#FILES[@]}]}"
-    [[ "$PICK" != "$LAST" ]] && break
-  done
-  log "PICK=$PICK after $attempts attempts"
+IDX=$("$STATE" get WALLPAPER_PLAYLIST_INDEX)
+IDX=${IDX:-0}
+
+if (( IDX >= ${#LIST[@]} || IDX < 0 )); then
+  log "round complete or out-of-bounds, reshuffling"
+  regenerate_cache || { echo "[wallpaper/pick] no images" >&2; exit 1; }
+  mapfile -t LIST < "$CACHE"
+  IDX=0
 fi
 
-log "exec APPLY"
+PICK="${LIST[$IDX]}"
+log "PICK=$PICK index=$IDX/${#LIST[@]}"
+
+"$STATE" set WALLPAPER_PLAYLIST_INDEX $((IDX + 1))
+
 exec "$APPLY" "$PICK"

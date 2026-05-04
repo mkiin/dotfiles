@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+# state.env アクセサ (get / set / toggle / cycle)
+
+set -uo pipefail
+
+STATE_FILE="$HOME/.config/hyprctl/state.env"
+
+declare -A DEFAULTS=(
+  [WALLPAPER_NOTIFY]=true
+  [WALLPAPER_ROTATION]=true
+  [WALLPAPER_INTERVAL_SEC]=1800
+  [WALLPAPER_PLAYLIST_INDEX]=0
+  [MATUGEN_SOURCE_INDEX]=0
+  [MATUGEN_RANDOM_INDEX]=false
+)
+
+state_get() {
+  local key="$1"
+  if [[ -f "$STATE_FILE" ]]; then
+    local v
+    v=$(grep -E "^${key}=" "$STATE_FILE" 2>/dev/null | tail -1 | cut -d= -f2-)
+    if [[ -n "${v:-}" ]]; then
+      printf '%s\n' "$v"
+      return
+    fi
+  fi
+  printf '%s\n' "${DEFAULTS[$key]:-}"
+}
+
+state_set() {
+  local key="$1" val="$2"
+  mkdir -p "$(dirname "$STATE_FILE")"
+  touch "$STATE_FILE"
+  local tmp
+  tmp=$(mktemp "${STATE_FILE}.XXXX")
+  grep -vE "^${key}=" "$STATE_FILE" > "$tmp" 2>/dev/null || true
+  printf '%s=%s\n' "$key" "$val" >> "$tmp"
+  mv "$tmp" "$STATE_FILE"
+}
+
+state_toggle() {
+  local key="$1"
+  local cur
+  cur=$(state_get "$key")
+  if [[ "$cur" == "true" ]]; then
+    state_set "$key" "false"
+  else
+    state_set "$key" "true"
+  fi
+}
+
+state_cycle() {
+  local key="$1"
+  shift
+  local cur
+  cur=$(state_get "$key")
+  local found=0 first="$1"
+  for v in "$@"; do
+    if (( found )); then
+      state_set "$key" "$v"
+      return
+    fi
+    [[ "$v" == "$cur" ]] && found=1
+  done
+  state_set "$key" "$first"
+}
+
+cmd="${1:-}"
+case "$cmd" in
+  get)    shift; state_get "$@" ;;
+  set)    shift; state_set "$@" ;;
+  toggle) shift; state_toggle "$@" ;;
+  cycle)  shift; state_cycle "$@" ;;
+  *) echo "usage: hyprctl-state {get|set|toggle|cycle} KEY [args]" >&2; exit 2 ;;
+esac

@@ -8,4 +8,5 @@ elephant-runner-bin
 elephant-windows-bin
 hyprshutdown
 pear-desktop-bin
+the-honkers-railway-launcher-bin
 wallust

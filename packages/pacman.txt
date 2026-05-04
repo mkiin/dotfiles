@@ -1,10 +1,12 @@
 awww
 cava
 chezmoi
+cliphist
 discord
 fontforge
 hypridle
 hyprlock
+hyprpolkitagent
 hyprshot
 matugen
 mise

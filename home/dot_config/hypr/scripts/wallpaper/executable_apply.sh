@@ -4,6 +4,8 @@ set -euo pipefail
 LOG="$HOME/.cache/wallpaper-apply.log"
 log() { printf '[%s pid=%d apply] %s\n' "$(date +%FT%T.%3N)" "$$" "$*" >>"$LOG"; }
 
+STATE="$HOME/.config/hypr/scripts/hyprctl-state"
+
 img="${1:?usage: apply.sh <image>}"
 
 log "=== invoked img=$img"
@@ -22,9 +24,12 @@ awww img "$img" \
 awww_pid=$!
 log "awww img bg pid=$awww_pid"
 
-# matugen は画像から上位 5 色を抽出。同じ壁紙でも見た目を変えるため 0-3 でランダム選択し、抽出色が足りない画像用に 0 fallback。
-# --source-color-index を渡さないと TTY 対話 UI に落ちて exec/walker 経由で失敗する。
-SOURCE_IDX=$((RANDOM % 4))
+# --source-color-index 省略時に非 tty 起動で対話 UI に落ちて失敗するため必須。
+if [[ "$("$STATE" get MATUGEN_RANDOM_INDEX)" == "true" ]]; then
+  SOURCE_IDX=$((RANDOM % 4))
+else
+  SOURCE_IDX=$("$STATE" get MATUGEN_SOURCE_INDEX)
+fi
 log "matugen SOURCE_IDX=$SOURCE_IDX"
 (matugen image "$img" --source-color-index "$SOURCE_IDX" 2>>"$LOG" ||
   matugen image "$img" --source-color-index 0 2>>"$LOG") &
@@ -53,6 +58,11 @@ awww query >>"$LOG" 2>&1 || log "  awww query failed rc=$?"
 "$HOME/.config/hypr/scripts/waybar/reload-css.sh" 2>>"$LOG" ||
   log "waybar/reload-css failed rc=$?"
 
+# ghostty: theme ファイルは window 起動時にしか読まれず split は親 window のキャッシュを継承する。
+# wallust 後に SIGUSR2 で全 ghostty に reload_config を要求 (best-effort、動作未保証)。
+pkill -SIGUSR2 ghostty 2>>"$LOG" && log "ghostty SIGUSR2 sent" ||
+  log "ghostty SIGUSR2 failed rc=$? (no running ghostty?)"
+
 echo "$img" >"$HOME/.cache/last_wallpaper"
 log "wrote last_wallpaper=$img"
 
@@ -60,7 +70,9 @@ log "wrote last_wallpaper=$img"
 hyprctl reload 2>>"$LOG" ||
   log "hyprctl reload failed rc=$?"
 
-source "$HOME/.config/scripts/notify.sh"
-notify --app "wallset" --icon "preferences-desktop-wallpaper" \
-  "Wallpaper changed" "$(basename "$img")"
+if [[ "$("$STATE" get WALLPAPER_NOTIFY)" == "true" ]]; then
+  source "$HOME/.config/scripts/notify.sh"
+  notify --app "wallset" --icon "preferences-desktop-wallpaper" \
+    "Wallpaper changed" "$(basename "$img")"
+fi
 log "=== complete"

@@ -21,3 +21,7 @@ output_path = "~/.config/hypr/colors.conf"
 [templates.walker]
 input_path = "~/.config/matugen/templates/walker-colors.css"
 output_path = "~/.config/walker/themes/matugen/colors.css"
+
+[templates.rofi]
+input_path = "~/.config/matugen/templates/rofi-colors.rasi"
+output_path = "~/.config/rofi/themes/colors-matugen.rasi"

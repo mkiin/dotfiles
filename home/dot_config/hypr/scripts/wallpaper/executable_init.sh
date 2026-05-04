@@ -49,7 +49,8 @@ else
 fi
 
 if [[ "$WALLPAPER_RANDOM_ON_STARTUP" == "true" ]]; then
-  log "RANDOM_ON_STARTUP=true, exec PICKER"
+  rm -f "$HOME/.cache/wallpaper-shuffled.txt"
+  log "RANDOM_ON_STARTUP=true, cleared shuffle cache, exec PICKER"
   exec "$PICKER"
 else
   log "RANDOM_ON_STARTUP=false, attempting awww restore"

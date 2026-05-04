@@ -1,7 +1,7 @@
 {
   "layer": "top",
   "font": "JetBrains Nerd Font 10",
-  "margin": "10 8 -5 8",
+  "margin": "10 8 2 8",
   "reload_style_on_change": true,
   "modules-left": [
     "custom/archlinux",
@@ -144,6 +144,7 @@
       "headset": "󰋎",
       "default": [
         "󰕿",
+        "󰖀",
         "󰕾"
       ]
     },
@@ -270,7 +271,7 @@
   "custom/archlinux": {
     "format": "󰣇",
     "tooltip": false,
-    "on-click": "walker"
+    "on-click": "pkill -x rofi || ~/.config/rofi/scripts/rofi-launcher.sh"
   },
 
   "custom/power": {
