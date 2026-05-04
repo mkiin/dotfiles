@@ -13,13 +13,27 @@ cat >"$HOME/.config/hypr/monitors.conf" <<EOF
 \$MONITOR_MODE = $mode
 source = ./monitors/\$MONITOR_MODE.conf
 EOF
+
+# hyprctl reload は async。configreloaded event が出てから awww を触らないと
+# 新 monitor 構成への img 投下が取りこぼされる。
+# event socket を購読しておいて reload を発火 → configreloaded を待つ。
+HYPR_SOCK="${XDG_RUNTIME_DIR:-/run/user/$UID}/hypr/${HYPRLAND_INSTANCE_SIGNATURE}/.socket2.sock"
+exec {EV_FD}< <(socat -u "UNIX-CONNECT:$HYPR_SOCK" - 2>/dev/null)
+sleep 0.05  # socat の接続確立待ち (process substitution は非同期起動)
+
 hyprctl reload
 
-# hyprctl reload は async。awww-daemon が新 monitor 構成を認識する前に img を打つと取りこぼす
+while read -r -t 2 -u "$EV_FD" line; do
+  [[ "$line" == configreloaded* ]] && break
+done
+exec {EV_FD}<&-
+
+# awww-daemon は wayland output 通知経由で反映するので configreloaded 後でも
+# 数十ms ラグが残る可能性がある。短い poll で確認 (旧 100ms×10 → 50ms×5)。
 expected=$(hyprctl monitors -j 2>/dev/null | jq 'length')
-for _ in {1..10}; do
+for _ in {1..5}; do
   (($(awww query 2>/dev/null | wc -l) == expected)) && break
-  sleep 0.1
+  sleep 0.05
 done
 
 # Hyprland はモニター構成変更を layer surface に伝播しないバグがあるため awww と waybar を作り直す。

@@ -288,32 +288,32 @@
   "custom/pacman": {
     "format": "󰮯 {}",
     "tooltip-format": "Pacman official updates: {}\nClick to upgrade",
-    "exec": "~/.config/waybar/scripts/pkg-update/pacman-update.sh",
+    "exec": "~/.config/waybar/scripts/pkg-update/pkg-check.sh checkupdates",
     "return-type": "json",
     "interval": 1800,
     "signal": 8,
-    "on-click": "ghostty -e ~/.config/waybar/scripts/pkg-update/pacman-upgrade.sh",
+    "on-click": "ghostty -e ~/.config/waybar/scripts/pkg-update/pkg-upgrade.sh 8 sudo pacman -Syu",
     "format-icons": ["󰮯"]
   },
 
   "custom/aur": {
     "format": "󰏗 {}",
     "tooltip-format": "AUR updates: {}\nClick to upgrade",
-    "exec": "~/.config/waybar/scripts/pkg-update/aur-update.sh",
+    "exec": "~/.config/waybar/scripts/pkg-update/pkg-check.sh yay -Qua",
     "return-type": "json",
     "interval": 1800,
     "signal": 9,
-    "on-click": "ghostty -e ~/.config/waybar/scripts/pkg-update/aur-upgrade.sh"
+    "on-click": "ghostty -e ~/.config/waybar/scripts/pkg-update/pkg-upgrade.sh 9 yay -Sua"
   },
 
   "custom/mise": {
     "format": "󰦬 {}",
     "tooltip-format": "Mise outdated tools: {}\nClick to upgrade",
-    "exec": "~/.config/waybar/scripts/pkg-update/mise-update.sh",
+    "exec": "~/.config/waybar/scripts/pkg-update/pkg-check.sh mise outdated",
     "return-type": "json",
     "interval": 1800,
     "signal": 10,
-    "on-click": "ghostty -e ~/.config/waybar/scripts/pkg-update/mise-upgrade.sh"
+    "on-click": "ghostty -e ~/.config/waybar/scripts/pkg-update/pkg-upgrade.sh 10 mise upgrade"
   },
 
   "custom/weather": {

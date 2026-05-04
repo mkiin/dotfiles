@@ -11,7 +11,8 @@ if [[ -s "$LOG" ]] && (( $(wc -l <"$LOG") > 2000 )); then
   tail -n 1000 "$LOG" >"$LOG.tmp" && mv "$LOG.tmp" "$LOG"
 fi
 
-WALLPAPER_RANDOM_ON_STARTUP=true
+STATE="$HOME/.config/hypr/scripts/hyprctl-state"
+WALLPAPER_RANDOM_ON_STARTUP=$("$STATE" get WALLPAPER_RANDOM_ON_STARTUP)
 
 WALLPAPER_DIR="${HOME}/pictures/wallpaper"
 FALLBACK="${WALLPAPER_DIR}/1297749.jpg"
@@ -52,7 +53,7 @@ fi
 if [[ "$WALLPAPER_RANDOM_ON_STARTUP" == "true" ]]; then
   rm -f "${XDG_CACHE_HOME:-$HOME/.cache}/wallpaper-shuffled.txt"
   log "RANDOM_ON_STARTUP=true, cleared shuffle cache, exec PICKER"
-  exec "$PICKER"
+  WALLPAPER_BOOT=1 exec "$PICKER"
 else
   log "RANDOM_ON_STARTUP=false, attempting awww restore"
   if ! awww restore 2>>"$LOG"; then

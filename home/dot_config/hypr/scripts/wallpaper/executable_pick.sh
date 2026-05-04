@@ -7,8 +7,8 @@ log() { printf '[%s pid=%d pick] %s\n' "$(date +%FT%T.%3N)" "$$" "$*" >>"$LOG"; 
 WALLPAPER_DIR="${WALLPAPER_DIR:-$HOME/pictures/wallpaper}"
 SCHEDULE="${XDG_CONFIG_HOME:-$HOME/.config}/hypr/wallpaper-schedule.txt"
 CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/wallpaper-shuffled.txt"
+LAST="${XDG_STATE_HOME:-$HOME/.local/state}/hypr/last_wallpaper"
 APPLY="$HOME/.config/hypr/scripts/wallpaper/apply.sh"
-STATE="$HOME/.config/hypr/scripts/hyprctl-state"
 
 regenerate_cache() {
   declare -a SRC=()
@@ -37,29 +37,41 @@ regenerate_cache() {
 
   mkdir -p "$(dirname "$CACHE")"
   printf '%s\n' "${SRC[@]}" | shuf > "$CACHE"
-  "$STATE" set WALLPAPER_PLAYLIST_INDEX 0
   log "cache regenerated and shuffled count=${#SRC[@]}"
+
+  # round 境界での被り防止: 新 queue の head が直前の壁紙と同じなら末尾へ回す。
+  # N=1 では同一画像しか無いのでループ継続、N>=2 で必ず別画像に切り替わる。
+  if [[ -f "$LAST" ]]; then
+    local last_path head_path
+    last_path=$(<"$LAST")
+    IFS= read -r head_path <"$CACHE"
+    if [[ -n "$last_path" && "$head_path" == "$last_path" && ${#SRC[@]} -gt 1 ]]; then
+      tail -n +2 "$CACHE" >"$CACHE.tmp"
+      printf '%s\n' "$head_path" >>"$CACHE.tmp"
+      mv "$CACHE.tmp" "$CACHE"
+      log "round boundary swap: head==last, rotated to tail"
+    fi
+  fi
+}
+
+pop_head() {
+  IFS= read -r PICK <"$CACHE" || PICK=""
+  tail -n +2 "$CACHE" >"$CACHE.tmp" && mv "$CACHE.tmp" "$CACHE"
 }
 
 if [[ ! -s "$CACHE" ]]; then
-  regenerate_cache || { echo "[wallpaper/pick] no images" >&2; exit 1; }
+  log "queue empty, regenerating"
+  regenerate_cache || { printf '%s\n' "[wallpaper/pick] no images" >&2; exit 1; }
 fi
 
-mapfile -t LIST < "$CACHE"
+pop_head
 
-IDX=$("$STATE" get WALLPAPER_PLAYLIST_INDEX)
-IDX=${IDX:-0}
-
-if (( IDX >= ${#LIST[@]} || IDX < 0 )); then
-  log "round complete or out-of-bounds, reshuffling"
-  regenerate_cache || { echo "[wallpaper/pick] no images" >&2; exit 1; }
-  mapfile -t LIST < "$CACHE"
-  IDX=0
+if [[ -z "$PICK" ]]; then
+  log "queue head was empty, regenerating"
+  regenerate_cache || { printf '%s\n' "[wallpaper/pick] no images" >&2; exit 1; }
+  pop_head
 fi
 
-PICK="${LIST[$IDX]}"
-log "PICK=$PICK index=$IDX/${#LIST[@]}"
-
-"$STATE" set WALLPAPER_PLAYLIST_INDEX $((IDX + 1))
+log "PICK=$PICK"
 
 exec "$APPLY" "$PICK"

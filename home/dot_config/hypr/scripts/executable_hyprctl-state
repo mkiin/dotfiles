@@ -9,7 +9,7 @@ declare -A DEFAULTS=(
   [WALLPAPER_NOTIFY]=true
   [WALLPAPER_ROTATION]=true
   [WALLPAPER_INTERVAL_SEC]=1800
-  [WALLPAPER_PLAYLIST_INDEX]=0
+  [WALLPAPER_RANDOM_ON_STARTUP]=true
   [MATUGEN_SOURCE_INDEX]=0
   [MATUGEN_RANDOM_INDEX]=false
 )
@@ -17,10 +17,12 @@ declare -A DEFAULTS=(
 state_get() {
   local key="$1"
   if [[ -f "$STATE_FILE" ]]; then
-    local v
-    v=$(grep -E "^${key}=" "$STATE_FILE" 2>/dev/null | tail -1 | cut -d= -f2-)
-    if [[ -n "${v:-}" ]]; then
-      printf '%s\n' "$v"
+    local k v val=""
+    while IFS='=' read -r k v; do
+      [[ "$k" == "$key" ]] && val="$v"
+    done <"$STATE_FILE"
+    if [[ -n "$val" ]]; then
+      printf '%s\n' "$val"
       return
     fi
   fi
@@ -30,12 +32,16 @@ state_get() {
 state_set() {
   local key="$1" val="$2"
   mkdir -p "$(dirname "$STATE_FILE")"
+  # 並行 set でも last-writer-wins ではなく逐次反映させるため flock で直列化。
+  exec {LOCK_FD}>"$STATE_FILE.lock"
+  flock -x "$LOCK_FD"
   touch "$STATE_FILE"
   local tmp
-  tmp=$(mktemp "${STATE_FILE}.XXXX")
+  tmp=$(mktemp "${STATE_FILE}.XXXXXX")
   grep -vE "^${key}=" "$STATE_FILE" > "$tmp" 2>/dev/null || true
   printf '%s=%s\n' "$key" "$val" >> "$tmp"
   mv "$tmp" "$STATE_FILE"
+  exec {LOCK_FD}>&-
 }
 
 state_toggle() {

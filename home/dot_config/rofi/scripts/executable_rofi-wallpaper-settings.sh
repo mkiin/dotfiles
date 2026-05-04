@@ -60,7 +60,10 @@ show_menu() {
     "← Back") exit 0 ;;
     *壁紙切替時の通知*)         "$STATE" toggle WALLPAPER_NOTIFY ;;
     *壁紙ローテーション*)       "$STATE" toggle WALLPAPER_ROTATION ;;
-    *ローテーション間隔*)       "$STATE" cycle WALLPAPER_INTERVAL_SEC 300 900 1800 3600 10800 ;;
+    *ローテーション間隔*)
+      "$STATE" cycle WALLPAPER_INTERVAL_SEC 300 900 1800 3600 10800
+      pkill -USR1 -f wallpaper/rotate.sh 2>/dev/null || true
+      ;;
     *matugen\ ソース*)          "$STATE" cycle MATUGEN_SOURCE_INDEX 0 1 ;;
     *matugen\ index\ ランダム*) "$STATE" toggle MATUGEN_RANDOM_INDEX ;;
   esac

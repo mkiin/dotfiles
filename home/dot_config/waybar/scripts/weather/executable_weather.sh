@@ -12,7 +12,7 @@
 #   016010   = 石狩地方 (天気コード/天気文の area キー)
 #   14163    = 札幌 (気温の forecast area キー、amedas station ID と同じ)
 
-set -e
+set -euo pipefail
 
 REGION="016000"
 SUB_AREA="016010"
@@ -41,8 +41,7 @@ TOMORROW_DESC=$(jq -r --arg c "$SUB_AREA" '.[0].timeSeries[0].areas[] | select(.
 TEMPS=$(jq -r --arg c "$SAPPORO_ID" '
     .[0].timeSeries[2].areas[] | select(.area.code == $c) | .temps | @tsv
 ' <<<"$DATA")
-TOMORROW_LOW=$(awk '{print $3}' <<<"$TEMPS")
-TOMORROW_HIGH=$(awk '{print $4}' <<<"$TEMPS")
+IFS=$'\t' read -r TODAY_9AM _ TOMORROW_LOW TOMORROW_HIGH <<<"$TEMPS"
 
 # 現在の観測値を amedas から取る (失敗しても致命的ではないので fallback)。
 NOW_TEMP=""
@@ -85,7 +84,7 @@ ICON=$(jq -r --arg c "$TODAY_CODE" --arg f "$ICON_FIELD" \
 # bar 表示用の温度。amedas が取れていればそちら、無ければ予報値の今日 9 時。
 DISPLAY_TEMP="$NOW_TEMP"
 if [[ -z "$DISPLAY_TEMP" ]]; then
-  DISPLAY_TEMP=$(awk '{print $1}' <<<"$TEMPS")
+  DISPLAY_TEMP="$TODAY_9AM"
 fi
 # icon を下方向に微調整 (nf-weather-* は baseline より高めに描画される傾向)。
 # pango rise / letter_spacing の単位は 1024ths of a point。
