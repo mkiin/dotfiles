@@ -1,3 +1,4 @@
+anime-games-launcher-bin
 elephant-calc-bin
 elephant-clipboard-bin
 elephant-desktopapplications-bin

@@ -3,7 +3,7 @@
 
 set -uo pipefail
 
-STATE_FILE="$HOME/.config/hyprctl/state.env"
+STATE_FILE="${XDG_STATE_HOME:-$HOME/.local/state}/hypr/state.env"
 
 declare -A DEFAULTS=(
   [WALLPAPER_NOTIFY]=true

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-LOG="$HOME/.cache/wallpaper-apply.log"
+LOG="${XDG_STATE_HOME:-$HOME/.local/state}/hypr/wallpaper-apply.log"
+LAST="${XDG_STATE_HOME:-$HOME/.local/state}/hypr/last_wallpaper"
 log() { printf '[%s pid=%d apply] %s\n' "$(date +%FT%T.%3N)" "$$" "$*" >>"$LOG"; }
 
 STATE="$HOME/.config/hypr/scripts/hyprctl-state"
@@ -10,7 +11,7 @@ img="${1:?usage: apply.sh <image>}"
 
 log "=== invoked img=$img"
 log "img exists=$([[ -f $img ]] && echo yes || echo no) size=$(stat -c %s "$img" 2>/dev/null || echo ?)"
-log "last_cache=$(cat "$HOME/.cache/last_wallpaper" 2>/dev/null || echo '<none>')"
+log "last_cache=$(cat "$LAST" 2>/dev/null || echo '<none>')"
 log "awww query before:"
 awww query >>"$LOG" 2>&1 || log "  awww query failed rc=$?"
 
@@ -63,7 +64,7 @@ awww query >>"$LOG" 2>&1 || log "  awww query failed rc=$?"
 pkill -SIGUSR2 ghostty 2>>"$LOG" && log "ghostty SIGUSR2 sent" ||
   log "ghostty SIGUSR2 failed rc=$? (no running ghostty?)"
 
-echo "$img" >"$HOME/.cache/last_wallpaper"
+echo "$img" >"$LAST"
 log "wrote last_wallpaper=$img"
 
 # Hyprland の $variable は parse 時に値置換されるため、border 等の既評価ルールに新色を伝播するには全 reload が必要 (colors.conf 単体 source では不十分)

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-LOG="$HOME/.cache/wallpaper-apply.log"
+LOG="${XDG_STATE_HOME:-$HOME/.local/state}/hypr/wallpaper-apply.log"
+mkdir -p "$(dirname "$LOG")"
 log() { printf '[%s pid=%d init] %s\n' "$(date +%FT%T.%3N)" "$$" "$*" >>"$LOG"; }
 
 # log size cap: 2000 行超えたら最新 1000 行に切り詰め (~20-40 boots 分の履歴を保持)。
@@ -49,7 +50,7 @@ else
 fi
 
 if [[ "$WALLPAPER_RANDOM_ON_STARTUP" == "true" ]]; then
-  rm -f "$HOME/.cache/wallpaper-shuffled.txt"
+  rm -f "${XDG_CACHE_HOME:-$HOME/.cache}/wallpaper-shuffled.txt"
   log "RANDOM_ON_STARTUP=true, cleared shuffle cache, exec PICKER"
   exec "$PICKER"
 else

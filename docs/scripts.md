@@ -58,8 +58,8 @@
 3. `WALLSET_RANDOM_ON_STARTUP` の値で分岐:
    - **`true`** (デフォルト、ランダム経路):
      1. `~/pictures/wallpaper/` 配下の画像を `fd` で列挙
-     2. `~/.cache/last_wallpaper` を読んで直前と被らないよう reroll
-     3. 選んだ画像パスを `~/.cache/last_wallpaper` に記録
+     2. `~/.local/state/hypr/last_wallpaper` を読んで直前と被らないよう reroll
+     3. 選んだ画像パスを `~/.local/state/hypr/last_wallpaper` に記録
      4. `exec wallset-backend.sh <picked>` で全パイプライン実行 (色再生成含む)
    - **`false`** (復元経路):
      1. `awww restore` で per-monitor キャッシュから復元
@@ -85,7 +85,7 @@
 1. `awww img <image>` を非同期起動 (3 秒トランジション)
 2. `matugen image <image> --source-color-index 0` を非同期起動
 3. 両方の `wait` で完了を待つ
-4. `~/.cache/last_wallpaper` に画像パスを記録 (mode 切替時の壁紙同期用)
+4. `~/.local/state/hypr/last_wallpaper` に画像パスを記録 (mode 切替時の壁紙同期用)
 5. `hyprctl reload` で全 config を再評価 → border 等の `$variable` 参照箇所が新色を反映
 
 **ポイント**:
@@ -146,7 +146,7 @@
 - **`hyprctl reload` 一発で済む**: 旧版は `--batch keyword monitor` (即時 monitor 切替) + workspace dispatch ループ + focus/dpms 補正を持っていたが、reload が同じ事を一括でやる (monitor 設定、persistent:true による空 ws の auto-materialize、focus 自動補正)。reload は monitor 重複や signal 断も Hyprland 側で吸収するので --batch 相当の atomicity も不要。
 - **awww 認識待ちのポーリングが必須**: `hyprctl reload` は async で、戻り値の直後に `awww img` を打つと awww-daemon の view にまだ新規 enable monitor が来ておらず取りこぼされる (例: bed→desk 直後 DP-2 だけ更新されて DP-1/3 が古いキャッシュのまま)。`awww query` の monitor 数 = `hyprctl monitors` の数になるまで 100ms 単位で待つ。
 - **layer 再構築は必須**: Hyprland はモニター位置変更を layer surface に伝播しない既知バグがあるため、awww (壁紙) と waybar の layer だけは reload では復活せず、手動再起動が必要。
-- **モード間壁紙同期**: awww-daemon は per-monitor で壁紙キャッシュを持つため、`awww restore` だと disable 中だったモニターは過去のキャッシュが残ってモード間で壁紙が割れる。`~/.cache/last_wallpaper` (wallset-backend.sh が更新) を明示適用することで両モードに同じ壁紙が乗る。`--transition-type none` でモード切替の即時性を担保。
+- **モード間壁紙同期**: awww-daemon は per-monitor で壁紙キャッシュを持つため、`awww restore` だと disable 中だったモニターは過去のキャッシュが残ってモード間で壁紙が割れる。`~/.local/state/hypr/last_wallpaper` (wallset-backend.sh が更新) を明示適用することで両モードに同じ壁紙が乗る。`--transition-type none` でモード切替の即時性を担保。
 
 ---
 

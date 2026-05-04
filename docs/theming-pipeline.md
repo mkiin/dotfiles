@@ -74,7 +74,7 @@ Hyprland 起動
                         ※ 色再生成は走らせず、前回の生成物をそのまま使う
 ```
 
-`WALLSET_RANDOM_ON_STARTUP` は `wallset-backend-startup.sh` 冒頭の変数で切り替える (将来 settings UI から制御予定)。直前と同じ画像を再選択しないよう `~/.cache/last_wallpaper` を読み書きする。
+`WALLSET_RANDOM_ON_STARTUP` は `wallset-backend-startup.sh` 冒頭の変数で切り替える (将来 settings UI から制御予定)。直前と同じ画像を再選択しないよう `~/.local/state/hypr/last_wallpaper` を読み書きする。
 
 ## 各色生成ツール
 

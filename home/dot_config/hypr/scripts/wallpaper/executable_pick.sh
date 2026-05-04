@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-LOG="$HOME/.cache/wallpaper-apply.log"
+LOG="${XDG_STATE_HOME:-$HOME/.local/state}/hypr/wallpaper-apply.log"
 log() { printf '[%s pid=%d pick] %s\n' "$(date +%FT%T.%3N)" "$$" "$*" >>"$LOG"; }
 
 WALLPAPER_DIR="${WALLPAPER_DIR:-$HOME/pictures/wallpaper}"
-SCHEDULE="$HOME/.config/hyprctl/wallpaper-schedule.txt"
-CACHE="$HOME/.cache/wallpaper-shuffled.txt"
+SCHEDULE="${XDG_CONFIG_HOME:-$HOME/.config}/hypr/wallpaper-schedule.txt"
+CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/wallpaper-shuffled.txt"
 APPLY="$HOME/.config/hypr/scripts/wallpaper/apply.sh"
 STATE="$HOME/.config/hypr/scripts/hyprctl-state"
 

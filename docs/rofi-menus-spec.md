@@ -31,7 +31,7 @@ dotfiles を Walker から rofi へ全面移行する際の要求仕様。
 ### 1.1 状態ファイル
 
 - **形式**: shell env（`KEY=value` 1 行）
-- **置き場所**: `~/.config/hyprctl/state.env`
+- **置き場所**: `~/.local/state/hypr/state.env` (XDG_STATE_HOME)
 - **採用理由**:
   - 値が単純（bool / int / 短い文字列）で構造化が要らない
   - シェルから `. state.env` で source できるのが最も低コスト
