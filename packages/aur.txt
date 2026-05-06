@@ -7,6 +7,7 @@ elephant-menus-bin
 elephant-providerlist-bin
 elephant-runner-bin
 elephant-windows-bin
+gpu-screen-recorder-gtk
 hyprshutdown
 pear-desktop-bin
 the-honkers-railway-launcher-bin
