@@ -21,5 +21,5 @@ case "$mode" in
 esac
 
 mkdir -p "$out_dir"
-hyprshot -m "$mode" --output-folder "$out_dir" --silent
+hyprshot -m "$mode" --output-folder "$out_dir" --silent || true
 notify-send -a "screenshot" "スクリーンショット" "$out_dir に保存しました"
