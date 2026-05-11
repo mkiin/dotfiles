@@ -1,4 +1,5 @@
 anime-games-launcher-bin
+bibata-cursor-theme
 elephant-calc-bin
 elephant-clipboard-bin
 elephant-desktopapplications-bin
@@ -11,4 +12,5 @@ gpu-screen-recorder-gtk
 hyprshutdown
 pear-desktop-bin
 the-honkers-railway-launcher-bin
+upscayl-bin
 wallust
