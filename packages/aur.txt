@@ -13,4 +13,5 @@ hyprshutdown
 pear-desktop-bin
 the-honkers-railway-launcher-bin
 upscayl-bin
+via-bin
 wallust
