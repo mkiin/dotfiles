@@ -18,8 +18,10 @@ mise
 mpv
 nvidia-container-toolkit
 papirus-icon-theme
+piper
 rofi
 socat
+solaar
 swaync
 ttf-jetbrains-mono-nerd
 walker
