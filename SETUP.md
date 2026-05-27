@@ -200,6 +200,19 @@ exec zsh   # 反映 (bash で source ~/.zshrc はしない)
 > apt リポジトリ配信は `mise.en.dev`(docs サイト `mise.jdx.dev` とは別ドメイン)。
 > mise install が GitHub レート制限 (403) で一部失敗したら、`gh auth login` 後に `mise install` を再実行。
 
+### Nerd Font (Windows 側)
+
+starship プロンプトや `eza --icons` のアイコン表示には Nerd Font が要る。WSL ではターミナル描画は
+Windows 側が行うため、フォントは **Windows に** 入れる (WSL 内に入れても反映されない)。
+wezterm/ghostty 設定に合わせ **JetBrainsMono Nerd Font** を使う:
+
+```powershell
+winget install DEVCOM.JetBrainsMonoNerdFont
+```
+
+導入後、使用するターミナル (Windows Terminal 等) のフォントを `JetBrainsMono Nerd Font` に設定する。
+WSL のシェルから入れる場合は `winget.exe install DEVCOM.JetBrainsMonoNerdFont` でも可。
+
 ---
 
 ## 日常運用
