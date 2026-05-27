@@ -65,10 +65,14 @@ CachyOS + Hyprland のデスクトップ環境を chezmoi で再現する。
 
 公式 ISO でインストール。Hyprland エディションを選ぶとベースが揃う。
 
-### 2. chezmoi と yay をインストール
+### 2. mise と yay をインストール、chezmoi は mise 経由で
+
+chezmoi の二重管理を避けるため、ネイティブ (pacman) で入れるのは mise だけにし、
+chezmoi 以降の CLI は mise に寄せる:
 
 ```bash
-sudo pacman -S chezmoi yay
+sudo pacman -S mise yay
+mise use -g chezmoi
 ```
 
 ### 3. dotfiles を展開
@@ -110,11 +114,11 @@ sudo install -m 644 -o root -g root \
 > 以降、`sudo pacman -S foo` / `yay -S bar` で自動的に `packages/pacman.txt` /
 > `packages/aur.txt` が更新される。手動の `./scripts/sync-packages.sh` は不要。
 
-### 5. mise と言語ランタイム
+### 5. 言語ランタイムを導入
+
+mise は手順 2 で導入済み。残りのランタイム/ツールをまとめて入れる:
 
 ```bash
-# mise は pacman にもあるが念のため
-sudo pacman -S --needed mise
 mise install
 ```
 
@@ -147,6 +151,78 @@ yay -S hyprshutdown
 ### 8. 再ログイン
 
 fcitx5 の環境変数 (`~/.config/environment.d/fcitx5.conf`) はセッション起動時に読まれるため、ログアウト→ログインが必要。
+
+---
+
+## WSL / Ubuntu でのセットアップ
+
+WSL2 上では Wayland コンポジタ・WM は動かさず、シェルと開発ツールのみ再現する。
+デスクトップ専用設定 (hypr, waybar, rofi 等) は `.chezmoiignore` が WSL を自動判定して除外する。
+
+### 1. mise を apt 公式リポジトリから導入
+
+apt には chezmoi が無いため、Arch と同じく「ネイティブで入れるのは mise だけ」とし、
+chezmoi 以降は mise に寄せる:
+
+```bash
+sudo apt update -y && sudo apt install -y curl git zsh
+sudo install -dm 755 /etc/apt/keyrings
+curl -fSs https://mise.en.dev/gpg-key.pub | sudo tee /etc/apt/keyrings/mise-archive-keyring.asc 1> /dev/null
+echo "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.asc] https://mise.en.dev/deb stable main" \
+  | sudo tee /etc/apt/sources.list.d/mise.list
+sudo apt update -y && sudo apt install -y mise
+```
+
+> apt リポジトリ配信は `mise.en.dev`(docs サイト `mise.jdx.dev` とは別ドメイン)。公式手順どおり。
+
+### 2. chezmoi を mise 経由で導入
+
+```bash
+mise use -g chezmoi
+```
+
+### 3. dotfiles を展開
+
+```bash
+chezmoi init --apply git@github.com:mkiin/dotfiles.git
+```
+
+`home/.chezmoi.toml.tmpl` が `.chezmoi.kernel.osrelease` に `microsoft` を見つけて
+`isWSL = true` を生成し、デスクトップ設定の除外と zshrc の分岐 (open/qs-restart/wbr) が自動で効く。
+sourceDir をリポジトリ直指しする設定も Arch と同様 `home/.chezmoi.toml.tmpl` 側で扱う。
+
+### 4. 言語ランタイムを導入
+
+```bash
+mise install
+```
+
+### 5. apt パッケージを復元
+
+`packages/apt.txt` は WSL Ubuntu の baseline (`packages/ubuntu-baseline.txt`) を除外した
+ユーザ選択のみ。CLI ツールは mise が持つので apt は最小限:
+
+```bash
+[ -s ~/dotfiles/packages/apt.txt ] && sudo apt install -y $(cat ~/dotfiles/packages/apt.txt)
+```
+
+### 6. apt hook を有効化
+
+apt install / remove のたびに `packages/apt.txt` を自動更新するフックをデプロイ:
+
+```bash
+sudo install -m 644 -o root -g root \
+  ~/dotfiles/hooks/99-sync-user-packages.apt.conf \
+  /etc/apt/apt.conf.d/99sync-user-packages
+```
+
+> 以降、`sudo apt install foo` で自動的に `packages/apt.txt` が更新される。
+
+### 7. ログインシェルを zsh に
+
+```bash
+chsh -s "$(command -v zsh)"
+```
 
 ---
 
