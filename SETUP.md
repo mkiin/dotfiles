@@ -159,6 +159,24 @@ fcitx5 の環境変数 (`~/.config/environment.d/fcitx5.conf`) はセッショ�
 WSL2 上では Wayland コンポジタ・WM は動かさず、シェルと開発ツールのみ再現する。
 デスクトップ専用設定 (hypr, waybar, rofi 等) は `.chezmoiignore` が WSL を自動判定して除外する。
 
+### Git / SSH の準備 (clone 前)
+
+SSH で clone するには公開鍵を GitHub に登録しておく。鍵が無ければ生成:
+
+```bash
+[ -f ~/.ssh/id_ed25519 ] || ssh-keygen -t ed25519 -C "$(whoami)@$(hostname)"
+cat ~/.ssh/id_ed25519.pub
+```
+
+出力された公開鍵を GitHub の **Settings → SSH and GPG keys → New SSH key** に貼る。接続確認:
+
+```bash
+ssh -T git@github.com   # "Hi mkiin!" が出れば OK
+```
+
+> 初回 clone 前は gh がまだ無い (mise 導入後に入る) ため、上記の手動登録が必要。
+> bootstrap 後は `gh auth login` でも鍵のアップロードと git protocol=ssh 設定ができる。
+
 ### ブートストラップ (一括)
 
 clone 後、スクリプトを 1 回実行すれば環境が揃う (冪等。途中で失敗しても再実行で続きから):
