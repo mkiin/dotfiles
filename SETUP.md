@@ -159,70 +159,28 @@ fcitx5 の環境変数 (`~/.config/environment.d/fcitx5.conf`) はセッショ�
 WSL2 上では Wayland コンポジタ・WM は動かさず、シェルと開発ツールのみ再現する。
 デスクトップ専用設定 (hypr, waybar, rofi 等) は `.chezmoiignore` が WSL を自動判定して除外する。
 
-### 1. mise を apt 公式リポジトリから導入
+### ブートストラップ (一括)
 
-apt には chezmoi が無いため、Arch と同じく「ネイティブで入れるのは mise だけ」とし、
-chezmoi 以降は mise に寄せる:
-
-```bash
-sudo apt update -y && sudo apt install -y curl git zsh
-sudo install -dm 755 /etc/apt/keyrings
-curl -fSs https://mise.en.dev/gpg-key.pub | sudo tee /etc/apt/keyrings/mise-archive-keyring.asc 1> /dev/null
-echo "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.asc] https://mise.en.dev/deb stable main" \
-  | sudo tee /etc/apt/sources.list.d/mise.list
-sudo apt update -y && sudo apt install -y mise
-```
-
-> apt リポジトリ配信は `mise.en.dev`(docs サイト `mise.jdx.dev` とは別ドメイン)。公式手順どおり。
-
-### 2. chezmoi を mise 経由で導入
+clone 後、スクリプトを 1 回実行すれば環境が揃う (冪等。途中で失敗しても再実行で続きから):
 
 ```bash
-mise use -g chezmoi
+git clone git@github.com:mkiin/dotfiles.git ~/dotfiles
+~/dotfiles/scripts/bootstrap-wsl.sh
+exec zsh   # 反映 (bash で source ~/.zshrc はしない)
 ```
 
-### 3. dotfiles を展開
+`scripts/bootstrap-wsl.sh` がやること:
 
-```bash
-chezmoi init --apply git@github.com:mkiin/dotfiles.git
-```
+1. **mise** を apt 公式リポジトリから導入 (`curl git zsh ca-certificates build-essential` 込み)
+2. **chezmoi** を mise 経由で導入し、既存 `~/dotfiles` を source に `init` + `apply`
+   - `.chezmoi.toml.tmpl` が `osrelease` に `microsoft` を見つけ `isWSL = true` を生成 →
+     デスクトップ設定の除外と zshrc 分岐 (open/qs-restart/wbr) が自動で効く
+3. **mise install** で全ツール — `gh`/`GITHUB_TOKEN` があればレート制限を回避
+4. **apt.txt** のパッケージ復元 + 自動スナップショットフック (`99sync-user-packages`) 配置
+5. **chsh** で zsh をログインシェルに
 
-`home/.chezmoi.toml.tmpl` が `.chezmoi.kernel.osrelease` に `microsoft` を見つけて
-`isWSL = true` を生成し、デスクトップ設定の除外と zshrc の分岐 (open/qs-restart/wbr) が自動で効く。
-sourceDir をリポジトリ直指しする設定も Arch と同様 `home/.chezmoi.toml.tmpl` 側で扱う。
-
-### 4. 言語ランタイムを導入
-
-```bash
-mise install
-```
-
-### 5. apt パッケージを復元
-
-`packages/apt.txt` は WSL Ubuntu の baseline (`packages/ubuntu-baseline.txt`) を除外した
-ユーザ選択のみ。CLI ツールは mise が持つので apt は最小限:
-
-```bash
-[ -s ~/dotfiles/packages/apt.txt ] && sudo apt install -y $(cat ~/dotfiles/packages/apt.txt)
-```
-
-### 6. apt hook を有効化
-
-apt install / remove のたびに `packages/apt.txt` を自動更新するフックをデプロイ:
-
-```bash
-sudo install -m 644 -o root -g root \
-  ~/dotfiles/hooks/99-sync-user-packages.apt.conf \
-  /etc/apt/apt.conf.d/99sync-user-packages
-```
-
-> 以降、`sudo apt install foo` で自動的に `packages/apt.txt` が更新される。
-
-### 7. ログインシェルを zsh に
-
-```bash
-chsh -s "$(command -v zsh)"
-```
+> apt リポジトリ配信は `mise.en.dev`(docs サイト `mise.jdx.dev` とは別ドメイン)。
+> mise install が GitHub レート制限 (403) で一部失敗したら、`gh auth login` 後に `mise install` を再実行。
 
 ---
 
