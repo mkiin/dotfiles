@@ -7,3 +7,24 @@
 
 # fcitx5 が runtime で書き換える (HiddenNotifications の順序が頻繁に入れ替わる)
 .config/fcitx5/conf/notifications.conf
+
+{{- if and (hasKey . "isWSL") .isWSL }}
+# === WSL: デスクトップ / WM 専用設定を除外 (ターミナル設定 ghostty/wezterm は残す) ===
+.config/hypr
+.config/waybar
+.config/rofi
+.config/wlogout
+.config/swaync
+.config/matugen
+.config/wallust
+.config/fcitx5
+.config/environment.d
+.config/systemd
+.config/menus
+.config/mouse
+.config/scripts
+.config/mimeapps.list
+.local/bin/nikke-launch.sh
+.local/share/icons
+.local/share/applications
+{{- end }}

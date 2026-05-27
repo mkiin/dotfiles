@@ -213,9 +213,13 @@ alias cr="code -r ."
 alias vim="nvim"
 alias lg="lazygit"
 alias pn="pnpm"
-alias open='explorer.exe .'
 alias nvc="cd ~/.config/nvim"
+{{ if .isWSL -}}
+alias open='explorer.exe .'
+{{- else -}}
+alias open='xdg-open .'
 alias qs-restart="pkill -9 quickshell; nohup quickshell &>/dev/null & disown"
+{{- end }}
 
 # --------------------------------------------
 # 略語 (zsh-abbr)
@@ -238,7 +242,9 @@ abbr gb="git branch"
 abbr lg="lazygit"
 abbr pn="pnpm"
 abbr nvc="cd ~/.config/nvim"
+{{ if not .isWSL -}}
 abbr wbr="pkill -x waybar; uwsm app -- waybar &>/dev/null & disown"
+{{ end -}}
 abbr ai="claude"
 abbr aid="claude --dangerously-skip-permissions"
 abbr aia="claude --enable-auto-mode"
