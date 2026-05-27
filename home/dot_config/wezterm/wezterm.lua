@@ -3,8 +3,12 @@ local config = wezterm.config_builder()
 local mux = wezterm.mux
 local act = wezterm.action
 
--- WSL2 Ubuntuをデフォルト
-config.default_domain = "WSL:Ubuntu-24.04"
+local is_windows = wezterm.target_triple:find("windows") ~= nil
+
+-- WSL2 Ubuntu をデフォルト (Windows 版 wezterm のみ)
+if is_windows then
+	config.default_domain = "WSL:Ubuntu-24.04"
+end
 config.automatically_reload_config = true
 config.front_end = "OpenGL"
 
@@ -33,7 +37,9 @@ config.use_ime = true
 -- ウィンドウの見た目
 config.window_background_opacity = 1.0
 config.window_decorations = "RESIZE | TITLE"
-config.win32_system_backdrop = "Acrylic"
+if is_windows then
+	config.win32_system_backdrop = "Acrylic"
+end
 
 -- タブバーの設定
 config.tab_bar_at_bottom = true

@@ -213,6 +213,20 @@ winget install DEVCOM.JetBrainsMonoNerdFont
 導入後、使用するターミナル (Windows Terminal 等) のフォントを `JetBrainsMono Nerd Font` に設定する。
 WSL のシェルから入れる場合は `winget.exe install DEVCOM.JetBrainsMonoNerdFont` でも可。
 
+### wezterm (Windows 側)
+
+Windows 版 wezterm は WSL 内の `~/.config/wezterm` を読まないため、Windows の設定パスから
+dotfiles のファイルへ symlink を張る。PowerShell を**管理者または開発者モード**で:
+
+```powershell
+New-Item -ItemType SymbolicLink `
+  -Path "$env:USERPROFILE\.wezterm.lua" `
+  -Target "\\wsl.localhost\Ubuntu-24.04\home\mkiin\.config\wezterm\wezterm.lua"
+```
+
+`wezterm.lua` は `wezterm.target_triple` で OS を実行時判定し、WSL ドメイン (`default_domain`) と
+`win32_system_backdrop` は Windows 版でのみ有効化する (Linux デスクトップ版と同一ファイルで両対応)。
+
 ---
 
 ## 日常運用
