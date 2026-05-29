@@ -150,7 +150,7 @@
     },
     "scroll-step": 1,
     "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
-    "on-click-right": "pavucontrol",
+    "on-click-right": "pwvucontrol",
     "ignored-sinks": [
       "Easy Effects Sink"
     ]
