@@ -42,10 +42,7 @@ if is_windows then
 end
 
 -- タブバーの設定
-config.tab_bar_at_bottom = true
-config.use_fancy_tab_bar = false
-config.hide_tab_bar_if_only_one_tab = false
-config.show_new_tab_button_in_tab_bar = false
+config.enable_tab_bar = false
 
 -- リーダーキー
 config.leader = { key = "Space", mods = "CTRL", timeout_milliseconds = 1500 }
