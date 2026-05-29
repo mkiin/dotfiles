@@ -15,3 +15,4 @@ the-honkers-railway-launcher-bin
 upscayl-bin
 via-bin
 wallust
+wezterm-nightly-bin

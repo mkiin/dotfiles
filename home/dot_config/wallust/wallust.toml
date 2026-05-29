@@ -22,3 +22,6 @@ waybar = { template = "waybar.css", target = "~/.config/waybar/colors-waybar.css
 # ghostty 用テーマ (palette = N=#hex, background, foreground, cursor-color)。
 # `theme = wallust` で `~/.config/ghostty/themes/wallust` を読む仕組み。
 ghostty = { template = "ghostty.conf", target = "~/.config/ghostty/themes/wallust" }
+
+# wezterm 用カラースキーム (TOML)。wezterm.lua が load_scheme で読み reload watch する。
+wezterm = { template = "wezterm.toml", target = "~/.config/wezterm/colors/wallust.toml" }

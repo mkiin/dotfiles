@@ -140,4 +140,18 @@ config.colors = {
 	},
 }
 
+-- wallust 連動パレット。壁紙変更で再生成され watch list 経由で自動リロード。
+-- 無い時 (初回 / Windows) は上の color_scheme にフォールバック。
+local wallust_scheme = wezterm.config_dir .. "/colors/wallust.toml"
+local wf = io.open(wallust_scheme, "r")
+if wf then
+	wf:close()
+	local ok, palette = pcall(wezterm.color.load_scheme, wallust_scheme)
+	if ok and palette then
+		palette.tab_bar = config.colors.tab_bar
+		config.colors = palette
+		wezterm.add_to_config_reload_watch_list(wallust_scheme)
+	end
+end
+
 return config
