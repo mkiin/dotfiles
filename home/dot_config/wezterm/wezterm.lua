@@ -26,7 +26,7 @@ config.font = wezterm.font_with_fallback({
 	"JetBrainsMono Nerd Font",
 	"BIZ UDGothic",
 })
-config.font_size = 12.0
+config.font_size = 14.0
 
 -- カラー
 config.color_scheme = "Snazzy (base16)"
@@ -35,7 +35,7 @@ config.color_scheme = "Snazzy (base16)"
 config.use_ime = true
 
 -- ウィンドウの見た目
-config.window_background_opacity = 1.0
+config.window_background_opacity = 0.7
 config.window_decorations = "RESIZE | TITLE"
 if is_windows then
 	config.win32_system_backdrop = "Acrylic"
