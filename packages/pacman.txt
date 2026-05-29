@@ -2,6 +2,7 @@ awww
 cava
 chezmoi
 cliphist
+copyq
 discord
 docker
 docker-buildx
@@ -13,15 +14,18 @@ hypridle
 hyprlock
 hyprpolkitagent
 hyprshot
+hyprshutdown
 matugen
 mise
 mpv
 nvidia-container-toolkit
 papirus-icon-theme
 piper
+pwvucontrol
 rofi
 socat
 solaar
+steam
 swaync
 ttf-jetbrains-mono-nerd
 walker
