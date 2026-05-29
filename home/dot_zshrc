@@ -246,3 +246,28 @@ abbr aia="claude --enable-auto-mode"
 # カーソルをブロックに固定
 zle-line-init() { echo -ne '\e[2 q' }
 zle -N zle-line-init
+
+# --------------------------------------------
+# webp -> png 一括変換 (ffmpeg + fd)
+# 変換成功時に元 webp は削除される
+# --------------------------------------------
+webp2png() {
+    local target="${1:-.}"
+    if [[ -f "$target" ]]; then
+        [[ "$target" != *.webp ]] && { echo "webp2png: not a .webp file: $target" >&2; return 1; }
+        local dst="${target%.webp}.png"
+        ffmpeg -y -loglevel error -i "$target" -update 1 -frames:v 1 "$dst" \
+            && rm -- "$target" \
+            && echo "$dst  (removed $target)"
+    elif [[ -d "$target" ]]; then
+        fd -e webp . "$target" -x sh -c '
+            dst="${1%.webp}.png"
+            ffmpeg -y -loglevel error -i "$1" -update 1 -frames:v 1 "$dst" \
+                && rm -- "$1" \
+                && echo "$dst  (removed $1)"
+        ' _ {}
+    else
+        echo "webp2png: not found: $target" >&2
+        return 1
+    fi
+}
