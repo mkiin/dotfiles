@@ -24,3 +24,7 @@ run resolution active set 0
 run button 3 action set button 4
 run button 4 action set button 5
 run button 5 action set key KEY_F24
+
+for p in 1 2 3 4; do
+  run profile $p dpi set 1600
+done

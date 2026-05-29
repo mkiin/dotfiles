@@ -144,7 +144,20 @@ AUR から `hyprshutdown` を追加導入(必要に応じて):
 yay -S hyprshutdown
 ```
 
-### 8. 再ログイン
+### 8. マウス (G703 / M575SP)
+
+詳細は [`docs/mouse.md`](docs/mouse.md)。最小限の手順:
+
+```bash
+# G703 用 DBus デーモン
+sudo systemctl enable --now ratbagd
+
+# マウス設定をデバイス/host に書込
+~/.config/mouse/g703h.sh
+~/.config/mouse/m575sp.sh
+```
+
+### 9. 再ログイン
 
 fcitx5 の環境変数 (`~/.config/environment.d/fcitx5.conf`) はセッション起動時に読まれるため、ログアウト→ログインが必要。
 

@@ -11,4 +11,4 @@ run() {
   fi
 }
 
-run dpi 1600
+run dpi 800
