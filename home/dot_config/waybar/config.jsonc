@@ -292,7 +292,7 @@
     "return-type": "json",
     "interval": 1800,
     "signal": 8,
-    "on-click": "ghostty -e ~/.config/waybar/scripts/pkg-update/pkg-upgrade.sh 8 sudo pacman -Syu",
+    "on-click": "wezterm start -- ~/.config/waybar/scripts/pkg-update/pkg-upgrade.sh 8 sudo pacman -Syu",
     "format-icons": ["󰮯"]
   },
 
@@ -303,7 +303,7 @@
     "return-type": "json",
     "interval": 1800,
     "signal": 9,
-    "on-click": "ghostty -e ~/.config/waybar/scripts/pkg-update/pkg-upgrade.sh 9 yay -Sua"
+    "on-click": "wezterm start -- ~/.config/waybar/scripts/pkg-update/pkg-upgrade.sh 9 yay -Sua"
   },
 
   "custom/mise": {
@@ -313,7 +313,7 @@
     "return-type": "json",
     "interval": 1800,
     "signal": 10,
-    "on-click": "ghostty -e ~/.config/waybar/scripts/pkg-update/pkg-upgrade.sh 10 mise upgrade"
+    "on-click": "wezterm start -- ~/.config/waybar/scripts/pkg-update/pkg-upgrade.sh 10 mise upgrade"
   },
 
   "custom/weather": {
