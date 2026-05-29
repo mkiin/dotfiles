@@ -3,3 +3,9 @@
 	email = mkiin@users.noreply.github.com
 [init]
 	defaultBranch = main
+[credential "https://github.com"]
+	helper =
+	helper = !~/.local/share/mise/shims/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !~/.local/share/mise/shims/gh auth git-credential
