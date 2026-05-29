@@ -34,6 +34,9 @@ config.color_scheme = "Snazzy (base16)"
 -- IME
 config.use_ime = true
 
+-- スクロールバック (ScrollToPrompt の目印が溢れにくいよう既定 3500 から拡張)
+config.scrollback_lines = 10000
+
 -- ウィンドウの見た目
 config.window_background_opacity = 0.7
 config.window_decorations = "RESIZE | TITLE"
@@ -44,64 +47,63 @@ end
 -- タブバーの設定
 config.enable_tab_bar = false
 
--- リーダーキー
-config.leader = { key = "Space", mods = "CTRL", timeout_milliseconds = 1500 }
+-- リーダーキー (CapsLock。input.conf の kb_options=caps:none で VoidSymbol 化)
+config.leader = { key = "VoidSymbol", mods = "", timeout_milliseconds = 1000 }
 
--- キーバインド
+-- キーバインド (LEADER = CapsLock)
 config.keys = {
-	-- ========================================
-	-- タブ操作
-	-- ========================================
-	{ key = "n", mods = "LEADER", action = act.SpawnTab("CurrentPaneDomain") },
-	{ key = "q", mods = "LEADER", action = act.CloseCurrentTab({ confirm = true }) },
-	{ key = "[", mods = "LEADER", action = act.ActivateTabRelative(-1) }, -- 前のタブ
-	{ key = "]", mods = "LEADER", action = act.ActivateTabRelative(1) }, -- 次のタブ
-
-	-- ========================================
-	-- ペイン操作
-	-- ========================================
-	{ key = "v", mods = "LEADER", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
-	{ key = "s", mods = "LEADER", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
-	{ key = "m", mods = "LEADER", action = act.CloseCurrentPane({ confirm = true }) },
-	{ key = "z", mods = "LEADER", action = act.TogglePaneZoomState }, -- ペインズーム
-
-	-- ========================================
-	-- ペイン操作セクションキー
-	-- ========================================
-	{ key = "e", mods = "LEADER", action = act.PaneSelect },
-
-	-- ペイン間移動
+	-- 移動: ペイン (hjkl)
 	{ key = "h", mods = "LEADER", action = act.ActivatePaneDirection("Left") },
-	{ key = "l", mods = "LEADER", action = act.ActivatePaneDirection("Right") },
-	{ key = "k", mods = "LEADER", action = act.ActivatePaneDirection("Up") },
 	{ key = "j", mods = "LEADER", action = act.ActivatePaneDirection("Down") },
+	{ key = "k", mods = "LEADER", action = act.ActivatePaneDirection("Up") },
+	{ key = "l", mods = "LEADER", action = act.ActivatePaneDirection("Right") },
 
-	-- ペインサイズ調整モード
+	-- 移動: タブ
+	{ key = "H", mods = "LEADER|SHIFT", action = act.ActivateTabRelative(-1) },
+	{ key = "L", mods = "LEADER|SHIFT", action = act.ActivateTabRelative(1) },
+	{ key = "Tab", mods = "LEADER", action = act.ActivateLastTab },
+
+	-- 移動: スクロール
+	{ key = "J", mods = "LEADER|SHIFT", action = act.ScrollByPage(1) },
+	{ key = "K", mods = "LEADER|SHIFT", action = act.ScrollByPage(-1) },
+	{ key = "g", mods = "LEADER", action = act.ScrollToTop },
+	{ key = "G", mods = "LEADER|SHIFT", action = act.ScrollToBottom },
+
+	-- 移動: プロンプト (要 OSC133)
+	{ key = ",", mods = "LEADER", action = act.ScrollToPrompt(-1) },
+	{ key = ".", mods = "LEADER", action = act.ScrollToPrompt(1) },
+
+	-- 移動: リサイズモード
 	{ key = "r", mods = "LEADER", action = act.ActivateKeyTable({ name = "resize_pane", one_shot = false }) },
 
-	-- ========================================
-	-- コピーモード・コマンドパレット
-	-- ========================================
-	{ key = "c", mods = "LEADER", action = act.ActivateCopyMode },
-	{ key = "p", mods = "SHIFT|CTRL", action = act.ActivateCommandPalette },
+	-- 分割
+	{ key = "s", mods = "LEADER", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) }, -- 左右
+	{ key = "v", mods = "LEADER", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) }, -- 上下
 
-	-- ========================================
-	-- 番号でタブ移動
-	-- ========================================
+	-- ペイン操作
+	{ key = "m", mods = "LEADER", action = act.CloseCurrentPane({ confirm = true }) },
+	{ key = "z", mods = "LEADER", action = act.TogglePaneZoomState },
+	{ key = "e", mods = "LEADER", action = act.PaneSelect },
+
+	-- タブ操作
+	{ key = "n", mods = "LEADER", action = act.SpawnTab("CurrentPaneDomain") },
+	{ key = "q", mods = "LEADER", action = act.CloseCurrentTab({ confirm = true }) },
 	{ key = "1", mods = "LEADER", action = act.ActivateTab(0) },
 	{ key = "2", mods = "LEADER", action = act.ActivateTab(1) },
 	{ key = "3", mods = "LEADER", action = act.ActivateTab(2) },
 	{ key = "4", mods = "LEADER", action = act.ActivateTab(3) },
 	{ key = "5", mods = "LEADER", action = act.ActivateTab(4) },
 
-	-- ========================================
-	-- 新しいウィンドウを生成
-	-- ========================================
+	-- コピーモード / その他
+	{ key = "y", mods = "LEADER", action = act.ActivateCopyMode },
 	{ key = "w", mods = "LEADER", action = act.SpawnWindow },
+	{ key = "p", mods = "SHIFT|CTRL", action = act.ActivateCommandPalette },
 
-	-- ========================================
-	-- F14・F15キーを無効化
-	-- ========================================
+	-- 既定の Shift+PageUp/Down スクロールを無効化
+	{ key = "PageUp", mods = "SHIFT", action = act.DisableDefaultAssignment },
+	{ key = "PageDown", mods = "SHIFT", action = act.DisableDefaultAssignment },
+
+	-- F14・F15 を無効化
 	{ key = "F14", mods = "NONE", action = act.Nop },
 	{ key = "F15", mods = "NONE", action = act.Nop },
 }
@@ -123,9 +125,9 @@ config.mouse_bindings = {
 config.key_tables = {
 	resize_pane = {
 		{ key = "h", action = act.AdjustPaneSize({ "Left", 2 }) },
-		{ key = "l", action = act.AdjustPaneSize({ "Right", 2 }) },
-		{ key = "k", action = act.AdjustPaneSize({ "Up", 2 }) },
 		{ key = "j", action = act.AdjustPaneSize({ "Down", 2 }) },
+		{ key = "k", action = act.AdjustPaneSize({ "Up", 2 }) },
+		{ key = "l", action = act.AdjustPaneSize({ "Right", 2 }) },
 		{ key = "Enter", action = "PopKeyTable" },
 		{ key = "Escape", action = "PopKeyTable" },
 	},
