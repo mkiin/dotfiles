@@ -2,7 +2,7 @@
 set -euo pipefail
 
 mode="${1:?usage: screenshot.sh <region|window|output>}"
-base_dir="${HOME}/Pictures/screenshots"
+base_dir="${HOME}/Pictures/Screenshots"
 
 case "$mode" in
   region|window)

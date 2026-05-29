@@ -14,7 +14,7 @@ fi
 STATE="$HOME/.config/hypr/scripts/hyprctl-state"
 WALLPAPER_RANDOM_ON_STARTUP=$("$STATE" get WALLPAPER_RANDOM_ON_STARTUP)
 
-WALLPAPER_DIR="${HOME}/pictures/wallpaper"
+WALLPAPER_DIR="${HOME}/Pictures/wallpaper"
 FALLBACK="${WALLPAPER_DIR}/1297749.jpg"
 PICKER="${HOME}/.config/hypr/scripts/wallpaper/pick.sh"
 

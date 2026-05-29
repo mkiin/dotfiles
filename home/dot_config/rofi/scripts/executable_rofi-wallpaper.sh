@@ -2,7 +2,7 @@
 # 独立 keybind: 壁紙ピッカー (icon grid)
 
 THEME="$HOME/.config/rofi/themes/wallpaper.rasi"
-WALL_DIR="$HOME/pictures/wallpaper"
+WALL_DIR="$HOME/Pictures/wallpaper"
 APPLY="$HOME/.config/hypr/scripts/wallpaper/apply.sh"
 
 # 壁紙ファイル一覧 (basename と path をペアで保持)

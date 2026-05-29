@@ -4,7 +4,7 @@ set -euo pipefail
 LOG="${XDG_STATE_HOME:-$HOME/.local/state}/hypr/wallpaper-apply.log"
 log() { printf '[%s pid=%d pick] %s\n' "$(date +%FT%T.%3N)" "$$" "$*" >>"$LOG"; }
 
-WALLPAPER_DIR="${WALLPAPER_DIR:-$HOME/pictures/wallpaper}"
+WALLPAPER_DIR="${WALLPAPER_DIR:-$HOME/Pictures/wallpaper}"
 SCHEDULE="${XDG_CONFIG_HOME:-$HOME/.config}/hypr/wallpaper-schedule.txt"
 CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/wallpaper-shuffled.txt"
 LAST="${XDG_STATE_HOME:-$HOME/.local/state}/hypr/last_wallpaper"

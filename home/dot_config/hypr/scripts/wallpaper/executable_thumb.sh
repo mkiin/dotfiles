@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SRC="${HOME}/pictures/wallpaper"
+SRC="${HOME}/Pictures/wallpaper"
 CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/wallpaper-thumbs"
 mkdir -p "$CACHE"
 
