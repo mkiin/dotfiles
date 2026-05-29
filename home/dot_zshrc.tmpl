@@ -277,3 +277,10 @@ webp2png() {
         return 1
     fi
 }
+
+# --------------------------------------------
+# wezterm シェル統合: OSC133 プロンプトマークを出す (ScrollToPrompt = b/f の前提)
+# --------------------------------------------
+if [[ -n "$WEZTERM_PANE" && -r /etc/profile.d/wezterm.sh ]]; then
+    source /etc/profile.d/wezterm.sh
+fi
