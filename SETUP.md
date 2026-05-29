@@ -65,10 +65,14 @@ CachyOS + Hyprland のデスクトップ環境を chezmoi で再現する。
 
 公式 ISO でインストール。Hyprland エディションを選ぶとベースが揃う。
 
-### 2. chezmoi と yay をインストール
+### 2. mise と yay をインストール、chezmoi は mise 経由で
+
+chezmoi の二重管理を避けるため、ネイティブ (pacman) で入れるのは mise だけにし、
+chezmoi 以降の CLI は mise に寄せる:
 
 ```bash
-sudo pacman -S chezmoi yay
+sudo pacman -S mise yay
+mise use -g chezmoi
 ```
 
 ### 3. dotfiles を展開
@@ -110,11 +114,11 @@ sudo install -m 644 -o root -g root \
 > 以降、`sudo pacman -S foo` / `yay -S bar` で自動的に `packages/pacman.txt` /
 > `packages/aur.txt` が更新される。手動の `./scripts/sync-packages.sh` は不要。
 
-### 5. mise と言語ランタイム
+### 5. 言語ランタイムを導入
+
+mise は手順 2 で導入済み。残りのランタイム/ツールをまとめて入れる:
 
 ```bash
-# mise は pacman にもあるが念のため
-sudo pacman -S --needed mise
 mise install
 ```
 
@@ -160,6 +164,81 @@ sudo systemctl enable --now ratbagd
 ### 9. 再ログイン
 
 fcitx5 の環境変数 (`~/.config/environment.d/fcitx5.conf`) はセッション起動時に読まれるため、ログアウト→ログインが必要。
+
+---
+
+## WSL / Ubuntu でのセットアップ
+
+WSL2 上では Wayland コンポジタ・WM は動かさず、シェルと開発ツールのみ再現する。
+デスクトップ専用設定 (hypr, waybar, rofi 等) は `.chezmoiignore` が WSL を自動判定して除外する。
+
+### Git / SSH の準備 (clone 前)
+
+SSH で clone するには公開鍵を GitHub に登録しておく。鍵が無ければ生成:
+
+```bash
+[ -f ~/.ssh/id_ed25519 ] || ssh-keygen -t ed25519 -C "$(whoami)@$(hostname)"
+cat ~/.ssh/id_ed25519.pub
+```
+
+出力された公開鍵を GitHub の **Settings → SSH and GPG keys → New SSH key** に貼る。接続確認:
+
+```bash
+ssh -T git@github.com   # "Hi mkiin!" が出れば OK
+```
+
+> 初回 clone 前は gh がまだ無い (mise 導入後に入る) ため、上記の手動登録が必要。
+> bootstrap 後は `gh auth login` でも鍵のアップロードと git protocol=ssh 設定ができる。
+
+### ブートストラップ (一括)
+
+clone 後、スクリプトを 1 回実行すれば環境が揃う (冪等。途中で失敗しても再実行で続きから):
+
+```bash
+git clone git@github.com:mkiin/dotfiles.git ~/dotfiles
+~/dotfiles/scripts/bootstrap-wsl.sh
+exec zsh   # 反映 (bash で source ~/.zshrc はしない)
+```
+
+`scripts/bootstrap-wsl.sh` がやること:
+
+1. **mise** を apt 公式リポジトリから導入 (`curl git zsh ca-certificates build-essential` 込み)
+2. **chezmoi** を mise 経由で導入し、既存 `~/dotfiles` を source に `init` + `apply`
+   - `.chezmoi.toml.tmpl` が `osrelease` に `microsoft` を見つけ `isWSL = true` を生成 →
+     デスクトップ設定の除外と zshrc 分岐 (open/qs-restart/wbr) が自動で効く
+3. **mise install** で全ツール — `gh`/`GITHUB_TOKEN` があればレート制限を回避
+4. **apt.txt** のパッケージ復元 + 自動スナップショットフック (`99sync-user-packages`) 配置
+5. **chsh** で zsh をログインシェルに
+
+> apt リポジトリ配信は `mise.en.dev`(docs サイト `mise.jdx.dev` とは別ドメイン)。
+> mise install が GitHub レート制限 (403) で一部失敗したら、`gh auth login` 後に `mise install` を再実行。
+
+### Nerd Font (Windows 側)
+
+starship プロンプトや `eza --icons` のアイコン表示には Nerd Font が要る。WSL ではターミナル描画は
+Windows 側が行うため、フォントは **Windows に** 入れる (WSL 内に入れても反映されない)。
+wezterm/ghostty 設定に合わせ **JetBrainsMono Nerd Font** を使う:
+
+```powershell
+winget install DEVCOM.JetBrainsMonoNerdFont
+```
+
+導入後、使用するターミナル (Windows Terminal 等) のフォントを `JetBrainsMono Nerd Font` に設定する。
+WSL のシェルから入れる場合は `winget.exe install DEVCOM.JetBrainsMonoNerdFont` でも可。
+
+### wezterm (Windows 側)
+
+Windows 版 wezterm は WSL 内の `~/.config/wezterm` を読まないため、Windows の設定パスから
+dotfiles のファイルへ symlink を張る。PowerShell を**管理者または開発者モード**で:
+
+```powershell
+New-Item -ItemType SymbolicLink `
+  -Path "$env:USERPROFILE\.wezterm.lua" `
+  -Target "\\wsl.localhost\Ubuntu-24.04\home\mkiin\.config\wezterm\wezterm.lua"
+```
+
+`wezterm.lua` は `wezterm.target_triple` で OS を実行時判定し、WSL ドメイン (`default_domain`) と
+`win32_system_backdrop` は Windows 版でのみ有効化する (Linux デスクトップ版と同一ファイルで両対応)。
 
 ---
 
