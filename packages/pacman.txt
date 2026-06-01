@@ -22,6 +22,7 @@ nvidia-container-toolkit
 papirus-icon-theme
 piper
 pwvucontrol
+resvg
 rofi
 socat
 solaar
@@ -34,4 +35,5 @@ wlogout
 xdg-desktop-portal-gtk
 xorg-xrandr
 yay
+yazi
 zen-browser-bin

@@ -254,6 +254,18 @@ zle-line-init() { echo -ne '\e[2 q' }
 zle -N zle-line-init
 
 # --------------------------------------------
+# yazi: 終了時に最後のディレクトリへ cd
+# --------------------------------------------
+y() {
+    local tmp cwd
+    tmp="$(mktemp -t yazi-cwd.XXXXXX)"
+    yazi "$@" --cwd-file="$tmp"
+    IFS= read -r -d '' cwd <"$tmp"
+    [[ -n "$cwd" && "$cwd" != "$PWD" ]] && builtin cd -- "$cwd"
+    rm -f -- "$tmp"
+}
+
+# --------------------------------------------
 # webp -> png 一括変換 (ffmpeg + fd)
 # 変換成功時に元 webp は削除される
 # --------------------------------------------

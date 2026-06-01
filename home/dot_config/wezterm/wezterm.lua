@@ -47,6 +47,20 @@ end
 -- タブバーの設定
 config.enable_tab_bar = false
 
+-- このリストは既定値を上書きするため、シェル類を再掲した上で yazi を追加
+config.skip_close_confirmation_for_processes_named = {
+	"bash",
+	"sh",
+	"zsh",
+	"fish",
+	"tmux",
+	"nu",
+	"cmd.exe",
+	"pwsh.exe",
+	"powershell.exe",
+	"yazi",
+}
+
 -- リーダーキー (CapsLock。input.conf の kb_options=caps:none で VoidSymbol 化)
 config.leader = { key = "VoidSymbol", mods = "", timeout_milliseconds = 1000 }
 
@@ -81,13 +95,13 @@ config.keys = {
 	{ key = "v", mods = "LEADER", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) }, -- 上下
 
 	-- ペイン操作
-	{ key = "m", mods = "LEADER", action = act.CloseCurrentPane({ confirm = true }) },
+	{ key = "m", mods = "LEADER", action = act.CloseCurrentPane({ confirm = false }) },
 	{ key = "z", mods = "LEADER", action = act.TogglePaneZoomState },
 	{ key = "e", mods = "LEADER", action = act.PaneSelect },
 
 	-- タブ操作
 	{ key = "n", mods = "LEADER", action = act.SpawnTab("CurrentPaneDomain") },
-	{ key = "q", mods = "LEADER", action = act.CloseCurrentTab({ confirm = true }) },
+	{ key = "q", mods = "LEADER", action = act.CloseCurrentTab({ confirm = false }) },
 	{ key = "1", mods = "LEADER", action = act.ActivateTab(0) },
 	{ key = "2", mods = "LEADER", action = act.ActivateTab(1) },
 	{ key = "3", mods = "LEADER", action = act.ActivateTab(2) },
@@ -102,6 +116,11 @@ config.keys = {
 	-- 既定の Shift+PageUp/Down スクロールを無効化
 	{ key = "PageUp", mods = "SHIFT", action = act.DisableDefaultAssignment },
 	{ key = "PageDown", mods = "SHIFT", action = act.DisableDefaultAssignment },
+
+	-- 既定の Ctrl+f / Ctrl+Shift+f (Search = 検索モード起動) を無効化
+	{ key = "f", mods = "CTRL", action = act.DisableDefaultAssignment },
+	{ key = "f", mods = "CTRL|SHIFT", action = act.DisableDefaultAssignment },
+	{ key = "F", mods = "CTRL|SHIFT", action = act.DisableDefaultAssignment },
 
 	-- F14・F15 を無効化
 	{ key = "F14", mods = "NONE", action = act.Nop },
