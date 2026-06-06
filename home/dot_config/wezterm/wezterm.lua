@@ -24,7 +24,7 @@ config.audible_bell = "Disabled"
 -- フォント
 config.font = wezterm.font_with_fallback({
 	"JetBrainsMono Nerd Font",
-	"BIZ UDGothic",
+	"UDEV Gothic NF",
 })
 config.font_size = 14.0
 
@@ -38,7 +38,7 @@ config.use_ime = true
 config.scrollback_lines = 10000
 
 -- ウィンドウの見た目
-config.window_background_opacity = 0.7
+config.window_background_opacity = 0.9
 config.window_decorations = "RESIZE | TITLE"
 if is_windows then
 	config.win32_system_backdrop = "Acrylic"
