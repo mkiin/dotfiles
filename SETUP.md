@@ -148,18 +148,24 @@ AUR から `hyprshutdown` を追加導入(必要に応じて):
 yay -S hyprshutdown
 ```
 
-### 8. マウス (G703 / M575SP)
-
-詳細は [`docs/mouse.md`](docs/mouse.md)。最小限の手順:
+### 8. マウス (G703 / M575S)
 
 ```bash
-# G703 用 DBus デーモン
+# G703: libratbag DBus デーモン → ボタン/DPI をデバイスへ書込 (一度きり)
 sudo systemctl enable --now ratbagd
-
-# マウス設定をデバイス/host に書込
 ~/.config/mouse/g703h.sh
-~/.config/mouse/m575sp.sh
+
+# M575S: アプリ別プロファイル (DPI + サイド/中央ボタン) 常駐デーモンを有効化
+systemctl --user enable --now m575-profiled.service
 ```
+
+> **M575S アプリ別プロファイル**: Hyprland の前面ウィンドウ class を `socket2` で検知し、
+> `~/.config/mouse/profiles.toml` に従って DPI とサイド/中央ボタンをアプリ別に切り替える。
+> (Solaar の Process 条件は Wayland 非GNOME で効かないため判定は Hyprland 側。DPI は
+> `solaar config`、ボタンは `hyprctl keyword bind` で実装)。アプリや割当の追加・変更は
+> profiles.toml を編集するだけ (mtime 監視で自動再読込、restart 不要)。
+> サービス enable のシンボリックリンクは dotfiles 管理外なので、**新 PC では上記
+> `systemctl --user enable` を再実行**する。
 
 ### 9. 再ログイン
 
