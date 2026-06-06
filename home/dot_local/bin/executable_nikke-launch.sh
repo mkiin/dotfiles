@@ -38,6 +38,7 @@ export PROTONPATH="$ROOT/proton/dwproton-10.0-22"
 export GAMEID=umu-nikke
 export PROTON_USE_WOW64=1
 export WINEDEBUG=""
+# 起動毎の steamrt3 更新 DL で起動が詰まるため更新を無効化
+export UMU_RUNTIME_UPDATE=0
 
-bash "$ROOT/nikke-launch-wrapper.sh" "$ROOT/umu-run" \
-  "$NIKKE_WINEPREFIX/drive_c/NIKKE/Launcher/nikke_launcher.exe"
+"$ROOT/umu-run" "$NIKKE_WINEPREFIX/drive_c/NIKKE/Launcher/nikke_launcher.exe"
