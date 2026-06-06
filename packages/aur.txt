@@ -12,6 +12,8 @@ gpu-screen-recorder-gtk
 pear-desktop-bin
 phinger-cursors
 the-honkers-railway-launcher-bin
+ttf-material-design-icons-webfont
+ttf-udev-gothic
 upscayl-bin
 via-bin
 wallust

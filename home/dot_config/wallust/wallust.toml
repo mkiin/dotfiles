@@ -25,3 +25,6 @@ ghostty = { template = "ghostty.conf", target = "~/.config/ghostty/themes/wallus
 
 # wezterm 用カラースキーム (TOML)。wezterm.lua が load_scheme で読み reload watch する。
 wezterm = { template = "wezterm.toml", target = "~/.config/wezterm/colors/wallust.toml" }
+
+# Quickshell 用 pywal 互換 colors.json。services/Pywal.qml が FileView で watch して追従。
+pywal = { template = "pywal-colors.json", target = "~/.cache/wal/colors.json" }

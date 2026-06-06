@@ -1,4 +1,5 @@
 awww
+bluez-tools
 cava
 chezmoi
 cliphist
@@ -15,6 +16,7 @@ hyprlock
 hyprpolkitagent
 hyprshot
 hyprshutdown
+inter-font
 matugen
 mise
 mpv

@@ -157,6 +157,7 @@
   },
   "bluetooth": {
     "format": "{icon} {status}",
+    "on-click": "qs -c bluetooth -n",
     "format-icons": {
       "enabled": "󰂯",
       "disabled": "󰂲"

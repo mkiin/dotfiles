@@ -1,0 +1,12 @@
+[Unit]
+Description=Bluetooth pairing agent (bt-agent)
+PartOf=graphical-session.target
+After=bluetooth.target graphical-session.target
+
+[Service]
+ExecStart=/usr/bin/bt-agent --capability=NoInputNoOutput
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=graphical-session.target
