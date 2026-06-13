@@ -9,11 +9,6 @@ output_path = "~/.config/waybar/colors.css"
 input_path = "~/.config/matugen/templates/wlogout-colors.css"
 output_path = "~/.config/wlogout/colors.css"
 
-[templates.swaync]
-input_path = "~/.config/matugen/templates/swaync-colors.css"
-output_path = "~/.config/swaync/colors.css"
-post_hook = "swaync-client -rs"
-
 [templates.hyprland]
 input_path = "~/.config/matugen/templates/hyprland-colors.conf"
 output_path = "~/.config/hypr/colors.conf"
@@ -25,3 +20,7 @@ output_path = "~/.config/walker/themes/matugen/colors.css"
 [templates.rofi]
 input_path = "~/.config/matugen/templates/rofi-colors.rasi"
 output_path = "~/.config/rofi/themes/colors-matugen.rasi"
+
+[templates.quickshell]
+input_path = "~/.config/matugen/templates/quickshell-colors.json"
+output_path = "~/.cache/quickshell/matugen-colors.json"
