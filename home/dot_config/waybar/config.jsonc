@@ -150,7 +150,7 @@
     },
     "scroll-step": 1,
     "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
-    "on-click-right": "pwvucontrol",
+    "on-click-right": "qs -c audio -n",
     "ignored-sinks": [
       "Easy Effects Sink"
     ]
