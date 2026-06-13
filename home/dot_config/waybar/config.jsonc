@@ -243,10 +243,11 @@
       "dnd-inhibited-none": "󰪑"
     },
     "return-type": "json",
-    "exec-if": "which swaync-client",
-    "exec": "swaync-client -swb",
-    "on-click": "swaync-client -t -sw",
-    "on-click-right": "swaync-client -d -sw",
+    "interval": 2,
+    "exec-if": "which qs",
+    "exec": "qs -c shell ipc call cc status",
+    "on-click": "qs -c shell ipc call cc toggle",
+    "on-click-right": "qs -c shell ipc call cc dnd",
     "escape": true
   },
   "custom/temperature": {

@@ -1,0 +1,21 @@
+{
+  "appearance": {
+    "fontFamily": "Inter",
+    "materialIconFont": "Material Design Icons"
+  },
+  "paths": {
+    "pywalColors": "~/.cache/quickshell/matugen-colors.json",
+    "screenshotsDir": "~/Pictures/Screenshots"
+  },
+  "notifications": {
+    "registerServer": true,
+    "popupWidth": 340,
+    "maxVisible": 5,
+    "timeoutMs": 5000,
+    "spacing": 10,
+    "margin": 10
+  },
+  "launcher": { "enabled": false },
+  "sidebar": { "enabled": false },
+  "dashboard": { "enabled": false }
+}
