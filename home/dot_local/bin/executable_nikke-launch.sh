@@ -33,6 +33,12 @@ if [ $# -gt 0 ]; then
 fi
 
 # Standalone モード (rofi 等)
+if pgrep -f "$NIKKE_WINEPREFIX/drive_c/NIKKE/Launcher/nikke_launcher.exe" >/dev/null 2>&1; then
+  echo "NIKKE は既に起動中です。二重起動を中止します。" >&2
+  trap - EXIT  # cleanup の wineserver -k が起動中インスタンスを巻き込むのを防ぐ
+  exit 0
+fi
+
 export WINEPREFIX="$NIKKE_WINEPREFIX"
 export PROTONPATH="$ROOT/proton/dwproton-10.0-22"
 export GAMEID=umu-nikke
