@@ -237,6 +237,9 @@ PanelWindow {
 
                             Text {
                                 Layout.fillWidth: true
+                                Layout.preferredHeight: 16
+                                verticalAlignment: Text.AlignVCenter
+                                maximumLineCount: 1
                                 text: Pipewire.defaultAudioSink
                                     ? (Pipewire.defaultAudioSink.description || Pipewire.defaultAudioSink.name)
                                     : "No output device"
@@ -250,9 +253,9 @@ PanelWindow {
 
                     // Output section
                     Text {
-                        text: "出力"
+                        text: "Output"
                         font.family: "Inter"
-                        font.pixelSize: 10
+                        font.pixelSize: 12
                         font.weight: Font.Medium
                         color: cSubText
                     }
@@ -283,7 +286,7 @@ PanelWindow {
                                 Layout.fillWidth: true
                                 Layout.margins: 8
                                 horizontalAlignment: Text.AlignHCenter
-                                text: "出力デバイスなし"
+                                text: "No output devices"
                                 font.family: "Inter"
                                 font.pixelSize: 12
                                 color: cSubText
@@ -294,9 +297,9 @@ PanelWindow {
                     // Input section（入力デバイスがある時だけ）
                     Text {
                         visible: popupWindow.sources.length > 0
-                        text: "入力"
+                        text: "Input"
                         font.family: "Inter"
-                        font.pixelSize: 10
+                        font.pixelSize: 12
                         font.weight: Font.Medium
                         color: cSubText
                     }

@@ -24,7 +24,7 @@ Singleton {
     })
 
     readonly property var paths: ({
-        pywalColors: _expandHome(data.paths?.pywalColors ?? "~/.cache/wal/colors.json"),
+        pywalColors: _expandHome(data.paths?.pywalColors ?? "~/.cache/quickshell/matugen-colors.json"),
         screenshotsDir: _expandHome(data.paths?.screenshotsDir ?? "~/Pictures/Screenshots")
     })
 
