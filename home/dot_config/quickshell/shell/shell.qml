@@ -61,4 +61,10 @@ ShellRoot {
             return JSON.stringify({ text: "", alt: alt, tooltip: (d ? "DND · " : "") + u + " unread" })
         }
     }
+
+    // 壁紙変更後に matugen post_hook から呼ぶカラーリロード
+    IpcHandler {
+        target: "theme"
+        function reload(): void { QsServices.Pywal.reload() }
+    }
 }

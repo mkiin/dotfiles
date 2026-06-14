@@ -24,3 +24,4 @@ output_path = "~/.config/rofi/themes/colors-matugen.rasi"
 [templates.quickshell]
 input_path = "~/.config/matugen/templates/quickshell-colors.json"
 output_path = "~/.cache/quickshell/matugen-colors.json"
+post_hook = "for c in shell audio bluetooth; do qs -c $c ipc call theme reload 2>/dev/null; done; true"

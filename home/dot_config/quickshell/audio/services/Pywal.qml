@@ -127,6 +127,11 @@ Singleton {
         }
     }
 
+    // matugen の atomic 書込で FileView 監視が外れるため、post_hook から明示リロードする。
+    function reload(): void {
+        matugenFile.reload()
+    }
+
     FileView {
         id: matugenFile
         path: QsConfig.Config.paths.pywalColors
