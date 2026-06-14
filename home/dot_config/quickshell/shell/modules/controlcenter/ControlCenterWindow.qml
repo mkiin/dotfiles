@@ -217,7 +217,7 @@ PanelWindow {
                         
                         HeaderButton {
                             icon: "󰒓"
-                            tooltip: "Network Settings"
+                            tooltip: "Settings"
                             onClicked: settingsProcess.running = true
                         }
                         HeaderButton {
