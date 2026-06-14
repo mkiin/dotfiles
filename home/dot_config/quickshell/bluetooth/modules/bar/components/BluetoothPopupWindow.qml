@@ -22,8 +22,8 @@ PanelWindow {
     })
 
     // Solid colors like Control Center
-    readonly property color cSurface: pywal.background
-    readonly property color cSurfaceContainer: Qt.lighter(pywal.background, 1.15)
+    readonly property color cSurface: pywal.surfaceContainer
+    readonly property color cSurfaceContainer: pywal.surfaceContainerHigh
     readonly property color cPrimary: pywal.primary
     readonly property color cText: pywal.foreground
     readonly property color cSubText: Qt.rgba(cText.r, cText.g, cText.b, 0.6)
@@ -212,7 +212,7 @@ PanelWindow {
                         Layout.fillWidth: true
                         Layout.preferredHeight: 36
                         radius: 10
-                        color: scanArea.containsMouse ? Qt.lighter(cSurfaceContainer, 1.25) : cSurfaceContainer
+                        color: scanArea.containsMouse ? pywal.surfaceContainerHighest : cSurfaceContainer
 
                         Behavior on color { ColorAnimation { duration: 100 } }
 

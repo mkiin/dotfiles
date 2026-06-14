@@ -28,8 +28,8 @@ PanelWindow {
     }
 
     // Solid colors like Control Center（Bluetooth と共通）
-    readonly property color cSurface: pywal.background
-    readonly property color cSurfaceContainer: Qt.lighter(pywal.background, 1.15)
+    readonly property color cSurface: pywal.surfaceContainer
+    readonly property color cSurfaceContainer: pywal.surfaceContainerHigh
     readonly property color cPrimary: pywal.primary
     readonly property color cText: pywal.foreground
     readonly property color cSubText: Qt.rgba(cText.r, cText.g, cText.b, 0.6)
