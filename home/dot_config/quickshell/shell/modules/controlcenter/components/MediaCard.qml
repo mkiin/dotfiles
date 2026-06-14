@@ -4,12 +4,12 @@ import QtQuick.Controls 6.10
 import QtQuick.Effects
 import Quickshell
 import "../../../components/effects"
+import "../../../config" as QsConfig
 
 Rectangle {
     id: root
     
     required property var mpris
-    property var pywal
     
     // Get active player safely
     readonly property var activePlayer: mpris?.active ?? null
@@ -56,10 +56,10 @@ Rectangle {
     }
     
     // Color tokens
-    readonly property color surfaceColor: pywal ? Qt.lighter(pywal.background, 1.12) : "#1e1e2e"
-    readonly property color textColor: pywal ? pywal.foreground : "#dddddd"
-    readonly property color textDim: pywal ? Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.7) : Qt.rgba(1, 1, 1, 0.7)
-    readonly property color accentColor: pywal ? pywal.primary : "#a6e3a1"
+    readonly property color surfaceColor: QsConfig.Theme.card
+    readonly property color textColor: QsConfig.Theme.text
+    readonly property color textDim: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.7)
+    readonly property color accentColor: QsConfig.Theme.accent
     
     Layout.fillWidth: true
     Layout.preferredHeight: hasPlayer ? 100 : 0
@@ -109,7 +109,7 @@ Rectangle {
     // Dark overlay for readability
     Rectangle {
         anchors.fill: parent
-        color: pywal ? Qt.rgba(pywal.background.r, pywal.background.g, pywal.background.b, 0.4) : Qt.rgba(0, 0, 0, 0.3)
+        color: QsConfig.Theme.withAlpha(QsConfig.Theme.background, 0.4)
         visible: bgImage.status === Image.Ready
     }
     
@@ -196,7 +196,7 @@ Rectangle {
                 text: "󰝚"
                 font.family: "Material Design Icons"
                 font.pixelSize: 32
-                color: pywal ? Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.3) : Qt.rgba(1, 1, 1, 0.3)
+                color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.3)
                 visible: albumArt.status !== Image.Ready
             }
         }
@@ -292,7 +292,7 @@ Rectangle {
                     text: root.isPlaying ? "󰏤" : "󰐊"
                     font.family: "Material Design Icons"
                     font.pixelSize: 24
-                    color: pywal ? pywal.background : Qt.rgba(0, 0, 0, 0.9)
+                    color: QsConfig.Theme.background
                 }
                 
                 MouseArea {

@@ -2,17 +2,17 @@ import QtQuick 6.10
 import QtQuick.Layouts 6.10
 import Quickshell
 import "../../../components/effects"
+import "../../../config" as QsConfig
 
 Rectangle {
     id: root
     
     required property var systemUsage
-    property var pywal
     
     // Color tokens
-    readonly property color surfaceColor: pywal ? pywal.surfaceContainerHigh : "#111111"
-    readonly property color textColor: pywal ? pywal.foreground : "#dddddd"
-    readonly property color textDim: pywal ? Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.5) : Qt.rgba(0.5, 0.5, 0.5, 0.5)
+    readonly property color surfaceColor: QsConfig.Theme.card
+    readonly property color textColor: QsConfig.Theme.text
+    readonly property color textDim: QsConfig.Theme.textDim
     
     Layout.fillWidth: true
     Layout.preferredHeight: 86
@@ -41,7 +41,7 @@ Rectangle {
             icon: "󰘚"
             label: "CPU"
             value: (root.systemUsage.cpuPerc ?? 0) * 100
-            accentColor: root.pywal?.primary ?? Qt.rgba(0.5, 0.7, 1.0, 1)
+            accentColor: QsConfig.Theme.accent
         }
         
         Item { Layout.fillWidth: true }
@@ -59,7 +59,7 @@ Rectangle {
             icon: "󰍛"
             label: "RAM"
             value: (root.systemUsage.memPerc ?? 0) * 100
-            accentColor: root.pywal?.secondary ?? Qt.rgba(0.74, 0.78, 0.86, 1)
+            accentColor: QsConfig.Theme.secondary
         }
         
         Item { Layout.fillWidth: true }
@@ -76,7 +76,7 @@ Rectangle {
             icon: "󰋊"
             label: "Disk"
             value: (root.systemUsage.diskPerc ?? 0) * 100
-            accentColor: root.pywal?.info ?? Qt.rgba(0.5, 0.7, 1.0, 1)
+            accentColor: QsConfig.Theme.info
         }
         
         Item { Layout.fillWidth: true }
@@ -99,7 +99,7 @@ Rectangle {
             icon: "󰢮"
             label: "GPU"
             value: root.systemUsage.gpuUsage ?? 0
-            accentColor: root.pywal?.tertiary ?? Qt.rgba(0.86, 0.74, 0.88, 1)
+            accentColor: QsConfig.Theme.tertiary
         }
         
         Item { 

@@ -4,21 +4,21 @@ import QtQuick.Controls 6.10
 import Quickshell
 import "../../../components/effects"
 import "../../../services" as QsServices
+import "../../../config" as QsConfig
 
 Rectangle {
     id: root
     
     required property var audio
-    property var pywal
     
     // Current volume value - use PipeWire audio service
     readonly property int currentVolume: audio.percentage
     readonly property bool isMuted: audio.muted
     
     // Solid color tokens
-    readonly property color surfaceColor: pywal ? pywal.surfaceContainerHighest : "#1a1a1a"
-    readonly property color textColor: pywal ? pywal.foreground : "#dddddd"
-    readonly property color accentColor: pywal ? pywal.primary : "#88cc88"
+    readonly property color surfaceColor: QsConfig.Theme.cardHigh
+    readonly property color textColor: QsConfig.Theme.text
+    readonly property color accentColor: QsConfig.Theme.accent
     
     Layout.fillWidth: true
     Layout.preferredHeight: 54
@@ -26,7 +26,7 @@ Rectangle {
     radius: 22
     color: surfaceColor
     border.width: 1
-    border.color: pywal ? pywal.outlineVariant : Qt.rgba(1, 1, 1, 0.12)
+    border.color: QsConfig.Theme.border
     
     Behavior on color {
         ColorAnimation {

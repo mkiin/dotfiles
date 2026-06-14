@@ -14,22 +14,21 @@ import "../../../config" as QsConfig
 PanelWindow {
     id: root
 
-    readonly property var pywal: QsServices.Pywal
     readonly property var notifs: QsServices.Notifs
     readonly property var logger: QsServices.Logger
     readonly property var config: QsConfig.Config
 
     // ── Color Tokens (semantic, from Pywal) ──
-    readonly property color m3Surface: pywal.background
-    readonly property color m3SurfaceContainer: pywal.surfaceContainer
-    readonly property color m3SurfaceContainerHigh: pywal.surfaceContainerHigh
-    readonly property color m3Primary: pywal.primary
-    readonly property color m3OnSurface: pywal.foreground
-    readonly property color m3OnSurfaceVariant: Qt.rgba(m3OnSurface.r, m3OnSurface.g, m3OnSurface.b, 0.55)
-    readonly property color m3Error: pywal.error
-    readonly property color m3Warning: pywal.warning
-    readonly property color m3Success: pywal.success
-    readonly property color m3Border: Qt.rgba(m3OnSurface.r, m3OnSurface.g, m3OnSurface.b, 0.06)
+    readonly property color m3Surface: QsConfig.Theme.card
+    readonly property color m3SurfaceContainer: QsConfig.Theme.panel
+    readonly property color m3SurfaceContainerHigh: QsConfig.Theme.cardHigh
+    readonly property color m3Primary: QsConfig.Theme.accent
+    readonly property color m3OnSurface: QsConfig.Theme.text
+    readonly property color m3OnSurfaceVariant: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.55)
+    readonly property color m3Error: QsConfig.Theme.error
+    readonly property color m3Warning: QsConfig.Theme.warning
+    readonly property color m3Success: QsConfig.Theme.success
+    readonly property color m3Border: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.06)
 
     // Swipe dismiss threshold (fraction of popup width)
     readonly property real swipeThreshold: 0.30

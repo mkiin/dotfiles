@@ -3,21 +3,21 @@ import QtQuick.Layouts 6.10
 import QtQuick.Controls 6.10
 import Quickshell
 import "../../../components/effects"
+import "../../../config" as QsConfig
 
 Rectangle {
     id: root
     
     required property var notifs
-    property var pywal
     property real maxListHeight: 100000
     
-    // Solid color tokens from pywal
-    readonly property color surfaceColor: pywal ? pywal.surfaceContainerLow : "#111111"
-    readonly property color surfaceVariant: pywal ? pywal.surfaceContainerHigh : "#1a1a1a"
-    readonly property color textColor: pywal ? pywal.foreground : "#dddddd"
-    readonly property color textVariant: pywal ? Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.72) : "#999999"
-    readonly property color accentColor: pywal ? pywal.primary : "#88cc88"
-    readonly property color borderColor: pywal ? Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.08) : "#222222"
+    // Solid color tokens (Theme)
+    readonly property color surfaceColor: QsConfig.Theme.inset
+    readonly property color surfaceVariant: QsConfig.Theme.card
+    readonly property color textColor: QsConfig.Theme.text
+    readonly property color textVariant: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.72)
+    readonly property color accentColor: QsConfig.Theme.accent
+    readonly property color borderColor: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.08)
     
     Layout.fillWidth: true
     implicitHeight: contentCol.implicitHeight + 32
