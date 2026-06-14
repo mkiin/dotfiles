@@ -312,7 +312,7 @@ PanelWindow {
                             
                             QuickToggle {
                                 Layout.fillWidth: true
-                                icon: "󰅶"
+                                icon: root.idleInhibitor.inhibited ? "󰈈" : "󰈉"
                                 label: "Caffeine"
                                 subLabel: root.idleInhibitor.inhibited ? "Active" : "Off"
                                 active: root.idleInhibitor.inhibited

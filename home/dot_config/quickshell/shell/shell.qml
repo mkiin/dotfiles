@@ -67,4 +67,18 @@ ShellRoot {
         target: "theme"
         function reload(): void { QsServices.Pywal.reload() }
     }
+
+    // アイドルインヒビター(Caffeine)を waybar と共有。状態の真実はこの IdleInhibitor サービス。
+    IpcHandler {
+        target: "idle"
+        function toggle(): void { QsServices.IdleInhibitor.inhibited = !QsServices.IdleInhibitor.inhibited }
+        function status(): string {
+            const on = QsServices.IdleInhibitor.inhibited
+            return JSON.stringify({
+                text: on ? "󰈈" : "󰈉",
+                class: on ? "activated" : "deactivated",
+                tooltip: on ? "Idle inhibited (caffeine on)" : "Idle inhibitor off"
+            })
+        }
+    }
 }

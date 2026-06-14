@@ -51,7 +51,7 @@ window#waybar {
 .cluster #bluetooth,
 .cluster #cpu,
 .cluster #memory,
-.cluster #idle_inhibitor,
+.cluster #custom-idle_inhibitor,
 .cluster #temperature,
 .cluster #tray,
 .cluster #window,
@@ -82,7 +82,7 @@ window#waybar {
 #bluetooth,
 #cpu,
 #memory,
-#idle_inhibitor,
+#custom-idle_inhibitor,
 #temperature,
 #tray,
 #window,
@@ -223,7 +223,7 @@ window#waybar.empty #window {
 /* ============================================================
    System Stats (CPU, Memory, Idle Inhibitor, Temperature)
    ============================================================ */
-#idle_inhibitor.activated {
+#custom-idle_inhibitor.activated {
     color: @primary;
 }
 

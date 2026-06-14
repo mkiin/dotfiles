@@ -46,7 +46,7 @@
       // "cava",
       "group/sysstats",
       "pulseaudio",
-      "idle_inhibitor",
+      "custom/idle_inhibitor",
       "custom/swaync",
       "custom/separator",
       "tray"
@@ -66,12 +66,13 @@
       "memory"
     ]
   },
-  "idle_inhibitor": {
-    "format": "{icon}",
-    "format-icons": {
-      "activated": "󰈈",
-      "deactivated": "󰈉"
-    }
+  "custom/idle_inhibitor": {
+    "format": "{}",
+    "return-type": "json",
+    "interval": 2,
+    "exec-if": "which qs",
+    "exec": "qs -c shell ipc call idle status",
+    "on-click": "qs -c shell ipc call idle toggle"
   },
   "cpu": {
     "interval": 10,
