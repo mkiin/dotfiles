@@ -2,19 +2,6 @@ return {
 	{
 		"folke/snacks.nvim",
 		opts = function(_, opts)
-			-- デフォルトの "c"(Config) を Claude Code に差し替え
-			for i, key in ipairs(opts.dashboard.preset.keys) do
-				if key.key == "c" then
-					opts.dashboard.preset.keys[i] = {
-						icon = "󰚩 ",
-						key = "c",
-						desc = "Claude Code (danger)",
-						action = "<cmd>lua require('sidekick.cli').toggle({name='claude-danger', focus=true})<cr>",
-					}
-					break
-				end
-			end
-
 			opts.terminal = {
 				win = {
 					position = "float",
