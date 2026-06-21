@@ -3,6 +3,7 @@ import QtQuick.Layouts 6.10
 import QtQuick.Controls 6.10 as QQC
 import Quickshell
 import Quickshell.Wayland
+import Quickshell.Hyprland
 import Quickshell.Widgets
 import "../../config" as QsConfig
 import "../../services" as QsServices
@@ -16,14 +17,14 @@ PanelWindow {
     property int selectedIndex: 0
 
     readonly property var config: QsConfig.Config
-    readonly property var pywal: QsServices.Pywal
-    readonly property color cSurface: pywal.surfaceContainerHighest
-    readonly property color cSurfaceContainer: pywal.surfaceContainerHigh
-    readonly property color cSurfaceContainerHigh: pywal.surfaceContainerHigh
-    readonly property color cPrimary: pywal.primary
-    readonly property color cText: pywal.foreground
-    readonly property color cSubText: pywal.onSurfaceMuted
-    readonly property color cBorder: pywal.outlineVariant
+    readonly property color cSurface: QsConfig.Theme.cardHigh
+    readonly property color cSurfaceContainer: QsConfig.Theme.card
+    readonly property color cSurfaceContainerHigh: QsConfig.Theme.cardHigh
+    readonly property color cPrimary: QsConfig.Theme.accent
+    readonly property color cText: QsConfig.Theme.text
+    readonly property color cSubText: QsConfig.Theme.textMuted
+    readonly property color cBorder: QsConfig.Theme.border
+    readonly property color cOnPrimary: QsConfig.Theme.onColor(QsConfig.Theme.accent)
     readonly property var terminalCommand: Array.isArray(config.launcher.terminalCommand) && config.launcher.terminalCommand.length > 0
         ? config.launcher.terminalCommand
         : ["foot"]
@@ -133,9 +134,6 @@ PanelWindow {
             })
         }
 
-        if (!q.length && favoriteApps.length > 0)
-            return favoriteApps.slice(0, config.launcher.maxResults)
-
         return appEntries
     }
 
@@ -188,25 +186,34 @@ PanelWindow {
             selectedIndex = Math.max(0, visibleEntries.length - 1)
     }
 
-    screen: Quickshell.screens[0]
+    // クリックしたモニター（フォーカス中の出力）に追従
+    screen: [...Quickshell.screens].find(s => s.name === Hyprland.focusedMonitor?.name) ?? Quickshell.screens[0]
     anchors {
         top: true
         left: true
+        right: true
+        bottom: true
     }
-    margins {
-        top: (config.bar.height ?? 34) + 22
-        left: Math.max(0, Math.round((screen.width - root.implicitWidth) / 2))
-    }
-    implicitWidth: config.launcher.width
-    implicitHeight: shouldShow || panel.opacity > 0 ? panelColumn.implicitHeight + 40 : 0
+    exclusionMode: ExclusionMode.Ignore
     color: "transparent"
     visible: config.launcher.enabled && (shouldShow || panel.opacity > 0)
 
     WlrLayershell.keyboardFocus: shouldShow ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
 
+    // 枠外クリックで閉じる（パネルより背面）
+    MouseArea {
+        anchors.fill: parent
+        enabled: root.shouldShow
+        onClicked: root.closeLauncher()
+    }
+
     FocusScope {
         id: panel
-        anchors.fill: parent
+        width: config.launcher.width
+        height: panelColumn.implicitHeight + 40
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        anchors.topMargin: (config.bar.height ?? 34) + 22
         property real revealOffset: shouldShow ? 0 : -20
         scale: shouldShow ? 1.0 : 0.97
         opacity: shouldShow ? 1.0 : 0.0
@@ -252,13 +259,7 @@ PanelWindow {
                     radius: 22
                     color: root.cSurfaceContainer
                     border.width: 1
-                    border.color: Qt.rgba(root.cPrimary.r, root.cPrimary.g, root.cPrimary.b, 0.18)
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: parent.radius
-                        color: Qt.rgba(root.cPrimary.r, root.cPrimary.g, root.cPrimary.b, 0.04)
-                    }
+                    border.color: root.cBorder
 
                     RowLayout {
                         anchors.fill: parent
@@ -322,6 +323,7 @@ PanelWindow {
                 }
 
                 Flickable {
+                    id: appsFlick
                     Layout.fillWidth: true
                     Layout.preferredHeight: Math.min(520, listColumn.implicitHeight + 12)
                     clip: true
@@ -335,7 +337,9 @@ PanelWindow {
 
                     Column {
                         id: listColumn
-                        width: root.width - 48
+                        // ホバー時の 1.02 拡大が clip されないよう左右に余白を取る
+                        x: 8
+                        width: appsFlick.width - 24
                         spacing: 8
 
                         Repeater {
@@ -345,30 +349,23 @@ PanelWindow {
                                 id: delegateRoot
                                 required property var modelData
                                 required property int index
+                                readonly property bool isSel: root.selectedIndex === index
 
                                 width: listColumn.width
                                 height: 66
                                 radius: 20
-                                color: root.selectedIndex === index
-                                    ? Qt.rgba(root.cPrimary.r, root.cPrimary.g, root.cPrimary.b, 0.18)
+                                color: isSel
+                                    ? root.cPrimary
                                     : hovered.hovered
                                         ? root.cSurfaceContainerHigh
                                         : root.cSurfaceContainer
                                 border.width: 1
-                                border.color: root.selectedIndex === index
-                                    ? Qt.rgba(root.cPrimary.r, root.cPrimary.g, root.cPrimary.b, 0.34)
-                                    : Qt.rgba(root.cText.r, root.cText.g, root.cText.b, 0.10)
+                                border.color: isSel ? root.cPrimary : root.cBorder
                                 scale: hovered.hovered ? 1.02 : 1.0
 
                                 Behavior on color { ColorAnimation { duration: 160 } }
                                 Behavior on border.color { ColorAnimation { duration: 160 } }
                                 Behavior on scale { NumberAnimation { duration: 180; easing.bezierCurve: [0.22, 1.0, 0.36, 1.0] } }
-
-                                Rectangle {
-                                    anchors.fill: parent
-                                    radius: parent.radius
-                                    color: Qt.rgba(root.cPrimary.r, root.cPrimary.g, root.cPrimary.b, root.selectedIndex === index ? 0.05 : hovered.hovered ? 0.03 : 0)
-                                }
 
                                 HoverHandler { id: hovered }
 
@@ -381,10 +378,27 @@ PanelWindow {
                                         Layout.preferredWidth: 40
                                         Layout.preferredHeight: 40
                                         radius: 14
-                                        color: Qt.rgba(root.cPrimary.r, root.cPrimary.g, root.cPrimary.b, delegateRoot.modelData.type === "action" ? 0.14 : 0.10)
+                                        color: delegateRoot.isSel
+                                            ? QsConfig.Theme.withAlpha(root.cOnPrimary, 0.18)
+                                            : root.cSurfaceContainerHigh
 
+                                        Image {
+                                            id: appIconImg
+                                            anchors.centerIn: parent
+                                            width: 26
+                                            height: 26
+                                            sourceSize.width: 52
+                                            sourceSize.height: 52
+                                            source: delegateRoot.modelData.type === "action" || !delegateRoot.modelData.icon
+                                                ? ""
+                                                : "image://icon/" + delegateRoot.modelData.icon
+                                            visible: status === Image.Ready
+                                        }
+
+                                        // アイコン未取得時のフォールバック（アクションはグリフ、アプリは頭文字）
                                         Text {
                                             anchors.centerIn: parent
+                                            visible: !appIconImg.visible
                                             text: delegateRoot.modelData.type === "action"
                                                 ? (delegateRoot.modelData.glyph ?? "󰣆")
                                                 : ((delegateRoot.modelData.name ?? "?").slice(0, 1).toUpperCase())
@@ -393,7 +407,7 @@ PanelWindow {
                                                 : QsConfig.Config.appearance.fontFamily
                                             font.pixelSize: delegateRoot.modelData.type === "action" ? 20 : 16
                                             font.weight: Font.DemiBold
-                                            color: root.cPrimary
+                                            color: delegateRoot.isSel ? root.cOnPrimary : root.cPrimary
                                         }
                                     }
 
@@ -407,7 +421,7 @@ PanelWindow {
                                             font.family: QsConfig.Config.appearance.fontFamily
                                             font.pixelSize: 14
                                             font.weight: Font.Medium
-                                            color: root.cText
+                                            color: delegateRoot.isSel ? root.cOnPrimary : root.cText
                                             elide: Text.ElideRight
                                         }
 
@@ -416,17 +430,17 @@ PanelWindow {
                                             text: delegateRoot.modelData.comment || delegateRoot.modelData.genericName || delegateRoot.modelData.execString || "Launch"
                                             font.family: QsConfig.Config.appearance.fontFamily
                                             font.pixelSize: 11
-                                            color: root.cSubText
+                                            color: delegateRoot.isSel ? QsConfig.Theme.withAlpha(root.cOnPrimary, 0.75) : root.cSubText
                                             elide: Text.ElideRight
                                         }
                                     }
 
                                     Text {
-                                        visible: root.selectedIndex === index
+                                        visible: delegateRoot.isSel
                                         text: "󰁔"
                                         font.family: "Material Design Icons"
                                         font.pixelSize: 18
-                                        color: root.cPrimary
+                                        color: root.cOnPrimary
                                     }
                                 }
 

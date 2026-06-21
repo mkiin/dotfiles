@@ -15,7 +15,7 @@
     "spacing": 10,
     "margin": 10
   },
-  "launcher": { "enabled": false },
+  "launcher": { "enabled": true },
   "sidebar": { "enabled": false },
   "dashboard": { "enabled": false }
 }

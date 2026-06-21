@@ -274,7 +274,7 @@
   "custom/archlinux": {
     "format": "󰣇",
     "tooltip": false,
-    "on-click": "pkill -x rofi || ~/.config/rofi/scripts/rofi-launcher.sh"
+    "on-click": "qs -c shell ipc call launcher toggle"
   },
 
   "custom/power": {
