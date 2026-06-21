@@ -154,13 +154,6 @@ PanelWindow {
                 }
             }
 
-            Behavior on height {
-                NumberAnimation {
-                    duration: Material3Anim.medium2
-                    easing.bezierCurve: Material3Anim.standard
-                }
-            }
-
             // Block clicks from passing through
             MouseArea {
                 anchors.fill: parent
