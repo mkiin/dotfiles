@@ -1,6 +1,5 @@
 import QtQuick 6.10
 import QtQuick.Layouts 6.10
-import QtQuick.Controls 6.10
 import Quickshell
 import "../../../components/effects"
 import "../../../services" as QsServices
@@ -81,60 +80,17 @@ Rectangle {
         }
         
         // Slider
-        Slider {
+        VolumeTrack {
             id: slider
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.rightMargin: 12
 
-            from: 0
-            to: 100
             value: root.currentVolume
-            live: true
+            surfaceColor: root.surfaceColor
 
             onMoved: root.audio.setVolume(value / 100)
-
-            background: Rectangle {
-                x: slider.leftPadding
-                y: slider.topPadding + slider.availableHeight / 2 - height / 2
-                implicitWidth: 200
-                implicitHeight: 30
-                width: slider.availableWidth
-                height: implicitHeight
-                radius: 15
-                color: Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.08)
-
-                // Progress fill
-                Rectangle {
-                    width: slider.position * parent.width
-                    height: parent.height
-                    radius: 15
-                    color: root.accentColor
-                    opacity: 0.34
-
-                    Behavior on width {
-                        NumberAnimation {
-                            duration: Material3Anim.short2
-                            easing.bezierCurve: Material3Anim.standard
-                        }
-                    }
-                }
-
-                Rectangle {
-                    width: 10
-                    height: 10
-                    radius: 5
-                    x: Math.max(0, Math.min(parent.width - width, slider.position * parent.width - width / 2))
-                    y: (parent.height - height) / 2
-                    color: root.accentColor
-                    border.width: 2
-                    border.color: root.surfaceColor
-                }
-            }
-
-            handle: Rectangle {
-                visible: false
-            }
+            onVolumeStepped: newValue => root.audio.setVolume(newValue / 100)
         }
 
         // Percentage Text

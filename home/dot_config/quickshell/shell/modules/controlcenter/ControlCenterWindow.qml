@@ -20,7 +20,6 @@ PanelWindow {
     readonly property var network: QsServices.Network
     readonly property var bluetooth: QsServices.Bluetooth
     readonly property var audio: QsServices.Audio
-    readonly property var brightness: QsServices.Brightness
     readonly property var mpris: QsServices.Players
     readonly property var notifs: QsServices.Notifs
     readonly property var systemUsage: QsServices.SystemUsage
@@ -139,7 +138,7 @@ PanelWindow {
             anchors.topMargin: 8
             anchors.rightMargin: 12
             width: 420
-            height: Math.min(112 + contentColumn.implicitHeight, root.screen.height - 56)
+            height: Math.min(innerCol.implicitHeight + 40, root.screen.height - 56)
             color: root.cSurface
             radius: 24
             strokeColor: root.cBorder
@@ -170,6 +169,7 @@ PanelWindow {
             
             // Content Layout
             ColumnLayout {
+                id: innerCol
                 anchors.fill: parent
                 anchors.margins: 20
                 spacing: 16
@@ -233,39 +233,11 @@ PanelWindow {
                     }
                 }
                 
-                // Scrollable Content
-                Flickable {
-                    id: contentFlick
+                // 上段(トグル〜メディア): 固定・スクロールしない
+                ColumnLayout {
+                    id: upperCol
                     Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    interactive: false
-                    
-                    contentHeight: contentColumn.height
-                    clip: true
-                    boundsBehavior: Flickable.StopAtBounds
-                    flickDeceleration: 3000
-                    maximumFlickVelocity: 2000
-                    
-                    ScrollBar.vertical: ScrollBar {
-                        policy: ScrollBar.AsNeeded
-                        width: 4
-                        
-                        contentItem: Rectangle {
-                            radius: 2
-                            color: Qt.rgba(root.cOnSurface.r, root.cOnSurface.g, root.cOnSurface.b, 0.2)
-                        }
-                    }
-                    
-                    ColumnLayout {
-                        id: contentColumn
-                        width: contentFlick.width
-                        spacing: 14
-
-                        // 上段(トグル〜メディア): 固定・スクロールしない
-                        ColumnLayout {
-                            id: upperCol
-                            Layout.fillWidth: true
-                            spacing: 14
+                    spacing: 14
 
                         // Quick Toggles
                         GridLayout {
@@ -385,10 +357,82 @@ PanelWindow {
                                 Layout.fillWidth: true
                                 audio: root.audio
                             }
-                            
-                            BrightnessSlider {
+
+                            // アプリ単位ミキサー（展開トグル）
+                            ColumnLayout {
+                                id: mixerSection
                                 Layout.fillWidth: true
-                                brightness: root.brightness
+                                Layout.leftMargin: 4
+                                Layout.rightMargin: 4
+                                spacing: 8
+
+                                property bool expanded: false
+
+                                Item {
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: 22
+
+                                    RowLayout {
+                                        anchors.fill: parent
+                                        spacing: 6
+
+                                        Text {
+                                            text: "󰕾"
+                                            font.family: "Material Design Icons"
+                                            font.pixelSize: 14
+                                            color: root.cOnSurfaceVariant
+                                        }
+
+                                        Text {
+                                            Layout.fillWidth: true
+                                            text: "アプリ音量"
+                                            font.family: "Inter"
+                                            font.pixelSize: 12
+                                            font.weight: Font.DemiBold
+                                            color: root.cOnSurfaceVariant
+                                        }
+
+                                        Text {
+                                            text: mixerSection.expanded ? "󰅀" : "󰅂"
+                                            font.family: "Material Design Icons"
+                                            font.pixelSize: 16
+                                            color: root.cOnSurfaceVariant
+                                        }
+                                    }
+
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        cursorShape: Qt.PointingHandCursor
+                                        onClicked: mixerSection.expanded = !mixerSection.expanded
+                                    }
+                                }
+
+                                // 展開アニメ: clip した枠の高さを 0↔内容高 で補間
+                                Item {
+                                    Layout.fillWidth: true
+                                    clip: true
+                                    implicitHeight: mixerSection.expanded ? mixer.implicitHeight : 0
+
+                                    Behavior on implicitHeight {
+                                        NumberAnimation {
+                                            duration: Material3Anim.medium2
+                                            easing.bezierCurve: Material3Anim.emphasizedDecelerate
+                                        }
+                                    }
+
+                                    AppVolumeMixer {
+                                        id: mixer
+                                        width: parent.width
+                                        opacity: mixerSection.expanded ? 1 : 0
+
+                                        Behavior on opacity {
+                                            NumberAnimation {
+                                                duration: Material3Anim.short3
+                                                easing.bezierCurve: Material3Anim.standard
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                         
@@ -412,16 +456,12 @@ PanelWindow {
                         }
                         }
 
-                        // Notifications: 上限まで伸び、超過分は内部スクロール
-                        NotificationList {
-                            Layout.fillWidth: true
-                            maxListHeight: Math.max(120, root.screen.height - 280 - upperCol.implicitHeight)
-                            notifs: root.notifs
-                        }
-
-                        // Bottom padding
-                        Item { Layout.preferredHeight: 8 }
-                    }
+                // Notifications: パネル内の余りを埋め、超過分は内部スクロール
+                NotificationList {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.minimumHeight: 160
+                    notifs: root.notifs
                 }
             }
         }

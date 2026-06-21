@@ -71,8 +71,11 @@ Singleton {
     }
 
     function setVolume(newVolume) {
+        const v = Math.max(0, Math.min(1.5, newVolume))
+        // wpctl のポーリング反映(250ms)を待たず即座にUIへ反映
+        root.volume = v
         setMute(false)
-        setVolProc.command = ["wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", Math.max(0, Math.min(1.5, newVolume)).toFixed(3)]
+        setVolProc.command = ["wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", v.toFixed(3)]
         setVolProc.running = true
     }
 

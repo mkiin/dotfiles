@@ -9,7 +9,6 @@ Rectangle {
     id: root
     
     required property var notifs
-    property real maxListHeight: 100000
     
     // Solid color tokens (Theme)
     readonly property color surfaceColor: QsConfig.Theme.inset
@@ -20,7 +19,7 @@ Rectangle {
     readonly property color borderColor: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.08)
     
     Layout.fillWidth: true
-    implicitHeight: contentCol.implicitHeight + 32
+    implicitHeight: Math.max(contentCol.implicitHeight + 32, 160)
 
     radius: 20
     color: surfaceColor
@@ -36,9 +35,7 @@ Rectangle {
     
     ColumnLayout {
         id: contentCol
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: parent.top
+        anchors.fill: parent
         anchors.margins: 16
         spacing: 12
         
@@ -98,7 +95,9 @@ Rectangle {
         ListView {
             id: notifListView
             Layout.fillWidth: true
-            Layout.preferredHeight: Math.min((notifs.recentNotifications?.length ?? 0) > 0 ? notifListView.contentHeight : 120, root.maxListHeight)
+            Layout.fillHeight: true
+            Layout.preferredHeight: (notifs.recentNotifications?.length ?? 0) > 0 ? notifListView.contentHeight : 120
+            Layout.minimumHeight: 0
             clip: true
             spacing: 8
 
