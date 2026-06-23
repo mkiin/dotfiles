@@ -1,6 +1,5 @@
 # matugen-generated artifacts (true source: ~/.config/matugen/templates/)
 .config/hypr/colors.conf
-.config/walker/themes/matugen/colors.css
 .config/waybar/CSS/colors.css
 .config/wlogout/colors.css
 .config/nvim/lazy-lock.json
@@ -12,7 +11,6 @@
 # === WSL: デスクトップ / WM 専用設定を除外 (ターミナル設定 ghostty/wezterm は残す) ===
 .config/hypr
 .config/waybar
-.config/rofi
 .config/wlogout
 .config/swaync
 .config/matugen

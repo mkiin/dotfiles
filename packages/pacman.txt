@@ -25,13 +25,11 @@ papirus-icon-theme
 piper
 pwvucontrol
 resvg
-rofi
 socat
 solaar
 steam
 swaync
 ttf-jetbrains-mono-nerd
-walker
 waybar
 wlogout
 xdg-desktop-portal-gtk
