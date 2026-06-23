@@ -64,18 +64,11 @@ PanelWindow {
         }
     ]
 
-    readonly property var favoriteApps: {
-        const favorites = config.launcher.favorites ?? []
-        const apps = DesktopEntries.applications.values ?? []
-        return favorites
-            .map(favoriteId => apps.find(entry => entry.id === favoriteId || entry.name === favoriteId))
-            .filter(entry => !!entry)
-    }
-
     readonly property var appEntries: {
         const apps = DesktopEntries.applications.values ?? []
         const q = query.trim().toLowerCase()
-        const favoriteIds = (favoriteApps ?? []).map(entry => entry.id)
+        // usageEpoch を参照して起動後に再評価させる（frecency の即時反映）
+        const _ = QsServices.LauncherUsage.apps
 
         function score(entry) {
             const name = (entry.name ?? "").toLowerCase()
@@ -83,10 +76,12 @@ PanelWindow {
             const comment = (entry.comment ?? "").toLowerCase()
             const execString = (entry.execString ?? "").toLowerCase()
             const id = (entry.id ?? "").toLowerCase()
+            const freq = QsServices.LauncherUsage.score(entry.id)
             let rank = 0
 
             if (!q.length)
-                rank = favoriteIds.includes(entry.id) ? 200 : 100
+                // 空クエリ: 使用実績のあるアプリを frecency 降順、未使用は最後尾
+                rank = freq > 0 ? 1000 + freq : 1
             else if (name === q)
                 rank = 1000
             else if (name.startsWith(q))
@@ -100,8 +95,8 @@ PanelWindow {
             else if (execString.includes(q))
                 rank = 420
 
-            if (favoriteIds.includes(entry.id))
-                rank += 90
+            if (rank > 0 && q.length)
+                rank += Math.min(80, freq * 5)
 
             return rank
         }
@@ -171,6 +166,7 @@ PanelWindow {
             })
         }
 
+        QsServices.LauncherUsage.record(entry.id)
         closeLauncher()
     }
 
@@ -305,7 +301,7 @@ PanelWindow {
                     spacing: 10
 
                     Text {
-                        text: query.trim().startsWith(">") ? "Quick actions" : (query.trim().length ? "Best matches" : "Favorites")
+                        text: query.trim().startsWith(">") ? "Quick actions" : (query.trim().length ? "Best matches" : "Frequent")
                         font.family: QsConfig.Config.appearance.fontFamily
                         font.pixelSize: 13
                         font.weight: Font.DemiBold

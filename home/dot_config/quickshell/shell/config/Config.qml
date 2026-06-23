@@ -46,18 +46,7 @@ Singleton {
         enabled: data.launcher?.enabled ?? true,
         width: data.launcher?.width ?? 720,
         maxResults: data.launcher?.maxResults ?? 8,
-        terminalCommand: data.launcher?.terminalCommand ?? ["foot"],
-        favorites: data.launcher?.favorites ?? [
-            "org.wezfurlong.wezterm",
-            "kitty",
-            "Alacritty",
-            "firefox",
-            "zen-browser",
-            "thunar",
-            "org.gnome.Nautilus",
-            "code",
-            "Code"
-        ]
+        terminalCommand: data.launcher?.terminalCommand ?? ["foot"]
     })
 
     readonly property var sidebar: ({
