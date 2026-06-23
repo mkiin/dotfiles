@@ -29,11 +29,36 @@
         };
       };
 
-      checks.${system}.flake-evaluation =
-        let
-          cachyos = self.homeConfigurations.cachyos.activationPackage;
-          wsl = self.homeConfigurations.wsl.activationPackage;
-        in
-        pkgs.runCommand "flake-evaluation" { inherit cachyos wsl; } "touch $out";
+      checks.${system} = {
+        flake-evaluation =
+          let
+            cachyos = self.homeConfigurations.cachyos.activationPackage;
+            wsl = self.homeConfigurations.wsl.activationPackage;
+          in
+          pkgs.runCommand "flake-evaluation" { inherit cachyos wsl; } "touch $out";
+
+        common-config-paths =
+          let
+            config = self.homeConfigurations.cachyos.config;
+            requiredPaths = [
+              ".zshrc"
+              ".zshenv"
+              ".gitconfig"
+              "mise/config.toml"
+            ];
+            missingPaths = builtins.filter (
+              path:
+              !(builtins.hasAttr path config.home.file)
+              && !(builtins.hasAttr path config.xdg.configFile)
+            ) requiredPaths;
+          in
+          pkgs.runCommand "common-config-paths" { } ''
+            if [ -n "${builtins.concatStringsSep " " missingPaths}" ]; then
+              echo "Missing managed configuration paths: ${builtins.concatStringsSep " " missingPaths}" >&2
+              exit 1
+            fi
+            touch $out
+          '';
+      };
     };
 }
