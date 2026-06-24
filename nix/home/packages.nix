@@ -13,7 +13,6 @@
     jq
     fzf
     zoxide
-    delta
     # shell
     sheldon
     shellcheck
