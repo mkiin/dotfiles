@@ -7,18 +7,22 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixgl = {
+      url = "github:nix-community/nixGL";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
-    { nixpkgs, home-manager, ... }:
+    { nixpkgs, home-manager, nixgl, ... }:
     let
       username = "mkiin";
       homedir  = "/home/${username}";
       dotfilesDir = "${homedir}/dotfiles";
 
-      mkHome = { system, envModule }: home-manager.lib.homeManagerConfiguration {
+      mkHome = { system, envModule, extraArgs ? {} }: home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.${system};
-        extraSpecialArgs = { inherit username homedir dotfilesDir; };
+        extraSpecialArgs = { inherit username homedir dotfilesDir; } // extraArgs;
         modules = [
           {
             home.username     = username;
@@ -31,8 +35,12 @@
     in
     {
       homeConfigurations = {
-        cachyos = mkHome { system = "x86_64-linux"; envModule = ./nix/home/cachyos.nix; };
-        wsl     = mkHome { system = "x86_64-linux"; envModule = ./nix/home/wsl.nix; };
+        cachyos = mkHome {
+          system    = "x86_64-linux";
+          envModule = ./nix/home/cachyos.nix;
+          extraArgs = { nixgl = nixgl.packages."x86_64-linux"; };
+        };
+        wsl = mkHome { system = "x86_64-linux"; envModule = ./nix/home/wsl.nix; };
       };
     };
 }
