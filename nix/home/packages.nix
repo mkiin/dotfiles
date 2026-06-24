@@ -14,7 +14,6 @@
     fzf
     zoxide
     # shell
-    sheldon
     shellcheck
     shfmt
     mo

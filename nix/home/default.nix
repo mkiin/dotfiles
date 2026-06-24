@@ -8,6 +8,7 @@
     ./programs/mise.nix
     ./programs/lazygit.nix
     ./programs/starship.nix
+    ./programs/sheldon.nix
     ./programs/neovim.nix
   ];
 
