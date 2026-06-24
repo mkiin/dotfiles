@@ -1,8 +1,9 @@
-{ pkgs, nixgl, config, dotfilesDir, ... }:
+{ pkgs, config, dotfilesDir, ... }:
 
 let
   wezterm-wrapped = pkgs.writeShellScriptBin "wezterm" ''
-    exec ${nixgl.nixGLDefault}/bin/nixGL ${pkgs.wezterm}/bin/wezterm "$@"
+    export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json
+    exec ${pkgs.wezterm}/bin/wezterm "$@"
   '';
 in
 

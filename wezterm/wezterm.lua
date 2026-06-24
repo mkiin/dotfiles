@@ -10,7 +10,7 @@ if is_windows then
 	config.default_domain = "WSL:Ubuntu-24.04"
 end
 config.automatically_reload_config = true
-config.front_end = "OpenGL"
+config.front_end = "WebGpu"
 
 -- 起動時に最大化
 wezterm.on("gui-startup", function(cmd)
