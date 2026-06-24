@@ -3,6 +3,7 @@
 {
   programs.yazi = {
     enable = true;
+    enableShellIntegration = true;
     settings = {
       mgr = {
         show_hidden = false;

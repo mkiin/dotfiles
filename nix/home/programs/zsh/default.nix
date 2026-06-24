@@ -56,6 +56,7 @@
       lg     = "lazygit";
       pn     = "pnpm";
       nvc    = "cd ~/.config/nvim";
+      open   = "y";
     };
 
     initContent = ''
