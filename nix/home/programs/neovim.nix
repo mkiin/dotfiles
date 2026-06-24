@@ -16,6 +16,8 @@
     ];
   };
 
+  xdg.configFile."nvim/init.lua".enable = lib.mkForce false;
+
   home.activation.linkNvimConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     if [[ -e "${config.xdg.configHome}/nvim" ]] || [[ -L "${config.xdg.configHome}/nvim" ]]; then
       rm -rf "${config.xdg.configHome}/nvim"
