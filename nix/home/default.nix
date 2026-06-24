@@ -10,6 +10,7 @@
     ./programs/starship.nix
     ./programs/sheldon.nix
     ./programs/neovim.nix
+    ./programs/yazi.nix
   ];
 
   home.stateVersion = "25.11";
