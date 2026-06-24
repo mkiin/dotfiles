@@ -24,3 +24,27 @@ A. でいきます
 2 5 8 B
 3 6 9 C
 
+
+# Nixのコマンド備忘録
+
+## home-manager・flake
+
+### nix flake show
+
+### nix run nixpkgs#home-manager -- build --flake .#casyos
+
+コマンド解説
+
+*nix run nixpkgs#とは*
+`home-manager`コマンドをローカルにインストールせず、その場だけで Nix Storeから取り出して実行する方法
+-> npxのようなもの？
+-> `home-manager -- build --flake .#casyos`
+
+*`--buildとは`*
+`home-manager`のサブコマンド
+`--`で`home-manager`への引数がここから始まるよという区切りを伝えている。
+
+### nix run nixpkgs#home-manager -- switch --flake .#cachyos -b hm-pre-migration
+
+*`hm-pre-migration`とは*
+このオプションにより衝突したファイルを`.hm-pre-migration`にリネームしバックアップしてくれる
