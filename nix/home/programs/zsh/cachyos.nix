@@ -3,6 +3,7 @@
 {
   programs.zsh = {
     shellAliases = {
+      open       = "y";
       qs-restart = "pkill -9 quickshell; nohup quickshell &>/dev/null & disown";
     };
     initContent = ''
