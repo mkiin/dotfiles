@@ -1,4 +1,5 @@
 { ... }:
 
 {
+  imports = [ ./zsh/wsl.nix ];
 }
