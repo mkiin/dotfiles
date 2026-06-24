@@ -2,9 +2,8 @@
 
 {
   home.sessionVariables = {
-    EDITOR          = "nvim";
-    VISUAL          = "nvim";
-    STARSHIP_CONFIG = "${config.xdg.configHome}/starship/starship.toml";
+    EDITOR = "nvim";
+    VISUAL = "nvim";
   };
 
   home.sessionPath = [

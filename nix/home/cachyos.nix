@@ -1,5 +1,5 @@
 { ... }:
 
 {
-  imports = [ ./zsh/cachyos.nix ];
+  imports = [ ./programs/zsh/cachyos.nix ];
 }

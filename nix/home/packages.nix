@@ -1,13 +1,11 @@
 { pkgs, ... }:
 
 {
-  imports = [
-    ./zsh
-    ./git.nix
-    ./mise.nix
-  ];
-
   home.packages = with pkgs; [
+    # essentials
+    curl
+    ghq
+    # search & file utilities
     ripgrep
     fd
     bat
@@ -15,14 +13,14 @@
     jq
     fzf
     zoxide
-    lazygit
-    lazydocker
-    gh
-    starship
+    delta
+    # shell
     sheldon
     shellcheck
     shfmt
-    delta
     mo
+    # dev tools
+    gh
+    lazydocker
   ];
 }
