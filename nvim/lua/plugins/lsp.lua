@@ -3,6 +3,8 @@ return {
 		"mfussenegger/nvim-lint",
 		enabled = false,
 	},
+	{ "williamboman/mason.nvim", enabled = false },
+	{ "williamboman/mason-lspconfig.nvim", enabled = false },
 	{
 		"neovim/nvim-lspconfig",
 		opts = {
@@ -17,15 +19,20 @@ return {
 						documentOnTypeFormattingProvider = false,
 					},
 				},
-				Lua = {
-					diagnostics = {
-						globals = { "vim" },
-					},
-					workspace = {
-						library = vim.api.nvim_get_runtime_file("", true),
-						checkThirdParty = false,
+				lua_ls = {
+					settings = {
+						Lua = {
+							diagnostics = {
+								globals = { "vim" },
+							},
+							workspace = {
+								library = vim.api.nvim_get_runtime_file("", true),
+								checkThirdParty = false,
+							},
+						},
 					},
 				},
+				nixd = {},
 			},
 		},
 	},

@@ -1,0 +1,37 @@
+{ pkgs, lib, config, dotfilesDir, ... }:
+
+{
+  programs.neovim = {
+    enable = true;
+    withPython3 = false;
+    withRuby = false;
+    extraPackages = with pkgs; [
+      typescript-go
+      lua-language-server
+      nixd
+      oxfmt
+    ];
+  };
+
+  home.activation.linkNvimConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    if [[ -e "${config.xdg.configHome}/nvim" ]] || [[ -L "${config.xdg.configHome}/nvim" ]]; then
+      rm -rf "${config.xdg.configHome}/nvim"
+    fi
+    ln -s "${dotfilesDir}/nvim" "${config.xdg.configHome}/nvim"
+  '';
+
+  home.activation.restoreNeovimPlugins = lib.hm.dag.entryAfter [ "linkNvimConfig" ] ''
+    LAZY_DIR="$HOME/.local/share/nvim/lazy"
+    LAZY_LOCK="${dotfilesDir}/nvim/lazy-lock.json"
+    LAZY_LOCK_TIMESTAMP="$LAZY_DIR/.lazy-lock-timestamp"
+
+    if [[ ! -f "$LAZY_LOCK_TIMESTAMP" ]] || [[ "$LAZY_LOCK" -nt "$LAZY_LOCK_TIMESTAMP" ]]; then
+      if [[ -d "$LAZY_DIR/lazy.nvim" ]]; then
+        echo "Restoring Neovim plugins..."
+        ${lib.getExe pkgs.neovim} --headless "+Lazy! restore" +qa 2>/dev/null || true
+      fi
+      mkdir -p "$LAZY_DIR"
+      touch "$LAZY_LOCK_TIMESTAMP"
+    fi
+  '';
+}
