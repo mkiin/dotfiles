@@ -3,7 +3,8 @@
 {
   programs.yazi = {
     enable = true;
-    enableShellIntegration = true;
+    enableZshIntegration = true;
+    shellWrapperName = "y";
     settings = {
       mgr = {
         show_hidden = false;
@@ -27,13 +28,8 @@
       require("full-border"):setup()
       require("git"):setup()
     '';
-    plugins = with pkgs.yaziPlugins; [
-      full-border
-      git
-      jump-to-char
-      smart-enter
-      smart-filter
-      toggle-pane
-    ];
+    plugins = with pkgs.yaziPlugins; {
+      inherit full-border git jump-to-char smart-enter smart-filter toggle-pane;
+    };
   };
 }
