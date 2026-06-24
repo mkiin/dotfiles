@@ -10,6 +10,9 @@
       lua-language-server
       nixd
       oxfmt
+      bash-language-server
+      shellcheck
+      shfmt
     ];
   };
 
