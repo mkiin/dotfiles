@@ -2,7 +2,7 @@
 
 let
   wezterm-wrapped = pkgs.writeShellScriptBin "wezterm" ''
-    exec ${nixgl.nixGLDefault}/bin/nixGLDefault ${pkgs.wezterm}/bin/wezterm "$@"
+    exec ${nixgl.nixGLDefault}/bin/nixGL ${pkgs.wezterm}/bin/wezterm "$@"
   '';
 in
 
