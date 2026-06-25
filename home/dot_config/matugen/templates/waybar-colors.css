@@ -1,7 +1,0 @@
-<* for name, value in colors *>
-@define-color {{name}} {{value.default.hex}};
-<* endfor *>
-
-@define-color state_success  #a6e3a1;
-@define-color state_warning  #f9e2af;
-@define-color state_critical #f38ba8;

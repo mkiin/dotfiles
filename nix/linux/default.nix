@@ -2,6 +2,10 @@
 
 {
   imports = [
+    ./packages.nix
+    ./programs/hyprland
+    ./programs/matugen.nix
+    ./programs/wallust.nix
     ./programs/wezterm.nix
     ./programs/ghostty.nix
   ];
