@@ -11,6 +11,7 @@
     ./programs/sheldon.nix
     ./programs/neovim.nix
     ./programs/yazi.nix
+    ./programs/goclipboard.nix
   ];
 
   home.stateVersion = "25.11";
