@@ -3,7 +3,7 @@
 {
   imports = [
     ./packages.nix
-    ./programs/zsh
+    ./programs/zsh.nix
     ./programs/git.nix
     ./programs/mise.nix
     ./programs/lazygit.nix

@@ -1,6 +1,11 @@
 { lib, ... }:
 
 {
+  imports = [
+    ./programs/wezterm.nix
+    ./programs/ghostty.nix
+  ];
+
   programs.zsh = {
     shellAliases = {
       open       = "y";
