@@ -1,0 +1,16 @@
+bluez-tools
+discord
+docker
+docker-buildx
+docker-compose
+gpu-screen-recorder
+guvcview
+hyprlock
+nvidia-container-toolkit
+piper
+solaar
+steam
+xdg-desktop-portal-gtk
+xorg-xrandr
+yay
+zen-browser-bin

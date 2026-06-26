@@ -1,4 +1,1 @@
 build-essential
-curl
-mise
-zsh
