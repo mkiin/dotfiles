@@ -5,34 +5,25 @@ CachyOS（Hyprland デスクトップ）と WSL の2環境をサポートする�
 
 ## セットアップ
 
-### 1. Nix をインストールする
-
-```bash
-curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
-```
-
-インストール後、シェルを再起動する。
-
-```bash
-exec zsh
-```
-
-### 2. リポジトリをクローンする
+### 1. リポジトリをクローンする
 
 ```bash
 git clone https://github.com/mkiin/dotfiles ~/dotfiles
-cd ~/dotfiles
 ```
 
-### 3. Home Manager を初回適用する
-
-Home Manager がまだインストールされていない場合、`nix run` で直接実行する。
+### 2. ブートストラップスクリプトを実行する
 
 ```bash
-git add .
-nix run github:nix-community/home-manager -- switch --flake .#cachyos   # CachyOS
-nix run github:nix-community/home-manager -- switch --flake .#wsl       # WSL
+bash ~/dotfiles/scripts/bootstrap-cachyos.sh   # CachyOS
+bash ~/dotfiles/scripts/bootstrap-wsl.sh       # WSL
 ```
+
+スクリプトは冪等で、以下を順に行う。
+
+- Nix のインストール（Determinate Nix Installer）
+- `nix run` による Home Manager の初回適用
+- pacman フックの配置（CachyOS のみ）
+- ログインシェルの zsh への変更
 
 初回適用後は `home-manager` コマンドが使えるようになる。
 
