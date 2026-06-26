@@ -22,9 +22,6 @@ ModifierOnlyKeyTimeout=250
 [Hotkey/DeactivateKeys]
 0=Alt+Alt_L
 
-[Hotkey/AltTriggerKeys]
-0=Shift_L
-
 [Hotkey/PrevPage]
 0=Up
 
@@ -46,7 +43,7 @@ ActiveByDefault=False
 # フォーカス時に状態をリセット
 resetStateWhenFocusIn=No
 # 入力状態を共有する
-ShareInputState=No
+ShareInputState=All
 # アプリケーションにプリエディットを表示する
 PreeditEnabledByDefault=True
 # 入力メソッドを切り替える際に入力メソッドの情報を表示する
