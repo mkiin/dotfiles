@@ -1,0 +1,23 @@
+[config]
+default_mode = "dark"
+
+[templates.waybar]
+input_path = "~/.config/matugen/templates/waybar-colors.css"
+output_path = "~/.config/waybar/colors.css"
+
+[templates.wlogout]
+input_path = "~/.config/matugen/templates/wlogout-colors.css"
+output_path = "~/.config/wlogout/colors.css"
+
+[templates.hyprland]
+input_path = "~/.config/matugen/templates/hyprland-colors.conf"
+output_path = "~/.config/hypr/colors.conf"
+
+[templates.hyprland_lua]
+input_path = "~/.config/matugen/templates/hyprland-colors.lua"
+output_path = "~/.config/hypr/colors.lua"
+
+[templates.quickshell]
+input_path = "~/.config/matugen/templates/quickshell-colors.json"
+output_path = "~/.cache/quickshell/matugen-colors.json"
+post_hook = "for c in shell audio bluetooth; do qs -c $c ipc call theme reload 2>/dev/null; done; true"

@@ -5,6 +5,7 @@ docker-buildx
 docker-compose
 gpu-screen-recorder
 guvcview
+hyprlock
 nvidia-container-toolkit
 piper
 solaar

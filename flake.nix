@@ -9,33 +9,22 @@
     };
   };
 
-  outputs =
-    { nixpkgs, home-manager, ... }:
-    let
-      username = "mkiin";
-      homedir  = "/home/${username}";
-      dotfilesDir = "${homedir}/dotfiles";
-      nixRoot = ./nix;
-
-      mkHome = { system, hostModule, extraArgs ? {} }: home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.${system};
-        extraSpecialArgs = { inherit username homedir dotfilesDir nixRoot system; } // extraArgs;
-        modules = [
-          {
-            home.username     = username;
-            home.homeDirectory = homedir;
-          }
-          hostModule
-        ];
+  outputs = { self, ... }@inputs:
+  let
+    mylib = import ./nix/lib { inherit inputs; };
+  in
+  {
+    homeConfigurations = {
+      cachyos = mylib.mkHome {
+        system   = "x86_64-linux";
+        username = "mkiin";
+        modules  = [ ./nix/hosts/cachyos.nix ];
       };
-    in
-    {
-      homeConfigurations = {
-        cachyos = mkHome {
-          system    = "x86_64-linux";
-          hostModule = ./nix/hosts/cachyos;
-        };
-        wsl = mkHome { system = "x86_64-linux"; hostModule = ./nix/hosts/wsl; };
+      wsl = mylib.mkHome {
+        system   = "x86_64-linux";
+        username = "mkiin";
+        modules  = [ ./nix/hosts/wsl.nix ];
       };
     };
+  };
 }

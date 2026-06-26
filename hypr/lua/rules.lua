@@ -1,0 +1,51 @@
+hl.window_rule({
+  name           = "suppress-maximize-events",
+  match          = { class = ".*" },
+  suppress_event = "maximize",
+})
+
+hl.window_rule({
+  name     = "fix-xwayland-drags",
+  match    = { class = "^$", title = "^$", xwayland = true, float = true, fullscreen = false, pin = false },
+  no_focus = true,
+})
+
+hl.window_rule({
+  name  = "move-hyprland-run",
+  match = { class = "hyprland-run" },
+  move  = "20 monitor_h-120",
+  float = true,
+})
+
+hl.window_rule({
+  name  = "float-guvcview",
+  match = { class = "^guvcview$" },
+  float = true,
+})
+
+hl.window_rule({
+  name   = "float-pwvucontrol",
+  match  = { class = "^com%.saivert%.pwvucontrol$" },
+  float  = true,
+  size   = "700 800",
+  center = 1,
+})
+
+hl.window_rule({
+  name      = "hide-wine-explorer-desktop",
+  match     = { class = "^steam_proton$", title = "^$", xwayland = true },
+  workspace = "special silent",
+  no_focus  = true,
+})
+
+hl.layer_rule({
+  name      = "logout-blur",
+  match     = { namespace = "logout_dialog" },
+  blur      = true,
+})
+
+hl.layer_rule({
+  name       = "logout-dim",
+  match      = { namespace = "logout_dialog" },
+  dim_around = true,
+})
