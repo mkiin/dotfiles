@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 mode="${1:?usage: mode.sh <mode>}"
-[[ -f "$HOME/.config/hypr/monitors/$mode.conf" ]] || {
-  echo "[mode.sh] unknown mode: $mode (no monitors/$mode.conf)" >&2
+[[ -f "$HOME/.config/hypr/monitors/$mode.lua" ]] || {
+  echo "[mode.sh] unknown mode: $mode (no monitors/$mode.lua)" >&2
   exit 1
 }
 
@@ -9,9 +9,8 @@ PREV_WS=$(hyprctl activeworkspace -j 2>/dev/null |
   jq -r 'select(.id > 0) | .id' 2>/dev/null) || PREV_WS=1
 [[ "$PREV_WS" =~ ^[0-9]+$ ]] || PREV_WS=1
 
-cat >"$HOME/.config/hypr/monitors.conf" <<EOF
-\$MONITOR_MODE = $mode
-source = ./monitors/\$MONITOR_MODE.conf
+cat >"$HOME/.config/hypr/monitors.lua" <<EOF
+require("monitors.$mode")
 EOF
 
 # hyprctl reload は async。configreloaded event が出てから awww を触らないと
@@ -44,7 +43,7 @@ if [[ -f "$LAST" ]] && [[ -r "$(<"$LAST")" ]]; then
 else
   awww restore >/dev/null 2>&1 || true
 fi
-pkill -x waybar 2>/dev/null
+pkill -f waybar 2>/dev/null; sleep 0.1
 uwsm app -- waybar >/dev/null 2>&1 &
 disown
 

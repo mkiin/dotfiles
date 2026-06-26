@@ -1,6 +1,5 @@
 bluez-tools
 discord
-ghostty
 docker
 docker-buildx
 docker-compose

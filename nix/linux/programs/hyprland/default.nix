@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
   imports = [
@@ -12,35 +12,47 @@
 
   wayland.windowManager.hyprland = {
     enable = true;
-    package = pkgs.hyprland;
+    package = null;
     xwayland.enable = true;
     systemd.enable = false;
-    configType = "hyprlang";
+    configType = "lua";
 
     settings = {
-      "$terminal"    = "wezterm";
-      "$fileManager" = "wezterm start -- yazi";
-      "$browser"     = "zen-browser";
-      "$mainMod"     = "SUPER";
+      terminal    = { _var = "wezterm"; };
+      fileManager = { _var = "wezterm start -- yazi"; };
+      browser     = { _var = "zen-browser"; };
+      mainMod     = { _var = "SUPER"; };
     };
 
-    # colors.conf は wallust が動的生成、monitors.conf は mode.sh が動的切替
-    # カラートークン ($primary 等) を使う設定は source の後に書く必要があるためここで上書き
+    # colors.conf の代替: matugen が colors.lua を生成、これが require する
+    # extraLuaFiles に autoLoad = true エントリを置くと home-manager が
+    # package.path を自動設定するため、他 extraConfig 内の require() も動く
+    extraLuaFiles = {
+      "color-scheme" = {
+        autoLoad = true;
+        content = ''
+          local ok, colors = pcall(require, "colors")
+          if not ok then return end
+
+          hl.config({
+            general = {
+              ["col.active_border"]   = { colors = { colors.primary, colors.tertiary }, angle = 45 },
+              ["col.inactive_border"] = colors.outline_variant,
+            },
+            group = {
+              ["col.border_active"]         = { colors = { colors.primary, colors.tertiary }, angle = 45 },
+              ["col.border_inactive"]        = colors.outline_variant,
+              ["col.border_locked_active"]   = { colors = { colors.primary, colors.tertiary }, angle = 45 },
+              ["col.border_locked_inactive"] = colors.outline_variant,
+            },
+          })
+        '';
+      };
+    };
+
+    # monitors.lua は mode.sh が動的生成。package.path は上の extraLuaFiles が設定済み
     extraConfig = ''
-      source = ~/.config/hypr/colors.conf
-      source = ~/.config/hypr/monitors.conf
-
-      general {
-        col.active_border = $primary $tertiary 45deg
-        col.inactive_border = $outline_variant
-      }
-
-      group {
-        col.border_active = $primary $tertiary 45deg
-        col.border_inactive = $outline_variant
-        col.border_locked_active = $primary $tertiary 45deg
-        col.border_locked_inactive = $outline_variant
-      }
+      pcall(require, "monitors")
     '';
   };
 }

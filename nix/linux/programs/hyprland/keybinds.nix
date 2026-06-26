@@ -1,107 +1,92 @@
 { ... }:
 
 {
-  wayland.windowManager.hyprland.settings = {
-    bind = [
-      # モニターモード切替
-      "$mainMod SHIFT, D, exec, ~/.config/hypr/scripts/mode.sh desk"
-      "$mainMod SHIFT, B, exec, ~/.config/hypr/scripts/mode.sh bed"
-      # アプリ起動
-      "$mainMod, G, exec, $terminal"
-      "$mainMod, C, killactive,"
-      "$mainMod, E, exec, $fileManager"
-      "$mainMod, B, exec, $browser"
-      "$mainMod, A, exec, qs -c shell ipc call launcher toggle"
-      "$mainMod, N, exec, qs -c shell ipc call cc toggle"
-      "$mainMod, Q, exec, pkill -x wlogout || wlogout"
-      # スクリーンショット
-      "$mainMod, P, exec, ~/.config/hypr/scripts/screenshot.sh region"
-      "$mainMod SHIFT, P, exec, ~/.config/hypr/scripts/screenshot.sh window"
-      "$mainMod CTRL, P, exec, ~/.config/hypr/scripts/screenshot.sh output"
-      # 画面録画
-      "$mainMod, R, exec, ~/.config/hypr/scripts/record.sh"
-      "$mainMod CTRL, R, exec, ~/.config/hypr/scripts/record.sh ~/personal/tools/facefusion/media/target"
-      # ウインドウ操作
-      "$mainMod, V, togglefloating,"
-      "$mainMod, F, fullscreen, 0"
-      "$mainMod, T, layoutmsg, togglesplit"
-      # フォーカス移動
-      "$mainMod, H, movefocus, l"
-      "$mainMod, J, movefocus, d"
-      "$mainMod, K, movefocus, u"
-      "$mainMod, L, movefocus, r"
-      "$mainMod, left, movefocus, l"
-      "$mainMod, right, movefocus, r"
-      "$mainMod, up, movefocus, u"
-      "$mainMod, down, movefocus, d"
-      # ウインドウ移動
-      "$mainMod SHIFT, H, movewindow, l"
-      "$mainMod SHIFT, J, movewindow, d"
-      "$mainMod SHIFT, K, movewindow, u"
-      "$mainMod SHIFT, L, movewindow, r"
-      # ワークスペース前後移動
-      "$mainMod, I, workspace, e-1"
-      "$mainMod, O, workspace, e+1"
-      "$mainMod SHIFT, I, movetoworkspace, e-1"
-      "$mainMod SHIFT, O, movetoworkspace, e+1"
-      # ワークスペース切替
-      "$mainMod, 1, workspace, 1"
-      "$mainMod, 2, workspace, 2"
-      "$mainMod, 3, workspace, 3"
-      "$mainMod, 4, workspace, 4"
-      "$mainMod, 5, workspace, 5"
-      "$mainMod, 6, workspace, 6"
-      "$mainMod, 7, workspace, 7"
-      "$mainMod, 8, workspace, 8"
-      "$mainMod, 9, workspace, 9"
-      "$mainMod, 0, workspace, 10"
-      # ウインドウをワークスペースに移動
-      "$mainMod SHIFT, 1, movetoworkspace, 1"
-      "$mainMod SHIFT, 2, movetoworkspace, 2"
-      "$mainMod SHIFT, 3, movetoworkspace, 3"
-      "$mainMod SHIFT, 4, movetoworkspace, 4"
-      "$mainMod SHIFT, 5, movetoworkspace, 5"
-      "$mainMod SHIFT, 6, movetoworkspace, 6"
-      "$mainMod SHIFT, 7, movetoworkspace, 7"
-      "$mainMod SHIFT, 8, movetoworkspace, 8"
-      "$mainMod SHIFT, 9, movetoworkspace, 9"
-      "$mainMod SHIFT, 0, movetoworkspace, 10"
-      # スペシャルワークスペース
-      "$mainMod, S, togglespecialworkspace, magic"
-      "$mainMod SHIFT, S, movetoworkspace, special:magic"
-      # マウス
-      "$mainMod, mouse_down, workspace, e+1"
-      "$mainMod, mouse_up, workspace, e-1"
-    ];
+  wayland.windowManager.hyprland.extraConfig = ''
+    -- モニターモード切替
+    hl.bind(mainMod .. " + SHIFT + D", hl.dsp.exec_cmd("~/.config/hypr/scripts/mode.sh desk"))
+    hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd("~/.config/hypr/scripts/mode.sh bed"))
 
-    binde = [
-      # ウインドウリサイズ
-      "$mainMod CTRL, H, resizeactive, -30 0"
-      "$mainMod CTRL, J, resizeactive, 0 30"
-      "$mainMod CTRL, K, resizeactive, 0 -30"
-      "$mainMod CTRL, L, resizeactive, 30 0"
-    ];
+    -- アプリ起動
+    hl.bind(mainMod .. " + G", hl.dsp.exec_cmd(terminal))
+    hl.bind(mainMod .. " + C", hl.dsp.window.close())
+    hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
+    hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser))
+    hl.bind(mainMod .. " + A", hl.dsp.exec_cmd("qs -c shell ipc call launcher toggle"))
+    hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("qs -c shell ipc call cc toggle"))
+    hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd("pkill -x wlogout || wlogout"))
 
-    bindel = [
-      # メディアキー
-      ", XF86AudioRaiseVolume, exec, wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"
-      ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
-      ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-      ", XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
-      ", XF86MonBrightnessUp, exec, brightnessctl -e4 -n2 set 5%+"
-      ", XF86MonBrightnessDown, exec, brightnessctl -e4 -n2 set 5%-"
-    ];
+    -- スクリーンショット
+    hl.bind(mainMod .. " + P",       hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot.sh region"))
+    hl.bind(mainMod .. " + SHIFT + P", hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot.sh window"))
+    hl.bind(mainMod .. " + CTRL + P",  hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot.sh output"))
 
-    bindl = [
-      ", XF86AudioNext, exec, playerctl next"
-      ", XF86AudioPause, exec, playerctl play-pause"
-      ", XF86AudioPlay, exec, playerctl play-pause"
-      ", XF86AudioPrev, exec, playerctl previous"
-    ];
+    -- 画面録画
+    hl.bind(mainMod .. " + R",      hl.dsp.exec_cmd("~/.config/hypr/scripts/record.sh"))
+    hl.bind(mainMod .. " + CTRL + R", hl.dsp.exec_cmd("~/.config/hypr/scripts/record.sh ~/personal/tools/facefusion/media/target"))
 
-    bindm = [
-      "$mainMod, mouse:272, movewindow"
-      "$mainMod, mouse:273, resizewindow"
-    ];
-  };
+    -- ウィンドウ操作
+    hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
+    hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen())
+    hl.bind(mainMod .. " + T", hl.dsp.layout("togglesplit"))
+
+    -- フォーカス移動
+    hl.bind(mainMod .. " + H",     hl.dsp.focus({ direction = "l" }))
+    hl.bind(mainMod .. " + J",     hl.dsp.focus({ direction = "d" }))
+    hl.bind(mainMod .. " + K",     hl.dsp.focus({ direction = "u" }))
+    hl.bind(mainMod .. " + L",     hl.dsp.focus({ direction = "r" }))
+    hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "l" }))
+    hl.bind(mainMod .. " + right", hl.dsp.focus({ direction = "r" }))
+    hl.bind(mainMod .. " + up",    hl.dsp.focus({ direction = "u" }))
+    hl.bind(mainMod .. " + down",  hl.dsp.focus({ direction = "d" }))
+
+    -- ウィンドウ移動
+    hl.bind(mainMod .. " + SHIFT + H", hl.dsp.window.move({ direction = "l" }))
+    hl.bind(mainMod .. " + SHIFT + J", hl.dsp.window.move({ direction = "d" }))
+    hl.bind(mainMod .. " + SHIFT + K", hl.dsp.window.move({ direction = "u" }))
+    hl.bind(mainMod .. " + SHIFT + L", hl.dsp.window.move({ direction = "r" }))
+
+    -- ワークスペース前後移動
+    hl.bind(mainMod .. " + I",       hl.dsp.focus({ workspace = "e-1" }))
+    hl.bind(mainMod .. " + O",       hl.dsp.focus({ workspace = "e+1" }))
+    hl.bind(mainMod .. " + SHIFT + I", hl.dsp.window.move({ workspace = "e-1" }))
+    hl.bind(mainMod .. " + SHIFT + O", hl.dsp.window.move({ workspace = "e+1" }))
+
+    -- ワークスペース切替
+    for i = 1, 9 do
+      hl.bind(mainMod .. " + " .. i,        hl.dsp.focus({ workspace = i }))
+      hl.bind(mainMod .. " + SHIFT + " .. i,  hl.dsp.window.move({ workspace = i }))
+    end
+    hl.bind(mainMod .. " + 0",       hl.dsp.focus({ workspace = 10 }))
+    hl.bind(mainMod .. " + SHIFT + 0", hl.dsp.window.move({ workspace = 10 }))
+
+    -- スペシャルワークスペース
+    hl.bind(mainMod .. " + S",       hl.dsp.workspace.toggle_special("magic"))
+    hl.bind(mainMod .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special:magic" }))
+
+    -- マウス
+    hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
+    hl.bind(mainMod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }))
+    hl.bind(mainMod .. " + mouse:272",  hl.dsp.window.drag(),   { mouse = true })
+    hl.bind(mainMod .. " + mouse:273",  hl.dsp.window.resize(), { mouse = true })
+
+    -- ウィンドウリサイズ (repeating)
+    hl.bind(mainMod .. " + CTRL + H", hl.dsp.window.resize({ x = -30, y = 0,   relative = true }), { repeating = true })
+    hl.bind(mainMod .. " + CTRL + J", hl.dsp.window.resize({ x = 0,   y = 30,  relative = true }), { repeating = true })
+    hl.bind(mainMod .. " + CTRL + K", hl.dsp.window.resize({ x = 0,   y = -30, relative = true }), { repeating = true })
+    hl.bind(mainMod .. " + CTRL + L", hl.dsp.window.resize({ x = 30,  y = 0,   relative = true }), { repeating = true })
+
+    -- メディアキー (locked + repeating)
+    hl.bind("XF86AudioRaiseVolume",  hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
+    hl.bind("XF86AudioLowerVolume",  hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),      { locked = true, repeating = true })
+    hl.bind("XF86AudioMute",         hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),     { locked = true, repeating = true })
+    hl.bind("XF86AudioMicMute",      hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),   { locked = true, repeating = true })
+    hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+"),                  { locked = true, repeating = true })
+    hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-"),                  { locked = true, repeating = true })
+
+    -- メディアコントロール (locked)
+    hl.bind("XF86AudioNext",  hl.dsp.exec_cmd("playerctl next"),        { locked = true })
+    hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"),  { locked = true })
+    hl.bind("XF86AudioPlay",  hl.dsp.exec_cmd("playerctl play-pause"),  { locked = true })
+    hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),    { locked = true })
+  '';
 }
