@@ -12,7 +12,7 @@
   ];
 
   xdg.configFile."zsh/functions.zsh".source =
-    config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/nix/home/programs/zsh/functions.zsh";
+    config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/nix/modules/home/programs/zsh/functions.zsh";
 
   programs.zsh = {
     enable         = true;
