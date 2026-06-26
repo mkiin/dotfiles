@@ -9,6 +9,7 @@
     ./fcitx5.nix
     ./mouse.nix
     ./services.nix
+    ./apps.nix
   ];
 
   xdg.mimeApps = {

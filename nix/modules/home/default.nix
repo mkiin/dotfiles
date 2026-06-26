@@ -12,6 +12,7 @@
     ./programs/neovim.nix
     ./programs/yazi.nix
     ./programs/goclipboard.nix
+    ./programs/python.nix
   ];
 
   programs.home-manager.enable = true;
