@@ -1,8 +1,0 @@
-{{- $isWSL := false -}}
-{{- if hasKey .chezmoi.kernel "osrelease" -}}
-{{-   $isWSL = (.chezmoi.kernel.osrelease | lower | contains "microsoft") -}}
-{{- end -}}
-sourceDir = {{ .chezmoi.sourceDir | quote }}
-
-[data]
-    isWSL = {{ $isWSL }}
