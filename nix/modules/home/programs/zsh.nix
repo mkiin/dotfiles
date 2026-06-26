@@ -75,7 +75,6 @@
 
       ABBR_QUIET=1
       eval "$(sheldon source)"
-      eval "$(starship init zsh)"
 
       source "${config.xdg.configHome}/zsh/functions.zsh"
 
