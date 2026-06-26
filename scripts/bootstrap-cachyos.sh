@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# WSL (Ubuntu/Debian) 用 dotfiles ブートストラップ。冪等。
+# CachyOS 用 dotfiles ブートストラップ。冪等。
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -28,22 +28,26 @@ log "Nix $(nix --version)"
 log "Home Manager を適用"
 cd "$REPO_ROOT"
 git add .
-nix run github:nix-community/home-manager -- switch --flake .#wsl
+nix run github:nix-community/home-manager -- switch --flake .#cachyos
 
-# 3. apt パッケージを復元
-if [[ -s "$REPO_ROOT/packages/apt.txt" ]]; then
-  log "apt パッケージを復元"
-  xargs sudo apt install -y < "$REPO_ROOT/packages/apt.txt"
+# 3. pacman / AUR パッケージを復元
+if [[ -s "$REPO_ROOT/packages/pacman.txt" ]]; then
+  log "pacman パッケージを復元"
+  sudo pacman -S --needed --noconfirm - < "$REPO_ROOT/packages/pacman.txt"
+fi
+if [[ -s "$REPO_ROOT/packages/yay.txt" ]]; then
+  log "AUR パッケージを復元"
+  yay -S --needed --noconfirm - < "$REPO_ROOT/packages/yay.txt"
 fi
 
-# 4. apt 自動スナップショットフックを配置
-APT_HOOK_SRC="$REPO_ROOT/hooks/99-sync-user-packages.apt.conf"
-APT_HOOK_DST="/etc/apt/apt.conf.d/99sync-user-packages"
-if [[ ! -f "$APT_HOOK_DST" ]]; then
-  log "apt フックを配置"
-  sudo install -m 644 -o root -g root "$APT_HOOK_SRC" "$APT_HOOK_DST"
+# 4. pacman 自動スナップショットフックを配置
+HOOK_SRC="$REPO_ROOT/hooks/99-sync-user-packages.hook"
+HOOK_DST="/etc/pacman.d/hooks/99-sync-user-packages.hook"
+if [[ ! -f "$HOOK_DST" ]]; then
+  log "pacman フックを配置"
+  sudo install -Dm 644 -o root -g root "$HOOK_SRC" "$HOOK_DST"
 else
-  log "apt フック導入済み"
+  log "pacman フック導入済み"
 fi
 
 # 5. ログインシェルを zsh に
