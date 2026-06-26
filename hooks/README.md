@@ -3,7 +3,7 @@
 ## 99-sync-user-packages.hook
 
 pacman / yay で install / remove / upgrade が走るたびに
-`scripts/sync-packages.sh` を自動実行し、`packages/*.txt` を最新化する。
+`scripts/sync-packages.sh` を自動実行し、`packages/yay.txt` を最新化する。
 
 ### デプロイ
 
@@ -17,7 +17,7 @@ sudo install -m 644 -o root -g root \
 
 ```bash
 sudo pacman -S --needed tree    # 何でもいい install
-ls -la packages/pacman.txt      # timestamp が更新されていれば OK
+ls -la packages/yay.txt         # timestamp が更新されていれば OK
 ```
 
 ### 無効化
