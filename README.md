@@ -5,17 +5,24 @@ CachyOS（Hyprland デスクトップ）と WSL の2環境をサポートする�
 
 ## セットアップ
 
-### 1. リポジトリをクローンする
+### 1. リポジトリを取得する
+
+`ghq` で取得し、リポジトリへ移動する。取得先は `~/ghq/github.com/mkiin/dotfiles` に固定される。
 
 ```bash
-git clone https://github.com/mkiin/dotfiles ~/dotfiles
+nix shell nixpkgs#ghq nixpkgs#git --command ghq get github.com/mkiin/dotfiles
+cd "$(ghq root)/github.com/mkiin/dotfiles"
 ```
+
+Nix 未導入の環境では、先に Determinate Nix Installer を実行する。
 
 ### 2. ブートストラップスクリプトを実行する
 
+リポジトリ直下で実行する。
+
 ```bash
-bash ~/dotfiles/scripts/bootstrap-cachyos.sh   # CachyOS
-bash ~/dotfiles/scripts/bootstrap-wsl.sh       # WSL
+bash scripts/bootstrap-cachyos.sh   # CachyOS
+bash scripts/bootstrap-wsl.sh       # WSL
 ```
 
 スクリプトは冪等で、以下を順に行う。
@@ -47,7 +54,7 @@ New-Item -ItemType Directory "$env:USERPROFILE\.config\wezterm" -Force
 
 New-Item -ItemType SymbolicLink `
   -Path "$env:USERPROFILE\.config\wezterm\wezterm.lua" `
-  -Target "\\wsl.localhost\Ubuntu-26.04\home\mkiin\dotfiles\wezterm\wezterm.lua" `
+  -Target "\\wsl.localhost\Ubuntu-26.04\home\mkiin\ghq\github.com\mkiin\dotfiles\wezterm\wezterm.lua" `
   -Force
 ```
 
@@ -70,6 +77,8 @@ Nix flake は git-tracked なファイルのみを参照するため、未追跡
 このリポジトリを直接編集すれば即時に反映される（`home-manager switch` は不要）。
 
 ## 構成
+
+リポジトリの実体は `~/ghq/github.com/mkiin/dotfiles` に置かれる。
 
 ```
 dotfiles/

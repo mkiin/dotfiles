@@ -9,6 +9,9 @@ let
     then "/Users/${username}"
     else "/home/${username}";
 
+  dotfilesDirOf = { system, username }:
+    "${homeDir { inherit system username; }}/ghq/github.com/${username}/dotfiles";
+
   coreModule = { system, username }:
     let home = homeDir { inherit system username; };
     in {
@@ -21,7 +24,7 @@ in
   mkHome = { system, username, modules ? [] }:
     let
       home        = homeDir { inherit system username; };
-      dotfilesDir = "${home}/dotfiles";
+      dotfilesDir = dotfilesDirOf { inherit system username; };
     in
     hm.lib.homeManagerConfiguration {
       pkgs = inputs.nixpkgs.legacyPackages.${system};
@@ -35,7 +38,7 @@ in
   mkNixos = { system, username, modules ? [], homeModules ? [] }:
     let
       home        = homeDir { inherit system username; };
-      dotfilesDir = "${home}/dotfiles";
+      dotfilesDir = dotfilesDirOf { inherit system username; };
     in
     inputs.nixpkgs.lib.nixosSystem {
       inherit system;
@@ -58,7 +61,7 @@ in
   mkDarwin = { system, username, modules ? [], homeModules ? [] }:
     let
       home        = homeDir { inherit system username; };
-      dotfilesDir = "${home}/dotfiles";
+      dotfilesDir = dotfilesDirOf { inherit system username; };
     in
     inputs.nix-darwin.lib.darwinSystem {
       inherit system;
