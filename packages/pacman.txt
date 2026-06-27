@@ -15,6 +15,7 @@ gpu-screen-recorder
 guvcview
 hyprland
 hyprlock
+hyprshot
 nvidia-container-toolkit
 piper
 polkit-kde-agent
