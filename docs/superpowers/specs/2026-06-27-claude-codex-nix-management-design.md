@@ -85,7 +85,7 @@ agents/
 ### nix/modules/home/programs/claude-code.nix（新規）
 
 ```nix
-{ ... }:
+{ inputs, ... }:
 {
   programs.claude-code = {
     enable = true;
@@ -115,7 +115,7 @@ agents/
       skipAutoPermissionPrompt = true;
     };
 
-    context = ../../../agents/claude/CLAUDE.md;
+    context = inputs.self + "/agents/claude/CLAUDE.md";
   };
 }
 ```
@@ -127,7 +127,7 @@ agents/
 ### nix/modules/home/programs/codex.nix（新規）
 
 ```nix
-{ ... }:
+{ inputs, ... }:
 {
   programs.codex = {
     enable = true;
@@ -137,7 +137,7 @@ agents/
       projects."/home/mkiin/dotfiles".trust_level = "trusted";
     };
 
-    context = ../../../agents/codex/AGENTS.md;
+    context = inputs.self + "/agents/codex/AGENTS.md";
   };
 }
 ```
@@ -151,12 +151,13 @@ agents/
 ### nix/modules/home/agent-skills.nix（書きかけを修正）
 
 ```nix
+{ inputs, ... }:
 {
   programs.agent-skills = {
     enable = true;
 
     sources.local = {
-      path = ../../../agents/skills;
+      path = inputs.self + "/agents/skills";
       subdir = ".";
       filter.maxDepth = 1;
     };
@@ -222,6 +223,20 @@ imports に四つのエントリを足す。
 native の `programs.claude-code` と `programs.codex` は home-manager 本体のモジュールであり、外部 flake を要しない。
 
 input の追加が必要なのは agent-skills-nix だけである。
+
+### ソースパスの参照方法
+
+skills と指示書のソースは、モジュールから `inputs.self + "/agents/..."` で参照する。
+
+`inputs` は `mkHome` の `extraSpecialArgs` から全モジュールに渡るため、`mkHome` には手を入れない。
+
+各モジュールが `{ inputs, ... }` で受け取り、`inputs.self`（flake root、git管理下）を基点にソースを指す。
+
+`../../../agents/...` のようにモジュールの位置から相対で遡る書き方は採らない。
+
+`dotfilesDir` も使わない。
+
+`dotfilesDir` は `/home/<user>/dotfiles` という flake 外の絶対文字列パスであり、store import を要する agent-skills の source や native の `context` では pure eval に弾かれる（`dotfilesDir` は `mkOutOfStoreSymlink` 専用とする）。
 
 ## 移行手順
 
