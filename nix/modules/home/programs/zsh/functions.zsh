@@ -178,7 +178,7 @@ ghq-fzf() {
     zle clear-screen
 }
 zle -N ghq-fzf
-bindkey '^]' ghq-fzf
+bindkey '^g' ghq-fzf
 
 # --------------------------------------------
 # 起動時バックグラウンド処理
