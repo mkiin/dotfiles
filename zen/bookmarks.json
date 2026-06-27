@@ -1,0 +1,218 @@
+[
+  {
+    "title": "menu",
+    "type": "folder",
+    "children": [
+      {
+        "title": "Mozilla Firefox",
+        "type": "folder",
+        "children": [
+          {
+            "title": "Get Help",
+            "type": "bookmark",
+            "url": "https://support.mozilla.org/products/firefox"
+          },
+          {
+            "title": "Customize Firefox",
+            "type": "bookmark",
+            "url": "https://support.mozilla.org/kb/customize-firefox-controls-buttons-and-toolbars?utm_source=firefox-browser&utm_medium=default-bookmarks&utm_campaign=customize"
+          },
+          {
+            "title": "Get Involved",
+            "type": "bookmark",
+            "url": "https://www.mozilla.org/contribute/"
+          },
+          {
+            "title": "About Us",
+            "type": "bookmark",
+            "url": "https://www.mozilla.org/about/"
+          },
+          {
+            "title": "ヘルプを表示",
+            "type": "bookmark",
+            "url": "https://support.mozilla.org/products/firefox"
+          },
+          {
+            "title": "Firefox をカスタマイズしてみよう",
+            "type": "bookmark",
+            "url": "https://support.mozilla.org/kb/customize-firefox-controls-buttons-and-toolbars?utm_source=firefox-browser&utm_medium=default-bookmarks&utm_campaign=customize"
+          },
+          {
+            "title": "Mozilla のコミュニティ",
+            "type": "bookmark",
+            "url": "https://www.mozilla.org/contribute/"
+          },
+          {
+            "title": "Mozilla について",
+            "type": "bookmark",
+            "url": "https://www.mozilla.org/about/"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "toolbar",
+    "type": "folder",
+    "children": [
+      {
+        "title": "google-app",
+        "type": "folder",
+        "children": [
+          {
+            "title": "",
+            "type": "bookmark",
+            "url": "https://mail.google.com/mail/u/0/#inbox"
+          },
+          {
+            "title": "",
+            "type": "bookmark",
+            "url": "https://www.google.com/maps"
+          }
+        ]
+      },
+      {
+        "title": "Media",
+        "type": "folder",
+        "children": [
+          {
+            "title": "ホーム | dアニメストア",
+            "type": "bookmark",
+            "url": "https://animestore.docomo.ne.jp/animestore/tp/"
+          }
+        ]
+      },
+      {
+        "title": "Tech",
+        "type": "folder",
+        "children": [
+          {
+            "title": "Vim",
+            "type": "folder",
+            "children": [
+              {
+                "title": "🚀 Getting Started | LazyVim",
+                "type": "bookmark",
+                "url": "https://www.lazyvim.org/"
+              }
+            ]
+          },
+          {
+            "title": "Sources",
+            "type": "folder",
+            "children": [
+              {
+                "title": "Qiita",
+                "type": "bookmark",
+                "url": "https://qiita.com/"
+              },
+              {
+                "title": "Zenn｜エンジニアのための情報共有コミュニティ",
+                "type": "bookmark",
+                "url": "https://zenn.dev/"
+              }
+            ]
+          },
+          {
+            "title": "Frontend",
+            "type": "folder",
+            "children": []
+          },
+          {
+            "title": "Cloud",
+            "type": "folder",
+            "children": []
+          },
+          {
+            "title": "Database",
+            "type": "folder",
+            "children": []
+          },
+          {
+            "title": "Tooling",
+            "type": "folder",
+            "children": [
+              {
+                "title": "Getting Started | mise-en-place",
+                "type": "bookmark",
+                "url": "https://mise.jdx.dev/getting-started.html"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "facefusion",
+        "type": "folder",
+        "children": []
+      },
+      {
+        "title": "Personal",
+        "type": "folder",
+        "children": [
+          {
+            "title": "Storage",
+            "type": "folder",
+            "children": [
+              {
+                "title": "Amazon Photos",
+                "type": "bookmark",
+                "url": "https://www.amazon.co.jp/photos"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "",
+        "type": "bookmark",
+        "url": "https://claude.ai/new"
+      },
+      {
+        "title": "",
+        "type": "bookmark",
+        "url": "https://github.com/"
+      },
+      {
+        "title": "",
+        "type": "bookmark",
+        "url": "https://chatgpt.com/"
+      },
+      {
+        "title": "",
+        "type": "bookmark",
+        "url": "https://www.twitch.tv/"
+      },
+      {
+        "title": "",
+        "type": "bookmark",
+        "url": "https://www.youtube.com/"
+      },
+      {
+        "title": "",
+        "type": "bookmark",
+        "url": "https://okini.mkiin.workers.dev/"
+      },
+      {
+        "title": "Claude Status",
+        "type": "bookmark",
+        "url": "https://status.claude.com/"
+      }
+    ]
+  },
+  {
+    "title": "tags",
+    "type": "folder",
+    "children": []
+  },
+  {
+    "title": "unfiled",
+    "type": "folder",
+    "children": []
+  },
+  {
+    "title": "mobile",
+    "type": "folder",
+    "children": []
+  }
+]
