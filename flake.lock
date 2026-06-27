@@ -1,6 +1,48 @@
 {
   "nodes": {
+    "agent-skills": {
+      "inputs": {
+        "home-manager": "home-manager",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1782183570,
+        "narHash": "sha256-4LrewbD02WDf0CosGP/yO1yLneTeeJM39SjFa99kSRQ=",
+        "owner": "Kyure-A",
+        "repo": "agent-skills-nix",
+        "rev": "fe867fe7be3a55d939746b278194deee4814fb08",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Kyure-A",
+        "repo": "agent-skills-nix",
+        "type": "github"
+      }
+    },
     "home-manager": {
+      "inputs": {
+        "nixpkgs": [
+          "agent-skills",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1782100728,
+        "narHash": "sha256-YTyPsWf6ieaU6j/gJ+i7ERXKC7DEJC8BxUcAubx2SVQ=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "f3dc0b85833c6c9946ad1349ab810d07e0bdf761",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
+    "home-manager_2": {
       "inputs": {
         "nixpkgs": [
           "nixpkgs"
@@ -38,7 +80,8 @@
     },
     "root": {
       "inputs": {
-        "home-manager": "home-manager",
+        "agent-skills": "agent-skills",
+        "home-manager": "home-manager_2",
         "nixpkgs": "nixpkgs"
       }
     }
