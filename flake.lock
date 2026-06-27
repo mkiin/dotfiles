@@ -63,7 +63,24 @@
       "inputs": {
         "agent-skills": "agent-skills",
         "home-manager": "home-manager",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "superpowers-skill": "superpowers-skill"
+      }
+    },
+    "superpowers-skill": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1781822662,
+        "narHash": "sha256-+lT2a/qq0SF4k0PgnEDKiuidVlZX2p0vEso4d/5T1os=",
+        "owner": "obra",
+        "repo": "superpowers",
+        "rev": "896224c4b1879920ab573417e68fd51d2ccc9072",
+        "type": "github"
+      },
+      "original": {
+        "owner": "obra",
+        "repo": "superpowers",
+        "type": "github"
       }
     }
   },

@@ -12,6 +12,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
+    superpowers-skill = {
+      url = "github:obra/superpowers";
+      flake = false;
+    };
   };
 
   outputs = { self, ... }@inputs:
