@@ -1,7 +1,11 @@
-{ ... }:
+{ inputs, ... }:
 
 {
   imports = [
+    inputs.agent-skills.homeManagerModules.default
+    ./agent-skills.nix
+    ./programs/claude-code.nix
+    ./programs/codex.nix
     ./packages.nix
     ./programs/zsh.nix
     ./programs/git.nix
