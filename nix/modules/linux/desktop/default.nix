@@ -1,8 +1,10 @@
-{ ... }:
+{ lib, ... }:
 
 {
   imports = [
     ./hyprland
+    ./hyprland/monitor.nix
+    ./packages.nix
     ./waybar.nix
     ./quickshell.nix
     ./wlogout.nix
@@ -10,7 +12,18 @@
     ./mouse.nix
     ./services.nix
     ./apps.nix
+    ../programs/matugen.nix
+    ../programs/wallust.nix
+    ../programs/wezterm.nix
+    ../programs/ghostty.nix
   ];
+
+  programs.zsh = {
+    shellAliases.qs-restart = "pkill -9 quickshell; nohup quickshell &>/dev/null & disown";
+    initContent = lib.mkAfter ''
+      abbr wbr="pkill -x waybar; uwsm app -- waybar &>/dev/null & disown"
+    '';
+  };
 
   xdg.mimeApps = {
     enable = true;
