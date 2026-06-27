@@ -41,11 +41,9 @@ bat
 bind
 binutils
 bison
-bluez
 bluez-hid2hci
 bluez-libs
 bluez-obex
-bluez-utils
 boost-libs
 bpf
 breeze-icons
@@ -137,11 +135,6 @@ faac
 faad2
 fakeroot
 fastfetch
-fcitx5
-fcitx5-configtool
-fcitx5-gtk
-fcitx5-mozc
-fcitx5-qt
 fd
 ffmpeg
 ffmpeg4.4
@@ -177,7 +170,6 @@ gcr-4
 gdbm
 gdk-pixbuf2
 gettext
-ghostty
 ghostty-shell-integration
 ghostty-terminfo
 giflib
@@ -243,7 +235,6 @@ hwdetect
 hwinfo
 hyprcursor
 hyprgraphics
-hyprland
 hyprland-guiutils
 hyprlang
 hyprlauncher
@@ -779,7 +770,6 @@ playerctl
 plocate
 plymouth
 polkit
-polkit-kde-agent
 polkit-qt6
 poppler
 poppler-glib
@@ -824,7 +814,6 @@ qt6-speech
 qt6-svg
 qt6-translations
 qt6-wayland
-quickshell
 raptor
 rate-mirrors
 rav1e
@@ -921,7 +910,6 @@ usb_modeswitch
 usbutils
 util-linux
 util-linux-libs
-uwsm
 v4l-utils
 vapoursynth
 vid.stab
@@ -1018,7 +1006,6 @@ which
 wildmidi
 wireless-regdb
 wireplumber
-wl-clipboard
 wofi
 wpa_supplicant
 x264
@@ -1033,7 +1020,6 @@ xcb-util-keysyms
 xcb-util-renderutil
 xcb-util-wm
 xdg-desktop-portal
-xdg-desktop-portal-hyprland
 xdg-user-dirs
 xdg-utils
 xf86-input-libinput
