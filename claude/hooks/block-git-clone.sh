@@ -5,7 +5,10 @@ set -u
 input=$(cat)
 command=$(printf '%s' "$input" | jq -r '.tool_input.command // empty')
 
-if [[ "$command" =~ (^|[^[:alnum:]_])git[[:space:]]+clone([^[:alnum:]_]|$) ]]; then
+# 字句難読化（バックスラッシュ・クォート）を剥がす
+stripped=${command//[\\\"\']/}
+
+if [[ "$stripped" =~ (^|[^[:alnum:]_])git[[:space:]]+clone([^[:alnum:]_]|$) ]]; then
   reason=$(cat <<'EOF'
 `git clone` は禁止です。OSS・ライブラリのソースは `ghq get <url>` で取得してください。
 
