@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, config, ... }:
 {
   programs.claude-code = {
     enable = true;
@@ -23,7 +23,19 @@
           "Bash(/bin/find*)"
         ];
         defaultMode = "auto";
+        additionalDirectories = [ "${config.home.homeDirectory}/ghq" ];
       };
+      hooks.PreToolUse = [
+        {
+          matcher = "Bash";
+          hooks = [
+            {
+              type = "command";
+              command = "bash ${inputs.self}/claude/hooks/block-git-clone.sh";
+            }
+          ];
+        }
+      ];
       includeCoAuthoredBy = false;
       alwaysThinkingEnabled = true;
       autoMemoryEnabled = false;
