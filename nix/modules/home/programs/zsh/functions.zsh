@@ -166,6 +166,21 @@ if [[ -n "$WEZTERM_PANE" && -r /etc/profile.d/wezterm.sh ]]; then
 fi
 
 # --------------------------------------------
+# ghq + fzf: リポジトリ一覧から選んで cd
+# --------------------------------------------
+ghq-fzf() {
+    local dir
+    dir=$(ghq list -p | fzf --prompt="repositories > " --query "$LBUFFER")
+    if [[ -n "$dir" ]]; then
+        BUFFER="cd ${dir}"
+        zle accept-line
+    fi
+    zle clear-screen
+}
+zle -N ghq-fzf
+bindkey '^]' ghq-fzf
+
+# --------------------------------------------
 # 起動時バックグラウンド処理
 # --------------------------------------------
 (vscode_cleanup &>/dev/null &)
