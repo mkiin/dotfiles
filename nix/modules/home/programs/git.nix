@@ -23,11 +23,11 @@
       ghq.root = "${config.home.homeDirectory}/ghq";
       credential."https://github.com".helper = [
         ""
-        "!~/.local/share/mise/shims/gh auth git-credential"
+        "!gh auth git-credential"
       ];
       credential."https://gist.github.com".helper = [
         ""
-        "!~/.local/share/mise/shims/gh auth git-credential"
+        "!gh auth git-credential"
       ];
     };
   };
