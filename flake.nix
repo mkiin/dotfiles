@@ -16,6 +16,14 @@
       url = "github:obra/superpowers";
       flake = false;
     };
+    cloudflare-skills = {
+      url = "github:cloudflare/skills";
+      flake = false;
+    };
+    anthropic-skills = {
+      url = "github:anthropics/skills";
+      flake = false;
+    };
   };
 
   outputs = { self, ... }@inputs:
