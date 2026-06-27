@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 
 {
   programs.delta = {
@@ -20,6 +20,7 @@
         email = "mkiin@users.noreply.github.com";
       };
       init.defaultBranch = "main";
+      ghq.root = "${config.home.homeDirectory}/ghq";
       credential."https://github.com".helper = [
         ""
         "!~/.local/share/mise/shims/gh auth git-credential"
