@@ -13,6 +13,7 @@
       bash-language-server
       shellcheck
       shfmt
+      tree-sitter
     ];
   };
 

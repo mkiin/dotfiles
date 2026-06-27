@@ -60,31 +60,34 @@ For multi-step tasks, state a brief plan:
 
 Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
 
-## 5. Dotfiles Workflow (chezmoi)
+## 5. Dotfiles Workflow (Nix flake / home-manager)
 
-**This repo is managed by chezmoi. Edit the chezmoi source only, then sync — do NOT dual-edit.**
+**This repo is a Nix flake managed by home-manager. Edit the Nix source under `nix/`, then `switch` — do NOT hand-edit live files in `~`.**
 
-Files under `home/dot_config/...` are the chezmoi source. chezmoi materializes them into `~/.config/...` on `apply`. Naming translation rules:
+home-manager generates the live tree (`~/.config/...`, etc.) from the Nix source on `switch`; most live files are read-only symlinks into the Nix store. Editing them directly does nothing durable — the next `switch` overwrites them.
 
-- `dot_foo` → `.foo` (hidden file/dir)
-- `executable_foo.sh` → `foo.sh` with mode 0755
-- Other names pass through as-is
+### Layout
+
+- `flake.nix` — `homeConfigurations`: `wsl` and `cachyos`
+- `nix/hosts/<host>.nix` — per-host entry point
+- `nix/modules/home/` — cross-platform home-manager modules; per-tool config lives in `nix/modules/home/programs/<tool>.nix`
+- `nix/modules/linux/`, `nix/modules/darwin/` — OS-specific modules
 
 ### Required flow
 
-1. Edit the source only: `dotfiles/home/dot_config/<path>`
-2. `chezmoi diff` — preview what will change in the live tree (expected: non-empty diff reflecting your edit)
-3. `chezmoi apply` — sync live files from source
-4. `chezmoi diff` — re-run to confirm zero diff (source and live are now identical)
+1. Edit the Nix source only: `nix/modules/.../<tool>.nix`
+2. `home-manager switch --flake .#wsl` (or `.#cachyos`) — build and apply
+3. Verify the live result reflects the change
+
+Prefer home-manager's typed options (`programs.<tool>.settings`, …). Drop to raw files via `home.file` / `xdg.configFile` only when no module option fits.
 
 ### Forbidden
 
-- ❌ Editing `~/.config/<path>` and `dotfiles/home/dot_config/<path>` separately in the same change. This creates drift and muddies the source-of-truth.
-- ❌ Skipping `chezmoi diff` before `apply`. Always preview first so surprises are caught before the live tree mutates.
+- ❌ Hand-editing live files in `~` (e.g. `~/.config/<path>`). They are home-manager-managed; the next `switch` reverts the change and the source-of-truth drifts.
 
 ### Exception
 
-Live-only experiments (testing a value before committing to source) are fine, but must be either reverted or propagated to source before the task is considered done. No half-applied state should outlive the session.
+Live-only experiments (testing a value before committing to source) are fine, but must be either reverted or propagated to the Nix source before the task is considered done. No half-applied state should outlive the session.
 
 ## 6. Comments — Earn the Right
 
