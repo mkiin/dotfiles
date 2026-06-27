@@ -20,11 +20,6 @@
   ],
   "group/pkg-update#cluster": {
     "orientation": "horizontal",
-    "drawer": {
-      "transition-duration": 500,
-      "children-class": "not-pacman",
-      "transition-left-to-right": true
-    },
     "modules": [
       "custom/pacman",
       "custom/aur",
@@ -121,6 +116,7 @@
   },
   "hyprland/workspaces": {
     "format": "{id}",
+    "on-click": "activate",
     "format-icons": {
       "active": "{id}",
       "default": "",
