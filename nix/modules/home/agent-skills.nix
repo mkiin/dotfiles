@@ -1,4 +1,12 @@
 { inputs, ... }:
+let
+  inherit (inputs)
+    superpowers-skill
+    cloudflare-skills
+    anthropic-skills
+    ;
+  local-skills = inputs.self + "/agents/skills";
+in
 {
   programs.agent-skills = {
     enable = true;
@@ -6,25 +14,25 @@
     sources = {
       # Local: 自作スキル (cm, write-sentence)
       local = {
-        path = inputs.self + "/agents/skills";
+        path = local-skills;
         subdir = ".";
         filter.maxDepth = 1;
       };
       # External: superpowers (obra/superpowers)
       superpowers = {
-        path = inputs.superpowers-skill;
+        path = superpowers-skill;
         subdir = "skills";
         filter.maxDepth = 1;
       };
       # External: Cloudflare 公式スキル (cloudflare/skills)
       cloudflare = {
-        path = inputs.cloudflare-skills;
+        path = cloudflare-skills;
         subdir = "skills";
         filter.maxDepth = 1;
       };
       # External: Anthropic 公式スキル (anthropics/skills) — frontend-design のみ使用
       anthropic = {
-        path = inputs.anthropic-skills;
+        path = anthropic-skills;
         subdir = "skills";
         filter.maxDepth = 1;
       };
