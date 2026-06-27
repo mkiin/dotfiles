@@ -1,7 +1,7 @@
-{ config, dotfilesDir, ... }:
+{ dotLink, ... }:
 
 let
-  sym = path: config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/matugen/${path}";
+  sym = dotLink "matugen";
 in
 {
   xdg.configFile = {

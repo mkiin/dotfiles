@@ -1,4 +1,4 @@
-{ config, dotfilesDir, ... }:
+{ config, dotLink, ... }:
 
 {
   home.sessionVariables = {
@@ -12,7 +12,7 @@
   ];
 
   xdg.configFile."zsh/functions.zsh".source =
-    config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/nix/modules/home/programs/zsh/functions.zsh";
+    dotLink "nix/modules/home/programs/zsh" "functions.zsh";
 
   programs.zsh = {
     enable         = true;

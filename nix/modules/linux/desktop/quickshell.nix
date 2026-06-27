@@ -1,7 +1,7 @@
-{ config, dotfilesDir, ... }:
+{ dotLink, ... }:
 
 let
-  sym = path: config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/quickshell/${path}";
+  sym = dotLink "quickshell";
 in
 {
   xdg.configFile = {

@@ -1,8 +1,8 @@
-{ config, dotfilesDir, ... }:
+{ config, dotLink, ... }:
 
 let
   home = config.home.homeDirectory;
-  sym  = path: config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/local/${path}";
+  sym  = dotLink "local";
 in
 {
   xdg.desktopEntries = {

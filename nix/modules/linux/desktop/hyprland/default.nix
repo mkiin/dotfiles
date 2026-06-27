@@ -1,7 +1,7 @@
-{ config, dotfilesDir, ... }:
+{ dotLink, ... }:
 
 let
-  sym = path: config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/hypr/${path}";
+  sym = dotLink "hypr";
 in
 {
   wayland.windowManager.hyprland = {

@@ -1,7 +1,7 @@
-{ config, dotfilesDir, ... }:
+{ dotLink, ... }:
 
 let
-  sym = path: config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/wlogout/${path}";
+  sym = dotLink "wlogout";
 in
 {
   xdg.configFile = {

@@ -1,7 +1,7 @@
-{ config, dotfilesDir, ... }:
+{ dotLink, ... }:
 
 let
-  sym = path: config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/mouse/${path}";
+  sym = dotLink "mouse";
 in
 {
   xdg.configFile = {

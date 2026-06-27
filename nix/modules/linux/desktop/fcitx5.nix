@@ -1,7 +1,7 @@
-{ config, dotfilesDir, ... }:
+{ dotLink, ... }:
 
 let
-  sym = path: config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/fcitx5/${path}";
+  sym = dotLink "fcitx5";
 in
 {
   home.sessionVariables = {

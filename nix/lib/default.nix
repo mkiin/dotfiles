@@ -31,6 +31,7 @@ in
       extraSpecialArgs = { inherit inputs username dotfilesDir system; };
       modules = [
         (coreModule { inherit system username; })
+        ./dotlink.nix
         ../modules/home
       ] ++ modules;
     };
@@ -51,7 +52,7 @@ in
             useUserPackages = true;
             extraSpecialArgs = { inherit inputs username dotfilesDir; };
             users.${username}.imports =
-              [ (coreModule { inherit system username; }) ../modules/home ]
+              [ (coreModule { inherit system username; }) ./dotlink.nix ../modules/home ]
               ++ homeModules;
           };
         }
@@ -74,7 +75,7 @@ in
             useUserPackages = true;
             extraSpecialArgs = { inherit inputs username dotfilesDir; };
             users.${username}.imports =
-              [ (coreModule { inherit system username; }) ../modules/home ]
+              [ (coreModule { inherit system username; }) ./dotlink.nix ../modules/home ]
               ++ homeModules;
           };
         }
