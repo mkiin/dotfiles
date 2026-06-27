@@ -217,11 +217,19 @@ native の `programs.codex` は `settings` を `~/.codex/config.toml` に、`con
 
     skills.enableAll = [ "local" ];
 
-    targets.claude = { enable = true; structure = "link"; };
-    targets.codex  = { enable = true; structure = "link"; };
+    targets.claude = { enable = true; structure = "link"; dest = ".claude/skills"; };
+    targets.codex  = { enable = true; structure = "link"; dest = ".codex/skills"; };
   };
 }
 ```
+
+`dest` を静的な home 相対パスで明示する。
+
+agent-skills-nix の固定 rev では、`structure = "link"` と既定の動的 dest（`${CLAUDE_CONFIG_DIR:-$HOME/.claude}/skills` というシェル変数構文）の組み合わせで、内部の正規表現抽出が無効なパターンを生成して評価時にクラッシュする。
+
+静的 dest を渡すとこのシェル変数分岐を通らず、クラッシュを避けられる。
+
+配置先は動的 dest が正しく解決した場合と同一であり、現環境（`CLAUDE_CONFIG_DIR`/`CODEX_HOME` 未設定）では `~/.claude/skills` と `~/.codex/skills` を指す。
 
 `structure = "link"` は各 skill を個別の symlink で配置する。
 
@@ -239,8 +247,11 @@ inputs に agent-skills-nix を1つ追加する。
 agent-skills = {
   url = "github:Kyure-A/agent-skills-nix";
   inputs.nixpkgs.follows = "nixpkgs";
+  inputs.home-manager.follows = "home-manager";
 };
 ```
+
+`home-manager.follows` を付けるのは、agent-skills が独自に引く home-manager を本構成の home-manager に追従させ、flake.lock のノード重複（`home-manager_2`）を避けるためである。
 
 native モジュールは home-manager 本体に含まれるため、追加で要る input は agent-skills-nix だけである。
 
