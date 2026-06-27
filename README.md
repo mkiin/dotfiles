@@ -31,6 +31,29 @@ bash ~/dotfiles/scripts/bootstrap-wsl.sh       # WSL
 home-manager switch --flake .#cachyos
 ```
 
+### 3. Windows 版 WezTerm の設定をリンクする（WSL）
+
+Windows 版 WezTerm は Windows 側の設定ファイルを読むため、WSL 側の dotfiles へシンボリックリンクを張る。
+PowerShell で WSL ディストリビューション名を確認する。
+
+```powershell
+wsl -l -v
+```
+
+表示名が `Ubuntu-26.04` の場合は、PowerShell で以下を実行する。
+
+```powershell
+New-Item -ItemType Directory "$env:USERPROFILE\.config\wezterm" -Force
+
+New-Item -ItemType SymbolicLink `
+  -Path "$env:USERPROFILE\.config\wezterm\wezterm.lua" `
+  -Target "\\wsl.localhost\Ubuntu-26.04\home\mkiin\dotfiles\wezterm\wezterm.lua" `
+  -Force
+```
+
+通常の PowerShell で失敗する場合は、管理者 PowerShell で再実行する。
+Windows の Developer Mode が有効なら、管理者権限なしで作成できる場合がある。
+
 ## 日常の使い方
 
 `nix/modules/` の変更（パッケージ追加、サービス設定など）を反映するには `home-manager switch` を実行する。

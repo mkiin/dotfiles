@@ -7,7 +7,7 @@ local is_windows = wezterm.target_triple:find("windows") ~= nil
 
 -- WSL2 Ubuntu をデフォルト (Windows 版 wezterm のみ)
 if is_windows then
-	config.default_domain = "WSL:Ubuntu-24.04"
+	config.default_domain = "WSL:Ubuntu-26.04"
 end
 config.automatically_reload_config = true
 config.front_end = "OpenGL"
