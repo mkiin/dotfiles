@@ -4,6 +4,8 @@
     ./packages.nix
     ./hyprland
     ./waybar
+    ./cliphist
+    ./hypridle
     ./quickshell
     ./wlogout
     ./fcitx5
@@ -18,7 +20,7 @@
   programs.zsh = {
     shellAliases.qs-restart = "pkill -9 quickshell; nohup quickshell &>/dev/null & disown";
     initContent = lib.mkAfter ''
-      abbr wbr="pkill -x waybar; uwsm app -- waybar &>/dev/null & disown"
+      abbr wbr="systemctl --user restart waybar"
     '';
   };
 

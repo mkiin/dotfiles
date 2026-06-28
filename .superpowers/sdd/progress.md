@@ -4,3 +4,4 @@ Task 1: complete (commits 8a15b85..0c27ad8, review clean after neovim→lnk fix;
 Task 2 (system layer): files done, dry-build evaluates OK (commit 3faed55). Switch deferred until Phase 3 desktop config ready. mise nix-ld libs deferred per user.
 Task 3 (home desktop): complete (..236f7d5), dry-build OK, session binaries present, hardcoded paths fixed, hyprland cachix added. Switch-ready.
 Phase2 fix: blacklist amdgpu (hybrid wrong-GPU root cause; weston/hyprland grabbed iGPU w/ no monitor). committed 6b4f704
+Phase desktop polish: fonts→system, zen declarative(beta)+bookmarks, bt-agent→system, monitor/browser/waybar fixed. nixos uses <name>/default.nix.
