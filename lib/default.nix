@@ -42,14 +42,14 @@ in
     { system, username, modules }:
     let
       pkgs = mkPkgs system;
+      pkgs-stable = mkStable system;
       dotfilesDir = dotfilesDirOf system username;
     in
     inputs.home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
       extraSpecialArgs = {
-        inherit inputs system username;
+        inherit inputs system username pkgs-stable;
         homeDirectory = homeDirOf system username;
-        pkgs-stable = mkStable system;
         lnk = mkLnk pkgs dotfilesDir;
       };
       modules = [ (homeBase system username) ] ++ modules;
@@ -59,14 +59,14 @@ in
     { system, hostname, username, modules }:
     let
       pkgs = mkPkgs system;
+      pkgs-stable = mkStable system;
       dotfilesDir = dotfilesDirOf system username;
     in
     inputs.nixpkgs.lib.nixosSystem {
       inherit system;
       specialArgs = {
-        inherit inputs system username hostname;
+        inherit inputs system username hostname pkgs-stable;
         homeDirectory = homeDirOf system username;
-        pkgs-stable = mkStable system;
       };
       modules = [
         { nixpkgs.pkgs = pkgs; networking.hostName = hostname; }
@@ -75,9 +75,8 @@ in
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = {
-            inherit inputs system username;
+            inherit inputs system username pkgs-stable;
             homeDirectory = homeDirOf system username;
-            pkgs-stable = mkStable system;
             lnk = mkLnk pkgs dotfilesDir;
           };
           home-manager.users.${username} = homeBase system username;
