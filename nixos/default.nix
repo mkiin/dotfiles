@@ -4,6 +4,5 @@
     ./core
     ./hardware
     ./desktop
-    ./apps
   ];
 }

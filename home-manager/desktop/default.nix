@@ -12,6 +12,7 @@
     ./wallust
     ./terminal/ghostty
     ./terminal/wezterm
+    ./zen
   ];
 
   programs.zsh = {
