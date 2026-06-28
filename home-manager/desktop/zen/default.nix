@@ -8,28 +8,55 @@
       settings = {
         "browser.tabs.warnOnClose" = false;
 
-        # 定番UX
+        # Look and Feel / Appearance
         "zen.welcome-screen.seen" = true;
-        "browser.aboutConfig.showWarning" = false;
-        "zen.workspaces.continue-where-left-off" = true;
-
-        # コンパクトモード + フロートURLバー
+        "zen.watermark.enabled" = false;
         "zen.view.compact.hide-tabbar" = true;
         "zen.urlbar.behavior" = "float";
+        "browser.toolbars.bookmarks.visibility" = "always";
+        "browser.aboutConfig.showWarning" = false;
 
-        # プライバシー / テレメトリ off
+        # Tab Management / Tabs and Browsing
+        "zen.workspaces.continue-where-left-off" = true;
+        "browser.startup.page" = 3;
+        "browser.tabs.closeWindowWithLastTab" = false;
+        "browser.ctrlTab.sortByRecentlyUsed" = true;
+        "zen.tabs.dim-pending" = true;
+        "zen.ctrlTab.show-pending-tabs" = true;
+        "extensions.pocket.enabled" = false;
+        "browser.urlbar.quicksuggest.enabled" = false;
+        "browser.urlbar.suggest.quicksuggest.sponsored" = false;
+        "browser.urlbar.suggest.quicksuggest.nonsponsored" = false;
+
+        # Privacy and Security
+        "privacy.trackingprotection.enabled" = true;
+        "privacy.trackingprotection.socialtracking.enabled" = true;
+        "privacy.globalprivacycontrol.enabled" = true;
+        "dom.security.https_only_mode" = true;
+        "network.cookie.cookieBehavior" = 5;
+        "network.trr.mode" = 2;
         "datareporting.healthreport.uploadEnabled" = false;
         "toolkit.telemetry.enabled" = false;
         "browser.newtabpage.activity-stream.feeds.telemetry" = false;
 
-        # タブ運用
-        "zen.tabs.dim-pending" = true;
-        "zen.ctrlTab.show-pending-tabs" = true;
+        # Permissions and Data（通知のみブロック / 自動再生は音声のみ）
+        "permissions.default.desktop-notification" = 2;
+        "dom.push.enabled" = false;
+        "media.autoplay.default" = 1;
 
-        # 言語（Accept-Language ヘッダのみ）
+        # Downloads
+        "browser.download.useDownloadDir" = true;
+        "browser.download.folderList" = 2;
+        "browser.download.dir" = "/home/mkiin/Downloads";
+
+        # Accessibility
+        "widget.gtk.overlay-scrollbars.enabled" = false;
+        "findbar.highlightAll" = true;
+
+        # Languages（Accept-Language ヘッダのみ）
         "intl.accept_languages" = "ja,en-US,en";
 
-        # フォント（ja = 日本語 / x-western = 欧文）
+        # Fonts（ja = 日本語 / x-western = 欧文）
         "font.name.serif.ja" = "Noto Serif CJK JP";
         "font.name.sans-serif.ja" = "Noto Sans CJK JP";
         "font.name.monospace.ja" = "UDEV Gothic";
