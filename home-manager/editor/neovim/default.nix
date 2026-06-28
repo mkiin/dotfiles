@@ -1,8 +1,4 @@
-{ pkgs, lib, config, homeDirectory, username, ... }:
-let
-  dotfilesDir = "${homeDirectory}/ghq/github.com/${username}/dotfiles";
-  nvimConfigDir = "${dotfilesDir}/home-manager/editor/neovim/config";
-in
+{ pkgs, lib, config, lnk, ... }:
 {
   programs.neovim = {
     enable = true;
@@ -21,17 +17,11 @@ in
   };
 
   xdg.configFile."nvim/init.lua".enable = lib.mkForce false;
+  xdg.configFile."nvim".source = lnk ./config;
 
-  home.activation.linkNvimConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    if [[ -e "${config.xdg.configHome}/nvim" ]] || [[ -L "${config.xdg.configHome}/nvim" ]]; then
-      rm -rf "${config.xdg.configHome}/nvim"
-    fi
-    ln -s "${nvimConfigDir}" "${config.xdg.configHome}/nvim"
-  '';
-
-  home.activation.restoreNeovimPlugins = lib.hm.dag.entryAfter [ "linkNvimConfig" ] ''
+  home.activation.restoreNeovimPlugins = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     LAZY_DIR="$HOME/.local/share/nvim/lazy"
-    LAZY_LOCK="${nvimConfigDir}/lazy-lock.json"
+    LAZY_LOCK="${config.xdg.configHome}/nvim/lazy-lock.json"
     LAZY_LOCK_TIMESTAMP="$LAZY_DIR/.lazy-lock-timestamp"
 
     if [[ ! -f "$LAZY_LOCK_TIMESTAMP" ]] || [[ "$LAZY_LOCK" -nt "$LAZY_LOCK_TIMESTAMP" ]]; then
