@@ -8,7 +8,6 @@
     ./wlogout
     ./fcitx5
     ./mouse
-    ./services
     ./matugen
     ./wallust
     ./terminal/ghostty
