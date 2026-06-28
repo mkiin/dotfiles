@@ -1,6 +1,7 @@
 { lib, ... }:
 {
   imports = [
+    ./packages.nix
     ./hyprland
     ./waybar
     ./quickshell

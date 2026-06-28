@@ -1,4 +1,4 @@
-{ lnk, ... }:
+{ pkgs, lnk, ... }:
 {
   xdg.configFile = {
     "quickshell/shell.json".source = lnk ./shell.json;
@@ -15,7 +15,7 @@
     };
     Service = {
       Environment = "QT_QPA_PLATFORMTHEME=gtk3";
-      ExecStart = "/usr/bin/qs -c shell";
+      ExecStart = "${pkgs.quickshell}/bin/qs -c shell";
       Restart = "on-failure";
       RestartSec = 2;
     };

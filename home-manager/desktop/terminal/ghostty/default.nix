@@ -3,7 +3,6 @@
 {
   programs.ghostty = {
     enable = true;
-    package = null;
     systemd.enable = false;
     settings = {
       font-family = "JetBrainsMono Nerd Font";

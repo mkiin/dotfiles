@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   systemd.user = {
@@ -9,7 +9,7 @@
         After = [ "bluetooth.target" "graphical-session.target" ];
       };
       Service = {
-        ExecStart = "/usr/bin/bt-agent --capability=NoInputNoOutput";
+        ExecStart = "${pkgs.bluez-tools}/bin/bt-agent --capability=NoInputNoOutput";
         Restart = "on-failure";
         RestartSec = 2;
       };
