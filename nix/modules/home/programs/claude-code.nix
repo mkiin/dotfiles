@@ -5,6 +5,7 @@
     package = null;
 
     settings = {
+      theme = "dark";
       env = {
         ENABLE_BACKGROUND_TASKS = "1";
         FORCE_AUTO_BACKGROUND_TASKS = "1";
