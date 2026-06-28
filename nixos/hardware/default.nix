@@ -1,8 +1,8 @@
 { ... }:
 {
   imports = [
-    ./nvidia.nix
-    ./bluetooth.nix
+    ./nvidia
+    ./bluetooth
   ];
 
   hardware.graphics.enable = true;

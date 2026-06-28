@@ -1,10 +1,10 @@
 { ... }:
 {
   imports = [
-    ./hyprland.nix
-    ./display-manager.nix
-    ./fcitx5.nix
-    ./sound.nix
-    ./polkit.nix
+    ./hyprland
+    ./display-manager
+    ./fcitx5
+    ./sound
+    ./polkit
   ];
 }
