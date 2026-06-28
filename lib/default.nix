@@ -32,7 +32,7 @@ let
 
   homeBase = system: username: {
     home.username = username;
-    home.homeDirectory = homeDirOf system username;
+    home.homeDirectory = lib.mkForce (homeDirOf system username);
     home.stateVersion = "25.11";
     programs.home-manager.enable = true;
   };
