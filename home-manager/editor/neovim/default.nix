@@ -8,6 +8,7 @@
       typescript-go
       lua-language-server
       nixd
+      nixfmt
       oxfmt
       bash-language-server
       shellcheck
