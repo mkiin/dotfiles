@@ -1,12 +1,11 @@
-{ username, ... }:
+{ inputs, ... }:
 {
-  imports = [ ./hardware-configuration.nix ];
+  imports = [
+    ./hardware-configuration.nix
+    ../../nixos
+    inputs.nixos-hardware.nixosModules.common-cpu-amd
+    inputs.nixos-hardware.nixosModules.common-pc-ssd
+  ];
+
   system.stateVersion = "26.05";
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  users.users.${username} = {
-    isNormalUser = true;
-    group = username;
-  };
-  users.groups.${username} = { };
 }
