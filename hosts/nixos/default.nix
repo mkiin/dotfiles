@@ -7,5 +7,10 @@
     inputs.nixos-hardware.nixosModules.common-pc-ssd
   ];
 
+  home-manager.users.mkiin.imports = [
+    ../../home-manager
+    ../../home-manager/desktop
+  ];
+
   system.stateVersion = "26.05";
 }

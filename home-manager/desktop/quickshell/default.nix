@@ -1,14 +1,10 @@
-{ dotLink, ... }:
-
-let
-  sym = dotLink "quickshell";
-in
+{ lnk, ... }:
 {
   xdg.configFile = {
-    "quickshell/shell.json".source  = sym "shell.json";
-    "quickshell/shell".source       = sym "shell";
-    "quickshell/audio".source       = sym "audio";
-    "quickshell/bluetooth".source   = sym "bluetooth";
+    "quickshell/shell.json".source = lnk ./shell.json;
+    "quickshell/shell".source      = lnk ./shell;
+    "quickshell/audio".source      = lnk ./audio;
+    "quickshell/bluetooth".source  = lnk ./bluetooth;
   };
 
   systemd.user.services.quickshell = {

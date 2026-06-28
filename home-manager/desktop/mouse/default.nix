@@ -1,13 +1,9 @@
-{ dotLink, ... }:
-
-let
-  sym = dotLink "mouse";
-in
+{ lnk, ... }:
 {
   xdg.configFile = {
-    "mouse/g703h.sh".source         = sym "g703h.sh";
-    "mouse/m575-profiled.py".source = sym "m575-profiled.py";
-    "mouse/profiles.toml".source    = sym "profiles.toml";
+    "mouse/g703h.sh".source         = lnk ./g703h.sh;
+    "mouse/m575-profiled.py".source = lnk ./m575-profiled.py;
+    "mouse/profiles.toml".source    = lnk ./profiles.toml;
   };
 
   systemd.user.services.m575-profiled = {
