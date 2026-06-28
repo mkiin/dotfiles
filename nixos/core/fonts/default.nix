@@ -6,6 +6,8 @@
     noto-fonts-cjk-sans
     noto-fonts-color-emoji
     nerd-fonts.jetbrains-mono
+    udev-gothic
+    inter
     material-design-icons
   ];
   fonts.fontconfig.defaultFonts = {
