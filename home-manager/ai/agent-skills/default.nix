@@ -5,7 +5,7 @@ let
     cloudflare-skills
     anthropic-skills
     ;
-  local-skills = inputs.self + "/agents/skills";
+  local-skills = inputs.self + "/home-manager/ai/agent-skills/files/skills";
 in
 {
   programs.agent-skills = {

@@ -25,7 +25,7 @@
           hooks = [
             {
               type = "command";
-              command = "bash ${inputs.self}/claude/hooks/block-git-clone.sh";
+              command = "bash ${inputs.self}/home-manager/ai/claude-code/files/hooks/block-git-clone.sh";
             }
           ];
         }
@@ -41,9 +41,9 @@
       skipWorkflowUsageWarning = true;
     };
 
-    context = inputs.self + "/claude/CLAUDE.md";
-    commandsDir = inputs.self + "/claude/commands";
-    agentsDir = inputs.self + "/claude/agents";
-    rulesDir = inputs.self + "/claude/rules";
+    context = inputs.self + "/home-manager/ai/claude-code/files/CLAUDE.md";
+    commandsDir = inputs.self + "/home-manager/ai/claude-code/files/commands";
+    agentsDir = inputs.self + "/home-manager/ai/claude-code/files/agents";
+    rulesDir = inputs.self + "/home-manager/ai/claude-code/files/rules";
   };
 }
