@@ -24,7 +24,7 @@ config.audible_bell = "Disabled"
 -- フォント
 config.font = wezterm.font_with_fallback({
 	"JetBrainsMono Nerd Font",
-	"UDEV Gothic NF",
+	"UDEV Gothic",
 })
 config.font_size = 14.0
 

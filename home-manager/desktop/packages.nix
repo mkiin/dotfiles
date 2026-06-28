@@ -5,8 +5,10 @@
     matugen wallust awww
     # desktop utilities
     wlogout cliphist socat resvg mpv pwvucontrol cava waybar playerctl
+    # shell / panel (qs + quickshell on PATH for keybinds and matugen post_hook)
+    quickshell
     # fonts & themes
-    nerd-fonts.jetbrains-mono inter papirus-icon-theme
+    nerd-fonts.jetbrains-mono udev-gothic inter papirus-icon-theme
     # terminals
     wezterm
     # session essentials (lock, screenshot, clipboard, media keys)

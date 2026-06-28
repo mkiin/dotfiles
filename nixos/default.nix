@@ -11,5 +11,6 @@
     ./core/fonts.nix
     ./hardware
     ./desktop
+    ./apps
   ];
 }
