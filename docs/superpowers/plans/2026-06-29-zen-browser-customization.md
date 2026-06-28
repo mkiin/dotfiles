@@ -4,18 +4,18 @@
 
 **Goal:** home-manager 管理の Zen Browser に pref/言語/フォント/Spaces/mods を宣言的に追加する。
 
-**Architecture:** `home-manager/desktop/zen/default.nix` の `programs.zen-browser.profiles.default` を拡張する単一ファイル変更。検証は `nix` での eval（ビルド可否）と `home-manager switch` 後の目視確認で行う。Nix の宣言的設定のため失敗テストは書かず、「eval が通る」「switch が適用される」「Zen 上で値が反映される」を成功基準とする。
+**Architecture:** `home-manager/desktop/zen/default.nix` の `programs.zen-browser.profiles.default` を拡張する単一ファイル変更。zen は `nixosConfigurations.nixos` に home-manager モジュールとして組み込まれているため、検証は `nixos-rebuild build`（ビルド可否）と `sudo nixos-rebuild switch` 後の目視確認で行う。Nix の宣言的設定のため失敗テストは書かず、「ビルドが通る」「switch が適用される」「Zen 上で値が反映される」を成功基準とする。
 
 **Tech Stack:** Nix flake, home-manager, zen-browser-flake (beta module)
 
 ## Global Constraints
 
 - 編集対象は Nix ソースのみ（`home-manager/desktop/zen/default.nix`）。`~` 配下の live ファイルは手編集しない。
-- 有効ホスト: cachyos（`home-manager switch --flake .#cachyos`）。
+- 有効ホスト: `nixosConfigurations.nixos`。zen は NixOS システム設定に組み込まれた home-manager モジュール。適用は `sudo nixos-rebuild switch --flake .#nixos`。
 - pref のキーは **必ずダブルクォート**で囲む（zen-browser-flake の仕様。ネスト表記は使わない）。
 - `spacesForce = true` は既存 `zen-sessions.jsonlz4` を上書きする。switch 前に **Zen を完全終了**すること。
 - 既存の `browser.tabs.warnOnClose` と `bookmarks` は維持する。
-- フォントは cachyos に導入済みの実在フォント名のみ使用: `Noto Serif CJK JP` / `Noto Sans CJK JP` / `UDEV Gothic` / `Inter` / `JetBrainsMono Nerd Font`。
+- フォントは nixos ホストに導入済みの実在フォント名のみ使用: `Noto Serif CJK JP` / `Noto Sans CJK JP` / `UDEV Gothic` / `Inter` / `JetBrainsMono Nerd Font`。
 
 ---
 
@@ -81,7 +81,7 @@
 
 - [ ] **Step 2: eval（ビルド可否）を検証**
 
-Run: `nix build .#homeConfigurations.cachyos.activationPackage --no-link 2>&1 | tail -20`
+Run: `nixos-rebuild build --flake .#nixos 2>&1 | tail -20`
 Expected: エラーなく完了（ビルド成功）。pref のクォート漏れや型エラーがあればここで失敗する。
 
 - [ ] **Step 3: コミット**
@@ -177,7 +177,7 @@ git commit -m "feat(zen): add pref/language/font settings"
 
 - [ ] **Step 2: eval（ビルド可否）を検証**
 
-Run: `nix build .#homeConfigurations.cachyos.activationPackage --no-link 2>&1 | tail -20`
+Run: `nixos-rebuild build --flake .#nixos 2>&1 | tail -20`
 Expected: エラーなく完了。
 
 - [ ] **Step 3: コミット**
@@ -205,8 +205,8 @@ Expected: `zen not running`（プロセスが残っていれば終了させて�
 
 - [ ] **Step 2: switch を適用**
 
-Run: `home-manager switch --flake .#cachyos`
-Expected: `Activating ...` まで完了しエラーなし。
+Run: `sudo nixos-rebuild switch --flake .#nixos`
+Expected: `activating the configuration...` まで完了しエラーなし。
 
 - [ ] **Step 3: Zen を再起動して目視検証**
 

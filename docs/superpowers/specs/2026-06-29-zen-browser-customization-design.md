@@ -9,7 +9,7 @@ home-manager で管理している Zen Browser（`zen-browser-flake` の beta �
 ## 対象ファイル / ホスト
 
 - 編集対象: `home-manager/desktop/zen/default.nix`
-- 有効ホスト: cachyos（`hosts/nixos/default.nix` が `home-manager/desktop` を取り込む）
+- 有効ホスト: `nixosConfigurations.nixos`。zen は `hosts/nixos/default.nix` の `home-manager.users.mkiin.imports` が `home-manager/desktop` を取り込むことで、NixOS システム設定の一部として組み込まれる。適用は `sudo nixos-rebuild switch --flake .#nixos`（home-manager standalone の switch ではない）
 - フォントは `nixos/core/fonts/default.nix` で同ホストに導入済み（Noto CJK / JetBrainsMono Nerd Font / UDEV Gothic / Inter）
 
 ## スコープ外
@@ -89,7 +89,7 @@ mods = [
 
 ## 検証（成功基準）
 
-1. `home-manager switch --flake .#cachyos` がビルド・適用成功
+1. `sudo nixos-rebuild switch --flake .#nixos` がビルド・適用成功
 2. Zen 再起動後、`about:config` で各 pref が設定値になっている
 3. Space に Personal / Dev が出ている
 4. UI mod（Top Sites 非表示など）が効いている
