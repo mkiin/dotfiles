@@ -5,3 +5,7 @@ Task 2 (system layer): files done, dry-build evaluates OK (commit 3faed55). Swit
 Task 3 (home desktop): complete (..236f7d5), dry-build OK, session binaries present, hardcoded paths fixed, hyprland cachix added. Switch-ready.
 Phase2 fix: blacklist amdgpu (hybrid wrong-GPU root cause; weston/hyprland grabbed iGPU w/ no monitor). committed 6b4f704
 Phase desktop polish: fonts→system, zen declarative(beta)+bookmarks, bt-agent→system, monitor/browser/waybar fixed. nixos uses <name>/default.nix.
+Task zen-1: complete (commit 5632763, review clean; Noto Serif欧文は noto-fonts 実在フォントで設計通り)
+Task zen-2: complete (commit e351e6e, review clean; spaces+mods追加、settings無改変確認)
+Zen feature: final whole-branch review clean (4c05a4b..e351e6e, マージ可・指摘なし). Task3(apply+GUI検証)は人手(sudo nixos-rebuild switch + Zen目視)で未実施。
+Zen feature: settings全カテゴリ拡張完了 (commit ac075c7, review clean: spec準拠/決定事項準拠/品質Approved). spaces/mods/bookmarks維持確認済み。Task3(sudo switch+GUI検証)は人手で未実施。
