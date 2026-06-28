@@ -15,6 +15,7 @@
     ./terminal/ghostty
     ./terminal/wezterm
     ./zen
+    ./vesktop
   ];
 
   programs.zsh = {

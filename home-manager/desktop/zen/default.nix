@@ -1,10 +1,17 @@
-{ inputs, ... }:
+{ inputs, pkgs, ... }:
+let
+  firefox-addons = inputs.firefox-addons.packages.${pkgs.stdenv.hostPlatform.system};
+in
 {
   imports = [ inputs.zen-browser.homeModules.beta ];
 
   programs.zen-browser = {
     enable = true;
     profiles.default = {
+      extensions.packages = with firefox-addons; [
+        ublock-origin
+      ];
+
       settings = {
         "browser.tabs.warnOnClose" = false;
 
