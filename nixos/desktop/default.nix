@@ -6,5 +6,6 @@
     ./fcitx5
     ./sound
     ./polkit
+    ./vesktop
   ];
 }
