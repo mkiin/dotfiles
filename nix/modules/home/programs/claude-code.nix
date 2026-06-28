@@ -15,14 +15,7 @@
         CLAUDE_CODE_NO_FLICKER = "1";
       };
       permissions = {
-        deny = [
-          "Bash(grep:*)"
-          "Bash(find:*)"
-          "Bash(/usr/bin/grep*)"
-          "Bash(/bin/grep*)"
-          "Bash(/usr/bin/find*)"
-          "Bash(/bin/find*)"
-        ];
+        deny = [];
         defaultMode = "auto";
         additionalDirectories = [ "${config.home.homeDirectory}/ghq" ];
       };

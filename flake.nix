@@ -42,6 +42,11 @@
         username = "mkiin";
         modules  = [ ./nix/hosts/wsl.nix ];
       };
+      nixos = mylib.mkHome {
+        system   = "x86_64-linux";
+        username = "mkiin";
+        modules  = [ ./nix/hosts/nixos.nix ];
+      };
     };
   };
 }
