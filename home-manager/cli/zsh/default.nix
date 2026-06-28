@@ -1,4 +1,4 @@
-{ config, dotLink, ... }:
+{ config, lnk, ... }:
 
 {
   home.sessionVariables = {
@@ -11,8 +11,7 @@
     "${config.home.homeDirectory}/.local/share/mise/shims"
   ];
 
-  xdg.configFile."zsh/functions.zsh".source =
-    dotLink "nix/modules/home/programs/zsh" "functions.zsh";
+  xdg.configFile."zsh/functions.zsh".source = lnk ./functions.zsh;
 
   programs.zsh = {
     enable         = true;
