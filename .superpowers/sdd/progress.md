@@ -9,3 +9,6 @@ Task zen-1: complete (commit 5632763, review clean; Noto Serif欧文は noto-fon
 Task zen-2: complete (commit e351e6e, review clean; spaces+mods追加、settings無改変確認)
 Zen feature: final whole-branch review clean (4c05a4b..e351e6e, マージ可・指摘なし). Task3(apply+GUI検証)は人手(sudo nixos-rebuild switch + Zen目視)で未実施。
 Zen feature: settings全カテゴリ拡張完了 (commit ac075c7, review clean: spec準拠/決定事項準拠/品質Approved). spaces/mods/bookmarks維持確認済み。Task3(sudo switch+GUI検証)は人手で未実施。
+
+## auto-fmt-hook feature
+Task 1: complete (commits 7a49e1f..6e104fc, review clean). treefmt定義 lib/treefmt/default.nix。レビューでmatugenテンプレ(stylua/prettierハードフェイル)・lazy-lock churn・shfmt zshスキップ・prettier対象過大をincludes/excludesで修正。M1(statix/nixfmt priority冪等性)はTask2統合後に実測判断へ保留。

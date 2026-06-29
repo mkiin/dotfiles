@@ -1,125 +1,150 @@
 # dotfiles
 
-Home Manager による個人設定管理リポジトリ。
-CachyOS（Hyprland デスクトップ）と WSL の2環境をサポートする。
+Nix flake による個人環境の宣言的管理リポジトリ。
+以下の2つを1つの flake で管理する。
 
-## セットアップ
+- **NixOS**（ホスト名 `nixos`） — Hyprland デスクトップ環境。システムごと NixOS で構築し、home-manager は NixOS モジュールとして統合する。
+- **WSL**（`mkiin@wsl`） — 既存ディストリビューション上で home-manager を単体（standalone）で動かす。CLI とエディタのみで、デスクトップ関連は含まない。
 
-### 1. リポジトリを取得する
+> [!IMPORTANT]
+> このリポジトリの実体は `~/ghq/github.com/<username>/dotfiles` に置く。
+> `lib/default.nix` がこのパスを前提に `lnk`（後述）のリンク先を解決するため、別の場所には置かない。
 
-`ghq` で取得し、リポジトリへ移動する。取得先は `~/ghq/github.com/mkiin/dotfiles` に固定される。
+## セットアップ（NixOS）
+
+### 鶏と卵の問題
+
+インストール直後の NixOS は **`nix-command` / `flakes` が無効**で、しかも **git も ghq も入っていない**。
+このリポは両方を有効化する設定（`nixos/core/nix`）と git（home-manager 側）を含むが、それらは「この flake を適用したあと」に効く。
+つまり「適用するために flakes と git が要る」のに「flakes と git を入れるにはこの flake を適用しないといけない」という循環になる。
+
+そのため、新CLI（`nix shell nixpkgs#...`）はこの段階では `experimental Nix feature 'nix-command' is disabled` で失敗する。
+循環を断つには、**experimental features を要求しない安定版CLI `nix-shell -p`** で git/ghq を一時的に用意し、初回 rebuild にだけその場で feature を渡す。
+
+### 1. git/ghq を一時導入してリポジトリを取得する
 
 ```bash
-nix shell nixpkgs#ghq nixpkgs#git --command ghq get github.com/mkiin/dotfiles
+# experimental features 不要の安定版 CLI で git/ghq を一時的に使う
+nix-shell -p git ghq --run '
+  ghq get github.com/mkiin/dotfiles
+'
+cd "$(nix-shell -p ghq --run 'ghq root')/github.com/mkiin/dotfiles"
+```
+
+### 2. ハードウェア構成を生成する
+
+マシン固有のため実機で生成し直す。
+
+```bash
+nix-shell -p git --run '
+  sudo nixos-generate-config --show-hardware-config > hosts/nixos/hardware-configuration.nix
+  git add .
+'
+```
+
+`git add` は必須。flake は git 管理下のファイルのみを参照するため、未追跡ファイルはエラーになる。
+
+### 3. 初回 rebuild（その場で flakes を有効化）
+
+```bash
+sudo nixos-rebuild switch --flake .#nixos \
+  --extra-experimental-features 'nix-command flakes'
+```
+
+一度成功すれば `nixos/core/nix` の設定が効くため、以降は `--extra-experimental-features` も `nix-shell` も不要になる。
+
+```bash
+sudo nixos-rebuild switch --flake .#nixos
+```
+
+## セットアップ（WSL / home-manager 単体）
+
+Nix 未導入なら [Determinate Nix Installer](https://github.com/DeterminateSystems/nix-installer) を入れる。
+これは `nix-command` / `flakes` をデフォルトで有効にするため、NixOS のような鶏卵問題は起きない。
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+```
+
+リポジトリを取得して初回適用する。
+
+```bash
+nix shell nixpkgs#git nixpkgs#ghq --command ghq get github.com/mkiin/dotfiles
 cd "$(ghq root)/github.com/mkiin/dotfiles"
+
+git add .
+nix run github:nix-community/home-manager -- switch --flake .#"mkiin@wsl"
 ```
 
-Nix 未導入の環境では、先に Determinate Nix Installer を実行する。
-
-### 2. ブートストラップスクリプトを実行する
-
-リポジトリ直下で実行する。
+2回目以降は `home-manager` コマンドが使える。
 
 ```bash
-bash scripts/bootstrap-cachyos.sh   # CachyOS
-bash scripts/bootstrap-wsl.sh       # WSL
+home-manager switch --flake .#"mkiin@wsl"
 ```
-
-スクリプトは冪等で、以下を順に行う。
-
-- Nix のインストール（Determinate Nix Installer）
-- `nix run` による Home Manager の初回適用
-- pacman フックの配置（CachyOS のみ）
-- ログインシェルの zsh への変更
-
-初回適用後は `home-manager` コマンドが使えるようになる。
-
-```bash
-home-manager switch --flake .#cachyos
-```
-
-### 3. Windows 版 WezTerm の設定をリンクする（WSL）
-
-Windows 版 WezTerm は Windows 側の設定ファイルを読むため、WSL 側の dotfiles へシンボリックリンクを張る。
-PowerShell で WSL ディストリビューション名を確認する。
-
-```powershell
-wsl -l -v
-```
-
-表示名が `Ubuntu-26.04` の場合は、PowerShell で以下を実行する。
-
-```powershell
-New-Item -ItemType Directory "$env:USERPROFILE\.config\wezterm" -Force
-
-New-Item -ItemType SymbolicLink `
-  -Path "$env:USERPROFILE\.config\wezterm\wezterm.lua" `
-  -Target "\\wsl.localhost\Ubuntu-26.04\home\mkiin\ghq\github.com\mkiin\dotfiles\wezterm\wezterm.lua" `
-  -Force
-```
-
-通常の PowerShell で失敗する場合は、管理者 PowerShell で再実行する。
-Windows の Developer Mode が有効なら、管理者権限なしで作成できる場合がある。
 
 ## 日常の使い方
 
-`nix/modules/` の変更（パッケージ追加、サービス設定など）を反映するには `home-manager switch` を実行する。
+`nixos/` や `home-manager/` の変更（パッケージ追加、サービス設定など）を反映する。
 
 ```bash
 git add .
-home-manager switch --flake .#cachyos
+
+# NixOS
+sudo nixos-rebuild switch --flake .#nixos
+
+# WSL
+home-manager switch --flake .#"mkiin@wsl"
 ```
 
-新規ファイルを追加したとき、`git add` を先に実行する。
-Nix flake は git-tracked なファイルのみを参照するため、未追跡のファイルはエラーになる。
+新規ファイルを追加したときは `git add` を先に実行する。flake は git-tracked なファイルのみを参照する。
 
-`hypr/`, `waybar/`, `quickshell/` など頻繁に編集する設定は `mkOutOfStoreSymlink` でシンボリックリンクとして配置している。
-このリポジトリを直接編集すれば即時に反映される（`home-manager switch` は不要）。
+### lnk による即時反映
+
+`hypr/`, `quickshell/`, `nvim/`, `matugen/` など頻繁に編集する設定は、`lib/default.nix` の `lnk` ヘルパーでリポジトリ実体へのシンボリックリンクとして配置している。
+これらの中身はリポジトリを直接編集すれば即座に反映される（`rebuild` / `switch` の再実行は不要）。リンクの追加・削除など配置そのものを変えたときだけ再適用する。
 
 ## 構成
 
-リポジトリの実体は `~/ghq/github.com/mkiin/dotfiles` に置かれる。
-
 ```
 dotfiles/
-├── flake.nix               # エントリーポイント
-├── nix/
-│   ├── hosts/              # ホスト別設定（cachyos / wsl）
-│   ├── modules/
-│   │   ├── home/           # 全ホスト共通（zsh, git, neovim など）
-│   │   ├── linux/          # Linux 共通
-│   │   └── linux/desktop/  # デスクトップ環境（CachyOS のみ）
-│   │       └── hyprland/   # Hyprland 固有
-│   └── lib/                # mkHome などのユーティリティ
-├── hypr/                   # Hyprland 設定（Lua モード）
-├── waybar/                 # Waybar
-├── quickshell/             # Quickshell
-├── wlogout/                # Wlogout
-├── matugen/                # Matugen テンプレート
-├── wallust/                # Wallust テンプレート
-├── nvim/                   # Neovim
-├── fcitx5/                 # fcitx5
-├── mouse/                  # マウス設定・スクリプト（G703H / ERGO M575）
-├── local/                  # ~/.local 以下のファイル
-└── scripts/                # 汎用スクリプト
+├── flake.nix            # エントリーポイント（nixosConfigurations / homeConfigurations）
+├── lib/                 # makeNixosConfig / makeHomeManagerConfig / lnk ヘルパー
+├── hosts/
+│   ├── nixos/           # NixOS ホスト（system 設定 + hardware-configuration.nix）
+│   └── wsl/             # WSL の home-manager 単体エントリ
+├── nixos/               # NixOS システムモジュール
+│   ├── core/            # boot, nix, locale, network, users, fonts など
+│   ├── hardware/        # nvidia, bluetooth
+│   └── desktop/         # display-manager, hyprland, sound, fcitx5 など
+├── home-manager/        # home-manager モジュール
+│   ├── cli/             # zsh, git, mise, starship, yazi など
+│   ├── editor/          # neovim
+│   ├── ai/              # claude-code, codex, agent-skills
+│   └── desktop/         # hyprland, waybar, quickshell, zen, terminal など
+├── packages/            # Arch/Ubuntu 時代のパッケージスナップショット（参考）
+├── scripts/             # ブートストラップ・パッケージ同期スクリプト
+├── hooks/               # apt/pacman 自動スナップショットフック
+├── local/               # ~/.local 以下に配置するファイル
+└── docs/                # 設計メモ・SDD の spec / plan
 ```
 
 ### モジュール階層
 
 ```
-home/          全ホスト共通
-linux/         Linux 共通（WSL を含む）
-linux/desktop/ デスクトップ環境（CachyOS のみ）
+home-manager/         全ターゲット共通（cli, editor, ai）
+home-manager/desktop/ デスクトップ環境（NixOS ホストのみ）
+nixos/                NixOS システム設定（NixOS ホストのみ）
 ```
 
-`linux/desktop/` 以下の設定（Hyprland, Waybar, Quickshell, fcitx5 など）は WSL には適用されない。
+`hosts/nixos/default.nix` は `nixos/` と `home-manager` に加えて `home-manager/desktop` を読み込む。
+`hosts/wsl/home-manager.nix` は `home-manager` のみを読み込むため、Hyprland・Waybar・Quickshell などデスクトップ関連は WSL には適用されない。
 
 ## 壁紙と配色
 
 [matugen](https://github.com/InioX/matugen) で壁紙から Material You の配色を生成し、Hyprland, Waybar, Quickshell, Wlogout, hyprlock に適用する。
-[wallust](https://codeberg.org/explosion-mental/wallust) は Pywal 互換のテンプレートエンジンとして補完的に使用する。
+[wallust](https://codeberg.org/explosion-mental/wallust) は matugen が出さない Pywal 互換の `@color0..15` を Waybar 用に補完する。
 
-壁紙を変更したあと、以下を実行して配色を更新する。
+壁紙の切り替えと配色更新は `home-manager/desktop/hyprland/scripts/wallpaper/apply.sh` がまとめて行う（matugen → wallust → reload の順を制御する）。手動で当てる場合は次を実行する。
 
 ```bash
 matugen image <画像パス>
