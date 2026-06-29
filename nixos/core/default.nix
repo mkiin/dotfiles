@@ -3,6 +3,7 @@
   imports = [
     ./boot
     ./nix
+    ./packages
     ./users
     ./locale
     ./time
