@@ -21,6 +21,7 @@
     "hypr/vars.lua".source = lnk ./lua/vars.lua;
     "hypr/color-scheme.lua".source = lnk ./lua/color-scheme.lua;
     "hypr/appearance.lua".source = lnk ./lua/appearance.lua;
+    "hypr/env.lua".source = lnk ./lua/env.lua;
     "hypr/input.lua".source = lnk ./lua/input.lua;
     "hypr/autostart.lua".source = lnk ./lua/autostart.lua;
     "hypr/keybinds.lua".source = lnk ./lua/keybinds.lua;
