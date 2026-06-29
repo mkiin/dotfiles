@@ -1,6 +1,8 @@
 { config, ... }:
 
 {
+  imports = [ ./git-hooks.nix ];
+
   programs.delta = {
     enable = true;
     enableGitIntegration = true;
