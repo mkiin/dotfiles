@@ -34,6 +34,7 @@ jobs:
               - '.github/actions/setup-nix/**'
 
   build:
+    name: build (${{ matrix.name }})
     needs: changes
     runs-on: ubuntu-latest
     timeout-minutes: 30
