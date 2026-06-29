@@ -88,12 +88,17 @@
     }
   },
   "hyprland/workspaces": {
-    "format": "{id}",
+    "format": "{icon}",
     "on-click": "activate",
+    "show-special": true,
+    "special-visible-only": true,
     "format-icons": {
-      "active": "{id}",
-      "default": "",
-      "urgent": ""
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "special": "󰓎"
     },
     "persistent-workspaces": {
       "*": [1, 2, 3, 4, 5]
