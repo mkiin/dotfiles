@@ -265,9 +265,7 @@ window#waybar.empty #window {
 }
 
 #custom-nix {
-    color: @on_surface;
-    font-size: 20px;
-    padding-right: 16px;
+    color: @primary;
 }
 
 

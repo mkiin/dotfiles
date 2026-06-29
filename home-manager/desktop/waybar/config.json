@@ -4,7 +4,8 @@
   "margin": "10 8 2 8",
   "reload_style_on_change": true,
   "modules-left": [
-    "group/pkg-update#cluster",
+    "custom/nix",
+    "custom/mise",
     "group/connectivity#cluster",
     "hyprland/window"
   ],
@@ -17,13 +18,6 @@
     "clock",
     "custom/power"
   ],
-  "group/pkg-update#cluster": {
-    "orientation": "horizontal",
-    "modules": [
-      "custom/mise"
-    ]
-  },
-
   "group/connectivity#cluster": {
     "orientation": "horizontal",
     "modules": [
@@ -31,7 +25,6 @@
       "network"
     ]
   },
-
   "group/control-center#cluster": {
     "orientation": "horizontal",
     "modules": [
@@ -43,7 +36,6 @@
       "tray"
     ]
   },
-
   "group/sysstats": {
     "orientation": "horizontal",
     "drawer": {
@@ -78,7 +70,13 @@
   },
   "battery": {
     "format": "{capacity}",
-    "format-icons": ["", "", "", "", ""],
+    "format-icons": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
     "events": {
       "on-discharging-warning": "notify-send -u normal 'Low Battery'",
       "on-discharging-critical": "notify-send -u critical 'Very Low Battery'",
@@ -88,7 +86,6 @@
       "warning": 30,
       "critical": 15
     },
-
     "format-charging": "{capacity}% "
   },
   "clock": {
@@ -119,7 +116,13 @@
       "urgent": ""
     },
     "persistent-workspaces": {
-      "*": [1, 2, 3, 4, 5]
+      "*": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
     }
   },
   "hyprland/window": {
@@ -266,12 +269,15 @@
     "tooltip": false,
     "on-click": "wlogout"
   },
-
   "custom/separator": {
     "format": "│",
     "tooltip": false
   },
-
+  "custom/nix": {
+    "format": "  ",
+    "tooltip": false,
+    "on-click": "qs -c shell ipc call launcher toggle"
+  },
   "custom/mise": {
     "format": "󰦬 {}",
     "tooltip-format": "Mise outdated tools: {}\nClick to upgrade",
@@ -281,7 +287,6 @@
     "signal": 10,
     "on-click": "wezterm start -- ~/.config/waybar/scripts/pkg-update/pkg-upgrade.sh 10 mise upgrade"
   },
-
   "custom/weather": {
     "format": "{}",
     "tooltip": true,
@@ -289,7 +294,6 @@
     "exec": "~/.config/waybar/scripts/weather/weather.sh",
     "interval": 900
   },
-
   "temperature": {
     "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
     "interval": 5,
