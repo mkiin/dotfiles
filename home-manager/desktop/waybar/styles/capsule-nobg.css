@@ -164,10 +164,6 @@ window#waybar.empty #window {
   color: @on_error;
 }
 
-/* 特殊ワークスペース (super+s の special:magic)。show-special で出現する
- * button.special を tertiary 系で着色し数字ボタンと区別する。シンボル文字
- * 自体は config.json の format-icons "special" が供給する (GTK CSS は
- * グリフ注入不可のため装飾のみ担当)。 */
 #workspaces button.special {
   color: @on_tertiary;
   background-color: @tertiary;
