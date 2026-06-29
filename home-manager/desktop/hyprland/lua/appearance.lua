@@ -2,7 +2,7 @@ hl.config({
 	general = {
 		gaps_in = 3,
 		gaps_out = 8,
-		border_size = 1,
+		border_size = 0,
 		layout = "dwindle",
 		resize_on_border = true,
 		allow_tearing = false,
@@ -17,6 +17,8 @@ hl.config({
 			range = 15,
 			render_power = 5,
 			offset = "0 0",
+			color = "rgba(00000080)",
+			color_inactive = "rgba(00000033)",
 		},
 		blur = {
 			enabled = true,
