@@ -1,63 +1,49 @@
-/* ReGreet Tokyo Night theme
- * GTK4 CSS。backdrop-filter 等の Web CSS 専用プロパティは使わず、
- * 半透明 + box-shadow で擬似ガラスに見せる。
- * セレクタ階層は ReGreet のバージョンで変わりうるため、効かない箇所は
- * `regreet --demo` + GTK Inspector で実際の階層を確認して調整する。
- */
-
-/* 最背面: 背景画像が敷かれるが、読み込み失敗時のフォールバック色 */
 window.background {
   background-color: #1a1b26;
 }
 
-/* ログインカード本体 */
-box.vertical {
+frame.background {
   background-color: alpha(#24283b, 0.86);
   border: 1px solid alpha(#c0caf5, 0.14);
   border-radius: 22px;
   box-shadow: 0 18px 48px alpha(#000000, 0.45);
-  padding: 28px;
+  padding: 14px;
 }
 
-/* テキスト全般（挨拶・時計・ラベル） */
 label {
   color: #c0caf5;
 }
 
-/* 入力欄・コンボボックス・ボタン共通の角丸と高さ */
 entry,
-combobox,
 button {
   border-radius: 12px;
   min-height: 38px;
 }
 
-/* パスワード入力欄 */
 entry {
   background-color: alpha(#414868, 0.88);
   color: #c0caf5;
   border: 1px solid alpha(#c0caf5, 0.12);
-  padding: 8px 12px;
+  padding: 6px 12px;
 }
 
-entry:focus {
+entry:focus,
+entry:focus-within {
   border-color: #7aa2f7;
   box-shadow: 0 0 0 2px alpha(#7aa2f7, 0.25);
 }
 
-/* 通常ボタン */
 button {
   background-color: alpha(#414868, 0.9);
   color: #c0caf5;
   border: 1px solid alpha(#c0caf5, 0.1);
-  padding: 8px 14px;
+  padding: 6px 14px;
 }
 
 button:hover {
   background-color: alpha(#565f89, 0.95);
 }
 
-/* ログインなど主要アクション */
 button.suggested-action {
   background-color: #7aa2f7;
   color: #1a1b26;
@@ -68,7 +54,6 @@ button.suggested-action:hover {
   background-color: #89b4fa;
 }
 
-/* 電源・再起動など破壊的アクション */
 button.destructive-action {
   background-color: #f7768e;
   color: #1a1b26;

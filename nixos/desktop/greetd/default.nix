@@ -5,6 +5,13 @@
   programs.regreet = {
     enable = true;
 
+    cageArgs = [
+      "-s"
+      "-d"
+      "-m"
+      "last"
+    ];
+
     theme = {
       name = "Tokyonight-Dark";
       package = pkgs.tokyonight-gtk-theme;
