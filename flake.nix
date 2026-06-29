@@ -52,6 +52,9 @@
     { self, ... }@inputs:
     let
       mylib = import ./lib inputs;
+      system = "x86_64-linux";
+      pkgs = import inputs.nixpkgs { inherit system; };
+      treefmtEval = inputs.treefmt-nix.lib.evalModule pkgs ./lib/treefmt;
     in
     {
       nixosConfigurations.nixos = mylib.makeNixosConfig {
@@ -66,5 +69,8 @@
         username = "mkiin";
         modules = [ ./hosts/wsl/home-manager.nix ];
       };
+
+      formatter.${system} = treefmtEval.config.build.wrapper;
+      packages.${system}.fmt = treefmtEval.config.build.wrapper;
     };
 }
