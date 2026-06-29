@@ -1,0 +1,37 @@
+name: "CI: Nix diff"
+
+on:
+  pull_request:
+    paths:
+      - "flake.lock"
+      - "flake.nix"
+      - "hosts/**"
+      - "lib/**"
+      - "nixos/**"
+      - "home-manager/**"
+      - "packages/**"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  nix-diff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          fetch-depth: 0
+
+      - name: Setup Nix
+        uses: ./.github/actions/setup-nix
+
+      - name: Run nix-diff
+        uses: natsukium/nix-diff-action@4091452e4c7b3c7ea4ecbaec84be7f0066d810d7 # main
+        with:
+          skip-no-change: true
+          attributes: |
+            - displayName: home-manager (wsl)
+              attribute: homeConfigurations."mkiin@wsl".activationPackage
+            - displayName: nixos
+              attribute: nixosConfigurations.nixos.config.system.build.toplevel
