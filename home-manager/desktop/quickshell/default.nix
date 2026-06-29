@@ -14,7 +14,6 @@
       After = [ "graphical-session.target" ];
     };
     Service = {
-      Environment = "QT_QPA_PLATFORMTHEME=gtk3";
       ExecStart = "${pkgs.quickshell}/bin/qs -c shell";
       Restart = "on-failure";
       RestartSec = 2;
