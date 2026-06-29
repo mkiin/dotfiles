@@ -44,4 +44,6 @@ else
   grim -o "$monitor" "$file"
 fi
 
-notify-send -a "screenshot" "スクリーンショット" "$file に保存しました"
+wl-copy --type image/png <"$file"
+
+notify-send -a "screenshot" "スクリーンショット" "$file に保存しました（クリップボードにコピー済み）"
