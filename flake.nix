@@ -43,9 +43,18 @@
     agent-skills.inputs.nixpkgs.follows = "nixpkgs";
     agent-skills.inputs.home-manager.follows = "home-manager";
 
-    superpowers-skill = { url = "github:obra/superpowers"; flake = false; };
-    cloudflare-skills = { url = "github:cloudflare/skills"; flake = false; };
-    anthropic-skills = { url = "github:anthropics/skills"; flake = false; };
+    superpowers-skill = {
+      url = "github:obra/superpowers";
+      flake = false;
+    };
+    cloudflare-skills = {
+      url = "github:cloudflare/skills";
+      flake = false;
+    };
+    anthropic-skills = {
+      url = "github:anthropics/skills";
+      flake = false;
+    };
   };
 
   outputs =

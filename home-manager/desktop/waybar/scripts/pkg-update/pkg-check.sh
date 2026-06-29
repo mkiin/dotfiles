@@ -6,5 +6,5 @@ set -u
 
 count=$("$@" 2>/dev/null | wc -l)
 class=""
-(( count > 0 )) && class="has-updates"
+((count > 0)) && class="has-updates"
 printf '{"text":"%s","class":"%s"}\n' "$count" "$class"

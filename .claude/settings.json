@@ -45,6 +45,11 @@
       "Glob",
       "Grep"
     ],
-    "deny": ["Bash(pnpm install*)", "Bash(pnpm i)", "Bash(pnpm i *)", "Bash(pnpm add*)"]
+    "deny": [
+      "Bash(pnpm install*)",
+      "Bash(pnpm i)",
+      "Bash(pnpm i *)",
+      "Bash(pnpm add*)"
+    ]
   }
 }

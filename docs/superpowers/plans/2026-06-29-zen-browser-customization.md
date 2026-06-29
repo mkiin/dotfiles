@@ -22,9 +22,11 @@
 ### Task 1: settings（pref / 言語 / フォント）を追加
 
 **Files:**
+
 - Modify: `home-manager/desktop/zen/default.nix`
 
 **Interfaces:**
+
 - Consumes: `inputs.zen-browser.homeModules.beta` が提供する `programs.zen-browser.profiles.default.settings`（attrset、キーは pref 名の文字列）。
 - Produces: 拡張された `settings` attrset。Task 2 は同じ `profiles.default` 直下に `spacesForce` / `spaces` / `mods` を追加する。
 
@@ -96,9 +98,11 @@ git commit -m "feat(zen): add pref/language/font settings"
 ### Task 2: spaces と mods を追加
 
 **Files:**
+
 - Modify: `home-manager/desktop/zen/default.nix`
 
 **Interfaces:**
+
 - Consumes: Task 1 で拡張済みの `profiles.default`（`settings` / `bookmarks` を持つ）。
 - Produces: 同 attrset 直下に `spacesForce = true;`、`spaces`（attrset）、`mods`（文字列リスト）を追加した最終形。
 
@@ -194,6 +198,7 @@ git commit -m "feat(zen): declare Personal/Dev spaces and UI mods"
 **Files:** （変更なし。実機適用と確認のみ）
 
 **Interfaces:**
+
 - Consumes: Task 2 完了後の `default.nix`。
 
 - [ ] **Step 1: Zen を完全終了**
@@ -211,6 +216,7 @@ Expected: `activating the configuration...` まで完了しエラーなし。
 - [ ] **Step 3: Zen を再起動して目視検証**
 
 以下を確認する:
+
 1. `about:config` で `zen.view.compact.hide-tabbar` = `true`、`intl.accept_languages` = `ja,en-US,en` になっている。
 2. サイドバーに Space `Personal`（🏠）と `Dev`（💻）が出ている。
 3. UI mod が効いている（新規タブで Top Sites が非表示など）。mod 反映にはブラウザ再起動が必要。

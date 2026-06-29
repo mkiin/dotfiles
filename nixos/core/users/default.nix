@@ -5,6 +5,11 @@
     isNormalUser = true;
     description = username;
     shell = pkgs.zsh;
-    extraGroups = [ "networkmanager" "wheel" "video" "audio" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "video"
+      "audio"
+    ];
   };
 }

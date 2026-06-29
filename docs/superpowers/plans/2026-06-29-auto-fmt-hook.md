@@ -24,9 +24,11 @@
 ### Task 1: treefmt 定義ファイルの作成
 
 **Files:**
+
 - Create: `lib/treefmt/default.nix`
 
 **Interfaces:**
+
 - Consumes: なし
 - Produces: treefmt モジュール定義（attrset を返す関数）。Task 2 が `treefmt-nix.lib.evalModule pkgs ./lib/treefmt` で読み込む。`programs.<name>.enable` で各フォーマッタを有効化し、`projectRootFile = "flake.nix"` でツリールートを決定する。
 
@@ -66,9 +68,11 @@ git commit -m "feat(treefmt): add treefmt formatter/lint definition"
 ### Task 2: flake.nix への treefmt 統合
 
 **Files:**
+
 - Modify: `flake.nix`（`outputs` の `let` ブロックと返り値の attrset）
 
 **Interfaces:**
+
 - Consumes: `lib/treefmt/default.nix`（Task 1）、inputs の `treefmt-nix`, `nixpkgs`。
 - Produces: flake 出力 `formatter.x86_64-linux` と `packages.x86_64-linux.fmt`（どちらも `treefmtEval.config.build.wrapper`）。Task 3 の hook が `nix run .#fmt` でこれを呼ぶ。
 
@@ -142,9 +146,11 @@ git commit -m "feat(flake): wire treefmt into formatter and packages outputs"
 ### Task 3: .claude/settings.json への PostToolUse hook 追加
 
 **Files:**
+
 - Modify: `.claude/settings.json`
 
 **Interfaces:**
+
 - Consumes: `nix run .#fmt`（Task 2 の `packages.x86_64-linux.fmt`）、`jq`（`/etc/profiles/per-user/mkiin/bin/jq` に存在）。
 - Produces: なし（最終成果物）。
 

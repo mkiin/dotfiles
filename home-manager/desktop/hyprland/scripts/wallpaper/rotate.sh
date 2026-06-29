@@ -11,7 +11,7 @@ SLEEP_PID=
 # 進行中の sleep を kill して新 INTERVAL で再ループする。
 reload_interval() {
   INTERVAL=$("$STATE" get WALLPAPER_INTERVAL_SEC)
-  [[ -n "$SLEEP_PID" ]] && kill "$SLEEP_PID" 2>/dev/null
+  [[ -n $SLEEP_PID ]] && kill "$SLEEP_PID" 2>/dev/null
 }
 trap reload_interval USR1
 
@@ -23,10 +23,10 @@ while :; do
   SLEEP_PID=
 
   # rc>128 は signal 起因の中断 (USR1 reload など)。ROTATE せずに wait をやり直す。
-  (( rc > 128 )) && continue
+  ((rc > 128)) && continue
 
   ROTATION=$("$STATE" get WALLPAPER_ROTATION)
-  if [[ "$ROTATION" == "true" ]]; then
+  if [[ $ROTATION == "true" ]]; then
     "$PICKER" || printf '%s\n' "[wallpaper/rotate] pick failed (continuing)" >&2
   fi
 done

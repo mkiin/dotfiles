@@ -9,7 +9,7 @@ while IFS= read -r -d '' img; do
   name=$(basename "$img")
   thumb="$CACHE/${name%.*}.jpg"
 
-  if [[ -f "$thumb" && "$thumb" -nt "$img" ]]; then
+  if [[ -f $thumb && $thumb -nt $img ]]; then
     continue
   fi
 

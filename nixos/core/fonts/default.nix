@@ -11,9 +11,18 @@
     material-design-icons
   ];
   fonts.fontconfig.defaultFonts = {
-    serif = [ "Noto Serif CJK JP" "Noto Color Emoji" ];
-    sansSerif = [ "Noto Sans CJK JP" "Noto Color Emoji" ];
-    monospace = [ "JetBrainsMono Nerd Font" "Noto Color Emoji" ];
+    serif = [
+      "Noto Serif CJK JP"
+      "Noto Color Emoji"
+    ];
+    sansSerif = [
+      "Noto Sans CJK JP"
+      "Noto Color Emoji"
+    ];
+    monospace = [
+      "JetBrainsMono Nerd Font"
+      "Noto Color Emoji"
+    ];
     emoji = [ "Noto Color Emoji" ];
   };
 }

@@ -37,12 +37,12 @@
 ### Task 1: Create the standalone Home Manager flake
 
 **Files:**
+
 - Create: `flake.nix`
 - Create: `nix/home.nix`
 - Create: `nix/home/common.nix`
 - Create: `nix/home/wsl.nix`
 - Create: `nix/home/cachyos.nix`
-
 
 - [ ] **Step 1: Generate the standalone Home Manager scaffold**
 
@@ -88,6 +88,7 @@ git commit -m "feat: add Home Manager flake foundation"
 ### Task 2: Move and manage shell, Git, and mise configuration
 
 **Files:**
+
 - Create: `zsh/zshrc`、`zsh/zshenv`、`git/config`、`mise/config.toml`
 - Create: `nix/home/zsh.nix`、`nix/home/git.nix`、`nix/home/mise.nix`
 - Modify: `nix/home/common.nix`
@@ -137,6 +138,7 @@ git commit -m "feat: manage shell Git and mise with Home Manager"
 ### Task 3: Preserve Lazy.nvim and deploy terminal configuration
 
 **Files:**
+
 - Create: `nix/home/neovim.nix`、`nix/home/wezterm.nix`
 - Create: `nvim/`、`wezterm/`
 - Modify: `nix/home/common.nix`
@@ -188,6 +190,7 @@ git commit -m "feat: manage Neovim and WezTerm with Home Manager"
 ### Task 4: Add shared AI configuration and agent skills
 
 **Files:**
+
 - Create: `nix/home/agent-skills.nix`、`nix/home/codex.nix`、`nix/home/claude.nix`
 - Create: `agents/skills/README.md`
 - Create: `codex/`、`claude/`
@@ -227,6 +230,7 @@ git commit -m "feat: manage shared AI configuration and skills"
 ### Task 5: Add CachyOS user-space package module and remove obsolete applications
 
 **Files:**
+
 - Modify: `nix/home/cachyos.nix`
 - Delete: `home/dot_config/swaync/`、`home/dot_config/systemd/user/symlink_swaync.service`
 - Modify: `packages/pacman.txt`
@@ -266,6 +270,7 @@ git commit -m "feat: manage CachyOS user packages with Nix"
 ### Task 6: Apply the initial configuration and validate ownership
 
 **Files:**
+
 - Modify: `SETUP.md`
 
 - [ ] **Step 1: Document first-apply commands**

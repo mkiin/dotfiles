@@ -12,16 +12,16 @@ APPLY="$HOME/.config/hypr/scripts/wallpaper/apply.sh"
 
 regenerate_cache() {
   declare -a SRC=()
-  if [[ -f "$SCHEDULE" ]]; then
+  if [[ -f $SCHEDULE ]]; then
     while IFS= read -r line; do
-      [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
-      [[ "$line" == "~/"* ]] && line="${HOME}/${line#~/}"
-      if [[ -f "$line" ]]; then
+      [[ -z $line || $line =~ ^[[:space:]]*# ]] && continue
+      [[ $line == "~/"* ]] && line="${HOME}/${line#~/}"
+      if [[ -f $line ]]; then
         SRC+=("$line")
       else
         log "skip missing: $line"
       fi
-    done < "$SCHEDULE"
+    done <"$SCHEDULE"
     log "schedule loaded count=${#SRC[@]}"
   fi
 
@@ -36,16 +36,16 @@ regenerate_cache() {
   fi
 
   mkdir -p "$(dirname "$CACHE")"
-  printf '%s\n' "${SRC[@]}" | shuf > "$CACHE"
+  printf '%s\n' "${SRC[@]}" | shuf >"$CACHE"
   log "cache regenerated and shuffled count=${#SRC[@]}"
 
   # round 境界での被り防止: 新 queue の head が直前の壁紙と同じなら末尾へ回す。
   # N=1 では同一画像しか無いのでループ継続、N>=2 で必ず別画像に切り替わる。
-  if [[ -f "$LAST" ]]; then
+  if [[ -f $LAST ]]; then
     local last_path head_path
     last_path=$(<"$LAST")
     IFS= read -r head_path <"$CACHE"
-    if [[ -n "$last_path" && "$head_path" == "$last_path" && ${#SRC[@]} -gt 1 ]]; then
+    if [[ -n $last_path && $head_path == "$last_path" && ${#SRC[@]} -gt 1 ]]; then
       tail -n +2 "$CACHE" >"$CACHE.tmp"
       printf '%s\n' "$head_path" >>"$CACHE.tmp"
       mv "$CACHE.tmp" "$CACHE"
@@ -59,16 +59,22 @@ pop_head() {
   tail -n +2 "$CACHE" >"$CACHE.tmp" && mv "$CACHE.tmp" "$CACHE"
 }
 
-if [[ ! -s "$CACHE" ]]; then
+if [[ ! -s $CACHE ]]; then
   log "queue empty, regenerating"
-  regenerate_cache || { printf '%s\n' "[wallpaper/pick] no images" >&2; exit 1; }
+  regenerate_cache || {
+    printf '%s\n' "[wallpaper/pick] no images" >&2
+    exit 1
+  }
 fi
 
 pop_head
 
-if [[ -z "$PICK" ]]; then
+if [[ -z $PICK ]]; then
   log "queue head was empty, regenerating"
-  regenerate_cache || { printf '%s\n' "[wallpaper/pick] no images" >&2; exit 1; }
+  regenerate_cache || {
+    printf '%s\n' "[wallpaper/pick] no images" >&2
+    exit 1
+  }
   pop_head
 fi
 

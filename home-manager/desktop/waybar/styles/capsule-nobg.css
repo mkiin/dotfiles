@@ -3,26 +3,25 @@
    Modern minimalist look with pill-shaped modules.
    ============================================================ */
 
-
 /* ============================================================
    Global Reset & Base
    ============================================================ */
 * {
-    border: none;
-    border-radius: 0;
-    font-family: "JetBrainsMono Nerd Font", "Iosevka Nerd Font", "Font Awesome 6 Free";
-    font-size: 14px;
-    margin: 0;
-    padding: 0;
-    min-height: 1px;
+  border: none;
+  border-radius: 0;
+  font-family:
+    "JetBrainsMono Nerd Font", "Iosevka Nerd Font", "Font Awesome 6 Free";
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
+  min-height: 1px;
 }
 
 window#waybar {
-    background-color: transparent;
-    color: @on_surface;
-    border-radius: 12px;
+  background-color: transparent;
+  color: @on_surface;
+  border-radius: 12px;
 }
-
 
 /* ============================================================
    Cluster Wrappers
@@ -30,16 +29,16 @@ window#waybar {
    to the group widget. Single rule covers every cluster group.
    ============================================================ */
 .cluster {
-    background-color: @surface_container;
-    border-radius: 20px;
-    padding: 0px 4px;
-    margin: 0px 5px;
-    color: @on_surface;
+  background-color: @surface_container;
+  border-radius: 20px;
+  padding: 0px 4px;
+  margin: 0px 5px;
+  color: @on_surface;
 }
 
 .modules-center {
-    background-color: @surface_container;
-    border-radius: 20px;
+  background-color: @surface_container;
+  border-radius: 20px;
 }
 
 /* Inside a cluster, individual modules drop their own pill bg
@@ -60,17 +59,16 @@ window#waybar {
 .cluster #custom-mise,
 .cluster #custom-swaync,
 .cluster #custom-separator {
-    background-color: transparent;
-    border-radius: 0;
-    margin: 0;
-    padding: 0 6px;
+  background-color: transparent;
+  border-radius: 0;
+  margin: 0;
+  padding: 0 6px;
 }
 
 /* cluster 内モジュール間の縦線 separator */
 #custom-separator {
-    color: @outline;
+  color: @outline;
 }
-
 
 /* ============================================================
    Default Module Capsule
@@ -94,13 +92,12 @@ window#waybar {
 #custom-aur,
 #custom-mise,
 #custom-swaync {
-    background-color: @surface_container;
-    border-radius: 20px;
-    padding: 0px 12px;
-    margin: 0px 5px;
-    color: @on_surface;
+  background-color: @surface_container;
+  border-radius: 20px;
+  padding: 0px 12px;
+  margin: 0px 5px;
+  color: @on_surface;
 }
-
 
 /* ============================================================
    Tooltip
@@ -108,129 +105,122 @@ window#waybar {
    style.css 側で行う前提で、ここでは色・形状・余白だけ指定。
    ============================================================ */
 tooltip {
-    background-color: @surface_container;
-    border: 1px solid @outline_variant;
-    border-radius: 12px;
-    padding: 6px 8px;
+  background-color: @surface_container;
+  border: 1px solid @outline_variant;
+  border-radius: 12px;
+  padding: 6px 8px;
 }
 
 tooltip label {
-    color: @on_surface;
-    padding: 2px 4px;
+  color: @on_surface;
+  padding: 2px 4px;
 }
-
 
 /* ============================================================
    Window (hide empty pill when no window focused)
    ============================================================ */
 window#waybar.empty #window {
-    background-color: transparent;
-    padding: 0;
-    margin: 0;
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
 }
-
 
 /* ============================================================
    Workspaces
    ============================================================ */
 #workspaces {
-    padding: 0px 6px;
-    min-width: 20px;
-    margin: 0px;
+  padding: 0px 6px;
+  min-width: 20px;
+  margin: 0px;
 }
 
 #workspaces button {
-    min-width: 20px;
-    margin: 5px 3px;
-    color: @surface_container_highest;
-    background-color: @surface_container_highest;
-    border-radius: 20px;
-    transition:
-        background 0.25s cubic-bezier(0.4, 0.0, 0.2, 1),
-        color      0.25s cubic-bezier(0.4, 0.0, 0.2, 1),
-        box-shadow 0.25s cubic-bezier(0.4, 0.0, 0.2, 1),
-        min-width  0.25s cubic-bezier(0.4, 0.0, 0.2, 1);
+  min-width: 20px;
+  margin: 5px 3px;
+  color: @surface_container_highest;
+  background-color: @surface_container_highest;
+  border-radius: 20px;
+  transition:
+    background 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    min-width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 #workspaces button.active {
-    color: @on_primary_fixed;
-    background-color: @primary;
-    min-width: 50px;
-    box-shadow: 0 0 5px alpha(@primary, 0.0);
+  color: @on_primary_fixed;
+  background-color: @primary;
+  min-width: 50px;
+  box-shadow: 0 0 5px alpha(@primary, 0);
 }
 
 #workspaces button:hover {
-    background-color: @secondary_container;
-    color: @on_secondary_container;
+  background-color: @secondary_container;
+  color: @on_secondary_container;
 }
 
 #workspaces button.urgent {
-    background-color: @error;
-    color: @on_error;
+  background-color: @error;
+  color: @on_error;
 }
-
 
 /* ============================================================
    Clock
    ============================================================ */
 #clock {
-    color: @on_primary;
-    background-color: @primary;
+  color: @on_primary;
+  background-color: @primary;
 }
-
 
 /* ============================================================
    Audio (Pulseaudio, Cava)
    ============================================================ */
 #pulseaudio.muted {
-    color: @primary;
+  color: @primary;
 }
 
 #cava {
-    color: @tertiary;
-    margin: 0px 20px;
+  color: @tertiary;
+  margin: 0px 20px;
 }
-
 
 /* ============================================================
    Network
    ============================================================ */
 #network {
-    color: @error;
+  color: @error;
 }
 
 #network.wifi {
-    color: @error;
+  color: @error;
 }
 
 #network.ethernet {
-    color: @primary;
+  color: @primary;
 }
 
 #network.disconnected {
-    color: @error;
+  color: @error;
 }
 
 #network.linked {
-    color: @primary;
+  color: @primary;
 }
 
 #network.disabled {
-    color: @on_surface_variant;
+  color: @on_surface_variant;
 }
-
 
 /* ============================================================
    System Stats (CPU, Memory, Idle Inhibitor, Temperature)
    ============================================================ */
 #custom-idle_inhibitor.activated {
-    color: @primary;
+  color: @primary;
 }
 
 #temperature.critical {
-    color: @error;
+  color: @error;
 }
-
 
 /* ============================================================
    Tray & Notifications
@@ -239,9 +229,8 @@ window#waybar.empty #window {
 #custom-swaync.dnd-notification,
 #custom-swaync.dnd-inhibited-none,
 #custom-swaync.dnd-inhibited-notification {
-    color: @primary;
+  color: @primary;
 }
-
 
 /* ============================================================
    Package Updates (pacman / aur / mise)
@@ -250,24 +239,22 @@ window#waybar.empty #window {
 #custom-pacman.has-updates,
 #custom-aur.has-updates,
 #custom-mise.has-updates {
-    color: @tertiary;
+  color: @tertiary;
 }
-
 
 /* ============================================================
    Power & Launcher
    ============================================================ */
 #custom-power {
-    color: @on_primary_container;
-    background-color: @primary_container;
-    border-radius: 20px;
-    margin-right: 5px;
+  color: @on_primary_container;
+  background-color: @primary_container;
+  border-radius: 20px;
+  margin-right: 5px;
 }
 
 #custom-nix {
-    color: @primary;
+  color: @primary;
 }
-
 
 /* ============================================================
    Backlight & Battery (laptop, currently unused)

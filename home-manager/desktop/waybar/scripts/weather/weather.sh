@@ -48,17 +48,17 @@ NOW_TEMP=""
 NOW_HUMIDITY=""
 NOW_WIND=""
 LATEST=$(curl -sf --max-time 5 "$AMEDAS_LATEST_URL" 2>/dev/null || true)
-if [[ -n "$LATEST" ]]; then
+if [[ -n $LATEST ]]; then
   # amedas point ファイルは 3 時間ブロック単位 (00/03/06/09/12/15/18/21)。
   # 観測時刻の hour を 3 で切り捨てて block hour に丸める (10# で 8 進数解釈回避)。
   HOUR=$(date -d "$LATEST" +%H 2>/dev/null || true)
   DATE_PART=$(date -d "$LATEST" +%Y%m%d 2>/dev/null || true)
-  if [[ -n "$HOUR" && -n "$DATE_PART" ]]; then
+  if [[ -n $HOUR && -n $DATE_PART ]]; then
     BLOCK_HOUR=$(printf "%02d" $((10#$HOUR / 3 * 3)))
     DATE_HOUR="${DATE_PART}_${BLOCK_HOUR}"
     AMEDAS_URL="https://www.jma.go.jp/bosai/amedas/data/point/${SAPPORO_ID}/${DATE_HOUR}.json"
     AMEDAS=$(curl -sf --max-time 5 "$AMEDAS_URL" 2>/dev/null || true)
-    if [[ -n "$AMEDAS" ]]; then
+    if [[ -n $AMEDAS ]]; then
       # 最新エントリ (key の昇順最後) から値を取り出す。値は [value, quality_flag]。
       NOW_TEMP=$(jq -r 'to_entries | last | .value.temp[0] // empty' <<<"$AMEDAS")
       NOW_HUMIDITY=$(jq -r 'to_entries | last | .value.humidity[0] // empty' <<<"$AMEDAS")
@@ -79,11 +79,11 @@ else
 fi
 ICON=$(jq -r --arg c "$TODAY_CODE" --arg f "$ICON_FIELD" \
   '.[$c][$f] // ""' "$ICON_MAP" 2>/dev/null || true)
-[[ -z "$ICON" ]] && ICON="󱍡" # md-weather-cloudy-alert (JSON 欠損 / 新規コード時の fallback)
+[[ -z $ICON ]] && ICON="󱍡" # md-weather-cloudy-alert (JSON 欠損 / 新規コード時の fallback)
 
 # bar 表示用の温度。amedas が取れていればそちら、無ければ予報値の今日 9 時。
 DISPLAY_TEMP="$NOW_TEMP"
-if [[ -z "$DISPLAY_TEMP" ]]; then
+if [[ -z $DISPLAY_TEMP ]]; then
   DISPLAY_TEMP="$TODAY_9AM"
 fi
 # icon を下方向に微調整 (nf-weather-* は baseline より高めに描画される傾向)。
@@ -96,10 +96,10 @@ TEXT="${ICON} ${DISPLAY_TEMP:-?}°C"
 
 # tooltip 構築
 TOOLTIP="${LABEL}\n今日: ${TODAY_DESC:-?}"
-if [[ -n "$NOW_TEMP" ]]; then
+if [[ -n $NOW_TEMP ]]; then
   TOOLTIP="${TOOLTIP}\n気温: ${NOW_TEMP}°C"
-  [[ -n "$NOW_HUMIDITY" ]] && TOOLTIP="${TOOLTIP}\n湿度: ${NOW_HUMIDITY}%"
-  [[ -n "$NOW_WIND" ]] && TOOLTIP="${TOOLTIP}\n風速: ${NOW_WIND} m/s"
+  [[ -n $NOW_HUMIDITY ]] && TOOLTIP="${TOOLTIP}\n湿度: ${NOW_HUMIDITY}%"
+  [[ -n $NOW_WIND ]] && TOOLTIP="${TOOLTIP}\n風速: ${NOW_WIND} m/s"
 fi
 TOOLTIP="${TOOLTIP}\n明日: ${TOMORROW_DESC:-?} (${TOMORROW_LOW:-?}°C / ${TOMORROW_HIGH:-?}°C)"
 

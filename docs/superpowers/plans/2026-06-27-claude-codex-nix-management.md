@@ -23,6 +23,7 @@
 ### Task 1: 設定の本丸とソースを整える
 
 **Files:**
+
 - Create: `claude/CLAUDE.md`
 - Create: `claude/commands/.gitkeep`
 - Create: `claude/agents/.gitkeep`
@@ -31,13 +32,14 @@
 - 既存: `agents/skills/`（変更なし。untracked なので add 対象）
 
 **Interfaces:**
+
 - Produces: `claude/CLAUDE.md`（claude-code.nix の `context`）、`claude/commands`・`claude/agents`・`claude/rules`（各 `*Dir`）、`codex/AGENTS.md`（codex.nix の `context`）、`agents/skills/`（agent-skills.nix の source）。
 
 - [ ] **Step 1: `claude/CLAUDE.md` を作成**
 
 現 `~/.claude/CLAUDE.md` の内容をそのまま移植する。
 
-```markdown
+````markdown
 # Claude Code Guidelines
 
 ## Clipboard
@@ -47,6 +49,8 @@ When you want the user to copy a command, text, or code snippet, pipe it to `goc
 ```bash
 echo "something to copy" | gocopy
 ```
+````
+
 This places the content into the user's clipboard.
 
 ## Shell Tooling Rules
@@ -60,7 +64,8 @@ This places the content into the user's clipboard.
   - Find files by name: `fd -HI "pattern" path/`
   - Find files by extension: `fd -HI -e ts`
 - If `rg` or `fd` is unavailable in the environment, stop and tell me before falling back.
-```
+
+````
 
 - [ ] **Step 2: 空ディレクトリの枠を作成**
 
@@ -69,14 +74,15 @@ Run:
 cd /home/mkiin/dotfiles
 mkdir -p claude/commands claude/agents claude/rules
 touch claude/commands/.gitkeep claude/agents/.gitkeep claude/rules/.gitkeep
-```
+````
+
 Expected: エラーなし。
 
 - [ ] **Step 3: `codex/AGENTS.md` を作成**
 
 Claude と同等のツール規約を初期内容とする（実行後に調整可能）。
 
-```markdown
+````markdown
 # Codex Global Instructions
 
 ## Clipboard
@@ -86,6 +92,7 @@ When you want the user to copy a command, text, or code snippet, pipe it to `goc
 ```bash
 echo "something to copy" | gocopy
 ```
+````
 
 ## Shell Tooling Rules
 
@@ -94,7 +101,8 @@ echo "something to copy" | gocopy
 - By default, ignore `.gitignore`/`.ignore` rules: pass `--no-ignore --hidden` (`rg -uu` / `fd -HI`).
   - Only omit these flags when only tracked files are wanted.
 - If `rg` or `fd` is unavailable, stop and tell the user before falling back.
-```
+
+````
 
 - [ ] **Step 4: git に追加**
 
@@ -111,16 +119,18 @@ Expected: `claude/CLAUDE.md`、`claude/commands/.gitkeep`、`claude/agents/.gitk
 ```bash
 git add claude/ codex/ agents/
 git commit -m "feat: add claude/codex config sources and track skills"
-```
+````
 
 ---
 
 ### Task 2: flake.nix に agent-skills-nix input を追加
 
 **Files:**
+
 - Modify: `flake.nix`（`inputs` ブロック）
 
 **Interfaces:**
+
 - Produces: `inputs.agent-skills`（default.nix が `inputs.agent-skills.homeManagerModules.default` を import する）。
 
 - [ ] **Step 1: `inputs` に agent-skills を追加**
@@ -163,9 +173,11 @@ git commit -m "feat: add agent-skills-nix flake input"
 ### Task 3: agent-skills.nix を確定版に修正
 
 **Files:**
+
 - Modify: `nix/modules/home/agent-skills.nix`（書きかけを上書き）
 
 **Interfaces:**
+
 - Consumes: `inputs.self`、`programs.agent-skills`（Task 6 で import）。
 - Produces: `~/.claude/skills/*` と `~/.codex/skills/*` への link 配置（switch 時）。
 
@@ -210,9 +222,11 @@ git commit -m "feat: configure agent-skills for claude and codex targets"
 ### Task 4: claude-code.nix を作成
 
 **Files:**
+
 - Create: `nix/modules/home/programs/claude-code.nix`
 
 **Interfaces:**
+
 - Consumes: `inputs.self`、home-manager native `programs.claude-code`。
 - Produces: `~/.claude/settings.json`、`~/.claude/CLAUDE.md`、`~/.claude/commands`、`~/.claude/agents`、`~/.claude/rules`。
 
@@ -285,9 +299,11 @@ git commit -m "feat: manage claude-code settings and config via native module"
 ### Task 5: codex.nix を作成
 
 **Files:**
+
 - Create: `nix/modules/home/programs/codex.nix`
 
 **Interfaces:**
+
 - Consumes: `inputs.self`、home-manager native `programs.codex`。
 - Produces: `~/.codex/config.toml`、`~/.codex/AGENTS.md`。
 
@@ -328,9 +344,11 @@ git commit -m "feat: manage codex config and context via native module"
 ### Task 6: default.nix で全モジュールを import しビルド検証
 
 **Files:**
+
 - Modify: `nix/modules/home/default.nix`
 
 **Interfaces:**
+
 - Consumes: `inputs.agent-skills`、`./agent-skills.nix`、`./programs/claude-code.nix`、`./programs/codex.nix`。
 - Produces: 評価可能な home 設定（activationPackage がビルドできる状態）。
 
@@ -388,9 +406,11 @@ git commit -m "feat: wire claude-code, codex, and agent-skills modules into home
 ### Task 7: 既存ファイルを退避し switch して配置を確認
 
 **Files:**
+
 - 変更なし（実環境への適用と検証のみ）。
 
 **Interfaces:**
+
 - Consumes: Task 6 でビルド可能になった home 設定。
 
 - [ ] **Step 1: 退避先を作成**
@@ -401,12 +421,14 @@ Expected: エラーなし。
 - [ ] **Step 2: Claude の手動ファイルを退避**
 
 Run:
+
 ```bash
 mv ~/.claude/settings.json ~/agent-migration-backup-2026-06-27/ 2>/dev/null
 mv ~/.claude/CLAUDE.md ~/agent-migration-backup-2026-06-27/ 2>/dev/null
 mv ~/.claude/skills ~/agent-migration-backup-2026-06-27/claude-skills 2>/dev/null
 true
 ```
+
 Expected: エラーなし（既に無いものは無視）。
 
 - [ ] **Step 3: Codex の手動ファイルを退避**
@@ -414,12 +436,14 @@ Expected: エラーなし（既に無いものは無視）。
 `.system` は agent-skills が触らないため残す。同名衝突する skill を退避する。
 
 Run:
+
 ```bash
 mv ~/.codex/config.toml ~/agent-migration-backup-2026-06-27/codex-config.toml 2>/dev/null
 mv ~/.codex/skills/superpowers ~/agent-migration-backup-2026-06-27/codex-superpowers 2>/dev/null
 mv ~/.codex/skills/write-sentence ~/agent-migration-backup-2026-06-27/codex-write-sentence 2>/dev/null
 true
 ```
+
 Expected: エラーなし。
 
 - [ ] **Step 4: switch を適用**
@@ -430,22 +454,26 @@ Expected: 成功。clobber エラーが出たら、該当ファイルを Step 2/
 - [ ] **Step 5: Claude の配置を確認**
 
 Run:
+
 ```bash
 echo "--- settings.json ---"; cat ~/.claude/settings.json
 echo "--- CLAUDE.md ---"; readlink ~/.claude/CLAUDE.md; head -3 ~/.claude/CLAUDE.md
 echo "--- dirs ---"; readlink ~/.claude/commands ~/.claude/agents ~/.claude/rules
 echo "--- skills ---"; ls -l ~/.claude/skills | head; readlink ~/.claude/skills/cm
 ```
+
 Expected: settings.json が env / permissions.deny / effortLevel を含み、`enabledPlugins` を含まない。CLAUDE.md / commands / agents / rules と skills/cm が配置されている。
 
 - [ ] **Step 6: Codex の配置を確認**
 
 Run:
+
 ```bash
 echo "--- config.toml ---"; cat ~/.codex/config.toml
 echo "--- AGENTS.md ---"; readlink ~/.codex/AGENTS.md; head -3 ~/.codex/AGENTS.md
 echo "--- skills ---"; ls -l ~/.codex/skills
 ```
+
 Expected: config.toml に `[projects."/home/mkiin/dotfiles"] trust_level = "trusted"`。AGENTS.md が配置され、skills に local skill が並び `.system` が残っている。
 
 - [ ] **Step 7: バイナリが mise 版のままか確認**
@@ -463,9 +491,10 @@ Expected: enabledPlugins と env の差分のみ（意図した変更）。確�
 ## Self-Review
 
 **Spec coverage（design doc の各項目）:**
+
 - settings.json（env全部、enabledPlugins無し）→ Task 4
 - CLAUDE.md → Task 1 + Task 4（context）
-- commands / agents / rules → Task 1 + Task 4（*Dir）
+- commands / agents / rules → Task 1 + Task 4（\*Dir）
 - config.toml → Task 5
 - AGENTS.md → Task 1 + Task 5（context）
 - skills を Claude/Codex 両方へ → Task 3

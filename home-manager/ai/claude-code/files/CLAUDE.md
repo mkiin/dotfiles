@@ -7,6 +7,7 @@ When you want the user to copy a command, text, or code snippet, pipe it to `goc
 ```bash
 echo "something to copy" | gocopy
 ```
+
 This places the content into the user's clipboard.
 
 ## Shell Tooling Rules

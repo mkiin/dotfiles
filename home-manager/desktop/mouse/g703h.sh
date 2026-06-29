@@ -2,13 +2,13 @@
 set -euo pipefail
 
 DEV="$(ratbagctl list 2>/dev/null | awk -F: 'NR==1 && /G703/ {print $1}')"
-if [[ -z "${DEV:-}" ]]; then
+if [[ -z ${DEV:-} ]]; then
   echo "G703 not detected (offline or ratbagd down)" >&2
   exit 1
 fi
 
 run() {
-  if [[ "${DRY_RUN:-0}" == "1" ]]; then
+  if [[ ${DRY_RUN:-0} == "1" ]]; then
     echo "ratbagctl $DEV $*"
   else
     ratbagctl "$DEV" "$@"

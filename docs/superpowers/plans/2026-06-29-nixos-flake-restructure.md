@@ -4,7 +4,7 @@
 
 **Goal:** mkiin の dotfiles を、独自 `mkHome` 抽象と散在した設定ファイルから、`lib` 集約 + レイヤー分離 + コロケーションの flake 構成へ移行し、NixOS 実機で CachyOS 時代の Hyprland デスクトップを再現する。
 
-**Architecture:** トップレベルを `lib/`（make*Config と `lnk` ヘルパーを集約）、`nixos/`（システム実設定）、`home-manager/`（home 実設定）、`hosts/`（マシン配線）に分ける。NixOS 実機は home-manager をシステムに統合し、WSL は standalone `homeConfigurations` に分ける。生設定ファイルは各ツールディレクトリに `.nix` と同居させ、`lnk ./path` で作業ツリーへの out-of-store symlink を張って hot-reload を維持する。
+**Architecture:** トップレベルを `lib/`（make\*Config と `lnk` ヘルパーを集約）、`nixos/`（システム実設定）、`home-manager/`（home 実設定）、`hosts/`（マシン配線）に分ける。NixOS 実機は home-manager をシステムに統合し、WSL は standalone `homeConfigurations` に分ける。生設定ファイルは各ツールディレクトリに `.nix` と同居させ、`lnk ./path` で作業ツリーへの out-of-store symlink を張って hot-reload を維持する。
 
 **Tech Stack:** Nix flakes, home-manager, NixOS 26.05, nixpkgs nixos-unstable, Hyprland (flake), NVIDIA (open kernel module), SDDM, fcitx5-mozc。
 
@@ -38,6 +38,7 @@
 ### Task 0.1: 作業ブランチと新トップレベルディレクトリ
 
 **Files:**
+
 - Create: `lib/`, `nixos/`, `home-manager/`, `hosts/nixos/`, `hosts/wsl/`（空ディレクトリは `.gitkeep` で確保）
 
 - [ ] **Step 1: ブランチを切る**
@@ -61,12 +62,14 @@ mkdir -p lib nixos/core nixos/hardware nixos/desktop nixos/apps \
 git add -A && git commit -m "chore: scaffold new flake top-level layout"
 ```
 
-### Task 0.2: lib/default.nix（make*Config と lnk を集約）
+### Task 0.2: lib/default.nix（make\*Config と lnk を集約）
 
 **Files:**
+
 - Create: `lib/default.nix`
 
 **Interfaces:**
+
 - Produces:
   - `makeNixosConfig = { system, hostname, username, modules }: <nixosSystem>`
   - `makeHomeManagerConfig = { system, username, modules }: <homeManagerConfiguration>`
@@ -176,9 +179,11 @@ git add lib/default.nix && git commit -m "feat(lib): add make*Config helpers and
 ### Task 0.3: flake.nix 骨格（inputs 追加 + outputs 切替）
 
 **Files:**
+
 - Modify: `flake.nix`
 
 **Interfaces:**
+
 - Consumes: `lib/default.nix`（`mylib.makeNixosConfig` / `makeHomeManagerConfig`）。
 - Produces: `nixosConfigurations.nixos`, `homeConfigurations."mkiin@wsl"`。
 
@@ -302,6 +307,7 @@ git add flake.nix flake.lock hosts && git commit -m "feat(flake): switch to nixo
 ### Task 1.1: home-manager/default.nix（base パッケージと共通設定）
 
 **Files:**
+
 - Create: `home-manager/default.nix`
 - Source: `nix/modules/home/default.nix`, `nix/modules/home/packages.nix`
 
@@ -375,17 +381,17 @@ git add home-manager && git commit -m "feat(home): add cli/editor/ai aggregators
 
 **ファイル対応:**
 
-| 旧 .nix | 旧 生ファイル | 新ディレクトリ |
-|---|---|---|
-| `nix/modules/home/programs/zsh.nix` | `nix/modules/home/programs/zsh/functions.zsh`, `zsh/{zshrc,zshenv}` | `home-manager/cli/zsh/` |
-| `git.nix` | なし | `home-manager/cli/git/` |
-| `mise.nix` | `mise/config.toml` | `home-manager/cli/mise/` |
-| `lazygit.nix` | なし | `home-manager/cli/lazygit/` |
-| `starship.nix` | なし | `home-manager/cli/starship/` |
-| `sheldon.nix` | なし | `home-manager/cli/sheldon/` |
-| `yazi.nix` | なし | `home-manager/cli/yazi/` |
-| `goclipboard.nix` | なし | `home-manager/cli/goclipboard/` |
-| `python.nix` | なし | `home-manager/cli/python/` |
+| 旧 .nix                             | 旧 生ファイル                                                       | 新ディレクトリ                  |
+| ----------------------------------- | ------------------------------------------------------------------- | ------------------------------- |
+| `nix/modules/home/programs/zsh.nix` | `nix/modules/home/programs/zsh/functions.zsh`, `zsh/{zshrc,zshenv}` | `home-manager/cli/zsh/`         |
+| `git.nix`                           | なし                                                                | `home-manager/cli/git/`         |
+| `mise.nix`                          | `mise/config.toml`                                                  | `home-manager/cli/mise/`        |
+| `lazygit.nix`                       | なし                                                                | `home-manager/cli/lazygit/`     |
+| `starship.nix`                      | なし                                                                | `home-manager/cli/starship/`    |
+| `sheldon.nix`                       | なし                                                                | `home-manager/cli/sheldon/`     |
+| `yazi.nix`                          | なし                                                                | `home-manager/cli/yazi/`        |
+| `goclipboard.nix`                   | なし                                                                | `home-manager/cli/goclipboard/` |
+| `python.nix`                        | なし                                                                | `home-manager/cli/python/`      |
 
 **`dotLink` → `lnk` 置換の型**（mise を例に、全ツール同じ要領）:
 
@@ -495,6 +501,7 @@ git add -A && git commit -m "refactor(home): move editor/ai and wire wsl host"
 ### Task 2.1: nixos/core 層
 
 **Files:**
+
 - Create: `nixos/core/{boot.nix,nix.nix,users.nix,locale.nix,time.nix,network.nix,shell.nix,nix-ld.nix}`
 - Create: `nixos/default.nix`
 - Source: `/etc/nixos/configuration.nix`
@@ -630,6 +637,7 @@ git add nixos hosts && git commit -m "feat(nixos): core layer"
 ### Task 2.2: nixos/hardware（graphics, nvidia, bluetooth）
 
 **Files:**
+
 - Create: `nixos/hardware/{default.nix,nvidia.nix,bluetooth.nix}`
 
 **重要（調査ステップ）:** Blackwell (RTX 5070 Ti) 対応ドライバ版を確定する。
@@ -693,6 +701,7 @@ git add nixos/hardware && git commit -m "feat(nixos): nvidia(open)+graphics+blue
 ### Task 2.3: nixos/desktop（hyprland 有効化, sddm, fcitx5, sound, polkit）
 
 **Files:**
+
 - Create: `nixos/desktop/{default.nix,hyprland.nix,display-manager.nix,fcitx5.nix,sound.nix,polkit.nix}`
 
 - [ ] **Step 1: nixos/desktop/default.nix**
@@ -794,6 +803,7 @@ git add nixos/desktop && git commit -m "feat(nixos): desktop enable (hyprland/sd
 ### Task 2.4: nixos/core/fonts と nixos-hardware プロファイル
 
 **Files:**
+
 - Create: `nixos/core/fonts.nix`
 - Modify: `hosts/nixos/default.nix`
 
@@ -862,6 +872,7 @@ git add -A && git commit -m "chore: first system switch verified (sddm up)"
 ### Task 2.6: mise の node/python インストール修正
 
 **Files:**
+
 - Modify: `nixos/core/nix-ld.nix`
 
 - [ ] **Step 1: エラーを再現して原因を見る**
@@ -908,6 +919,7 @@ git add nixos/core/nix-ld.nix && git commit -m "fix(nixos): nix-ld libraries for
 ### Task 3.1: hyprland（lnk ./ への移行の代表例）
 
 **Files:**
+
 - Create: `home-manager/desktop/hyprland/default.nix`
 - Source: `nix/modules/linux/desktop/hyprland/default.nix`, `nix/modules/linux/desktop/hyprland/monitor.nix`, `hypr/`
 
@@ -968,18 +980,18 @@ Task 3.1 と同じ要領で移す。生ファイルを `home-manager/desktop/<to
 
 **ファイル対応:**
 
-| 旧 .nix | 旧 生ファイル | 新ディレクトリ |
-|---|---|---|
-| `nix/modules/linux/desktop/waybar.nix` | `waybar/` | `home-manager/desktop/waybar/` |
-| `quickshell.nix` | `quickshell/` | `home-manager/desktop/quickshell/` |
-| `wlogout.nix` | `wlogout/` | `home-manager/desktop/wlogout/` |
-| `fcitx5.nix` | `fcitx5/` | `home-manager/desktop/fcitx5/` |
-| `mouse.nix` | `mouse/` | `home-manager/desktop/mouse/` |
-| `services.nix` | なし | `home-manager/desktop/services/` |
-| `../programs/matugen.nix` | `matugen/` | `home-manager/desktop/matugen/` |
-| `../programs/wallust.nix` | `wallust/` | `home-manager/desktop/wallust/` |
-| `../programs/ghostty.nix` | なし | `home-manager/desktop/terminal/ghostty/` |
-| `../programs/wezterm.nix` | `wezterm/` | `home-manager/desktop/terminal/wezterm/` |
+| 旧 .nix                                | 旧 生ファイル | 新ディレクトリ                           |
+| -------------------------------------- | ------------- | ---------------------------------------- |
+| `nix/modules/linux/desktop/waybar.nix` | `waybar/`     | `home-manager/desktop/waybar/`           |
+| `quickshell.nix`                       | `quickshell/` | `home-manager/desktop/quickshell/`       |
+| `wlogout.nix`                          | `wlogout/`    | `home-manager/desktop/wlogout/`          |
+| `fcitx5.nix`                           | `fcitx5/`     | `home-manager/desktop/fcitx5/`           |
+| `mouse.nix`                            | `mouse/`      | `home-manager/desktop/mouse/`            |
+| `services.nix`                         | なし          | `home-manager/desktop/services/`         |
+| `../programs/matugen.nix`              | `matugen/`    | `home-manager/desktop/matugen/`          |
+| `../programs/wallust.nix`              | `wallust/`    | `home-manager/desktop/wallust/`          |
+| `../programs/ghostty.nix`              | なし          | `home-manager/desktop/terminal/ghostty/` |
+| `../programs/wezterm.nix`              | `wezterm/`    | `home-manager/desktop/terminal/wezterm/` |
 
 - [ ] **Step 1: 各ツールを移して lnk 化（waybar の例）**
 
@@ -1073,6 +1085,7 @@ git add -A && git commit -m "refactor(home): move all desktop tools to home-mana
 ### Task 4.1: GUI アプリと開発基盤
 
 **Files:**
+
 - Create: `nixos/apps/{default.nix,steam.nix,docker.nix,desktop-apps.nix,peripherals.nix}`
 
 - [ ] **Step 1: nixos/apps/default.nix**
@@ -1192,6 +1205,7 @@ git add -A && git commit -m "chore: remove legacy nix/ tree, cachyos host, packa
 ### Task 5.2: docs 更新
 
 **Files:**
+
 - Modify: `docs/nix-folder-structure.md`
 - Modify: `README.md`
 

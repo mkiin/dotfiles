@@ -22,10 +22,12 @@
 ### Task 1: 正規化マッチを hook に追加
 
 **Files:**
+
 - Modify: `claude/hooks/block-git-clone.sh`
 - Test: `claude/hooks/block-git-clone.test.sh`（一時テスト。Step 5 で削除）
 
 **Interfaces:**
+
 - Consumes: stdin に Claude Code PreToolUse の JSON（`.tool_input.command` にコマンド文字列）。
 - Produces: 字句難読化を含む `git clone` 検出時に deny JSON を stdout へ出力。非該当時は無出力で `exit 0`。配線（`claude-code.nix` の `bash ${inputs.self}/claude/hooks/block-git-clone.sh`）は既存のまま変更しない。
 
@@ -151,9 +153,11 @@ git commit -m "feat: クローン遮断 hook に字句難読化を剥がす正�
 ### Task 2: switch して実機検証
 
 **Files:**
+
 - なし（適用と検証のみ）
 
 **Interfaces:**
+
 - Consumes: Task 1 の `claude/hooks/block-git-clone.sh`。flake は `bash ${inputs.self}/claude/hooks/block-git-clone.sh` で参照する。
 
 - [ ] **Step 1: flake が評価・ビルドできることを確認**
@@ -201,6 +205,7 @@ git status
 ## Self-Review
 
 **Spec coverage:**
+
 - 正規化マッチ（`\ " '` 除去）→ Task 1 Step 3 ✓
 - 難読化ケースの deny（backslash / double-quote / single-quote / quoted-space）→ Task 1 Step 1・4 ✓
 - 誤検出回帰ガード（`legit clone foo` は pass）→ Task 1 Step 1・4 ✓

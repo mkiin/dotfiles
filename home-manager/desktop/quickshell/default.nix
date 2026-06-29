@@ -2,9 +2,9 @@
 {
   xdg.configFile = {
     "quickshell/shell.json".source = lnk ./shell.json;
-    "quickshell/shell".source      = lnk ./shell;
-    "quickshell/audio".source      = lnk ./audio;
-    "quickshell/bluetooth".source  = lnk ./bluetooth;
+    "quickshell/shell".source = lnk ./shell;
+    "quickshell/audio".source = lnk ./audio;
+    "quickshell/bluetooth".source = lnk ./bluetooth;
   };
 
   systemd.user.services.quickshell = {

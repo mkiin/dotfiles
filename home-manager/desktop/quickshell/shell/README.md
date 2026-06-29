@@ -7,6 +7,7 @@
 A modular desktop shell configuration built with [QuickShell](https://quickshell.org/) and QtQuick, designed for Wayland compositors and tuned for Hyprland.
 
 The project focuses on:
+
 - clean component boundaries (`components/`, `modules/`, `services/`)
 - dynamic theming via `pywal`
 - responsive UI behavior with smooth QML/scenegraph rendering
@@ -28,7 +29,6 @@ The project focuses on:
 - [License](#license)
 - [Security](#security)
 
-
 ## Contributing & Code of Conduct
 
 - See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines, PR process, and testing instructions.
@@ -41,8 +41,8 @@ The project focuses on:
 
 ## Screenshots
 
-| Main Desktop | Control Center + Popups | Notifications |
-|:-----------:|:------------------------:|:-------------:|
+|               Main Desktop                |            Control Center + Popups             |                  Notifications                   |
+| :---------------------------------------: | :--------------------------------------------: | :----------------------------------------------: |
 | ![Desktop](./image_quick/main_config.png) | ![Control Center](./image_quick/bluetooth.png) | ![Notifications](./image_quick/notification.png) |
 
 ## Core Capabilities
@@ -75,15 +75,15 @@ This separation keeps UI concerns, system logic, and user settings independent a
 
 ### Core Packages/Services
 
-| Dependency | Purpose |
-|---|---|
-| `python-pywal` | dynamic theme generation (`~/.cache/wal/colors.json`) |
-| `pipewire`, `wireplumber`, `pamixer`, `playerctl` | audio control and media metadata |
-| `networkmanager` | network state and controls |
-| `bluez`, `bluez-utils` | Bluetooth state and device management |
-| `upower`, `power-profiles-daemon` | battery and power profile integration |
-| `grim`, `slurp` | Wayland screenshots |
-| `brightnessctl` | display brightness control |
+| Dependency                                        | Purpose                                               |
+| ------------------------------------------------- | ----------------------------------------------------- |
+| `python-pywal`                                    | dynamic theme generation (`~/.cache/wal/colors.json`) |
+| `pipewire`, `wireplumber`, `pamixer`, `playerctl` | audio control and media metadata                      |
+| `networkmanager`                                  | network state and controls                            |
+| `bluez`, `bluez-utils`                            | Bluetooth state and device management                 |
+| `upower`, `power-profiles-daemon`                 | battery and power profile integration                 |
+| `grim`, `slurp`                                   | Wayland screenshots                                   |
+| `brightnessctl`                                   | display brightness control                            |
 
 ## Installation
 
@@ -127,6 +127,7 @@ Reload safely after changes:
 ```
 
 The reload script:
+
 - stops existing `quickshell` instances
 - force-kills only if needed
 - launches a fresh background instance
@@ -195,9 +196,9 @@ If you prefer manual setup, add it yourself to `~/.config/hypr/hyprland.conf`.
 ### Bluetooth/network/audio controls are non-responsive
 
 - ensure required services are running:
-    - `systemctl --user status wireplumber`
-    - `systemctl status NetworkManager`
-    - `systemctl status bluetooth`
+  - `systemctl --user status wireplumber`
+  - `systemctl status NetworkManager`
+  - `systemctl status bluetooth`
 
 ### Hyprland visual glitches around layer-shell windows
 

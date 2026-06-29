@@ -2,7 +2,10 @@
 {
   imports = [ ../../home-manager ];
 
-  home.packages = with pkgs; [ unzip zip ];
+  home.packages = with pkgs; [
+    unzip
+    zip
+  ];
 
   programs.zsh.shellAliases.open = "explorer.exe .";
   programs.zsh.initContent = lib.mkAfter ''

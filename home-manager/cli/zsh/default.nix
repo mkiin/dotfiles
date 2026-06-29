@@ -14,47 +14,47 @@
   xdg.configFile."zsh/functions.zsh".source = lnk ./functions.zsh;
 
   programs.zsh = {
-    enable         = true;
-    defaultKeymap  = "emacs";
-    autocd         = true;
+    enable = true;
+    defaultKeymap = "emacs";
+    autocd = true;
     enableCompletion = true;
 
     history = {
-      size        = 100000;
-      save        = 100000;
-      path        = "${config.xdg.dataHome}/zsh/history";
-      extended    = true;
-      share       = true;
-      ignoreDups  = true;
+      size = 100000;
+      save = 100000;
+      path = "${config.xdg.dataHome}/zsh/history";
+      extended = true;
+      share = true;
+      ignoreDups = true;
       ignoreSpace = true;
-      append      = true;
+      append = true;
     };
 
     shellAliases = {
-      ".."   = "cd ..";
-      "..."  = "cd ../..";
+      ".." = "cd ..";
+      "..." = "cd ../..";
       "...." = "cd ../../..";
-      cls    = "clear";
-      sz     = "source ~/.zshrc";
-      ls     = "eza --icons=always";
-      ll     = "eza -alF --icons=always --git";
-      la     = "eza -a --icons=always";
-      l      = "eza -F --icons=always";
-      tree   = "eza --tree --icons=always";
-      gs     = "git status";
-      ga     = "git add";
-      gc     = "git commit";
-      gp     = "git push";
-      gl     = "git log --oneline --graph";
-      gd     = "git diff";
-      gco    = "git checkout";
-      gb     = "git branch";
-      "c."   = "code .";
-      cr     = "code -r .";
-      vim    = "nvim";
-      lg     = "lazygit";
-      pn     = "pnpm";
-      nvc    = "cd ~/.config/nvim";
+      cls = "clear";
+      sz = "source ~/.zshrc";
+      ls = "eza --icons=always";
+      ll = "eza -alF --icons=always --git";
+      la = "eza -a --icons=always";
+      l = "eza -F --icons=always";
+      tree = "eza --tree --icons=always";
+      gs = "git status";
+      ga = "git add";
+      gc = "git commit";
+      gp = "git push";
+      gl = "git log --oneline --graph";
+      gd = "git diff";
+      gco = "git checkout";
+      gb = "git branch";
+      "c." = "code .";
+      cr = "code -r .";
+      vim = "nvim";
+      lg = "lazygit";
+      pn = "pnpm";
+      nvc = "cd ~/.config/nvim";
     };
 
     initContent = ''

@@ -1,2 +1,8 @@
 { ... }:
-{ imports = [ ./agent-skills ./claude-code ./codex ]; }
+{
+  imports = [
+    ./agent-skills
+    ./claude-code
+    ./codex
+  ];
+}

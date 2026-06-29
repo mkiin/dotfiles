@@ -35,7 +35,7 @@ fi
 # Standalone モード (rofi 等)
 if pgrep -f "$NIKKE_WINEPREFIX/drive_c/NIKKE/Launcher/nikke_launcher.exe" >/dev/null 2>&1; then
   echo "NIKKE は既に起動中です。二重起動を中止します。" >&2
-  trap - EXIT  # cleanup の wineserver -k が起動中インスタンスを巻き込むのを防ぐ
+  trap - EXIT # cleanup の wineserver -k が起動中インスタンスを巻き込むのを防ぐ
   exit 0
 fi
 
@@ -56,19 +56,26 @@ export UMU_RUNTIME_UPDATE=0
 # 間欠的なレースのため、ウィンドウ未出現を検知したら起動チェーンを畳んで再試行する。
 EXE="$NIKKE_WINEPREFIX/drive_c/NIKKE/Launcher/nikke_launcher.exe"
 LOG="/tmp/nikke-launch.$$.log"
-DEADLINE=55   # ウィンドウ出現をこの秒数待つ。超過 or デッドロックログ検知でリトライ
+DEADLINE=55 # ウィンドウ出現をこの秒数待つ。超過 or デッドロックログ検知でリトライ
 
 launch_once() {
-  : > "$LOG"
+  : >"$LOG"
   "$ROOT/umu-run" "$EXE" >"$LOG" 2>&1 &
   local umu=$! waited=0
   while [ "$waited" -lt "$DEADLINE" ]; do
-    sleep 2; waited=$((waited + 2))
-    grep -q 'wait timed out' "$LOG" && return 1                       # デッドロック確定
-    hyprctl clients 2>/dev/null | grep -q 'class: steam_proton' && { wait "$umu"; return 0; }  # 起動成功→終了まで待つ
-    kill -0 "$umu" 2>/dev/null || { wait "$umu"; return 0; }          # umu 自然終了
+    sleep 2
+    waited=$((waited + 2))
+    grep -q 'wait timed out' "$LOG" && return 1 # デッドロック確定
+    hyprctl clients 2>/dev/null | grep -q 'class: steam_proton' && {
+      wait "$umu"
+      return 0
+    } # 起動成功→終了まで待つ
+    kill -0 "$umu" 2>/dev/null || {
+      wait "$umu"
+      return 0
+    } # umu 自然終了
   done
-  return 1   # 時間切れ＝ハングとみなす
+  return 1 # 時間切れ＝ハングとみなす
 }
 
 for attempt in 1 2 3; do

@@ -1,4 +1,9 @@
-{ inputs, homeDirectory, username, ... }:
+{
+  inputs,
+  homeDirectory,
+  username,
+  ...
+}:
 let
   dotfilesDir = "${homeDirectory}/ghq/github.com/${username}/dotfiles";
 in

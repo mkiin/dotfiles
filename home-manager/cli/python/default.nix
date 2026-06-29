@@ -1,4 +1,4 @@
-{ ... }:
+_:
 
 {
   xdg.configFile."pip/pip.conf".text = ''

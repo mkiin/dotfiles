@@ -5,19 +5,19 @@ mode="${1:?usage: screenshot.sh <region|window|output>}"
 base_dir="${HOME}/Pictures/Screenshots"
 
 case "$mode" in
-  region|window)
-    class=$(hyprctl activewindow -j | jq -r '.class // "unknown"')
-    class="${class//[\/\\ ]/_}"
-    out_dir="${base_dir}/${class}"
-    ;;
-  output)
-    monitor=$(hyprctl monitors -j | jq -r '.[] | select(.focused) | .name // "unknown"')
-    out_dir="${base_dir}/output/${monitor}"
-    ;;
-  *)
-    echo "[screenshot.sh] unknown mode: $mode" >&2
-    exit 1
-    ;;
+region | window)
+  class=$(hyprctl activewindow -j | jq -r '.class // "unknown"')
+  class="${class//[\/\\ ]/_}"
+  out_dir="${base_dir}/${class}"
+  ;;
+output)
+  monitor=$(hyprctl monitors -j | jq -r '.[] | select(.focused) | .name // "unknown"')
+  out_dir="${base_dir}/output/${monitor}"
+  ;;
+*)
+  echo "[screenshot.sh] unknown mode: $mode" >&2
+  exit 1
+  ;;
 esac
 
 mkdir -p "$out_dir"

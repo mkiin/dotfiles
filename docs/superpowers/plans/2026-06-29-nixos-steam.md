@@ -22,10 +22,12 @@
 ### Task 1: Steam モジュールの作成と有効化
 
 **Files:**
+
 - Create: `nixos/desktop/steam/default.nix`
 - Modify: `nixos/desktop/default.nix`（`imports` リストに `./steam` を追加）
 
 **Interfaces:**
+
 - Consumes: なし（`programs.steam` は NixOS 標準モジュール）
 - Produces: `nixos/desktop/default.nix` が `./steam` を import し、`programs.steam.enable = true` がシステム構成に反映される
 

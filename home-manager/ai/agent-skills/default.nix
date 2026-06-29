@@ -39,7 +39,10 @@ in
     };
 
     # local と superpowers は全 skill を有効化
-    skills.enableAll = [ "local" "superpowers" ];
+    skills.enableAll = [
+      "local"
+      "superpowers"
+    ];
 
     # cloudflare は使う8個、anthropic は frontend-design のみ個別に有効化
     skills.enable = [
@@ -54,7 +57,15 @@ in
       "frontend-design"
     ];
 
-    targets.claude = { enable = true; structure = "link"; dest = ".claude/skills"; };
-    targets.codex  = { enable = true; structure = "link"; dest = ".codex/skills"; };
+    targets.claude = {
+      enable = true;
+      structure = "link";
+      dest = ".claude/skills";
+    };
+    targets.codex = {
+      enable = true;
+      structure = "link";
+      dest = ".codex/skills";
+    };
   };
 }

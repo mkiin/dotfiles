@@ -15,7 +15,7 @@
         CLAUDE_CODE_NO_FLICKER = "1";
       };
       permissions = {
-        deny = [];
+        deny = [ ];
         defaultMode = "auto";
         additionalDirectories = [ "${config.home.homeDirectory}/ghq" ];
       };

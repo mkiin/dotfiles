@@ -7,7 +7,7 @@ mode="${1:?usage: mode.sh <mode>}"
 
 PREV_WS=$(hyprctl activeworkspace -j 2>/dev/null |
   jq -r 'select(.id > 0) | .id' 2>/dev/null) || PREV_WS=1
-[[ "$PREV_WS" =~ ^[0-9]+$ ]] || PREV_WS=1
+[[ $PREV_WS =~ ^[0-9]+$ ]] || PREV_WS=1
 
 cat >"$HOME/.config/hypr/monitors.lua" <<EOF
 require("monitors.$mode")
@@ -18,12 +18,12 @@ EOF
 # event socket を購読しておいて reload を発火 → configreloaded を待つ。
 HYPR_SOCK="${XDG_RUNTIME_DIR:-/run/user/$UID}/hypr/${HYPRLAND_INSTANCE_SIGNATURE}/.socket2.sock"
 exec {EV_FD}< <(socat -u "UNIX-CONNECT:$HYPR_SOCK" - 2>/dev/null)
-sleep 0.05  # socat の接続確立待ち (process substitution は非同期起動)
+sleep 0.05 # socat の接続確立待ち (process substitution は非同期起動)
 
 hyprctl reload
 
 while read -r -t 2 -u "$EV_FD" line; do
-  [[ "$line" == configreloaded* ]] && break
+  [[ $line == configreloaded* ]] && break
 done
 exec {EV_FD}<&-
 
@@ -38,12 +38,13 @@ done
 # Hyprland はモニター構成変更を layer surface に伝播しないバグがあるため awww と waybar を作り直す。
 # `awww restore` は disable 中だったモニターのキャッシュが残ってモード間で壁紙が割れるので last_wallpaper を明示適用する。
 LAST="${XDG_STATE_HOME:-$HOME/.local/state}/hypr/last_wallpaper"
-if [[ -f "$LAST" ]] && [[ -r "$(<"$LAST")" ]]; then
+if [[ -f $LAST ]] && [[ -r "$(<"$LAST")" ]]; then
   awww img --transition-type none "$(<"$LAST")" >/dev/null 2>&1 || true
 else
   awww restore >/dev/null 2>&1 || true
 fi
-pkill -f waybar 2>/dev/null; sleep 0.1
+pkill -f waybar 2>/dev/null
+sleep 0.1
 uwsm app -- waybar >/dev/null 2>&1 &
 disown
 

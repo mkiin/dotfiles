@@ -22,10 +22,12 @@
 ### Task 1: git clone 遮断 hook スクリプト
 
 **Files:**
+
 - Create: `claude/hooks/block-git-clone.sh`
 - Test: `claude/hooks/block-git-clone.test.sh`（一時テスト。Step 5 で削除）
 
 **Interfaces:**
+
 - Consumes: stdin に Claude Code PreToolUse の JSON（`.tool_input.command` にコマンド文字列）。
 - Produces: `git clone` 検出時に deny JSON を stdout へ出力。非該当時は無出力で `exit 0`。後続タスク（Task 3）が `bash <path>/claude/hooks/block-git-clone.sh` として参照する。
 
@@ -127,9 +129,11 @@ git commit -m "feat: git clone を遮断し ghq get へ誘導する hook を追�
 ### Task 2: git 設定に ghq.root を明示
 
 **Files:**
+
 - Modify: `nix/modules/home/programs/git.nix`
 
 **Interfaces:**
+
 - Consumes: home-manager の `config.home.homeDirectory`。
 - Produces: 生成 gitconfig に `[ghq] root = <home>/ghq`。`ghq` / Task 4 のキーバインドがこの root を参照する。
 
@@ -168,9 +172,11 @@ git commit -m "feat: git 設定に ghq.root を明示"
 ### Task 3: claude-code に additionalDirectories と hook を配線
 
 **Files:**
+
 - Modify: `nix/modules/home/programs/claude-code.nix`
 
 **Interfaces:**
+
 - Consumes: `config.home.homeDirectory`、`inputs.self`、Task 1 の `claude/hooks/block-git-clone.sh`。
 - Produces: 生成 `~/.claude/settings.json` の `permissions.additionalDirectories` に `~/ghq`、`hooks.PreToolUse` に hook 配線。
 
@@ -232,9 +238,11 @@ git commit -m "feat: claude-code に ghq ワークスペースと git clone 遮�
 ### Task 4: ghq + fzf キーバインドを追加
 
 **Files:**
+
 - Modify: `nix/modules/home/programs/zsh/functions.zsh`
 
 **Interfaces:**
+
 - Consumes: `ghq`, `fzf`（導入済み）、`ghq.root`（Task 2）。
 - Produces: zle widget `ghq-fzf` を `^]` にバインド。
 
@@ -276,9 +284,11 @@ git commit -m "feat: ghq + fzf でリポジトリへ cd するキーバインド
 ### Task 5: switch して実機統合検証
 
 **Files:**
+
 - なし（適用と検証のみ）
 
 **Interfaces:**
+
 - Consumes: Task 1〜4 の全変更。
 
 - [ ] **Step 1: home-manager switch を適用**
@@ -299,9 +309,11 @@ Expected: `~/ghq`（絶対パス）と `Bash` matcher の hook command が出力
 - [ ] **Step 4: hook を実コマンドで検証**
 
 Run:
+
 ```bash
 printf '{"tool_input":{"command":"git clone https://github.com/x/y"}}' | bash ~/.claude/hooks/block-git-clone.sh
 ```
+
 （注: hook は flake store 経由で参照されるため、`~/.claude/hooks/` に無い場合は `bash "$(jq -r '.hooks.PreToolUse[0].hooks[0].command' ~/.claude/settings.json | sed "s/^bash //")"` の store パスで実行する）
 Expected: `permissionDecision: "deny"` を含む JSON が出力される。
 
@@ -323,6 +335,7 @@ git status
 ## Self-Review
 
 **Spec coverage:**
+
 - ghq.root 明示 → Task 2 ✓
 - additionalDirectories → Task 3 ✓
 - hook で git clone 遮断 + ルール注入 → Task 1（スクリプト）+ Task 3（配線）✓

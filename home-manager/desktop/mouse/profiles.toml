@@ -14,12 +14,12 @@
 # 各ボタンを書かなければ、そのボタンはネイティブ動作のまま。
 
 [device]
-name = "ERGO M575SP"           # solaar config の対象（部分一致）
-back_button = "mouse:275"      # BTN_SIDE（既定: 戻る）
-forward_button = "mouse:276"   # BTN_EXTRA（既定: 進む）
-middle_button = "mouse:274"    # BTN_MIDDLE（ホイール押下）
+name = "ERGO M575SP"         # solaar config の対象（部分一致）
+back_button = "mouse:275"    # BTN_SIDE（既定: 戻る）
+forward_button = "mouse:276" # BTN_EXTRA（既定: 進む）
+middle_button = "mouse:274"  # BTN_MIDDLE（ホイール押下）
 
-[default]                      # どの [[app]] にも一致しないとき
+[default] # どの [[app]] にも一致しないとき
 dpi = 800
 # back/forward/middle 未指定 → すべてネイティブ動作を維持
 
@@ -29,17 +29,17 @@ dpi = 800
 #   タブを閉じる = 中央ボタン（ホイール押下）
 [[app]]
 class = "^zen$"
-forward = { mods = "CTRL", key = "C" }   # コピー
-middle  = { mods = "CTRL", key = "W" }   # タブを閉じる
+forward = { mods = "CTRL", key = "C" } # コピー
+middle = { mods = "CTRL", key = "W" }  # タブを閉じる
 
 # 崩壊：スターレイル（Proton。class は全Protonゲーム共通の steam_proton なので
 # title でこのゲームだけに絞る。class と title 両方指定 = AND 条件）
 [[app]]
 class = "^steam_proton$"
 title = "崩壊|スターレイル|Star ?Rail"
-forward = { key = "escape" }                        # 進む → Esc（ゲームへ送出）
-back    = { key = "Alt_L" }                          # 戻る → Alt（ゲームへ送出）
-middle  = { exec = "hyprctl dispatch movefocus r" }  # 中央 → Super+L相当（フォーカスを右へ）
+forward = { key = "escape" }                       # 進む → Esc（ゲームへ送出）
+back = { key = "Alt_L" }                           # 戻る → Alt（ゲームへ送出）
+middle = { exec = "hyprctl dispatch movefocus r" } # 中央 → Super+L相当（フォーカスを右へ）
 
 # ── 他アプリ設定の書き方リファレンス（コメントアウト＝無効）──
 # [[app]]                        # 精密作業: DPI だけ上げ、ボタンはネイティブ維持

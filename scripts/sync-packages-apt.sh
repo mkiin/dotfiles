@@ -12,11 +12,11 @@ BASELINE="$OUT_DIR/ubuntu-baseline.txt"
 mkdir -p "$OUT_DIR"
 
 # apt: 明示導入 (manual) - baseline
-if [[ -f "$BASELINE" ]]; then
-  apt-mark showmanual | sort | comm -23 - <(sort -u "$BASELINE") > "$OUT_DIR/apt.txt"
+if [[ -f $BASELINE ]]; then
+  apt-mark showmanual | sort | comm -23 - <(sort -u "$BASELINE") >"$OUT_DIR/apt.txt"
 else
   # baseline がまだ無ければ raw dump (初回セットアップ中の保険)
-  apt-mark showmanual | sort > "$OUT_DIR/apt.txt"
+  apt-mark showmanual | sort >"$OUT_DIR/apt.txt"
 fi
 
 echo "[sync-packages-apt] wrote:"

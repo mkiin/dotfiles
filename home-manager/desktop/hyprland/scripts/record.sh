@@ -4,7 +4,7 @@ set -euo pipefail
 out_dir="${1:-${HOME}/Videos}"
 pid_file="${XDG_RUNTIME_DIR:-/tmp}/gpu-screen-recorder.pid"
 
-if [[ -f "$pid_file" ]] && pid=$(<"$pid_file") && kill -0 "$pid" 2>/dev/null; then
+if [[ -f $pid_file ]] && pid=$(<"$pid_file") && kill -0 "$pid" 2>/dev/null; then
   # SIGINT で正常終了させないと mp4 の moov atom が書かれず再生不能になる
   kill -SIGINT "$pid"
   for _ in {1..50}; do

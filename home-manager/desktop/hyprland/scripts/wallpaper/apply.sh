@@ -13,7 +13,7 @@ declare -a PIDS=() TAGS=()
 spawn() {
   local tag="$1"
   shift
-  ( "$@" ) >>"$LOG" 2>&1 &
+  ("$@") >>"$LOG" 2>&1 &
   PIDS+=("$!")
   TAGS+=("$tag")
   log "$tag bg pid=$!"
@@ -33,8 +33,8 @@ wait_all() {
 
 # matugen が指定 index で失敗したら 0 で再試行する safety net。
 matugen_with_fallback() {
-  matugen image "$1" --source-color-index "$2" \
-    || matugen image "$1" --source-color-index 0
+  matugen image "$1" --source-color-index "$2" ||
+    matugen image "$1" --source-color-index 0
 }
 
 run_color_pipeline() {
@@ -66,18 +66,18 @@ notify_downstream() {
   awww query >>"$LOG" 2>&1 || log "  awww query failed rc=$?"
 
   # matugen の post_hook で reload すると wallust 完了前に走り、@color3 等が古いまま固定される race になる
-  "$HOME/.config/hypr/scripts/waybar/reload-css.sh" 2>>"$LOG" \
-    || log "waybar/reload-css failed rc=$?"
+  "$HOME/.config/hypr/scripts/waybar/reload-css.sh" 2>>"$LOG" ||
+    log "waybar/reload-css failed rc=$?"
 
   # ghostty: theme ファイルは window 起動時にしか読まれず split は親 window のキャッシュを継承する。
   # wallust 後に SIGUSR2 で全 ghostty に reload_config を要求。
-  pkill -x -SIGUSR2 ghostty 2>>"$LOG" \
-    && log "ghostty SIGUSR2 sent" \
-    || log "ghostty SIGUSR2 failed rc=$? (no running ghostty?)"
+  pkill -x -SIGUSR2 ghostty 2>>"$LOG" &&
+    log "ghostty SIGUSR2 sent" ||
+    log "ghostty SIGUSR2 failed rc=$? (no running ghostty?)"
 
   # Hyprland の $variable は parse 時に値置換されるため、border 等の既評価ルールに新色を伝播するには全 reload が必要 (colors.conf 単体 source では不十分)
   # boot 経路 (init→pick→apply) は reload 完了を待たず exec を抜けて起動体感を縮める。
-  if [[ "${WALLPAPER_BOOT:-}" == 1 ]]; then
+  if [[ ${WALLPAPER_BOOT:-} == 1 ]]; then
     hyprctl reload >>"$LOG" 2>&1 &
     disown
     log "hyprctl reload backgrounded (boot path)"

@@ -1,9 +1,9 @@
 { lnk, ... }:
 {
   xdg.configFile = {
-    "mouse/g703h.sh".source         = lnk ./g703h.sh;
+    "mouse/g703h.sh".source = lnk ./g703h.sh;
     "mouse/m575-profiled.py".source = lnk ./m575-profiled.py;
-    "mouse/profiles.toml".source    = lnk ./profiles.toml;
+    "mouse/profiles.toml".source = lnk ./profiles.toml;
   };
 
   systemd.user.services.m575-profiled = {
