@@ -4,7 +4,7 @@
 
 **Goal:** Claude Code がファイルを編集するたびに、編集ファイルだけを treefmt で自動整形/lint する仕組みを dotfiles リポジトリに導入する。
 
-**Architecture:** inputs にある `treefmt-nix` を `flake.nix` の outputs に組み込み `nix run .#fmt` / `nix fmt` を有効化する。treefmt の定義は `treefmt/default.nix` に置く。`.claude/settings.json` の PostToolUse hook が編集ファイルのパスを jq で取り出して `nix run .#fmt -- <file>` を呼ぶ。
+**Architecture:** inputs にある `treefmt-nix` を `flake.nix` の outputs に組み込み `nix run .#fmt` / `nix fmt` を有効化する。treefmt の定義は `lib/treefmt/default.nix` に置く。`.claude/settings.json` の PostToolUse hook が編集ファイルのパスを jq で取り出して `nix run .#fmt -- <file>` を呼ぶ。
 
 **Tech Stack:** Nix flake（標準 flake、flake-parts 未使用）, treefmt-nix, nixfmt-rfc-style, statix, shfmt, prettier, taplo, stylua, Claude Code hooks, jq
 
@@ -14,7 +14,7 @@
 - treefmt に含める lint は自動修正できるもののみ（treefmt はファイルを書き換える前提）。
 - 採用フォーマッタ: nixfmt-rfc-style, statix, shfmt, prettier, taplo, stylua。
 - 除外: qml(qmlformat 非標準), py, deadnix（自動削除の誤爆回避）。
-- treefmt 定義のファイルパスは `treefmt/default.nix`。flake からは `./treefmt`（ディレクトリ）で参照する。
+- treefmt 定義のファイルパスは `lib/treefmt/default.nix`。flake からは `./lib/treefmt`（ディレクトリ）で参照する。
 - `.claude/settings.json` の既存キー（permissions, env, attribution 等）は変更しない。`hooks` キーを追加するのみ。
 - hook の matcher は `Edit|Write`。NotebookEdit は除外。
 - コミットメッセージは Conventional Commits 形式。`includeCoAuthoredBy` は無効化済みなので Co-Authored-By 行は付けない。
@@ -24,15 +24,15 @@
 ### Task 1: treefmt 定義ファイルの作成
 
 **Files:**
-- Create: `treefmt/default.nix`
+- Create: `lib/treefmt/default.nix`
 
 **Interfaces:**
 - Consumes: なし
-- Produces: treefmt モジュール定義（attrset を返す関数）。Task 2 が `treefmt-nix.lib.evalModule pkgs ./treefmt` で読み込む。`programs.<name>.enable` で各フォーマッタを有効化し、`projectRootFile = "flake.nix"` でツリールートを決定する。
+- Produces: treefmt モジュール定義（attrset を返す関数）。Task 2 が `treefmt-nix.lib.evalModule pkgs ./lib/treefmt` で読み込む。`programs.<name>.enable` で各フォーマッタを有効化し、`projectRootFile = "flake.nix"` でツリールートを決定する。
 
-- [ ] **Step 1: treefmt/default.nix を作成する**
+- [ ] **Step 1: lib/treefmt/default.nix を作成する**
 
-ファイル `treefmt/default.nix` を以下の内容で作成する。
+ファイル `lib/treefmt/default.nix` を以下の内容で作成する。
 
 ```nix
 { ... }:
@@ -51,13 +51,13 @@
 
 - [ ] **Step 2: 構文が正しいことを確認する**
 
-Run: `nix-instantiate --parse treefmt/default.nix > /dev/null && echo OK`
+Run: `nix-instantiate --parse lib/treefmt/default.nix > /dev/null && echo OK`
 Expected: `OK`（パースエラーが出ないこと）
 
 - [ ] **Step 3: コミット**
 
 ```bash
-git add treefmt/default.nix
+git add lib/treefmt/default.nix
 git commit -m "feat(treefmt): add treefmt formatter/lint definition"
 ```
 
@@ -69,7 +69,7 @@ git commit -m "feat(treefmt): add treefmt formatter/lint definition"
 - Modify: `flake.nix`（`outputs` の `let` ブロックと返り値の attrset）
 
 **Interfaces:**
-- Consumes: `treefmt/default.nix`（Task 1）、inputs の `treefmt-nix`, `nixpkgs`。
+- Consumes: `lib/treefmt/default.nix`（Task 1）、inputs の `treefmt-nix`, `nixpkgs`。
 - Produces: flake 出力 `formatter.x86_64-linux` と `packages.x86_64-linux.fmt`（どちらも `treefmtEval.config.build.wrapper`）。Task 3 の hook が `nix run .#fmt` でこれを呼ぶ。
 
 現状の `flake.nix` の `outputs`（51-69 行）は以下。
@@ -105,7 +105,7 @@ git commit -m "feat(treefmt): add treefmt formatter/lint definition"
       mylib = import ./lib inputs;
       system = "x86_64-linux";
       pkgs = import inputs.nixpkgs { inherit system; };
-      treefmtEval = inputs.treefmt-nix.lib.evalModule pkgs ./treefmt;
+      treefmtEval = inputs.treefmt-nix.lib.evalModule pkgs ./lib/treefmt;
     in
 ```
 

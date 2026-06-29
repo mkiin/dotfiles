@@ -27,13 +27,13 @@ Claude Code がファイルを編集（Edit/Write）するたびに、Nix を中
 - hook の対象範囲: **編集したファイルのみ**。hook の stdin(JSON) から
   `tool_input.file_path` を取り出し、そのファイルだけ整形する。
 - lint は**自動修正できるもののみ**採用（treefmt はファイルを書き換える前提のため）。
-- ファイル配置: treefmt の定義は `treefmt/default.nix` に置く。
+- ファイル配置: treefmt の定義は `lib/treefmt/default.nix` に置く。
 
 ## 構成
 
 3 つの変更からなる。
 
-### 1. `treefmt/default.nix`（新規）
+### 1. `lib/treefmt/default.nix`（新規）
 
 treefmt が適用するフォーマッタ/lint を定義する。
 
@@ -71,7 +71,7 @@ let
   mylib = import ./lib inputs;
   system = "x86_64-linux";
   pkgs = import inputs.nixpkgs { inherit system; };
-  treefmtEval = inputs.treefmt-nix.lib.evalModule pkgs ./treefmt;
+  treefmtEval = inputs.treefmt-nix.lib.evalModule pkgs ./lib/treefmt;
 in
 {
   # 既存の nixosConfigurations / homeConfigurations はそのまま
@@ -80,7 +80,7 @@ in
 }
 ```
 
-- `evalModule pkgs ./treefmt` はディレクトリを渡すと `default.nix` を読む。
+- `evalModule pkgs ./lib/treefmt` はディレクトリを渡すと `default.nix` を読む。
 - `nix run .#fmt`（hook 用）と `nix fmt`（手動用）の両方が使えるようになる。
 
 ### 3. `.claude/settings.json` への hook 追加
