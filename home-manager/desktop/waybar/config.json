@@ -69,8 +69,7 @@
     "format-charging": "{capacity}% "
   },
   "clock": {
-    "format": "󰥔 {:%H:%M}",
-    "format-alt": "󰸗 {:%A, %B %d, %Y}",
+    "format": "󰥔 {:%H:%M  󰸗 %e %b}",
     "tooltip-format": "{calendar}",
     "locale": "en_US.UTF-8",
     "calendar": {
@@ -82,7 +81,6 @@
       }
     },
     "actions": {
-      "on-click-right": "mode",
       "on-scroll-up": "shift_up",
       "on-scroll-down": "shift_down"
     }
