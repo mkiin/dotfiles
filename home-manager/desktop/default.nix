@@ -3,6 +3,7 @@
   imports = [
     ./packages.nix
     ./gtk
+    ./cursor
     ./hyprland
     ./waybar
     ./cliphist

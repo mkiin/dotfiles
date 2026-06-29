@@ -1,7 +1,3 @@
-hl.env("XCURSOR_THEME", "phinger-cursors-light")
-hl.env("HYPRCURSOR_THEME", "phinger-cursors-light")
-hl.env("XCURSOR_SIZE", "40")
-hl.env("HYPRCURSOR_SIZE", "40")
 hl.env("XMODIFIERS", "@im=fcitx")
 hl.env("GTK_IM_MODULE", "fcitx")
 hl.env("QT_IM_MODULE", "fcitx")
