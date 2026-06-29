@@ -15,7 +15,6 @@ in
       settings = {
         "browser.tabs.warnOnClose" = false;
 
-        # Look and Feel / Appearance
         "zen.welcome-screen.seen" = true;
         "zen.watermark.enabled" = false;
         "zen.view.compact.hide-tabbar" = true;
@@ -23,7 +22,6 @@ in
         "browser.toolbars.bookmarks.visibility" = "always";
         "browser.aboutConfig.showWarning" = false;
 
-        # Tab Management / Tabs and Browsing
         "zen.workspaces.continue-where-left-off" = true;
         "browser.startup.page" = 3;
         "browser.tabs.closeWindowWithLastTab" = false;
@@ -35,7 +33,6 @@ in
         "browser.urlbar.suggest.quicksuggest.sponsored" = false;
         "browser.urlbar.suggest.quicksuggest.nonsponsored" = false;
 
-        # Privacy and Security
         "privacy.trackingprotection.enabled" = true;
         "privacy.trackingprotection.socialtracking.enabled" = true;
         "privacy.globalprivacycontrol.enabled" = true;
@@ -46,24 +43,19 @@ in
         "toolkit.telemetry.enabled" = false;
         "browser.newtabpage.activity-stream.feeds.telemetry" = false;
 
-        # Permissions and Data（通知のみブロック / 自動再生は音声のみ）
         "permissions.default.desktop-notification" = 2;
         "dom.push.enabled" = false;
         "media.autoplay.default" = 1;
 
-        # Downloads
         "browser.download.useDownloadDir" = true;
         "browser.download.folderList" = 2;
         "browser.download.dir" = "/home/mkiin/Downloads";
 
-        # Accessibility
         "widget.gtk.overlay-scrollbars.enabled" = false;
         "findbar.highlightAll" = true;
 
-        # Languages（Accept-Language ヘッダのみ。UI 日本語化は Zen 設定で実行時 DL する方式のため pref では不可）
         "intl.accept_languages" = "ja,en-US,en";
 
-        # Fonts（ja = 日本語 / x-western = 欧文）
         "font.name.serif.ja" = "Noto Serif CJK JP";
         "font.name.sans-serif.ja" = "Noto Sans CJK JP";
         "font.name.monospace.ja" = "UDEV Gothic";
@@ -96,8 +88,7 @@ in
 
       bookmarks = import ./bookmarks.nix;
 
-      # Single Toolbar レイアウトでもブックマークバーを常時上部表示する
-      # （Zen 既定では "always" でもホバー時しか出ないため CSS で固定）
+      # Single Toolbar でもブックマークバーを常時表示（既定はホバー時のみ）
       userChrome = ''
         :root[zen-single-toolbar='true']:not([customizing]):has(#PersonalToolbar:not([collapsed])) {
           &:not([inDOMFullscreen='true']) {
