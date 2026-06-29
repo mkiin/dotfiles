@@ -2,7 +2,7 @@
 {
   imports = [
     ./hyprland
-    ./display-manager
+    ./greetd
     ./fcitx5
     ./sound
     ./polkit
