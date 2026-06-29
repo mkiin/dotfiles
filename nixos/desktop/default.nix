@@ -7,5 +7,6 @@
     ./sound
     ./polkit
     ./vesktop
+    ./steam
   ];
 }

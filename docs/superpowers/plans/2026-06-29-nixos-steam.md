@@ -71,8 +71,9 @@ Expected: ビルド成功（`programs.steam` モジュールが評価され、St
 
 - [ ] **Step 5: 検証 — Steam パッケージが構成に含まれることを確認**
 
-Run: `nix eval --raw .#nixosConfigurations.nixos.config.programs.steam.enable`
+Run: `nix eval .#nixosConfigurations.nixos.config.programs.steam.enable`
 Expected: `true`
+（注: `--raw` は文字列専用のため bool 値ではエラーになる。`--raw` なしで評価する）
 
 - [ ] **Step 6: Commit**
 
