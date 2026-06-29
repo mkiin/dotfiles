@@ -15,10 +15,15 @@ let
     # キャッシュ済みで動作する stable 版 (0.303.1) にピン留めして switch ブロックを回避する。
     # 上流修正/キャッシュ復旧後に削除してよい。
     (_final: prev: {
-      inherit ((import inputs.nixpkgs-stable {
-          inherit (prev.stdenv.hostPlatform) system;
-          config.allowUnfree = true;
-        })) cantarell-fonts;
+      inherit
+        (
+          (import inputs.nixpkgs-stable {
+            inherit (prev.stdenv.hostPlatform) system;
+            config.allowUnfree = true;
+          })
+        )
+        cantarell-fonts
+        ;
     })
   ];
 

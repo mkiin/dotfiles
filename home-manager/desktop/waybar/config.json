@@ -3,7 +3,12 @@
   "font": "JetBrains Nerd Font 10",
   "margin": "10 8 2 8",
   "reload_style_on_change": true,
-  "modules-left": ["custom/nix", "custom/mise", "group/connectivity#cluster", "hyprland/window"],
+  "modules-left": [
+    "custom/nix",
+    "custom/mise",
+    "group/connectivity#cluster",
+    "hyprland/window"
+  ],
   "modules-center": ["hyprland/workspaces", "custom/weather"],
   "modules-right": ["group/control-center#cluster", "clock", "custom/power"],
   "group/connectivity#cluster": {
