@@ -3,13 +3,26 @@
   "autoMemoryEnabled": false,
   "language": "japanese",
   "attribution": {
-  "commit": ""
+    "commit": ""
   },
-  "env":{
+  "env": {
     "CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS": "1",
     "ENABLE_CLAUDEAI_MCP_SERVERS": "false",
     "CLAUDE_CODE_ENABLE_TELEMETRY": "0",
     "DISABLE_TELEMETRY": "1"
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "file=$(jq -r '.tool_input.file_path // empty'); [ -n \"$file\" ] && nix run .#fmt -- \"$file\""
+          }
+        ]
+      }
+    ]
   },
   "permissions": {
     "allow": [
@@ -32,11 +45,6 @@
       "Glob",
       "Grep"
     ],
-    "deny": [
-      "Bash(pnpm install*)",
-      "Bash(pnpm i)",
-      "Bash(pnpm i *)",
-      "Bash(pnpm add*)"
-    ]
+    "deny": ["Bash(pnpm install*)", "Bash(pnpm i)", "Bash(pnpm i *)", "Bash(pnpm add*)"]
   }
 }
