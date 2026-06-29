@@ -1,5 +1,4 @@
-_:
-{
+_: {
   programs.starship = {
     enable = true;
     # このファイルは generate.py が symbol.toml から生成する。直接編集しない。

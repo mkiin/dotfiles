@@ -1,5 +1,4 @@
-_:
-{
+_: {
   projectRootFile = "flake.nix";
   programs = {
     nixfmt.enable = true; # nixfmt-rfc-style (Nix 整形)

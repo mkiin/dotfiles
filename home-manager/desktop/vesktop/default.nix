@@ -1,5 +1,4 @@
-_:
-{
+_: {
   # vesktop 本体は nixos/desktop/vesktop で system パッケージとして導入済み。
   # ここでは package = null としてパッケージの二重導入を避け、設定ファイルのみ生成する。
   programs.vesktop = {

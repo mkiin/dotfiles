@@ -1,4 +1,3 @@
-_:
-{
+_: {
   programs.nix-ld.enable = true;
 }
