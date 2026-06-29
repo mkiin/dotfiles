@@ -4,6 +4,11 @@
 
   programs.regreet = {
     enable = true;
+
+    theme = {
+      name = "Tokyonight-Dark";
+      package = pkgs.tokyonight-gtk-theme;
+    };
     iconTheme = {
       name = "Papirus-Dark";
       package = pkgs.papirus-icon-theme;
@@ -14,7 +19,24 @@
     };
     font = {
       name = "Inter";
-      size = 12;
+      package = pkgs.inter;
+      size = 15;
     };
+
+    settings = {
+      background = {
+        path = "${./assets/2025068-final.png}";
+        fit = "Cover";
+      };
+      GTK.application_prefer_dark_theme = true;
+      appearance.greeting_msg = "Welcome back";
+      widget.clock = {
+        format = "%H:%M  %a";
+        resolution = "1s";
+        label_width = 180;
+      };
+    };
+
+    extraCss = builtins.readFile ./style.css;
   };
 }
