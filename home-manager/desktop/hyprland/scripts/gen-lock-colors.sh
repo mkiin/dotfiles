@@ -20,6 +20,8 @@ fi
 TMPCONF="$(mktemp --suffix=.toml)"
 trap 'rm -f "$TMPCONF"' EXIT
 cat >"$TMPCONF" <<EOF
+[config]
+
 [templates.lock]
 input_path = "$TEMPLATE"
 output_path = "$OUT"
