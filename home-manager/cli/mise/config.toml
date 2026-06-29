@@ -14,3 +14,6 @@ supabase = "latest"
 claude-code = "latest"
 "pipx:serena-agent" = "latest"
 "aqua:openai/codex" = "latest"
+
+[settings]
+node.compile = false
