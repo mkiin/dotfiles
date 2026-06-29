@@ -1,6 +1,6 @@
 {
     "label" : "lock",
-    "action" : "hyprctl dispatch exec hyprlock",
+    "action" : "loginctl lock-session",
     "text" : "Lock",
     "keybind" : "l"
 }
