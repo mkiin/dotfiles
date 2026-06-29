@@ -15,8 +15,6 @@
     playerctl
     # shell / panel (qs + quickshell on PATH for keybinds and matugen post_hook)
     quickshell
-    # icon theme (fonts are managed system-wide in nixos/core/fonts)
-    papirus-icon-theme
     # terminals
     wezterm
     # session essentials (lock, screenshot, clipboard, media keys)
