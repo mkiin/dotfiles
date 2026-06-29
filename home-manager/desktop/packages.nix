@@ -19,11 +19,12 @@
     wezterm
     # session essentials (lock, screenshot, clipboard, media keys)
     hyprlock
-    hyprshot
     wl-clipboard
     brightnessctl
     pamixer
     # script dependencies (screenshot.sh, record.sh)
+    grim
+    slurp
     jq
     libnotify
   ];
