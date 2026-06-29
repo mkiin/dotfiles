@@ -1,6 +1,6 @@
 {
     "label" : "lock",
-    "action" : "setsid -f sh -c 'sleep 0.25; loginctl lock-session'",
+    "action" : "setsid -f sh -c 'sleep 0.1; loginctl lock-session'",
     "text" : "Lock",
     "keybind" : "l"
 }
