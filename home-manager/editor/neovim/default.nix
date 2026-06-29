@@ -5,6 +5,7 @@
     withPython3 = false;
     withRuby = false;
     extraPackages = with pkgs; [
+      gcc
       typescript-go
       lua-language-server
       nixd
