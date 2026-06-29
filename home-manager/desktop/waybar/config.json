@@ -98,7 +98,7 @@
       "3": "3",
       "4": "4",
       "5": "5",
-      "special": "󰓎"
+      "special": " "
     },
     "persistent-workspaces": {
       "*": [1, 2, 3, 4, 5]
