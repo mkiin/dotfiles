@@ -60,7 +60,7 @@ in
         "widget.gtk.overlay-scrollbars.enabled" = false;
         "findbar.highlightAll" = true;
 
-        # Languages（Accept-Language ヘッダのみ）
+        # Languages（Accept-Language ヘッダのみ。UI 日本語化は Zen 設定で実行時 DL する方式のため pref では不可）
         "intl.accept_languages" = "ja,en-US,en";
 
         # Fonts（ja = 日本語 / x-western = 欧文）
@@ -95,6 +95,48 @@ in
       ];
 
       bookmarks = import ./bookmarks.nix;
+
+      # Single Toolbar レイアウトでもブックマークバーを常時上部表示する
+      # （Zen 既定では "always" でもホバー時しか出ないため CSS で固定）
+      userChrome = ''
+        :root[zen-single-toolbar='true']:not([customizing]):has(#PersonalToolbar:not([collapsed])) {
+          &:not([inDOMFullscreen='true']) {
+            &[inFullscreen]:not([macOSNativeFullscreen]) :is(#zen-appcontent-navbar-wrapper, #zen-appcontent-navbar-container) {
+              visibility: visible !important;
+            }
+
+            & :is(#zen-appcontent-navbar-wrapper, #zen-appcontent-navbar-container) {
+              display: flex !important;
+              min-height: var(--zen-toolbar-height, 34px) !important;
+              height: var(--zen-toolbar-height, 34px) !important;
+              max-height: var(--zen-toolbar-height, 34px) !important;
+              pointer-events: auto !important;
+            }
+
+            & #zen-appcontent-navbar-wrapper {
+              z-index: 1 !important;
+              opacity: 1 !important;
+              overflow: visible !important;
+              transition: none !important;
+
+              & .titlebar-buttonbox-container {
+                max-height: 100% !important;
+                overflow: visible !important;
+                transition: none !important;
+              }
+
+              & .titlebar-button {
+                padding-block: revert !important;
+              }
+            }
+          }
+
+          & #tabbrowser-tabpanels[has-toolbar-hovered] .browserSidebarContainer:is(.deck-selected, [zen-split='true']) .browserContainer {
+            margin-top: 0 !important;
+            transition: none !important;
+          }
+        }
+      '';
     };
   };
 }
