@@ -79,6 +79,7 @@ in
           system
           username
           pkgs-stable
+          dotfilesDir
           ;
         homeDirectory = homeDirOf system username;
         lnk = mkLnk pkgs dotfilesDir;
@@ -126,6 +127,7 @@ in
               system
               username
               pkgs-stable
+              dotfilesDir
               ;
             homeDirectory = homeDirOf system username;
             lnk = mkLnk pkgs dotfilesDir;
