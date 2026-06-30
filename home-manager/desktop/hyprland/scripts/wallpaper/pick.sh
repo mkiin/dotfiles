@@ -26,7 +26,7 @@ regenerate_cache() {
   fi
 
   if [[ ${#SRC[@]} -eq 0 ]]; then
-    mapfile -t SRC < <(fd --max-depth 1 --type f -e jpg -e jpeg -e png -e webp . "$WALLPAPER_DIR" 2>/dev/null | sort)
+    mapfile -t SRC < <(fd --no-ignore --max-depth 1 --type f -e jpg -e jpeg -e png -e webp . "$WALLPAPER_DIR" 2>/dev/null | sort)
     log "fallback dir listing count=${#SRC[@]}"
   fi
 
