@@ -67,7 +67,7 @@
   };
 
   outputs =
-    { self, ... }@inputs:
+    inputs:
     let
       mylib = import ./lib inputs;
       system = "x86_64-linux";
