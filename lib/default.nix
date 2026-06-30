@@ -48,7 +48,7 @@ let
       rel = lib.removePrefix (toString inputs.self) (toString path);
       target = dotfilesDir + rel;
     in
-    pkgs.runCommandLocal (builtins.baseNameOf (toString path)) { } ''
+    pkgs.runCommandLocal (baseNameOf (toString path)) { } ''
       ln -s ${lib.escapeShellArg target} $out
     '';
 
