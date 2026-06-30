@@ -92,9 +92,7 @@
       formatter.${system} = treefmtEval.config.build.wrapper;
       packages.${system}.fmt = treefmtEval.config.build.wrapper;
 
-      # ローカル用カスタムコマンド: nix run .#<name>
       apps.${system} = {
-        # flake.lock を更新する
         update = {
           type = "app";
           program = toString (
@@ -107,7 +105,6 @@
           );
         };
 
-        # nixos 構成をビルドだけする（反映はしない）
         build = {
           type = "app";
           program = toString (
@@ -120,7 +117,6 @@
           );
         };
 
-        # nixos 構成をビルドして反映する
         switch = {
           type = "app";
           program = toString (

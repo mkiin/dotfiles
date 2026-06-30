@@ -5,7 +5,6 @@ result
 .env
 .superpowers/
 
-# git-hooks.nix が switch 時に生成する（nix store への symlink）
 .pre-commit-config.yaml
 
 /images/wallpaper/*
