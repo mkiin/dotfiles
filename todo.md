@@ -1,5 +1,12 @@
 # やりたいことリスト
 
+## 初回セットアップの自動化
+
+- R2 から壁紙を復元するスクリプトの作成（現状は手動で `images/wallpaper/` に配置する必要がある）
+- 初回起動時に `colors.css` / `colors-waybar.css` が存在せず waybar が起動できない問題の恒久対応
+  - home-manager activation でフォールバック色ファイルを生成する案（R2 復元前でも waybar が起動できるようにする）
+- `~/.config/scripts/notify.sh` が存在せず壁紙適用の最後でエラーになる問題の調査・修正
+
 ## pyprlandの導入
 
 ### workspace_follow_focus
@@ -71,3 +78,28 @@ quickshellで作成するが、参考になるデザインがまだみつかっ�
 ## miseの自動アップデート
 
 github actionかなんかで、自動でアップデートするようにしたい。
+
+## パスワードの宣言的管理（agenix）
+
+`mutableUsers`（現状デフォルト true）だと `passwd` で設定したパスワードがクリーンインストールで消えるため、宣言的に固定したい。public リポジトリなのでハッシュ直書きは避け、agenix で暗号化管理する。`agenix` は flake input には入っているが未配線。
+
+### 方針
+
+- root と user（mkiin）の両方のパスワードを管理する。
+- ハッシュは `mkpasswd -m yescrypt` で生成し、agenix で暗号化して `.age` を Git にコミットする。
+- 復号鍵の構成は未決（個人鍵をマスターにする案を推奨。host key は再インストールで作り直されるため単体だと復元できない）。
+
+### 前提・ブロッカー
+
+- このマシンには SSH host key が無い（openssh 無効、`/etc/ssh` に host key なし）。host key 方式を使うなら `services.openssh.enable = true` 等で先に生成が必要。
+- 復号鍵自体のバックアップ運用を決めないと「再インストールでも変わらない」が成立しない。
+
+### 作業
+
+- [ ] 復号鍵の構成を決める（個人鍵マスター + host key 併用 / host key のみ / 個人鍵のみ）
+- [ ] `secrets/secrets.nix` を作成し、公開鍵を登録する
+- [ ] `secrets/user-password.age` / `secrets/root-password.age` を `agenix -e` で作成する
+- [ ] NixOS モジュールで agenix を配線する（`age.secrets.*`）
+- [ ] `users.users.mkiin.hashedPasswordFile` と root の `hashedPasswordFile` を設定する
+- [ ] `mutableUsers = false` にするか検討する（false にすると passwd 変更が無効になる）
+- [ ] `nix run .#build` で検証してから switch する
