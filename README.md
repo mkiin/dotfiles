@@ -12,22 +12,11 @@ Nix flake による個人環境の宣言的管理リポジトリ。
 
 ## セットアップ（NixOS）
 
-### 鶏と卵の問題
-
-インストール直後の NixOS は **`nix-command` / `flakes` が無効**で、しかも **git も ghq も入っていない**。
-このリポは両方を有効化する設定（`nixos/core/nix`）と git（home-manager 側）を含むが、それらは「この flake を適用したあと」に効く。
-つまり「適用するために flakes と git が要る」のに「flakes と git を入れるにはこの flake を適用しないといけない」という循環になる。
-
-そのため、新CLI（`nix shell nixpkgs#...`）はこの段階では `experimental Nix feature 'nix-command' is disabled` で失敗する。
-循環を断つには、**experimental features を要求しない安定版CLI `nix-shell -p`** で git/ghq を一時的に用意し、初回 rebuild にだけその場で feature を渡す。
-
 ### 1. git/ghq を一時導入してリポジトリを取得する
 
 ```bash
 # experimental features 不要の安定版 CLI で git/ghq を一時的に使う
-nix-shell -p git ghq --run '
-  ghq get github.com/mkiin/dotfiles
-'
+sudo nixos-rebuild switch --flake .#nixos --option experimental-features "nix-command flakes"
 cd "$(nix-shell -p ghq --run 'ghq root')/github.com/mkiin/dotfiles"
 ```
 
@@ -36,13 +25,8 @@ cd "$(nix-shell -p ghq --run 'ghq root')/github.com/mkiin/dotfiles"
 マシン固有のため実機で生成し直す。
 
 ```bash
-nix-shell -p git --run '
-  sudo nixos-generate-config --show-hardware-config > hosts/nixos/hardware-configuration.nix
-  git add .
-'
+nix-shell -p git --run 'sudo nixos-generate-config --show-hardware-config > hosts/nixos/hardware-configuration.nix'
 ```
-
-`git add` は必須。flake は git 管理下のファイルのみを参照するため、未追跡ファイルはエラーになる。
 
 ### 3. 初回 rebuild（その場で flakes を有効化）
 
