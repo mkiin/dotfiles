@@ -86,8 +86,6 @@ in
         "906c6915-5677-48ff-9bfc-096a02a72379" # Floating Status Bar
       ];
 
-      bookmarks = import ./bookmarks.nix;
-
       # Single Toolbar でもブックマークバーを常時表示（既定はホバー時のみ）
       userChrome = ''
         :root[zen-single-toolbar='true']:not([customizing]):has(#PersonalToolbar:not([collapsed])) {
