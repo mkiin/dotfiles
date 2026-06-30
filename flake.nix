@@ -73,6 +73,7 @@
       system = "x86_64-linux";
       pkgs = import inputs.nixpkgs { inherit system; };
       treefmtEval = inputs.treefmt-nix.lib.evalModule pkgs ./lib/treefmt;
+      nom = pkgs.lib.getExe pkgs.nix-output-monitor;
     in
     {
       nixosConfigurations.nixos = mylib.makeNixosConfig {
@@ -90,5 +91,47 @@
 
       formatter.${system} = treefmtEval.config.build.wrapper;
       packages.${system}.fmt = treefmtEval.config.build.wrapper;
+
+      # ローカル用カスタムコマンド: nix run .#<name>
+      apps.${system} = {
+        # flake.lock を更新する
+        update = {
+          type = "app";
+          program = toString (
+            pkgs.writeShellScript "update" ''
+              set -e
+              echo "Updating flake.lock..."
+              nix flake update
+              echo "Done! Run 'nix run .#switch' to apply changes."
+            ''
+          );
+        };
+
+        # nixos 構成をビルドだけする（反映はしない）
+        build = {
+          type = "app";
+          program = toString (
+            pkgs.writeShellScript "build" ''
+              set -e
+              echo "Building nixos configuration..."
+              ${nom} build .#nixosConfigurations.nixos.config.system.build.toplevel "$@"
+              echo "Build successful! Run 'nix run .#switch' to apply."
+            ''
+          );
+        };
+
+        # nixos 構成をビルドして反映する
+        switch = {
+          type = "app";
+          program = toString (
+            pkgs.writeShellScript "switch" ''
+              set -eo pipefail
+              echo "Building and switching nixos configuration..."
+              sudo nixos-rebuild switch --flake .#nixos "$@" |& ${nom}
+              echo "Done!"
+            ''
+          );
+        };
+      };
     };
 }
