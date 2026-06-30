@@ -4,3 +4,7 @@ library/
 result
 .env
 .superpowers/
+
+# 壁紙プールは R2 バックアップ管理。ディレクトリだけ .gitkeep で残す。
+/images/wallpaper/*
+!/images/wallpaper/.gitkeep
