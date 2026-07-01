@@ -32,6 +32,8 @@ let
     import inputs.nixpkgs {
       inherit system;
       config.allowUnfree = true;
+      # vesktop がビルド時に引く pnpm。上流が修正版に上げたら削除する
+      config.permittedInsecurePackages = [ "pnpm-10.29.2" ];
       overlays = defaultOverlays;
     };
 
