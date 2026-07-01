@@ -8,5 +8,6 @@
     ./polkit
     ./vesktop
     ./steam
+    ./games/honkers
   ];
 }
