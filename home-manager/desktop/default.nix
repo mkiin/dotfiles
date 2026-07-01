@@ -18,6 +18,7 @@
     ./terminal/wezterm
     ./zen
     ./vesktop
+    ./games/nikke
   ];
 
   programs.zsh = {
