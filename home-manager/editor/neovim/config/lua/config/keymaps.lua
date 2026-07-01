@@ -11,6 +11,9 @@ map("n", "<Esc>", "<Cmd>nohlsearch<CR>", opts)
 -- モード切り替え
 map("i", "jj", "<Esc>", opts)
 
+-- ターミナルモード → ノーマルモード（既定の <C-\><C-n> の代替）
+map("t", "<C-y>", [[<C-\><C-n>]], opts)
+
 -- 削除操作（ヤンクしない）
 map("n", "c", '"_c', opts)
 map("n", "d", '"_d', opts)
