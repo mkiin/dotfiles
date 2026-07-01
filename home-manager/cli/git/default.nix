@@ -23,6 +23,7 @@
       };
       init.defaultBranch = "main";
       ghq.root = "${config.home.homeDirectory}/ghq";
+      url."git@github.com:".insteadOf = "https://github.com/";
       credential."https://github.com".helper = [
         ""
         "!gh auth git-credential"
