@@ -30,8 +30,7 @@ jobs:
         uses: natsukium/nix-diff-action@4091452e4c7b3c7ea4ecbaec84be7f0066d810d7 # main
         with:
           skip-no-change: true
+          # "mkiin@wsl" は '@' を含み attribute regex を通らないため nixos のみ
           attributes: |
-            - displayName: home-manager (wsl)
-              attribute: homeConfigurations."mkiin@wsl".activationPackage
             - displayName: nixos
               attribute: nixosConfigurations.nixos.config.system.build.toplevel
