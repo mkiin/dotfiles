@@ -20,7 +20,7 @@ NixOS & home-manager の個人 dotfiles。
 守るルール:
 
 1. **1 機能 = 1 ディレクトリ = 1 `default.nix`**。関連する設定ファイル(lua/conf/テンプレート)は同じディレクトリに同居(コロケーション)。ゲーム等の並列物は `desktop/games/<name>/` のように 1 つ下の階層で分ける。
-2. **各階層の `default.nix` は `imports` 集約役**。ロジックは書かない。機能を足したら親の `default.nix` の imports に 1 行足すだけ。
+2. **集約 `default.nix` は原則カテゴリ第一階層**(`nixos/core`・`home-manager/{cli,desktop}` 等)に置き、`imports` 集約に徹する(ロジックは書かない)。`terminal/`・`games/` のように「同種の実装が並ぶだけで共通設定を持たない緩い括り」は中間集約を省き、親から `./games/<name>` を直接 import してよい(既存の `terminal/*` に倣う)。
 3. **`packages.nix`** … 独立ディレクトリを作るほどでない、依存の薄いパッケージ束の置き場(`home-manager/{cli,desktop}/packages.nix`, `nixos/core/packages`)。
 4. **system か user か**を先に決める。全体に効くもの(steam/ランチャー/フォント)は `nixos/`、ユーザー設定は `home-manager/`。本体=system・設定=user に割るものもある(例: vesktop)。
 5. **ホスト差分は `hosts/` で吸収**。WSL は desktop を import しない等。共通は `nixos/`・`home-manager/` 側へ。
