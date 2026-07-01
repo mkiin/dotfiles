@@ -7,6 +7,30 @@ NixOS & home-manager の個人 dotfiles。
 - `nixosConfigurations.nixos` … 実機 NixOS（host: `nixos` / user: `mkiin`）
 - `homeConfigurations."mkiin@wsl"` … WSL 上の home-manager
 
+## ディレクトリ構成と分離ルール
+
+レイヤーで最上位を分ける:
+
+- `nixos/` … システム(NixOS module)。`core/`(boot/nix/users/locale/… 基盤) + `hardware/` + `desktop/`
+- `home-manager/` … ユーザー。`cli/` + `editor/` + `ai/` + `desktop/`
+- `hosts/` … ホスト単位のエントリ。imports 組み立て・`hardware-configuration.nix`・`home-manager.users` 配線・`stateVersion` のみ。実体設定は書かない
+- `lib/` … flake ヘルパー(`makeNixosConfig` 等)と `treefmt/`
+- `packages/` `scripts/` `hooks/` `images/` … 補助
+
+守るルール:
+
+1. **1 機能 = 1 ディレクトリ = 1 `default.nix`**。関連する設定ファイル(lua/conf/テンプレート)は同じディレクトリに同居(コロケーション)。ゲーム等の並列物は `desktop/games/<name>/` のように 1 つ下の階層で分ける。
+2. **各階層の `default.nix` は `imports` 集約役**。ロジックは書かない。機能を足したら親の `default.nix` の imports に 1 行足すだけ。
+3. **`packages.nix`** … 独立ディレクトリを作るほどでない、依存の薄いパッケージ束の置き場(`home-manager/{cli,desktop}/packages.nix`, `nixos/core/packages`)。
+4. **system か user か**を先に決める。全体に効くもの(steam/ランチャー/フォント)は `nixos/`、ユーザー設定は `home-manager/`。本体=system・設定=user に割るものもある(例: vesktop)。
+5. **ホスト差分は `hosts/` で吸収**。WSL は desktop を import しない等。共通は `nixos/`・`home-manager/` 側へ。
+
+## コーディング規約
+
+- **コメントをだらだら書くな**。何をしているかはコードで分かる。コメントは「なぜそうしたか(非自明な理由・ハマりどころ・外部制約)」だけを 1〜2 行で。
+- `enable = true; # 有効化` のような逐条コメントや、設定項目を日本語で言い換えるだけのコメントは禁止。冗長なら消す。
+- Nix の未使用 let 束縛は treefmt の deadnix が検出する。`nix run .#fmt -- --fail-on-change` を build と併せて必ず通す。
+
 ## ローカル用カスタムコマンド（flake apps）
 
 リポジトリ直下で実行する。
@@ -21,7 +45,7 @@ NixOS & home-manager の個人 dotfiles。
 定義は `flake.nix` の `apps.${system}`。`build` / `switch` は実機 NixOS（`.#nixos`）向け。
 WSL を反映するときは `nix run nixpkgs#home-manager -- switch --flake .#mkiin@wsl`。
 
-## 運用モデル: A（Bot主導 / pull運用）
+## 運用モデル: Bot主導 / pull運用
 
 flake の更新は **cron Bot に任せる**。Bot が main の `flake.lock` を更新し
 （release-age 3日 + CIビルド緑のみマージ）、検証済みの lock だけが main に入る。
