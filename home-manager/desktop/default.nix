@@ -18,7 +18,7 @@
     ./terminal/wezterm
     ./zen
     ./vesktop
-    ./games/nikke
+    ./games/anime-games-launcher
   ];
 
   programs.zsh = {
