@@ -21,41 +21,11 @@ return {
 		end,
 	},
 	{
-		"nvim-neo-tree/neo-tree.nvim",
-		keys = {
-			{
-				"<leader>o",
-				function()
-					require("neo-tree.command").execute({ focus = true })
-				end,
-				desc = "Focus NeoTree",
-			},
-			{
-				"<leader>fe",
-				function()
-					require("neo-tree.command").execute({ toggle = true, dir = vim.uv.cwd() })
-				end,
-				desc = "Explorer NeoTree (cwd)",
-			},
-		},
-		opts = {
-			filesystem = {
-				filtered_items = {
-					visible = true,
-					hide_dotfiles = false,
-					hide_gitignored = false,
-				},
-				use_libuv_file_watcher = true,
-			},
-		},
-	},
-	{
 		"folke/flash.nvim",
 		opts = {
 			search = {
 				multi_window = false,
 				exclude = {
-					"neo-tree",
 					"notify",
 					"cmp_menu",
 					"noice",
