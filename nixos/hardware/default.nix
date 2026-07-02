@@ -3,6 +3,7 @@
   imports = [
     ./nvidia
     ./bluetooth
+    ./sleep
   ];
 
   hardware.graphics.enable = true;
