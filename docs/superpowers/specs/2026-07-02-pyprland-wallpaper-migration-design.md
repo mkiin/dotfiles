@@ -70,7 +70,8 @@ graphical-session.target
 責務:
 
 - `home.packages` に `pyprland` を追加（keybind / 端末から `pypr` を使うため PATH に必要）。
-- `xdg.configFile."hypr/pyprland.toml".text`（下記）を生成 → 単一の読取専用 symlink。
+- `xdg.configFile."pypr/config.toml".text`（下記）を生成 → 単一の読取専用 symlink。
+  - 配置先は pyprland 3.x の推奨パス `~/.config/pypr/config.toml`。legacy の `~/.config/hypr/pyprland.toml` は起動時に移行警告が出るため使わない。
   - `path` と `command` / `post_command` の絶対パスは Nix 補間で埋める（`${dotfilesDir}` / `${config.home.homeDirectory}`）。`~` 展開に依存しない。
 - systemd ユーザーサービス 2 つ（HM 形式。既存 `quickshell` / `mouse` サービスに倣う）。
 

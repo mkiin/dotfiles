@@ -10,7 +10,9 @@
 
   # 宣言的な単一 config。transition 系は runtime 可変にするため state.env 側に置き、
   # ここには持たせない（command が set.sh 経由で都度読む）。interval は宣言的。
-  xdg.configFile."hypr/pyprland.toml".text = ''
+  # pyprland 3.x の推奨パスは ~/.config/pypr/config.toml。~/.config/hypr/pyprland.toml は
+  # legacy 扱いで起動時に移行警告が出るため新パスに置く。
+  xdg.configFile."pypr/config.toml".text = ''
     [pyprland]
     plugins = ["wallpapers"]
 
