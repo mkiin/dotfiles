@@ -83,6 +83,14 @@ quickshellで作成するが、参考になるデザインがまだみつかっ�
 
 github actionかなんかで、自動でアップデートするようにしたい。
 
+## oil.nvim の gitignore 非表示（保留）
+
+ファイラーを neo-tree から oil.nvim に移行した際の積み残し。
+
+- 「gitignore 対象を常に非表示」にしたいが、oil には native の gitignore フィルタが無い。
+- `view_options.is_hidden_file` で `git check-ignore` / `git ls-files` を噛ませれば「hidden 扱い」にはできるが、oil の隠し区分は1種類だけなので `g.`（toggle_hidden）を押すと dotfiles と一緒に必ず出てくる。「トグルでも絶対に出さない」は oil では不可。
+- 現状は素の `show_hidden`（dotfiles トグルのみ）で妥協。gitignore 隠しが本当に欲しくなったら公式 recipes の is_hidden_file + git キャッシュ実装（doc/recipes.md）を導入するか検討する。
+
 ## パスワードの宣言的管理（agenix）
 
 `mutableUsers`（現状デフォルト true）だと `passwd` で設定したパスワードがクリーンインストールで消えるため、宣言的に固定したい。public リポジトリなのでハッシュ直書きは避け、agenix で暗号化管理する。`agenix` は flake input には入っているが未配線。
