@@ -2,22 +2,35 @@ return {
 	"akinsho/bufferline.nvim",
 	opts = function(_, opts)
 		-- LazyVim は catppuccin のときだけ bufferline 専用 highlight を焼き込む。
-		-- その値が themery の実行時切替後も残り（bufferline #1030 で ColorScheme 時に
-		-- 再生成されない）、tokyonight/rose-pine で色が崩れる。テーマごとに highlights を
-		-- 選び直して ColorScheme のたびに setup し直す。
+		-- その値が themery の実行時テーマ切替後も残って tokyonight/rose-pine で色が崩れる。
+		-- ColorScheme のたびにテーマ別 highlights を選び直して bufferline を setup し直す。
 		local function highlights_for(name)
 			name = name or ""
+			-- catppuccin は完全な highlights を関数形式で返すのでそのまま使う。
 			if name:find("catppuccin") then
-				local ok, m = pcall(require, "catppuccin.special.bufferline")
-				return ok and m.get_theme() or {}
-			elseif name:find("rose%-pine") then
-				local ok, m = pcall(require, "rose-pine.plugins.bufferline")
-				return ok and m or {}
+				local ok, m = pcall(function()
+					return require("catppuccin.special.bufferline").get_theme()
+				end)
+				if ok and m then
+					return m
+				end
 			end
-			-- 専用テーブルを持たないテーマ（tokyonight/kanagawa 等）は
-			-- bufferline のカラースキーム自動生成に委ねる
-			return {}
+			local base = {}
+			if name:find("rose%-pine") then
+				local ok, m = pcall(require, "rose-pine.plugins.bufferline")
+				base = ok and m or {}
+			end
+			-- Normal を透過(bg=NONE)にしているため bufferline は separator 色を導けず
+			-- "NONE"→白グリフになる。separator セルも透過にして buffer 背景に溶け込ませる。
+			for _, k in ipairs({ "separator", "separator_visible", "separator_selected" }) do
+				base[k] = { fg = "NONE", bg = "NONE" }
+			end
+			return base
 		end
+
+		-- 区切りの │ グリフ自体を描かない（透過端末で白線が原理的に出ないように）。
+		opts.options = opts.options or {}
+		opts.options.separator_style = { "", "" }
 
 		opts.highlights = highlights_for(vim.g.colors_name)
 
