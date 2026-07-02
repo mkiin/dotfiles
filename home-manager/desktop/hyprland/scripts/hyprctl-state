@@ -5,13 +5,15 @@ set -uo pipefail
 
 STATE_FILE="${XDG_STATE_HOME:-$HOME/.local/state}/hypr/state.env"
 
+# 壁紙の回転/選択は pyprland に移行済み。ここに残すのは color/transition の runtime 可変値のみ。
 declare -A DEFAULTS=(
-  [WALLPAPER_NOTIFY]=true
-  [WALLPAPER_ROTATION]=true
-  [WALLPAPER_INTERVAL_SEC]=1800
-  [WALLPAPER_RANDOM_ON_STARTUP]=true
   [MATUGEN_SOURCE_INDEX]=0
   [MATUGEN_RANDOM_INDEX]=false
+  [AWWW_TRANSITION_TYPE]=grow
+  [AWWW_TRANSITION_FPS]=120
+  [AWWW_TRANSITION_DURATION]=3
+  [AWWW_TRANSITION_STEP]=90
+  [AWWW_TRANSITION_BEZIER]=.23,1,.32,1
 )
 
 state_get() {

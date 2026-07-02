@@ -8,6 +8,10 @@ local browser = vars.browser
 hl.bind(mainMod .. " + SHIFT + D", hl.dsp.exec_cmd("~/.config/hypr/scripts/mode.sh desk"))
 hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd("~/.config/hypr/scripts/mode.sh bed"))
 
+-- 壁紙 (pyprland wallpapers): W=次へ+回転再開 / SHIFT+W=回転停止
+hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("pypr wall next"))
+hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd("pypr wall pause"))
+
 -- アプリ起動
 hl.bind(mainMod .. " + G", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + C", hl.dsp.window.close())

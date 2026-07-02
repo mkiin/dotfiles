@@ -2,15 +2,10 @@
   inputs,
   pkgs,
   lnk,
-  dotfilesDir,
   ...
 }:
 {
   imports = [ ./monitor.nix ];
-
-  # 壁紙プールの canonical パス。壁紙スクリプト(init/pick/thumb)が WALLPAPER_DIR として参照する。
-  # コンポジタ/GPU 系の env は ./lua/env.lua にある（レイヤーが異なるため分離）。
-  home.sessionVariables.WALLPAPER_DIR = "${dotfilesDir}/images/wallpaper";
 
   wayland.windowManager.hyprland = {
     enable = true;
@@ -28,7 +23,6 @@
     "hypr/appearance.lua".source = lnk ./lua/appearance.lua;
     "hypr/env.lua".source = lnk ./lua/env.lua;
     "hypr/input.lua".source = lnk ./lua/input.lua;
-    "hypr/autostart.lua".source = lnk ./lua/autostart.lua;
     "hypr/keybinds.lua".source = lnk ./lua/keybinds.lua;
     "hypr/rules.lua".source = lnk ./lua/rules.lua;
     "hypr/scripts".source = lnk ./scripts;

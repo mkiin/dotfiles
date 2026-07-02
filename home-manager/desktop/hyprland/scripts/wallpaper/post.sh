@@ -1,14 +1,21 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# pyprland wallpapers の post_command。壁紙セット(set.sh)後の色生成と波及のみを担う。
+# awww img は set.sh に移譲済み。
 LOG="${XDG_STATE_HOME:-$HOME/.local/state}/hypr/wallpaper-apply.log"
 LAST="${XDG_STATE_HOME:-$HOME/.local/state}/hypr/last_wallpaper"
 STATE="$HOME/.config/hypr/scripts/hyprctl-state"
+mkdir -p "$(dirname "$LOG")"
 
-log() { printf '[%s pid=%d apply] %s\n' "$(date +%FT%T.%3N)" "$$" "$*" >>"$LOG"; }
+log() { printf '[%s pid=%d post] %s\n' "$(date +%FT%T.%3N)" "$$" "$*" >>"$LOG"; }
+
+# init.sh 廃止に伴い log cap をここへ移設。毎回の wc は安価。~20-40 回分の履歴を保持。
+if [[ -s $LOG ]] && (($(wc -l <"$LOG") > 2000)); then
+  tail -n 1000 "$LOG" >"$LOG.tmp" && mv "$LOG.tmp" "$LOG"
+fi
 
 # 並列子プロセス管理。spawn で push、wait_all で全 wait + 終了コード log。
-# タスクを増やすときは spawn 行を追加するだけ。
 declare -a PIDS=() TAGS=()
 spawn() {
   local tag="$1"
@@ -48,12 +55,6 @@ run_color_pipeline() {
   fi
   log "matugen SOURCE_IDX=$source_idx"
 
-  spawn awww awww img "$img" \
-    --transition-type grow \
-    --transition-fps 120 \
-    --transition-duration 3 \
-    --transition-step 90 \
-    --transition-bezier .23,1,.32,1
   spawn matugen matugen_with_fallback "$img" "$source_idx"
   # wallust: matugen が出さない @color0..15 (Pywal 系) を waybar style 用に追加生成
   spawn wallust wallust run "$img" --quiet
@@ -62,9 +63,6 @@ run_color_pipeline() {
 }
 
 notify_downstream() {
-  log "awww query after:"
-  awww query >>"$LOG" 2>&1 || log "  awww query failed rc=$?"
-
   # matugen の post_hook で reload すると wallust 完了前に走り、@color3 等が古いまま固定される race になる
   "$HOME/.config/hypr/scripts/waybar/reload-css.sh" 2>>"$LOG" ||
     log "waybar/reload-css failed rc=$?"
@@ -75,42 +73,15 @@ notify_downstream() {
     log "ghostty SIGUSR2 sent" ||
     log "ghostty SIGUSR2 failed rc=$? (no running ghostty?)"
 
-  # Hyprland の $variable は parse 時に値置換されるため、border 等の既評価ルールに新色を伝播するには全 reload が必要 (colors.conf 単体 source では不十分)
-  # boot 経路 (init→pick→apply) は reload 完了を待たず exec を抜けて起動体感を縮める。
-  if [[ ${WALLPAPER_BOOT:-} == 1 ]]; then
-    hyprctl reload >>"$LOG" 2>&1 &
-    disown
-    log "hyprctl reload backgrounded (boot path)"
-  else
-    hyprctl reload 2>>"$LOG" || log "hyprctl reload failed rc=$?"
-  fi
+  # Hyprland の $variable は parse 時に値置換されるため、border 等の既評価ルールに新色を伝播するには全 reload が必要
+  hyprctl reload 2>>"$LOG" || log "hyprctl reload failed rc=$?"
 }
 
-persist_last() {
-  local img="$1"
-  echo "$img" >"$LAST"
-  log "wrote last_wallpaper=$img"
-}
-
-maybe_notify() {
-  local img="$1"
-  if [[ "$("$STATE" get WALLPAPER_NOTIFY)" == "true" ]]; then
-    source "$HOME/.config/scripts/notify.sh"
-    notify --app "wallset" --icon "preferences-desktop-wallpaper" \
-      "Wallpaper changed" "$(basename "$img")"
-  fi
-}
-
-img="${1:?usage: apply.sh <image>}"
+img="${1:?usage: post.sh <image>}"
 
 log "=== invoked img=$img"
-log "img exists=$([[ -f $img ]] && echo yes || echo no) size=$(stat -c %s "$img" 2>/dev/null || echo ?)"
-log "last_cache=$(cat "$LAST" 2>/dev/null || echo '<none>')"
-log "awww query before:"
-awww query >>"$LOG" 2>&1 || log "  awww query failed rc=$?"
-
 run_color_pipeline "$img"
 notify_downstream
-persist_last "$img"
-maybe_notify "$img"
-log "=== complete"
+# mode.sh がモード切替時に参照するため last_wallpaper を書き続ける。
+echo "$img" >"$LAST"
+log "=== complete last_wallpaper=$img"

@@ -5,6 +5,7 @@
     ./gtk
     ./cursor
     ./hyprland
+    ./pyprland
     ./waybar
     ./cliphist
     ./hypridle
