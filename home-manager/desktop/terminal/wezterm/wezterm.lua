@@ -127,16 +127,8 @@ config.keys = {
 	{ key = "F15", mods = "NONE", action = act.Nop },
 }
 
--- ========================================
--- 右クリックでペースト動作
--- ========================================
-config.mouse_bindings = {
-	{
-		event = { Down = { streak = 1, button = "Right" } },
-		mods = "NONE",
-		action = act.PasteFrom("Clipboard"),
-	},
-}
+-- 右クリックへの独自割当はしない(wezterm デフォルト挙動)。
+-- 旧: 右クリック=PasteFrom は Claude Code 等の画像貼付(Ctrl+V検出)を潰すため廃止。
 
 -- ========================================
 -- キーテーブル（モード）
