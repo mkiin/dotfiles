@@ -55,3 +55,19 @@ hl.animation({ leaf = "border", enabled = true, speed = 1, bezier = "liner" })
 hl.animation({ leaf = "borderangle", enabled = true, speed = 30, bezier = "liner", style = "once" })
 hl.animation({ leaf = "fade", enabled = true, speed = 2, bezier = "default" })
 hl.animation({ leaf = "workspaces", enabled = true, speed = 5, bezier = "wind" })
+
+hl.config({
+	plugin = {
+		hyprfocus = {
+			enable = true,
+			keyboard_focus_animation = "flash",
+			mouse_focus_animation = "flash",
+			animate_floating = true,
+			fade_opacity = 0.8,
+		},
+	},
+})
+
+hl.curve("focusCurve", { type = "bezier", points = { { 0.05, 0.9 }, { 0.1, 1.0 } } })
+hl.animation({ leaf = "hyprfocusIn", enabled = true, speed = 1.7, bezier = "focusCurve" })
+hl.animation({ leaf = "hyprfocusOut", enabled = true, speed = 1.7, bezier = "focusCurve" })

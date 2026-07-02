@@ -41,9 +41,9 @@ quickshellで作成するが、参考になるデザインがまだみつかっ�
 
 ## 他パッケージの追加と設定
 
-- wl-creenrec : super+Rで起動、なぜか起動後に再度入力すると停止せずに２つ目の録画が始まる。これは解消
+- 画面録画 : gpu-screen-recorder(record.sh)を維持。wl-screenrec は NVIDIA proprietary driver だと VA-API 前提で HW エンコードが実質動かないため見送り。Super+R のトグルは実装済み(PIDファイル + SIGINT)。二重録画バグは解消。
 
-- hyprfocus : ボーダーによる強調をいれていないため、移動時にアニメーションで強調してくれる機能がほしい。
+- hyprfocus : 導入済み(hyprwm/hyprland-plugins、flash アニメでフォーカス強調)。
 
 ## 見た目・リファクタリング
 
