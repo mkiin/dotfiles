@@ -34,21 +34,21 @@ scratchpad / 窓退避 / 迷子窓救出 / fcitx5 自動切替を追加する。
 
 ## 決定事項（確定）
 
-| 論点                | 決定                                                                                                                             |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| config 構造         | 既存 `pyprland/default.nix` が生成する**単一 `config.toml` を拡張**（pyprland は単一 toml しか読まないため分割しない）           |
-| systemd             | 追加サービス無し。常駐中の `pyprland.service` が全プラグインを動かす                                                             |
-| follow_focus の挙動 | **純follow（A）**: 他モニター表示中の WS を選ぶと、その WS が手元（フォーカス中モニター）へ来る                                  |
-| WS↔モニター固定     | `monitors/*.lua` の `workspace_rule` から `monitor`/`default`/`persistent` を撤去。初期WSは pyprland `default_workspaces` で指定 |
-| 相対WS移動          | `SUPER+I/O` を `pypr change_workspace -1/+1` に変更（follow 尊重）                                                               |
-| SUPER+数字          | 変更なし（プラグインが hook する）                                                                                               |
-| scratchpads 対象    | term(wezterm `--class scratch-term`) / btop / vesktop                                                                            |
-| scratchpads keybind | `SUPER+Z`=term / `SUPER+X`=btop / `SUPER+D`=vesktop                                                                              |
-| SUPER+D             | vesktop の起動 exec を廃止し scratchpad トグルへ置換                                                                             |
-| toggle_special      | `SUPER+S` を native `toggle_special("magic")` → `pypr toggle_special` に置換                                                     |
-| SUPER+SHIFT+S       | **削除**（stash/unstash は SUPER+S の toggle_special に一本化）                                                                  |
-| lost_windows        | `SUPER+SHIFT+M` → `pypr lost_windows`（config 不要）                                                                             |
-| fcitx5 自動OFF      | `inactive_classes` = 端末(wezterm / scratch-term / scratch-btop) + ゲーム(nikke)。ブラウザは対象外（手動）                       |
+| 論点                | 決定                                                                                                                                            |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| config 構造         | 既存 `pyprland/default.nix` が生成する**単一 `config.toml` を拡張**（pyprland は単一 toml しか読まないため分割しない）                          |
+| systemd             | 追加サービス無し。常駐中の `pyprland.service` が全プラグインを動かす                                                                            |
+| follow_focus の挙動 | **純follow（A）**: 他モニター表示中の WS を選ぶと、その WS が手元（フォーカス中モニター）へ来る                                                 |
+| WS↔モニター固定     | `monitors/*.lua` の `workspace_rule` から `monitor`/`default`/`persistent` を撤去。初期WSは Hyprland のデフォルト割当（モニター宣言順）に委ねる |
+| 相対WS移動          | `SUPER+I/O` を `pypr change_workspace -1/+1` に変更（follow 尊重）                                                                              |
+| SUPER+数字          | 変更なし（プラグインが hook する）                                                                                                              |
+| scratchpads 対象    | term(wezterm `--class scratch-term`) / btop / vesktop                                                                                           |
+| scratchpads keybind | `SUPER+Z`=term / `SUPER+X`=btop / `SUPER+D`=vesktop                                                                                             |
+| SUPER+D             | vesktop の起動 exec を廃止し scratchpad トグルへ置換                                                                                            |
+| toggle_special      | `SUPER+S` を native `toggle_special("magic")` → `pypr toggle_special` に置換                                                                    |
+| SUPER+SHIFT+S       | **削除**（stash/unstash は SUPER+S の toggle_special に一本化）                                                                                 |
+| lost_windows        | `SUPER+SHIFT+M` → `pypr lost_windows`（config 不要）                                                                                            |
+| fcitx5 自動OFF      | `inactive_classes` = 端末(wezterm / scratch-term / scratch-btop) + ゲーム(nikke)。ブラウザは対象外（手動）                                      |
 
 ## アーキテクチャ
 
@@ -77,9 +77,8 @@ command = "<home>/.config/hypr/scripts/wallpaper/set.sh [file]"
 post_command = "<home>/.config/hypr/scripts/wallpaper/post.sh [file]"
 
 [workspaces_follow_focus]
+# change_workspace の巡回上限（このプラグインの唯一のオプション）
 max_workspaces = 10
-# 各出力の初期WS。接続されていない出力の行は無視される（bed/desk 両対応）。
-default_workspaces = ["DP-3:1", "DP-2:2", "DP-1:3", "HDMI-A-1:1"]
 
 [toggle_special]
 # フォーカス窓を special:stash へ退避/復帰
@@ -113,7 +112,8 @@ inactive_titles = []
 active_titles = []
 ```
 
-> `default_workspaces` は接続中の出力にのみ適用されるため、desk(3枚)/bed(1枚) の両モードで同じ記述が使える。
+> `workspaces_follow_focus` のオプションは `max_workspaces` のみ（`default_workspaces` は存在しない）。
+> 初期WS配置は Hyprland のデフォルト割当（宣言順のモニターに WS1,2,3… が付く）に委ねる。desk では宣言順 DP-3→WS1, DP-2→WS2, DP-1→WS3 になり従来と同等。
 > `[toggle_special]` の `name` は native の `special:magic` と衝突しない名前（`stash`）にする。
 
 ### 責務分担
@@ -144,7 +144,7 @@ hl.workspace_rule({ workspace = "2", monitor = "DP-2", default = true, persisten
 hl.workspace_rule({ workspace = "3", monitor = "DP-1", default = true, persistent = true })
 ```
 
-→ **`workspace_rule` を全撤去**（monitor 定義のみ残す）。初期WS配置は `default_workspaces` が担う。
+→ **`workspace_rule` を全撤去**（monitor 定義のみ残す）。初期WS配置は Hyprland のデフォルト割当（モニター宣言順に WS1,2,3…）に委ねる。
 follow_focus 下で `monitor`/`default`/`persistent` 固定は follow の挙動と競合するため。
 
 ### 3. 変更: `home-manager/desktop/hyprland/monitors/bed.lua`
