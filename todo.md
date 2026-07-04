@@ -13,38 +13,16 @@
 
 ## pyprlandの導入
 
-### workspace_follow_focus
-
-ワークスペースとモニターを一致する問題を解消でき、1つのモニター内で複数のワークスペースを保持できる
-
-### monitors
-
-ベッドモードとデスクモードを自前スクリプトで管理していたのを、pyprlandのmonitors機能で代替えする。モニタープロファイル機能を提供する。
-
 ### scratchpads
 
 見送り。vesktop(Electron 単一インスタンス)の窓追跡が安定せず、pyprland の手動スライドが Hyprland のアニメと衝突するため撤去した。
-
-### その他
-
-- toggle_special
-- lost_windows
-- fcitx5_switcher
 
 ## 壁紙選択ランチャーの作成
 
 quickshellで作成するが、参考になるデザインがまだみつかっていないため保留。
 機能としては、ロック画面およびログイン画面、デスクトップの壁紙を選択でき、ロック、ログイン画面は選択した際にバックグラウンドでmatugen由来のテーマを作成する。
 
-## 壁紙をR2に保存する処理の作成
-
-今後、壁紙が増えていくとgitで管理した際に容量が大きくなるため、images/wallpaperのみcloudflareのR2にバックアップを行う。イベントか定期か保存タイミングについてはR2の課金体型を調べてから決める。
-
 ## 他パッケージの追加と設定
-
-- 画面録画 : gpu-screen-recorder(record.sh)を維持。wl-screenrec は NVIDIA proprietary driver だと VA-API 前提で HW エンコードが実質動かないため見送り。Super+R のトグルは実装済み(PIDファイル + SIGINT)。二重録画バグは解消。
-
-- hyprfocus : 導入済み(hyprwm/hyprland-plugins、flash アニメでフォーカス強調)。
 
 - fastfetch : システム情報を表示するCLI。
 
@@ -94,27 +72,6 @@ github actionかなんかで、自動でアップデートするようにした�
 - `view_options.is_hidden_file` で `git check-ignore` / `git ls-files` を噛ませれば「hidden 扱い」にはできるが、oil の隠し区分は1種類だけなので `g.`（toggle_hidden）を押すと dotfiles と一緒に必ず出てくる。「トグルでも絶対に出さない」は oil では不可。
 - 現状は素の `show_hidden`（dotfiles トグルのみ）で妥協。gitignore 隠しが本当に欲しくなったら公式 recipes の is_hidden_file + git キャッシュ実装（doc/recipes.md）を導入するか検討する。
 
-## パスワードの宣言的管理（agenix）
+## パスワードの宣言的管理（agenix）✅ 完了
 
-`mutableUsers`（現状デフォルト true）だと `passwd` で設定したパスワードがクリーンインストールで消えるため、宣言的に固定したい。public リポジトリなのでハッシュ直書きは避け、agenix で暗号化管理する。`agenix` は flake input には入っているが未配線。
-
-### 方針
-
-- root と user（mkiin）の両方のパスワードを管理する。
-- ハッシュは `mkpasswd -m yescrypt` で生成し、agenix で暗号化して `.age` を Git にコミットする。
-- 復号鍵の構成は未決（個人鍵をマスターにする案を推奨。host key は再インストールで作り直されるため単体だと復元できない）。
-
-### 前提・ブロッカー
-
-- このマシンには SSH host key が無い（openssh 無効、`/etc/ssh` に host key なし）。host key 方式を使うなら `services.openssh.enable = true` 等で先に生成が必要。
-- 復号鍵自体のバックアップ運用を決めないと「再インストールでも変わらない」が成立しない。
-
-### 作業
-
-- [ ] 復号鍵の構成を決める（個人鍵マスター + host key 併用 / host key のみ / 個人鍵のみ）
-- [ ] `secrets/secrets.nix` を作成し、公開鍵を登録する
-- [ ] `secrets/user-password.age` / `secrets/root-password.age` を `agenix -e` で作成する
-- [ ] NixOS モジュールで agenix を配線する（`age.secrets.*`）
-- [ ] `users.users.mkiin.hashedPasswordFile` と root の `hashedPasswordFile` を設定する
-- [ ] `mutableUsers = false` にするか検討する（false にすると passwd 変更が無効になる）
-- [ ] `nix run .#build` で検証してから switch する
+root と mkiin に同一の yescrypt ハッシュを agenix で付与（`nixos/core/secrets/password.age`）。`mutableUsers = false`、両者に `hashedPasswordFile`、username 完全一致アサーション入り。復号鍵は個人 age 鍵マスター、rbw で保管/復元。実機の `sudo`/`su` で動作確認済み。設計・計画は `docs/superpowers/{specs,plans}/2026-07-04-declarative-password-agenix*`。
