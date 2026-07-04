@@ -70,8 +70,10 @@ end
 hl.bind(mainMod .. " + 0", hl.dsp.focus({ workspace = 10 }))
 hl.bind(mainMod .. " + SHIFT + 0", hl.dsp.window.move({ workspace = 10 }))
 
--- スペシャルワークスペース
+-- スペシャルワークスペース(stash)。S=窓を棚へ退避/棚内の窓を復帰、
+-- SHIFT+S=棚の表示トグル(退避した窓を一覧・取り出すため。pyprland には表示動線が無い)。
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("pypr toggle_special stash"))
+hl.bind(mainMod .. " + SHIFT + S", hl.dsp.workspace.toggle_special("stash"))
 hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd("pypr lost_windows"))
 
 -- マウス
