@@ -138,6 +138,39 @@
             ''
           );
         };
+
+        # シェル本体は scripts/ に分離。runtimeInputs で rbw/pinentry を PATH に載せ、
+        # writeShellApplication が build 時に shellcheck を通す。
+        backup-agenix-key = {
+          type = "app";
+          program = pkgs.lib.getExe (
+            pkgs.writeShellApplication {
+              name = "backup-agenix-key";
+              runtimeInputs = [
+                pkgs.rbw
+                pkgs.coreutils
+                pkgs.gnugrep
+              ];
+              text = builtins.readFile ./scripts/backup-agenix-key.sh;
+            }
+          );
+        };
+
+        restore-agenix-key = {
+          type = "app";
+          program = pkgs.lib.getExe (
+            pkgs.writeShellApplication {
+              name = "restore-agenix-key";
+              runtimeInputs = [
+                pkgs.rbw
+                pkgs.pinentry-curses
+                pkgs.coreutils
+                pkgs.gnugrep
+              ];
+              text = builtins.readFile ./scripts/restore-agenix-key.sh;
+            }
+          );
+        };
       };
     };
 }
