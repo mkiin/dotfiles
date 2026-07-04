@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** waybar をダークグラス・アイランドの単一スタイルに一新し、島構造を主要 OS の UI に倣った 6 島 + 例外 1 に組み直し、config.json を Nix 分割構成に置き換える。
+**Goal:** waybar をダークグラス・アイランドの単一スタイルに一新し、島構造を主要 OS の UI に倣った group 6 島 + 例外 1（window）に組み直し、config.json を Nix 分割構成に置き換える。
 
 **Architecture:** `programs.waybar.settings` を Nix（`settings/bar.nix` + `settings/modules.nix`）で構成する。バーに載る要素は原則 group（`group/<名前>#island`）とし、CSS は `.island` 単一クラス + `.island > *` リセット + 状態セレクタの 3 層だけで描く。すりガラスは Hyprland の layerrule（blur + ignore_alpha）で実現する。
 
@@ -46,10 +46,12 @@
 - Produces:
   - `settings/bar.nix` … 引数なしの attrset。レイアウトと group 定義。**group 名はすべて `group/<name>#island` 形式**（`#island` が CSS の `.island` クラスになる。Task 2 の CSS がこれに依存）
   - `settings/modules.nix` … `{ username }: attrset`。全モジュール定義
-  - バーに載るモジュール ID（Task 2 の CSS セレクタがこれに依存）: `custom/nix`, `hyprland/window`, `hyprland/workspaces`, `custom/time`, `custom/date`, `custom/weather`, `cpu`, `temperature`, `memory`, `network`, `bluetooth`, `pulseaudio`, `privacy`, `custom/swaync`, `tray`, `custom/power`
+  - バーに載るモジュール ID（Task 2 の CSS セレクタがこれに依存）: `custom/nix`, `hyprland/window`, `hyprland/workspaces`, `custom/time`, `custom/date`, `custom/weather`, `cpu`, `temperature`, `memory`, `network`, `bluetooth`, `pulseaudio`, `privacy`, `tray`, `custom/idle_inhibitor`, `custom/control-center`, `custom/power`
 
-このタスクで削除するもの: `custom/mise`（表示ごと廃止。`scripts/pkg-update/` も使用者がいなくなる）、`custom/idle_inhibitor`、`custom/separator`、旧 config.json の未使用定義（`battery`, `backlight`, `cava`, `custom/temperature`, `custom/light`）、CSS の管轄である最上位 `font` キー。
-クリックは 5 箇所（nix, workspaces, bluetooth, pulseaudio, swaync）のみ。power は表示専用で on-click を持たない。
+このタスクで削除するもの: `custom/mise`（表示ごと廃止。`scripts/pkg-update/` も使用者がいなくなる）、`custom/separator`、旧 config.json の未使用定義（`battery`, `backlight`, `cava`, `custom/temperature`, `custom/light`）、CSS の管轄である最上位 `font` キー。
+改名: 通知ベルは swaync を使っていない（実体は quickshell）ため `custom/swaync` → `custom/control-center` にする。
+control-center 島は `custom/idle_inhibitor` + `custom/control-center` + `custom/power` の 3 モジュール構成。group に on-click は無いため、**3 つとも同一の on-click（`qs -c shell ipc call cc toggle`）を持たせて島全体を CC の入口にする**。idle_inhibitor 単体トグルと wlogout 起動は廃止。
+クリック動作は 5 種（nix, workspaces, bluetooth, pulseaudio, control-center 島）のみ。
 
 - [ ] **Step 1: `settings/bar.nix` を作成**
 
@@ -70,6 +72,7 @@
   modules-right = [
     "group/sysstats#island"
     "group/status#island"
+    "group/control-center#island"
   ];
 
   "group/launcher#island" = {
@@ -108,8 +111,14 @@
       "bluetooth"
       "pulseaudio"
       "privacy"
-      "custom/swaync"
       "tray"
+    ];
+  };
+  "group/control-center#island" = {
+    orientation = "horizontal";
+    modules = [
+      "custom/idle_inhibitor"
+      "custom/control-center"
       "custom/power"
     ];
   };
@@ -240,7 +249,26 @@
     icon-size = 14;
     transition-duration = 250;
   };
-  "custom/swaync" = {
+  tray = {
+    icon-size = 21;
+    spacing = 10;
+    icons = {
+      blueman = "bluetooth";
+      TelegramDesktop = "$HOME/.local/share/icons/hicolor/16x16/apps/telegram.png";
+    };
+  };
+
+  # control-center 島: 3 モジュールに同一 on-click を与え、島全体を CC の入口にする
+  # (waybar の group は on-click を持てないため)
+  "custom/idle_inhibitor" = {
+    format = "{}";
+    return-type = "json";
+    interval = 2;
+    exec-if = "which qs";
+    exec = "qs -c shell ipc call idle status";
+    on-click = "qs -c shell ipc call cc toggle";
+  };
+  "custom/control-center" = {
     tooltip = true;
     format = "{icon}";
     format-icons = {
@@ -260,18 +288,10 @@
     on-click = "qs -c shell ipc call cc toggle";
     escape = true;
   };
-  tray = {
-    icon-size = 21;
-    spacing = 10;
-    icons = {
-      blueman = "bluetooth";
-      TelegramDesktop = "$HOME/.local/share/icons/hicolor/16x16/apps/telegram.png";
-    };
-  };
-  # 表示専用。電源操作はコントロールセンター側にあるため on-click を持たない
   "custom/power" = {
     format = "󰐥";
     tooltip = false;
+    on-click = "qs -c shell ipc call cc toggle";
   };
 }
 ```
@@ -310,7 +330,7 @@ git rm -r home-manager/desktop/waybar/scripts/pkg-update
 - [ ] **Step 5: settings の出力を確認**
 
 ```bash
-nix eval .#nixosConfigurations.nixos.config.home-manager.users.mkiin.programs.waybar.settings --json | jq '.[0] | {left: .["modules-left"], center: .["modules-center"], right: .["modules-right"], nix_format: .["custom/nix"].format, status: .["group/status#island"].modules}'
+nix eval .#nixosConfigurations.nixos.config.home-manager.users.mkiin.programs.waybar.settings --json | jq '.[0] | {left: .["modules-left"], center: .["modules-center"], right: .["modules-right"], nix_format: .["custom/nix"].format, status: .["group/status#island"].modules, cc: .["group/control-center#island"].modules}'
 ```
 
 期待値:
@@ -319,27 +339,25 @@ nix eval .#nixosConfigurations.nixos.config.home-manager.users.mkiin.programs.wa
 {
   "left": ["group/launcher#island", "hyprland/window"],
   "center": ["group/workspaces#island", "group/datetime#island"],
-  "right": ["group/sysstats#island", "group/status#island"],
+  "right": [
+    "group/sysstats#island",
+    "group/status#island",
+    "group/control-center#island"
+  ],
   "nix_format": "  mkiin",
-  "status": [
-    "network",
-    "bluetooth",
-    "pulseaudio",
-    "privacy",
-    "custom/swaync",
-    "tray",
-    "custom/power"
-  ]
+  "status": ["network", "bluetooth", "pulseaudio", "privacy", "tray"],
+  "cc": ["custom/idle_inhibitor", "custom/control-center", "custom/power"]
 }
 ```
 
-あわせて廃止確認:
+あわせて廃止と CC 入口の確認:
 
 ```bash
-nix eval .#nixosConfigurations.nixos.config.home-manager.users.mkiin.programs.waybar.settings --json | jq '.[0] | has("custom/mise"), has("custom/idle_inhibitor"), has("custom/separator"), has("battery"), has("cava"), (.["custom/power"] | has("on-click"))'
+nix eval .#nixosConfigurations.nixos.config.home-manager.users.mkiin.programs.waybar.settings --json | jq '.[0] | has("custom/mise"), has("custom/swaync"), has("custom/separator"), has("battery"), has("cava")'
+nix eval .#nixosConfigurations.nixos.config.home-manager.users.mkiin.programs.waybar.settings --json | jq '.[0] | [.["custom/idle_inhibitor"], .["custom/control-center"], .["custom/power"]] | map(.["on-click"]) | unique'
 ```
 
-期待: すべて `false`。
+期待: 1 本目はすべて `false`。2 本目は `["qs -c shell ipc call cc toggle"]`（3 モジュールの on-click が同一）。
 
 - [ ] **Step 6: ビルドと整形を通す**
 
@@ -537,10 +555,14 @@ window#waybar.empty #window {
   color: @state_critical;
 }
 
-#custom-swaync.dnd-none,
-#custom-swaync.dnd-notification,
-#custom-swaync.dnd-inhibited-none,
-#custom-swaync.dnd-inhibited-notification {
+#custom-idle_inhibitor.activated {
+  color: @primary;
+}
+
+#custom-control-center.dnd-none,
+#custom-control-center.dnd-notification,
+#custom-control-center.dnd-inhibited-none,
+#custom-control-center.dnd-inhibited-notification {
   color: @primary;
 }
 
@@ -664,10 +686,11 @@ systemctl --user restart waybar
 - `.island > *` のリセットが効いており、島の中に二重の枠や背景が出ていない
 - 明るい壁紙と暗い壁紙の両方で島の境界が識別できる（壁紙切替: 既存の壁紙スクリプトを使用）
 - 壁紙切替でアクセント色（アクティブ WS のピルなど）が追従する
-- 構成: 左 = launcher 島 + ウィンドウタイトル、中央 = ws 島 + 時刻/日付/天気島、右 = sysstats 島（drawer 開閉可）+ status 島（network, BT, 音量, privacy, ベル, tray, power）
+- 構成: 左 = launcher 島 + ウィンドウタイトル、中央 = ws 島 + 時刻/日付/天気島、右 = sysstats 島（drawer 開閉可）+ status 島（network, BT, 音量, privacy, tray）+ control-center 島（idle, ベル, 電源）
 - ウィンドウを全部閉じたとき window の空枠が残らない
-- クリック: nix→ランチャー、ws→移動、BT→bluetooth ポップアップ、音量→オーディオセレクタ、ベル→コントロールセンター の 5 つが動く
-- 廃止確認: power クリックで何も起きない、pulseaudio スクロールで音量が変わらない、mise がバーに存在しない
+- クリック: nix→ランチャー、ws→移動、BT→bluetooth ポップアップ、音量→オーディオセレクタ が動く
+- control-center 島は idle・ベル・電源の**どこをクリックしても**コントロールセンターが開く
+- 廃止確認: pulseaudio スクロールで音量が変わらない、mise がバーに存在しない、wlogout がバーから起動できない
 - tooltip が濃色背景で読める
 
 - [ ] **Step 4: 問題なければユーザーに push 判断を委ねる**
@@ -678,6 +701,6 @@ todo.md の waybar 関連項目（「waybarのリデザイン」「初回起動�
 
 ## Self-Review 結果
 
-- Spec coverage: 島構造の組み直しと mise/pkg-update 削除 = Task 1、クリック 5 箇所 + power 表示専用 = Task 1、ダークグラス CSS と 3 層セレクタ構造・styles 廃止・wallust 依存削除 = Task 2、Hyprland blur = Task 3、フォールバック確認と検証 = Task 4。
+- Spec coverage: 島構造の組み直しと mise/pkg-update 削除 = Task 1、swaync→control-center 改名と CC 島（3 モジュール同一 on-click）= Task 1、ダークグラス CSS と 3 層セレクタ構造・styles 廃止・wallust 依存削除 = Task 2、Hyprland blur = Task 3、フォールバック確認と検証 = Task 4。
 - Placeholder scan: なし（全コード完載）。
-- Type consistency: 全 group の `#island` サフィックスと CSS `.island`、`#window` 例外の扱い、モジュール ID と CSS セレクタ、`username` 引数の受け渡しを照合済み。`.island > *` が workspaces ボタンへ波及しない点は specificity（`#workspaces button` が優位）で担保、実機確認は Task 4 のチェックリストに含めた。
+- Type consistency: 全 group の `#island` サフィックスと CSS `.island`、`#window` 例外の扱い、モジュール ID と CSS セレクタ（`#custom-control-center`, `#custom-idle_inhibitor` 含む）、CC 島 3 モジュールの on-click 同一性、`username` 引数の受け渡しを照合済み。`.island > *` が workspaces ボタンへ波及しない点は specificity（`#workspaces button` が優位）で担保、実機確認は Task 4 のチェックリストに含めた。
