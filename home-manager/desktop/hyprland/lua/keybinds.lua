@@ -17,7 +17,9 @@ hl.bind(mainMod .. " + G", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + C", hl.dsp.window.close())
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser))
-hl.bind(mainMod .. " + D", hl.dsp.exec_cmd("vesktop"))
+hl.bind(mainMod .. " + D", hl.dsp.exec_cmd("pypr toggle vesktop"))
+hl.bind(mainMod .. " + Z", hl.dsp.exec_cmd("pypr toggle term"))
+hl.bind(mainMod .. " + X", hl.dsp.exec_cmd("pypr toggle btop"))
 hl.bind(mainMod .. " + A", hl.dsp.exec_cmd("qs -c shell ipc call launcher toggle"))
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("qs -c shell ipc call cc toggle"))
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd("pkill -x wlogout || wlogout"))
@@ -57,8 +59,8 @@ hl.bind(mainMod .. " + SHIFT + K", hl.dsp.window.move({ direction = "u" }))
 hl.bind(mainMod .. " + SHIFT + L", hl.dsp.window.move({ direction = "r" }))
 
 -- ワークスペース前後移動
-hl.bind(mainMod .. " + I", hl.dsp.focus({ workspace = "e-1" }))
-hl.bind(mainMod .. " + O", hl.dsp.focus({ workspace = "e+1" }))
+hl.bind(mainMod .. " + I", hl.dsp.exec_cmd("pypr change_workspace -1"))
+hl.bind(mainMod .. " + O", hl.dsp.exec_cmd("pypr change_workspace +1"))
 hl.bind(mainMod .. " + SHIFT + I", hl.dsp.window.move({ workspace = "e-1" }))
 hl.bind(mainMod .. " + SHIFT + O", hl.dsp.window.move({ workspace = "e+1" }))
 
@@ -71,8 +73,8 @@ hl.bind(mainMod .. " + 0", hl.dsp.focus({ workspace = 10 }))
 hl.bind(mainMod .. " + SHIFT + 0", hl.dsp.window.move({ workspace = 10 }))
 
 -- スペシャルワークスペース
-hl.bind(mainMod .. " + S", hl.dsp.workspace.toggle_special("magic"))
-hl.bind(mainMod .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special:magic" }))
+hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("pypr toggle_special stash"))
+hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd("pypr lost_windows"))
 
 -- マウス
 hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
