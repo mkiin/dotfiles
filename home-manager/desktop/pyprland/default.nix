@@ -58,7 +58,7 @@
 
     # ゲーム class は switch 後に hyprctl clients で採取して追加する(Task 4)。
     [fcitx5_switcher]
-    active_classes = []
+    active_classes = ["zen-beta"]
     inactive_classes = ["scratch-term", "scratch-btop", "org.wezfurlong.wezterm"]
     active_titles = []
     inactive_titles = []
