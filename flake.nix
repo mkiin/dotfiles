@@ -144,66 +144,30 @@
           );
         };
 
+        # シェル本体は scripts/ に分離。runtimeInputs で rbw/pinentry を PATH に載せ、
+        # writeShellApplication が build 時に shellcheck を通す。
         backup-agenix-key = {
           type = "app";
-          program = toString (
-            pkgs.writeShellScript "backup-agenix-key" ''
-              set -eo pipefail
-              rbw="${pkgs.rbw}/bin/rbw"
-              key="$HOME/.config/agenix/key.txt"
-
-              # 非対話だと rbw が $EDITOR を使わず stdin を読み、空値を保管しうるため端末必須。
-              [ -t 0 ] || { echo "run interactively (needs a tty for rbw)" >&2; exit 1; }
-              [ -e "$key" ] || { echo "no key at $key" >&2; exit 1; }
-              "$rbw" unlocked || { echo "rbw is locked. run: rbw unlock" >&2; exit 1; }
-
-              tmp=$(mktemp)
-              trap 'rm -f "$tmp"' EXIT
-              # grep が 0 件だと set -e で即死し下の親切なエラーが出ないため || true。-m1 で 1 行に限定。
-              grep -m1 '^AGE-SECRET-KEY-' "$key" > "$tmp" || true
-              [ -s "$tmp" ] || { echo "no AGE-SECRET-KEY line in $key" >&2; exit 1; }
-
-              # rbw は $EDITOR に一時ファイルを渡す。空白入り EDITOR を sh -c 経由で実行する挙動を使い
-              # cp を editor に見せかけ内容を流し込む。既存エントリは重複防止で edit にする。
-              if "$rbw" get agenix-age-key >/dev/null 2>&1; then
-                EDITOR="cp $tmp" "$rbw" edit agenix-age-key
-              else
-                EDITOR="cp $tmp" "$rbw" add agenix-age-key
-              fi
-              echo "Stored age key to Bitwarden entry 'agenix-age-key'."
-            ''
+          program = pkgs.lib.getExe (
+            pkgs.writeShellApplication {
+              name = "backup-agenix-key";
+              runtimeInputs = [ pkgs.rbw ];
+              text = builtins.readFile ./scripts/backup-agenix-key.sh;
+            }
           );
         };
 
         restore-agenix-key = {
           type = "app";
-          program = toString (
-            pkgs.writeShellScript "restore-agenix-key" ''
-              set -eo pipefail
-              # home-manager 適用前でも動くよう rbw と pinentry を nix から供給する。
-              export PATH="${pkgs.pinentry-curses}/bin:$PATH"
-              rbw="${pkgs.rbw}/bin/rbw"
-              key="$HOME/.config/agenix/key.txt"
-
-              if [ -e "$key" ]; then
-                echo "key already exists at $key (refusing to overwrite)" >&2
-                exit 1
-              fi
-
-              "$rbw" config set email blckcaties@gmail.com
-              "$rbw" config set pinentry pinentry-curses
-
-              # 既に unlock 済みなら login/unlock を飛ばす。マスターパスワードの手入力が唯一の起点。
-              if ! "$rbw" unlocked 2>/dev/null; then
-                "$rbw" login
-                "$rbw" unlock
-              fi
-
-              mkdir -p "$(dirname "$key")"
-              "$rbw" get agenix-age-key > "$key"
-              chmod 600 "$key"
-              echo "Restored age key to $key."
-            ''
+          program = pkgs.lib.getExe (
+            pkgs.writeShellApplication {
+              name = "restore-agenix-key";
+              runtimeInputs = [
+                pkgs.rbw
+                pkgs.pinentry-curses
+              ];
+              text = builtins.readFile ./scripts/restore-agenix-key.sh;
+            }
           );
         };
       };
