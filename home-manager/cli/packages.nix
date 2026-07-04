@@ -20,5 +20,6 @@
     # dev tools
     gh
     lazydocker
+    mise
   ];
 }
