@@ -23,13 +23,11 @@ grep -m1 '^AGE-SECRET-KEY-' "$key" >"$tmp" || true
   exit 1
 }
 
-# rbw は $EDITOR に一時ファイルを渡す。空白入り EDITOR を sh -c 経由で実行する挙動を使い
-# cp を editor に見せかけ内容を流し込む。既存エントリは重複防止で edit にする。
-if rbw get agenix-age-key >/dev/null 2>&1; then
-  EDITOR="cp $tmp" rbw edit agenix-age-key
-else
-  EDITOR="cp $tmp" rbw add agenix-age-key
-fi
+# rbw edit は notes を編集し password に入らないため必ず add を使う(add は 1 行目=password)。
+# 既存は先に削除して重複を防ぐ。rbw は VISUAL を EDITOR より優先し、空白入りコマンドを
+# sh -c "<cmd> <tmpfile>" で実行するので、cp を editor に見せかけ一時ファイルを流し込める。
+rbw remove agenix-age-key >/dev/null 2>&1 || true
+VISUAL="cp $tmp" EDITOR="cp $tmp" rbw add agenix-age-key
 # EDITOR トリックが将来の rbw で壊れても黙って空を保管しないよう、結果を読み戻して検証。
 rbw get agenix-age-key | grep -q '^AGE-SECRET-KEY-' || {
   echo "stored value verification failed" >&2
