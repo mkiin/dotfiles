@@ -68,8 +68,8 @@
 
   network = {
     format = "{ifname}";
-    format-wifi = "󰖩 wifi";
-    format-ethernet = "󰈀 ethernet";
+    format-wifi = "󰖩";
+    format-ethernet = "󰈀";
     format-disconnected = "";
     tooltip-format = "{ifname} via {gwaddr} 󰌘";
     tooltip-format-wifi = "{essid} ({signalStrength}%) ";
@@ -87,9 +87,11 @@
     on-click = "qs -c bluetooth -n";
   };
   pulseaudio = {
-    format = "{icon} {volume}%";
-    format-bluetooth = "{icon} 󰂰 {volume}%";
-    format-muted = "󰝟 {volume}%";
+    format = "{icon} {volume}% {format_source}";
+    format-bluetooth = "{icon} 󰂰 {volume}% {format_source}";
+    format-muted = "󰝟 {volume}% {format_source}";
+    format-source = "󰍬 {volume}%";
+    format-source-muted = "󰍭";
     format-icons = {
       headphone = "󰋋";
       hands-free = "󰜟";
