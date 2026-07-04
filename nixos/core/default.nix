@@ -10,5 +10,6 @@
     ./network
     ./nix-ld
     ./fonts
+    ./secrets
   ];
 }

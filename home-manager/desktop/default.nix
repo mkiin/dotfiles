@@ -15,6 +15,7 @@
     ./mouse
     ./matugen
     ./wallust
+    ./wallpaper-backup
     ./terminal/ghostty
     ./terminal/wezterm
     ./zen

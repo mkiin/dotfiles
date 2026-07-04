@@ -5,6 +5,7 @@
     matugen
     wallust
     awww
+    rclone
     # desktop utilities (waybar=programs.waybar, cliphist/hypridle=services)
     wlogout
     socat

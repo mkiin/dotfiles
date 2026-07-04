@@ -27,9 +27,9 @@
 - `home-manager/desktop/matugen/default.nix`（変更）：フォールバック配置の activation を追加。
 - `home-manager/desktop/wallust/fallback/colors-waybar.css`（作成）：waybar の wallust 色フォールバック実体。
 - `home-manager/desktop/wallust/default.nix`（変更）：フォールバック配置の activation を追加。
-- `secrets/secrets.nix`（作成）：agenix の暗号化ルール（どの公開鍵でどのファイルを暗号化するか）。
-- `secrets/rclone-r2.conf.age`（作成）：暗号化した rclone 設定。
-- `nixos/core/secrets/default.nix`（作成）：agenix NixOS モジュールの配線と `age.secrets` 定義。
+- `nixos/core/secrets/secrets.nix`（作成済み）：agenix の暗号化ルール（どの公開鍵でどのファイルを暗号化するか）。agenix 既定名なので CLI の `RULES` 指定は不要。
+- `nixos/core/secrets/rclone-r2.conf.age`（作成済み）：暗号化した rclone 設定。
+- `nixos/core/secrets/default.nix`（作成）：agenix NixOS モジュールの配線と `age.secrets` 定義。ストア（secrets.nix・.age）と同居。
 - `nixos/core/default.nix`（変更）：`./secrets` を imports に追加。
 - `home-manager/desktop/packages.nix`（変更）：`rclone` を追加。
 - `home-manager/desktop/wallpaper-backup/default.nix`（作成）：on-change バックアップの systemd user path unit と service。
@@ -221,39 +221,41 @@ Task 2 の成果物に依存する。`.age` を作ってから NixOS モジュ�
 
 ### Task 3: rclone 設定を agenix で暗号化する
 
+ストアは `nixos/core/secrets/` に集約する（配線モジュールとコロケーション）。ルールは agenix 既定名 `secrets.nix`（配線用に `default.nix` を空けるため）。
+
 **Files:**
 
-- Create: `secrets/secrets.nix`
-- Create: `secrets/rclone-r2.conf.age`
+- Create: `nixos/core/secrets/secrets.nix`（作成済み・移動済み）
+- Create: `nixos/core/secrets/rclone-r2.conf.age`（作成済み・移動済み）
 
 **Interfaces:**
 
 - Consumes: age 公開鍵、R2 の 3 値。
-- Produces: `secrets/rclone-r2.conf.age`。後続タスクの `age.secrets."rclone-r2.conf".file` が参照する。
+- Produces: `nixos/core/secrets/rclone-r2.conf.age`。後続タスクの `age.secrets."rclone-r2.conf".file = ./rclone-r2.conf.age` が参照する。
 
-- [ ] **Step 1: secrets.nix を作成**
+このタスクは実施済み。`secrets.nix`（公開鍵ルール）と暗号化済み `.age` は既に存在する。以下は再作成や検証時の参照手順。
 
-`<AGE_PUBLIC_KEY>` を Task 2 で控えた公開鍵に置き換える。
+- [x] **Step 1: secrets.nix（ルール）**
 
 ```nix
 let
-  mkiin = "<AGE_PUBLIC_KEY>";
+  mkiin = "age1jsh6xwxl7gckzcc002feuzy2j4rtt635257gwkqd3c5pcv0yksxq7stjy8";
 in
 {
   "rclone-r2.conf.age".publicKeys = [ mkiin ];
 }
 ```
 
-- [ ] **Step 2: 暗号化ファイルを作成**
+- [x] **Step 2: 暗号化ファイルを作成（再暗号化する場合）**
 
-`secrets/` 内で agenix を実行するとエディタが開く。R2 の 3 値を埋めた rclone 設定を入力して保存する。
+`nixos/core/secrets/` 内で実行するとエディタが開く。既定名 `secrets.nix` があるため `RULES` 指定は不要。
 
 ```bash
-cd secrets
+cd nixos/core/secrets
 EDITOR=nvim nix run github:ryantm/agenix -- -e rclone-r2.conf.age -i ~/.config/agenix/key.txt
 ```
 
-エディタに入力する内容（`<...>` を実値に置換）:
+入力する内容（`<...>` を実値に置換）:
 
 ```ini
 [r2]
@@ -264,20 +266,18 @@ secret_access_key = <SECRET_KEY>
 endpoint = https://<ACCOUNT_ID>.r2.cloudflarestorage.com
 ```
 
-- [ ] **Step 3: 暗号化されたことを確認**
-
-Run:
+- [x] **Step 3: 暗号化されたことを確認**
 
 ```bash
-head -c 40 secrets/rclone-r2.conf.age; echo
+head -c 21 nixos/core/secrets/rclone-r2.conf.age; echo
 ```
 
-Expected: `-----BEGIN AGE ENCRYPTED FILE-----` で始まる。平文の `access_key_id` が見えてはならない。
+Expected: `age-encryption.org/v1` で始まる（平文の `access_key_id` が見えてはならない）。
 
-- [ ] **Step 4: コミット**
+- [ ] **Step 4: コミット（配線 Task 4 とまとめてでよい）**
 
 ```bash
-git add secrets/secrets.nix secrets/rclone-r2.conf.age
+git add nixos/core/secrets/secrets.nix nixos/core/secrets/rclone-r2.conf.age
 git commit -m "feat(secrets): R2 の rclone 設定を agenix で暗号化"
 ```
 
@@ -290,10 +290,12 @@ git commit -m "feat(secrets): R2 の rclone 設定を agenix で暗号化"
 
 **Interfaces:**
 
-- Consumes: `secrets/rclone-r2.conf.age`、`inputs.agenix.nixosModules.default`。
+- Consumes: `nixos/core/secrets/rclone-r2.conf.age`（同一ディレクトリ）、`inputs.agenix.nixosModules.default`。
 - Produces: 復号済み `/run/agenix/rclone-r2.conf`（owner mkiin, mode 0400）。後続タスクの rclone がこれを `--config` で読む。
 
 - [ ] **Step 1: secrets モジュールを作成**
+
+`.age` と同居するため `file` は同一ディレクトリの相対パスでよい。
 
 ```nix
 { inputs, ... }:
@@ -305,7 +307,7 @@ git commit -m "feat(secrets): R2 の rclone 設定を agenix で暗号化"
 
   # ユーザーの rclone user service と flake app から読めるよう owner を mkiin にする。
   age.secrets."rclone-r2.conf" = {
-    file = ../../../secrets/rclone-r2.conf.age;
+    file = ./rclone-r2.conf.age;
     path = "/run/agenix/rclone-r2.conf";
     owner = "mkiin";
     mode = "0400";
@@ -344,7 +346,7 @@ nix run .#build
 nix run .#fmt -- --fail-on-change
 ```
 
-Expected: 成功。失敗する場合 `.age` の相対パス（`../../../secrets/...`）か公開鍵の不一致を疑う。
+Expected: 成功。失敗する場合 `.age` の相対パス（`./rclone-r2.conf.age`）か公開鍵の不一致を疑う。
 
 - [ ] **Step 4: switch して復号先を確認**
 
