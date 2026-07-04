@@ -36,14 +36,8 @@
   };
   "group/sysstats#island" = {
     orientation = "horizontal";
-    drawer = {
-      transition-duration = 500;
-      children-class = "not-cpu";
-      transition-left-to-right = false;
-    };
     modules = [
       "cpu"
-      "temperature"
       "memory"
     ];
   };

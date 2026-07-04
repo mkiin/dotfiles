@@ -60,13 +60,6 @@
     tooltip = true;
     tooltip-format = "CPU {usage}%  Load {load}";
   };
-  temperature = {
-    hwmon-path = "/sys/class/hwmon/hwmon2/temp1_input";
-    interval = 5;
-    critical-threshold = 80;
-    format = "󰔏 {temperatureC}°C";
-    format-critical = "󰔏 {temperatureC}°C ";
-  };
   memory = {
     interval = 30;
     format = "󰍛 {}%";
