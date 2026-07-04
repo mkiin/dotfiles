@@ -95,3 +95,11 @@ font 系プロパティは GTK CSS で継承されるため、`*` に置く必�
 
 - `nix run .#build` と `nix run .#fmt -- --fail-on-change` を通す。
 - switch 後に実表示で確認する：島とモジュールの間隔、sysstats の常時 2 モジュール表示、マイク音量の併記、network のアイコン化、`custom/nix` と `custom/power` の primary 色維持、window 島の質感と空タイトル時の消灯。
+
+## 運用後の調整（同日、実機確認を受けた追加変更）
+
+switch 後の実表示レビューで、次の 3 点を追加変更した。
+
+- **bluetooth のアイコンのみ表示**：`format` を `{icon}` にし、「on」の文字表記を廃止する。on/off はアイコン差分（󰂯/󰂲）で示す。
+- **privacy モジュールの完全削除**：マイク使用中インジケータは pulseaudio のマイク音量併記と情報が重複するため、モジュールごと削除する。これにより本文中の「privacy は `#privacy` の ID ルールで残す」は失効し、Role 層は `.accent` 単独になる。
+- **sysstats 島の廃止と status 島への統合**：2 モジュールだけの小島は島の padding と間隔で約 36px 余分に食うため、status 島の左端に cpu と memory を統合する。区画は「情報 (cpu/memory) | 接続と音 | tray」の 3 つとし、`#network` と `#tray` の左に島の縁と同じ hairline（`@glass_border`）の境界線を引く。
