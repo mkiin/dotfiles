@@ -22,6 +22,7 @@
         email = "mkiin@users.noreply.github.com";
       };
       init.defaultBranch = "main";
+      pull.rebase = false;
       ghq.root = "${config.home.homeDirectory}/ghq";
       url."git@github.com:".insteadOf = "https://github.com/";
       credential."https://github.com".helper = [
