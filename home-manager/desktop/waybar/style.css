@@ -1,18 +1,38 @@
-/* noro 系 waybar style エントリポイント。
- * 3 つの @import を順に適用する薄いファイル:
- *   1. matugen 生成 (Material Design 3 トークン: @primary, @surface_* 等)
- *   2. wallust 生成 (Pywal 16 色パレット: @color0..15, @cursor)
- *   3. styles/ から選んだ 1 つ (具体的な見た目)
- *
- * style 切替は最後の @import 行を変えるだけ。再起動 or `pkill -SIGUSR2 waybar`
- * で反映。
- */
+/* ダークグラス・アイランド単一スタイル。
+ * 色は matugen 生成の colors.css (MD3 トークン) のみに依存する。
+ * すりガラスは hyprland 側 layerrule (blur + ignore_alpha) が担当し、
+ * ここでは半透明ティントと縁取り・影だけを描く。 */
 
 @import "colors.css";
-@import "colors-waybar.css";
-@import "styles/capsule-nobg.css";
 
-/* GTK4 Adwaita 既定の button :hover/:focus-visible で発生する装飾を全部無効化 */
+/* ============================================================
+   Tokens
+   ============================================================ */
+@define-color glass_tint rgba(10, 12, 18, 0.58);
+@define-color glass_border rgba(255, 255, 255, 0.08);
+/* tooltip は blur が乗らない別サーフェスなので濃いめにして可読性を確保 */
+@define-color tooltip_bg rgba(10, 12, 18, 0.92);
+
+/* ============================================================
+   Reset
+   ============================================================ */
+* {
+  border: none;
+  border-radius: 0;
+  font-family:
+    "JetBrainsMono Nerd Font", "Iosevka Nerd Font", "Font Awesome 6 Free";
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
+  min-height: 1px;
+}
+
+window#waybar {
+  background-color: transparent;
+  color: @on_surface;
+}
+
+/* GTK4 Adwaita 既定の button/tooltip 装飾を無効化 */
 button {
   box-shadow: none;
   outline: none;
@@ -28,15 +48,138 @@ button:focus-visible {
   background-image: none;
 }
 
-/* GTK4 Adwaita 既定の tooltip 装飾 (linear-gradient の background-image,
- * text-shadow, box-shadow) を全 style 共通でリセット。色・角丸・padding は
- * 個別 style ファイル側で当てる。 */
 tooltip {
   background-image: none;
-  box-shadow: none;
   text-shadow: none;
 }
 
 tooltip label {
   background-image: none;
+}
+
+/* ============================================================
+   Island
+   バーに載る group は全部 `group/<name>#island` で .island class を持つ。
+   #window だけは group で包むと空タイトル時に空枠が残るため裸のまま
+   同じ質感を当てる (唯一の例外)。
+   ============================================================ */
+.island,
+#window {
+  background-color: @glass_tint;
+  border: 1px solid @glass_border;
+  border-radius: 20px;
+  padding: 0 10px;
+  margin: 0 5px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  color: @on_surface;
+}
+
+/* 島内モジュールは島の背景に乗るだけ。個別 ID は列挙しない */
+.island > * {
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  margin: 0;
+  padding: 0 6px;
+  box-shadow: none;
+}
+
+/* フォーカスウィンドウが無いときは window 島ごと消す */
+window#waybar.empty #window {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* ============================================================
+   Workspaces
+   非アクティブは小ドット (文字色を透明にして丸だけ見せる)、
+   アクティブは @primary の横長ピル。
+   ============================================================ */
+#workspaces button {
+  min-width: 20px;
+  margin: 5px 3px;
+  color: transparent;
+  background-color: alpha(@on_surface, 0.35);
+  border-radius: 20px;
+  transition:
+    background 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    min-width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#workspaces button.active {
+  color: @on_primary;
+  background-color: @primary;
+  min-width: 50px;
+}
+
+#workspaces button:hover {
+  background-color: @secondary_container;
+  color: @on_secondary_container;
+}
+
+#workspaces button.urgent {
+  background-color: @error;
+  color: @on_error;
+}
+
+#workspaces button.special {
+  color: @on_tertiary;
+  background-color: @tertiary;
+}
+
+/* ============================================================
+   状態色
+   ============================================================ */
+#custom-nix {
+  color: @primary;
+}
+
+#custom-power {
+  color: @primary;
+}
+
+#network.disconnected {
+  color: @state_critical;
+}
+
+#pulseaudio.muted {
+  color: @primary;
+}
+
+#privacy {
+  color: @primary;
+}
+
+#temperature.critical {
+  color: @state_critical;
+}
+
+#custom-idle_inhibitor.activated {
+  color: @primary;
+}
+
+#custom-control-center.dnd-none,
+#custom-control-center.dnd-notification,
+#custom-control-center.dnd-inhibited-none,
+#custom-control-center.dnd-inhibited-notification {
+  color: @primary;
+}
+
+/* ============================================================
+   Tooltip
+   ============================================================ */
+tooltip {
+  background-color: @tooltip_bg;
+  border: 1px solid @glass_border;
+  border-radius: 12px;
+  padding: 6px 8px;
+}
+
+tooltip label {
+  color: @on_surface;
+  padding: 2px 4px;
 }

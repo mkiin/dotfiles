@@ -12,6 +12,5 @@
     ];
   };
   xdg.configFile."waybar/style.css".source = lnk ./style.css;
-  xdg.configFile."waybar/styles".source = lnk ./styles;
   xdg.configFile."waybar/scripts".source = lnk ./scripts;
 }
