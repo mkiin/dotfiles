@@ -15,7 +15,7 @@
 - 各タスクの完了前に `nix run .#build` と `nix run .#fmt -- --fail-on-change` を必ず通す。deadnix が未使用 let 束縛を検出する。
 - 壁紙のバイナリは git に載せない。`.gitignore` の `/images/wallpaper/*` は変更しない。
 - モジュールは specialArgs から `pkgs` `lib` `config` `dotfilesDir` `inputs` を受け取れる。
-- 復号鍵は個人 age 鍵をマスターとし、identityPaths は `/home/mkiin/.config/agenix/key.txt`。復号先は `/run/agenix/rclone-r2.conf`。R2 バケット名は固定定数 `dotfiles-wallpaper`、バケット内プレフィックスは `wallpaper/`。rclone remote 名は `r2`。
+- 復号鍵は個人 age 鍵をマスターとし、identityPaths は `/home/mkiin/.config/agenix/key.txt`。復号先は `/run/agenix/rclone-r2.conf`。R2 バケット名は固定定数 `dotfile-wallpaper`、バケット内プレフィックスは `wallpaper/`。rclone remote 名は `r2`。
 
 ---
 
@@ -207,7 +207,7 @@ Expected: `Public key: age1...` が表示される。この公開鍵文字列を
 
 Cloudflare ダッシュボードまたは wrangler で次を用意する。
 
-- バケット `dotfiles-wallpaper` を作成する。
+- バケット `dotfile-wallpaper` を作成する。
 - R2 の S3 API トークン（Object Read & Write）を発行し、access key と secret を控える。
 - R2 アカウント ID を控える（エンドポイント `https://<ACCOUNT_ID>.r2.cloudflarestorage.com` に使う）。
 
@@ -405,7 +405,7 @@ Task 4 の復号先に依存する。
 let
   dir = "${dotfilesDir}/images/wallpaper";
   # copy は追加のみ。ローカル削除を R2 へ伝播させず、一度上げた壁紙を失わない。
-  backup = "${pkgs.rclone}/bin/rclone copy ${dir} r2:dotfiles-wallpaper/wallpaper --config /run/agenix/rclone-r2.conf";
+  backup = "${pkgs.rclone}/bin/rclone copy ${dir} r2:dotfile-wallpaper/wallpaper --config /run/agenix/rclone-r2.conf";
 in
 {
   systemd.user.paths.wallpaper-backup = {
@@ -487,7 +487,7 @@ git commit -m "feat(desktop): 壁紙の on-change R2 バックアップ(rclone c
             pkgs.writeShellScript "backup-wallpaper" ''
               set -eo pipefail
               ${pkgs.rclone}/bin/rclone copy images/wallpaper \
-                r2:dotfiles-wallpaper/wallpaper --config /run/agenix/rclone-r2.conf --progress
+                r2:dotfile-wallpaper/wallpaper --config /run/agenix/rclone-r2.conf --progress
               echo "Backed up wallpapers to R2."
             ''
           );
@@ -499,7 +499,7 @@ git commit -m "feat(desktop): 壁紙の on-change R2 バックアップ(rclone c
             pkgs.writeShellScript "restore-wallpaper" ''
               set -eo pipefail
               ${pkgs.rclone}/bin/rclone copy \
-                r2:dotfiles-wallpaper/wallpaper images/wallpaper --config /run/agenix/rclone-r2.conf --progress
+                r2:dotfile-wallpaper/wallpaper images/wallpaper --config /run/agenix/rclone-r2.conf --progress
               echo "Restored wallpapers from R2."
             ''
           );
@@ -533,7 +533,7 @@ Task 5 の switch で `rclone` は PATH にある。
 
 ```bash
 tmp=$(mktemp -d)
-rclone copy r2:dotfiles-wallpaper/wallpaper "$tmp" --config /run/agenix/rclone-r2.conf
+rclone copy r2:dotfile-wallpaper/wallpaper "$tmp" --config /run/agenix/rclone-r2.conf
 ls "$tmp"
 ```
 
@@ -603,4 +603,4 @@ git commit -m "docs(todo): 初回セットアップ節を実装反映で更新�
 
 - **Spec coverage:** フォールバック色(Task 1)、認証の agenix 管理(Task 3,4)、rclone アーカイブ・on-change バックアップ(Task 5)、手動復元(Task 6)、初期アップロード(Task 6 Step 3)、人手手順(Task 2)、stale 整理(Task 7)。spec の各節に対応タスクがある。
 - **依存順:** `.age` 不在で `nix build` が失敗するため、暗号化(Task 3)→配線(Task 4)→rclone(Task 5,6)の順に固定した。フォールバック色(Task 1)は独立で先行可能。
-- **型・名称の一貫性:** remote 名 `r2`、バケット `dotfiles-wallpaper`、プレフィックス `wallpaper/`、復号先 `/run/agenix/rclone-r2.conf`、identity `/home/mkiin/.config/agenix/key.txt` を全タスクで統一。
+- **型・名称の一貫性:** remote 名 `r2`、バケット `dotfile-wallpaper`、プレフィックス `wallpaper/`、復号先 `/run/agenix/rclone-r2.conf`、identity `/home/mkiin/.config/agenix/key.txt` を全タスクで統一。

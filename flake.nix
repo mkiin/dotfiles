@@ -176,7 +176,7 @@
             pkgs.writeShellScript "backup-wallpaper" ''
               set -eo pipefail
               ${pkgs.rclone}/bin/rclone copy images/wallpaper \
-                r2:dotfiles-wallpaper/wallpaper --config /run/agenix/rclone-r2.conf --progress
+                r2:dotfile-wallpaper/wallpaper --config /run/agenix/rclone-r2.conf --progress
               echo "Backed up wallpapers to R2."
             ''
           );
@@ -188,7 +188,7 @@
             pkgs.writeShellScript "restore-wallpaper" ''
               set -eo pipefail
               ${pkgs.rclone}/bin/rclone copy \
-                r2:dotfiles-wallpaper/wallpaper images/wallpaper --config /run/agenix/rclone-r2.conf --progress
+                r2:dotfile-wallpaper/wallpaper images/wallpaper --config /run/agenix/rclone-r2.conf --progress
               echo "Restored wallpapers from R2."
             ''
           );
