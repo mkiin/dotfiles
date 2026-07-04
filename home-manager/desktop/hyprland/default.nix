@@ -25,13 +25,6 @@
     "hypr/input.lua".source = lnk ./lua/input.lua;
     "hypr/keybinds.lua".source = lnk ./lua/keybinds.lua;
     "hypr/rules.lua".source = lnk ./lua/rules.lua;
-    # store パス補間が要るロード行だけ生成。plugins オプションは hyprland.lua を
-    # 生成してシンボリックリンクと衝突するため使わない。
-    "hypr/plugins.lua".text = ''
-      hl.plugin.load("${
-        inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system}.hyprfocus
-      }/lib/libhyprfocus.so")
-    '';
     "hypr/scripts".source = lnk ./scripts;
     "hypr/hyprlock.conf".source = lnk ./hyprlock.conf;
     "hypr/lock-colors.conf".source = lnk ./lock-colors.conf;
