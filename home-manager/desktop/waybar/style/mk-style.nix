@@ -73,13 +73,16 @@ t: ''
     color: @on_surface;
   }
 
-  /* 島内モジュールは島の背景に乗るだけ。個別 ID は列挙しない */
-  .island > * {
+  /* 島内モジュールは島の背景に乗るだけ。個別 ID は列挙しない。
+     waybar は全モジュールの可視ノード (label / box) に .module クラスを付ける。
+     間隔は margin で取る: GTK3 では eventbox への padding がレイアウトに
+     反映されない (margin は全ウィジェットで効く)。 */
+  .island .module {
     background-color: transparent;
     border: none;
     border-radius: 0;
-    margin: 0;
-    padding: 0 ${t.gapModule};
+    margin: 0 ${t.gapModule};
+    padding: 0;
   }
 
   /* フォーカスウィンドウが無いときは window 島ごと消す */
@@ -96,8 +99,10 @@ t: ''
      アクティブは @primary の横長ピル。
      ============================================================ */
   #workspaces button {
-    min-width: ${t.wsButtonMinWidth};
-    margin: ${t.wsButtonMargin};
+    min-width: ${t.wsDotSize};
+    min-height: ${t.wsDotSize};
+    padding: 0;
+    margin: ${t.wsDotMarginY} ${t.wsDotGap};
     color: transparent;
     background-color: alpha(@on_surface, 0.35);
     border-radius: ${t.radiusIsland};
@@ -159,10 +164,10 @@ t: ''
     color: @primary;
   }
 
-  #custom-control-center.dnd-none,
-  #custom-control-center.dnd-notification,
-  #custom-control-center.dnd-inhibited-none,
-  #custom-control-center.dnd-inhibited-notification {
+  #custom-notify.dnd-none,
+  #custom-notify.dnd-notification,
+  #custom-notify.dnd-inhibited-none,
+  #custom-notify.dnd-inhibited-notification {
     color: @primary;
   }
 

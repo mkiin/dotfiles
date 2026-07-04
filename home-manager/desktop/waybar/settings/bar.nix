@@ -1,6 +1,7 @@
 {
   layer = "top";
   margin = "10 10 2 10";
+  height = 34;
   reload_style_on_change = true;
 
   modules-left = [
@@ -60,7 +61,7 @@
     orientation = "horizontal";
     modules = [
       "custom/idle_inhibitor"
-      "custom/control-center"
+      "custom/notify"
       "custom/power"
     ];
   };

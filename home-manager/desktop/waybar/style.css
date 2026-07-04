@@ -71,13 +71,16 @@ tooltip label {
   color: @on_surface;
 }
 
-/* 島内モジュールは島の背景に乗るだけ。個別 ID は列挙しない */
-.island > * {
+/* 島内モジュールは島の背景に乗るだけ。個別 ID は列挙しない。
+   waybar は全モジュールの可視ノード (label / box) に .module クラスを付ける。
+   間隔は margin で取る: GTK3 では eventbox への padding がレイアウトに
+   反映されない (margin は全ウィジェットで効く)。 */
+.island .module {
   background-color: transparent;
   border: none;
   border-radius: 0;
-  margin: 0;
-  padding: 0 12px;
+  margin: 0 12px;
+  padding: 0;
 }
 
 /* フォーカスウィンドウが無いときは window 島ごと消す */
@@ -95,7 +98,9 @@ window#waybar.empty #window {
    ============================================================ */
 #workspaces button {
   min-width: 20px;
-  margin: 5px 3px;
+  min-height: 20px;
+  padding: 0;
+  margin: 6px 3px;
   color: transparent;
   background-color: alpha(@on_surface, 0.35);
   border-radius: 20px;
@@ -157,10 +162,10 @@ window#waybar.empty #window {
   color: @primary;
 }
 
-#custom-control-center.dnd-none,
-#custom-control-center.dnd-notification,
-#custom-control-center.dnd-inhibited-none,
-#custom-control-center.dnd-inhibited-notification {
+#custom-notify.dnd-none,
+#custom-notify.dnd-notification,
+#custom-notify.dnd-inhibited-none,
+#custom-notify.dnd-inhibited-notification {
   color: @primary;
 }
 

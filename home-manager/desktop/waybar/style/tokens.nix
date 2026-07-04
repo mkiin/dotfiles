@@ -10,9 +10,10 @@
   # 形状
   radiusIsland = "20px";
   radiusTooltip = "12px";
-  # workspaces ボタン
-  wsButtonMinWidth = "20px";
-  wsButtonMargin = "5px 3px";
+  # workspaces ボタン (バー高 34 = 枠1x2 + 縦マージン6x2 + 丸20 で割り切る)
+  wsDotSize = "20px";
+  wsDotMarginY = "6px";
+  wsDotGap = "3px";
   wsActiveMinWidth = "50px";
   # tooltip
   padTooltip = "6px 10px";

@@ -136,7 +136,7 @@
     exec = "qs -c shell ipc call idle status";
     on-click = "qs -c shell ipc call cc toggle";
   };
-  "custom/control-center" = {
+  "custom/notify" = {
     tooltip = true;
     format = "{icon}";
     format-icons = {
