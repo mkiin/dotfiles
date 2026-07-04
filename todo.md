@@ -33,7 +33,10 @@ quickshellで作成するが、参考になるデザインがまだみつかっ�
 - sddmに劣るデザイン
 
 - ロック画面のデザイン調整
-- 時計と日付のサイズを大きくしたい。
+  - 時計と日付のサイズを大きくしたい。下参考例 リンク:https://www.reddit.com/r/hyprland/comments/1ubib86/bad_caelestia_apple/
+    AM |JUNE
+    12:12 |21
+    |Sunday
 
 - waybarのリデザイン
 - 1つ1つのモジュールにクリックアクションを割り当てすぎ
