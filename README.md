@@ -87,6 +87,48 @@ home-manager switch --flake .#"mkiin@wsl"
 `hypr/`, `quickshell/`, `nvim/`, `matugen/` など頻繁に編集する設定は、`lib/default.nix` の `lnk` ヘルパーでリポジトリ実体へのシンボリックリンクとして配置している。
 これらの中身はリポジトリを直接編集すれば即座に反映される（`rebuild` / `switch` の再実行は不要）。リンクの追加・削除など配置そのものを変えたときだけ再適用する。
 
+## シークレット管理（agenix / rbw）
+
+R2 認証などの秘密は [agenix](https://github.com/ryantm/agenix) で暗号化して `nixos/core/secrets/*.age` にコミットし、NixOS の activation 時に個人 age 鍵で復号して `/run/agenix/` に配置する。
+復号鍵 `~/.config/agenix/key.txt` はリポジトリに入れず、[rbw](https://github.com/doy/rbw)（Bitwarden CLI）で退避・復元する。
+
+> [!IMPORTANT]
+> この age 鍵を失うと、暗号化した秘密を二度と復号できなくなる。生成したら必ず Bitwarden に退避する。
+
+`programs.rbw`（`home-manager/cli/rbw`）で rbw を宣言的に導入し、鍵の保管・復元は 2 つの flake app で行う。
+
+### 鍵の生成と保管（初回に 1 回）
+
+```bash
+# age 鍵を生成する
+mkdir -p ~/.config/agenix
+nix shell nixpkgs#age -c age-keygen -o ~/.config/agenix/key.txt
+chmod 600 ~/.config/agenix/key.txt
+
+# 表示された公開鍵を nixos/core/secrets/secrets.nix のルールに登録しておく（新規/鍵更新時）
+
+# 秘密鍵を Bitwarden に退避する
+rbw login && rbw unlock
+nix run .#backup-agenix-key
+```
+
+`backup-agenix-key` は `AGE-SECRET-KEY-` 行を Bitwarden のエントリ `agenix-age-key` に保管する（既存なら更新）。鍵を作り直したときだけ再実行する。
+
+### フレッシュインストールでの復元（最初の switch の前）
+
+新マシンでは、最初の `nixos-rebuild switch` の**前**に秘密鍵を戻す。鍵が無いと agenix の復号に失敗して switch がこける。
+
+```bash
+rbw login
+nix run .#restore-agenix-key   # Bitwarden → ~/.config/agenix/key.txt（mode 400）
+```
+
+`restore-agenix-key` は既存の `key.txt` があると上書きを拒否する。マスターパスワードの手入力が唯一の手作業で、以降は自動化される。
+
+### 日常運用
+
+普段は何もしない。`switch` のたびに agenix が `key.txt` を読んで秘密を自動復号する。
+
 ## 構成
 
 ```
