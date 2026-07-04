@@ -11,5 +11,6 @@
     ./yazi
     ./goclipboard
     ./python
+    ./rbw
   ];
 }
