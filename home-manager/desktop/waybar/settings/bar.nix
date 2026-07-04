@@ -1,6 +1,6 @@
 {
   layer = "top";
-  margin = "10 8 2 8";
+  margin = "10 10 2 10";
   reload_style_on_change = true;
 
   modules-left = [

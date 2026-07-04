@@ -54,6 +54,11 @@ NixOS & home-manager の個人 dotfiles。
 - `enable = true; # 有効化` のような逐条コメントや、設定項目を日本語で言い換えるだけのコメントは禁止。冗長なら消す。
 - Nix の未使用 let 束縛は treefmt の deadnix が検出する。`nix run .#fmt -- --fail-on-change` を build と併せて必ず通す。
 
+### 【IMPORTANT・禁止】waybar CSS の寸法・余白
+
+- **waybar の `style.css` は生成物であり手編集禁止**。寸法（余白・角丸・幅）と質感の値は `home-manager/desktop/waybar/style/tokens.nix` のセマンティックトークンだけで定義し、`style/render.sh` で再生成する（GTK CSS に寸法用の変数機構が無いため Nix をプリプロセッサにしている）。
+- **個別の CSS ルールにその場しのぎで px を足し引きして隙間を調整することを禁止する**。隙間の問題は「どのトークン（gapIsland / gapModule / padIslandX 等）の意味の話か」を特定してトークン側を変える。適切なトークンが無ければトークンを追加してから使う。
+
 ## ローカル用カスタムコマンド（flake apps）
 
 リポジトリ直下で実行する。

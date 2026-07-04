@@ -101,6 +101,11 @@ wallust（`colors-waybar.css`, `@color0..15`）への依存は削除する。
 2. `.island > *` … 島内モジュールの背景リセット。個別 ID の列挙はしない。
 3. 状態セレクタ（`#workspaces button.active`, `#pulseaudio.muted` など） … 効き色と状態だけを ID で指定。
 
+寸法と質感の値はセマンティックトークンで一元管理する。
+GTK CSS には寸法用の変数機構が無いため、Nix をプリプロセッサにする: `style/tokens.nix`（トークン定義）+ `style/mk-style.nix`（CSS テンプレート）から `style/render.sh` が `style.css` を生成し、生成物をコミットする。
+生成物は従来どおり `lnk` で実機に届くため、再生成すれば waybar の `reload_style_on_change` で即反映される。
+`style.css` の手編集と、個別ルールへの場当たりな寸法調整は禁止（プロジェクト CLAUDE.md に明記）。
+
 ## コード構造
 
 ```
@@ -109,7 +114,11 @@ home-manager/desktop/waybar/
 ├── settings/
 │   ├── bar.nix          # レイアウト, 島（group）定義, margin
 │   └── modules.nix      # 各モジュール定義
-├── style.css            # 決定版 1 本
+├── style/
+│   ├── tokens.nix       # 寸法・質感のセマンティックトークン（単一情報源）
+│   ├── mk-style.nix     # tokens → CSS 文字列のテンプレート
+│   └── render.sh        # style.css を再生成
+├── style.css            # 生成物（手編集禁止）
 └── scripts/             # weather のみ（pkg-update は削除）
 ```
 

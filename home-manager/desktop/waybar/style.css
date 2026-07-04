@@ -1,13 +1,10 @@
-/* ダークグラス・アイランド単一スタイル。
- * 色は matugen 生成の colors.css (MD3 トークン) のみに依存する。
- * すりガラスは hyprland 側 layerrule (blur + ignore_alpha) が担当し、
- * ここでは半透明ティントと縁取り・影だけを描く。 */
+/* ===== 生成ファイル: 手編集禁止 =====
+ * 寸法・質感は style/tokens.nix で変更し、style/render.sh で再生成する。
+ * ダークグラス・アイランド単一スタイル。色は matugen 生成の colors.css
+ * (MD3 トークン) のみに依存。すりガラスは hyprland 側 layerrule が担当。 */
 
 @import "colors.css";
 
-/* ============================================================
-   Tokens
-   ============================================================ */
 @define-color glass_tint rgba(10, 12, 18, 0.58);
 @define-color glass_border rgba(255, 255, 255, 0.08);
 /* tooltip は blur が乗らない別サーフェスなので濃いめにして可読性を確保 */
@@ -32,7 +29,7 @@ window#waybar {
   color: @on_surface;
 }
 
-/* GTK4 Adwaita 既定の button/tooltip 装飾を無効化 */
+/* GTK Adwaita 既定の button/tooltip 装飾を無効化 */
 button {
   box-shadow: none;
   outline: none;
@@ -69,8 +66,8 @@ tooltip label {
   background-color: @glass_tint;
   border: 1px solid @glass_border;
   border-radius: 20px;
-  padding: 0 10px;
-  margin: 0 5px;
+  padding: 0 12px;
+  margin: 0 7px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
   color: @on_surface;
 }
@@ -81,7 +78,7 @@ tooltip label {
   border: none;
   border-radius: 0;
   margin: 0;
-  padding: 0 6px;
+  padding: 0 9px;
   box-shadow: none;
 }
 
@@ -177,7 +174,7 @@ tooltip {
   background-color: @tooltip_bg;
   border: 1px solid @glass_border;
   border-radius: 12px;
-  padding: 6px 8px;
+  padding: 6px 10px;
 }
 
 tooltip label {
