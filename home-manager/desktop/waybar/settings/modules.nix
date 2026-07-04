@@ -78,7 +78,7 @@
     max-length = 50;
   };
   bluetooth = {
-    format = "{icon} {status}";
+    format = "{icon}";
     format-icons = {
       enabled = "󰂯";
       disabled = "󰂲";
@@ -106,11 +106,6 @@
     # クリックはセレクタ起動に一本化し、スクロール音量変更は無効化
     scroll-step = 0;
     ignored-sinks = [ "Easy Effects Sink" ];
-  };
-  privacy = {
-    icon-spacing = 6;
-    icon-size = 14;
-    transition-duration = 250;
   };
   tray = {
     icon-size = 21;

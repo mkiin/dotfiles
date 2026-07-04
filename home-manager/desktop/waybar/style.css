@@ -128,11 +128,9 @@ window#waybar.empty #window {
 /* ============================================================
    5 Role, State: 色のみ。寸法を持たない。
    .accent は #サフィックスで配るロールクラス (custom/nix, custom/power)。
-   privacy は id クラス非対応の実装なので ID 指定で残す。
    状態クラス (.muted 等) は waybar が動的に付与する。
    ============================================================ */
-.accent,
-#privacy {
+.accent {
   color: @primary;
 }
 

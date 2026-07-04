@@ -47,7 +47,6 @@
       "network"
       "bluetooth"
       "pulseaudio"
-      "privacy"
       "tray"
     ];
   };
