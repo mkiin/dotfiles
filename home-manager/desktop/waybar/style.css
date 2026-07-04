@@ -50,6 +50,7 @@ button:focus-visible {
 
 tooltip {
   background-image: none;
+  box-shadow: none;
   text-shadow: none;
 }
 
