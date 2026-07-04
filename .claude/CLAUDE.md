@@ -25,6 +25,29 @@ NixOS & home-manager の個人 dotfiles。
 4. **system か user か**を先に決める。全体に効くもの(steam/ランチャー/フォント)は `nixos/`、ユーザー設定は `home-manager/`。本体=system・設定=user に割るものもある(例: vesktop)。
 5. **ホスト差分は `hosts/` で吸収**。WSL は desktop を import しない等。共通は `nixos/`・`home-manager/` 側へ。
 
+## 【IMPORTANT・禁止】パッケージ宣言の置き場
+
+**設計原則: パッケージは集約 `packages.nix` で「宣言（インストール）」し、機能ディレクトリの `default.nix` では「設定」だけを持つ。**
+
+集約点（＝パッケージ宣言を書いてよい唯一の場所）:
+
+- `home-manager/desktop/packages.nix`
+- `home-manager/cli/packages.nix`
+- `nixos/core/packages`
+
+**禁止事項（IMPORTANT）:**
+
+- **機能／設定ディレクトリの `default.nix` に `home.packages` / `environment.systemPackages` でパッケージを直書きしてはならない。** そこは `programs.*` / `services.*` の enable・`xdg.configFile`・systemd unit 等の**設定専用**。パッケージ本体は必ず集約 `packages.nix` 側へ置く。
+- あるパッケージの「本体」を集約 `packages.nix`、その「設定」を同名サブフォルダ、という分離を崩さない。設定ディレクトリに本体パッケージを同居させるのは汚染とみなす。
+
+**禁止でないもの（誤解防止）:**
+
+- `programs.<foo>.enable = true;` / `services.<foo>.enable = true;` によるパッケージ導入は**正しい設定機構**。これは直書きではない。
+- `programs.<foo>.package = ...;` によるパッケージ差し替えも設定の一部。
+- systemd unit やスクリプト内の `${pkgs.X}/bin/...` 絶対パス参照は「宣言」ではない（PATH に載せていない）ので許容。ただし keybind/端末から叩くために PATH が要るなら、その本体は集約 `packages.nix` に入れる。
+
+**是正事例（同じ過ちを繰り返さないこと）:** `pkgs.btop`（pyprland scratchpad 用）・`pkgs.pyprland`・`pkgs.mise` はいずれも設定ディレクトリの `default.nix` に直書きされていたのを集約 `packages.nix` へ移した。新規パッケージ追加時は必ず集約側へ書き、ディレクトリ側には設定のみ書くこと。
+
 ## コーディング規約
 
 - **コメントをだらだら書くな**。何をしているかはコードで分かる。コメントは「なぜそうしたか(非自明な理由・ハマりどころ・外部制約)」だけを 1〜2 行で。
