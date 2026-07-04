@@ -6,7 +6,7 @@
 
 ## 目的
 
-起動時に各モニターが決まったワークスペースを表示する（中央 DP-2=メインに WS1）。加えて `workspaces_follow_focus` を残し、「マルチモニターで単一モニターのような自由度（WSがモニターに固定されず手元に寄る）」を上乗せする。
+起動時に各モニターが決まったワークスペースを表示する（中央 DP-2=メインに WS1）。加えて `workspaces_follow_focus` の恩恵をフルに得るため `persistent` は付けず（`default` のみ）、WS1..10 すべてがフォーカス/マウスに追従できるようにする。
 
 ## 背景（なぜ今こうなっているか）
 
@@ -30,9 +30,9 @@
 | 論点             | 決定                                                                                                                |
 | ---------------- | ------------------------------------------------------------------------------------------------------------------- |
 | 起動時WS配置     | 中央DP-2(メイン)=WS1 / 左DP-1=WS2 / 右DP-3=WS3                                                                      |
-| workspace_rule   | `default = true` + `persistent = true`（空でも常設し起動直後から3画面が揃う）                                       |
+| workspace_rule   | `default = true` のみ（persistent なし）。初期配置は決めるが空WSは消え、follow_focus の追従対象に戻る（フル follow_focus）  |
 | 起動時フォーカス | **後回し**（本スコープ外）。初期配置固定と follow_focus 試用を先に入れる                                            |
-| follow_focus     | **残す**（試用）。基準WSは固定を保ち、WS4以降が追従する                                                             |
+| follow_focus     | **残す**（試用）。persistent を付けないので WS1..10 すべてが追従・順送りの対象になる                                 |
 | SUPER+数字       | 当面 native のまま（WS2/3を押すとそのモニターへフォーカス移動）。将来 `focusworkspaceoncurrentmonitor` に変える余地 |
 
 ## アーキテクチャ / コンポーネント
@@ -47,9 +47,9 @@ hl.monitor({ output = "DP-2", mode = "2560x1440@180", position = "1920x0", scale
 hl.monitor({ output = "DP-3", mode = "1920x1080@100", position = "4480x0", scale = 1 })
 hl.monitor({ output = "HDMI-A-1", disabled = true })
 
-hl.workspace_rule({ workspace = "1", monitor = "DP-2", default = true, persistent = true })
-hl.workspace_rule({ workspace = "2", monitor = "DP-1", default = true, persistent = true })
-hl.workspace_rule({ workspace = "3", monitor = "DP-3", default = true, persistent = true })
+hl.workspace_rule({ workspace = "1", monitor = "DP-2", default = true })
+hl.workspace_rule({ workspace = "2", monitor = "DP-1", default = true })
+hl.workspace_rule({ workspace = "3", monitor = "DP-3", default = true })
 ```
 
 ### 2. 起動時フォーカス（後回し）
@@ -68,11 +68,11 @@ bed は HDMI-A-1 単一モニターのため、WS↔モニター固定の論点�
 - **今の画面でWSをめくる**: `SUPER+O`（次の空きWS）/ `SUPER+I`（前の空きWS）。他画面に出ているWSは自動で飛ばす。これが「単一モニターのようにパラパラめくる」体験。
 - **WSを手元に呼ぶ（追従）**: フォーカス（またはマウス）を別モニターへ移すと、空いているWS（4以降）がその画面に寄ってくる。
 - **試すときの着目点**: (a) SUPER+I/O で中央画面だけでWS4,5,6…を回せるか、(b) マウスを別画面へ動かしたとき空きWSが付いてくる感覚が「便利」か「うるさい」か。この2点で follow_focus を残すか外すかを判断する。
-- **うるさい場合の退避**: follow_focus だけ外しても、workspace_rule による起動時固定（1,2,3）は残る。
+- **うるさい場合の退避**: follow_focus だけ外せば追従は止まり、`default` による起動時の 1,2,3 初期配置だけが残る。
 
 ## 既知のエッジ / リスク
 
-1. **follow_focus と固定の擦れ**: WS2/WS3 をそのモニターの active から外す（例: 左DP-1で SUPER+O して WS5 にする）と、WS2 が「空き」になり、別モニターにフォーカスした際に追従で持って行かれ得る。基準運用（各モニターが自分の番号を表示）では起きない。
+1. **空になったWSは消える（意図した挙動）**: `persistent` を付けないので、WS2/WS3 をそのモニターの active から外す（例: 左DP-1で SUPER+O して WS5 にする）と、WS2 は空になり消える。これは「全WSを follow_focus 対象にする」ための仕様であり、常時 1,2,3 が並ぶ保証は無い。
 2. **mode.sh 連携**: bed/desk 切替時にも desk の workspace_rule が効く。切替後にWS配置が固定通りに戻るか実機確認。
 
 ## 検証手順
