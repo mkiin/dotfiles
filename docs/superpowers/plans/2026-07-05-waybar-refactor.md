@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** waybar をダークグラス・アイランドの単一スタイルに一新し、クリックを4箇所に集約し、config.json を Nix 分割構成に置き換える。
+**Goal:** waybar をダークグラス・アイランドの単一スタイルに一新し、島構造を主要 OS の UI に倣った 6 島 + 例外 1 に組み直し、config.json を Nix 分割構成に置き換える。
 
-**Architecture:** `programs.waybar.settings` を Nix（`settings/bar.nix` + `settings/modules.nix`）で構成し、CSS は matugen トークンのみに依存する単一 `style.css` に統合する。すりガラスは Hyprland の layerrule（blur + ignore_alpha）で実現する。
+**Architecture:** `programs.waybar.settings` を Nix（`settings/bar.nix` + `settings/modules.nix`）で構成する。バーに載る要素は原則 group（`group/<名前>#island`）とし、CSS は `.island` 単一クラス + `.island > *` リセット + 状態セレクタの 3 層だけで描く。すりガラスは Hyprland の layerrule（blur + ignore_alpha）で実現する。
 
 **Tech Stack:** NixOS / home-manager, waybar (GTK CSS), Hyprland Lua config, matugen
 
@@ -27,27 +27,29 @@
 - `colors-waybar.css`（wallust 生成）は今回 waybar から参照を外すが、wlogout が使うため wallust 側のフォールバックは触らない。
 - Hyprland 設定は Lua（`home-manager/desktop/hyprland/lua/*.lua`）。`hl.layer_rule({...})` の書式は `rules.lua` 末尾に既存例あり。`ignore_alpha` は `HL.LayerRuleSpec` でサポート確認済み。
 - `hyprland/scripts/waybar/reload-css.sh` は壁紙切替の `post.sh` から呼ばれているため**削除しない**。
+- waybar の group 名 `group/<name>#<class>` の `#<class>` 部分は、その group ウィジェットの CSS クラスになる。本計画では全 group を `#island` で統一する。
 
 ---
 
-### Task 1: settings の Nix 化（config.json 廃止）
+### Task 1: settings の Nix 化と島構造の組み直し（config.json 廃止）
 
 **Files:**
 
 - Create: `home-manager/desktop/waybar/settings/bar.nix`
 - Create: `home-manager/desktop/waybar/settings/modules.nix`
 - Modify: `home-manager/desktop/waybar/default.nix`（全面書き換え）
-- Delete: `home-manager/desktop/waybar/config.json`
+- Delete: `home-manager/desktop/waybar/config.json`, `home-manager/desktop/waybar/scripts/pkg-update/`
 
 **Interfaces:**
 
 - Consumes: モジュール引数 `username`（specialArgs、値 `mkiin`）
 - Produces:
-  - `settings/bar.nix` … 引数なしの attrset。レイアウトと group 定義。**group 名は `group/<name>#cluster` 形式**（`#cluster` が CSS の `.cluster` クラスになる。Task 2 の CSS がこれに依存）
+  - `settings/bar.nix` … 引数なしの attrset。レイアウトと group 定義。**group 名はすべて `group/<name>#island` 形式**（`#island` が CSS の `.island` クラスになる。Task 2 の CSS がこれに依存）
   - `settings/modules.nix` … `{ username }: attrset`。全モジュール定義
-  - バーに載るモジュール ID（Task 2 の CSS セレクタがこれに依存）: `custom/nix`, `custom/mise`, `bluetooth`, `network`, `hyprland/window`, `hyprland/workspaces`, `custom/time`, `custom/date`, `custom/weather`, `cpu`, `temperature`, `memory`, `pulseaudio`, `privacy`, `custom/swaync`, `tray`, `custom/power`
+  - バーに載るモジュール ID（Task 2 の CSS セレクタがこれに依存）: `custom/nix`, `hyprland/window`, `hyprland/workspaces`, `custom/time`, `custom/date`, `custom/weather`, `cpu`, `temperature`, `memory`, `network`, `bluetooth`, `pulseaudio`, `privacy`, `custom/swaync`, `tray`, `custom/power`
 
-このタスクで「バー構成の変更」も同時に行う（weather を datetime 島へ、右サイドを sysstats + systray の2島へ、idle_inhibitor / separator 削除、privacy 追加、クリック4箇所以外の全ポインタ操作の廃止）。旧 config.json にあった未使用定義（`battery`, `backlight`, `cava`, `custom/temperature`, `custom/light`）と、CSS の管轄である最上位 `font` キーは移植しない。
+このタスクで削除するもの: `custom/mise`（表示ごと廃止。`scripts/pkg-update/` も使用者がいなくなる）、`custom/idle_inhibitor`、`custom/separator`、旧 config.json の未使用定義（`battery`, `backlight`, `cava`, `custom/temperature`, `custom/light`）、CSS の管轄である最上位 `font` キー。
+クリックは 5 箇所（nix, workspaces, bluetooth, pulseaudio, swaync）のみ。power は表示専用で on-click を持たない。
 
 - [ ] **Step 1: `settings/bar.nix` を作成**
 
@@ -58,29 +60,27 @@
   reload_style_on_change = true;
 
   modules-left = [
-    "custom/nix"
-    "custom/mise"
-    "group/connectivity#cluster"
+    "group/launcher#island"
     "hyprland/window"
   ];
   modules-center = [
-    "hyprland/workspaces"
-    "group/datetime#cluster"
+    "group/workspaces#island"
+    "group/datetime#island"
   ];
   modules-right = [
-    "group/sysstats#cluster"
-    "group/systray#cluster"
-    "custom/power"
+    "group/sysstats#island"
+    "group/status#island"
   ];
 
-  "group/connectivity#cluster" = {
+  "group/launcher#island" = {
     orientation = "horizontal";
-    modules = [
-      "bluetooth"
-      "network"
-    ];
+    modules = [ "custom/nix" ];
   };
-  "group/datetime#cluster" = {
+  "group/workspaces#island" = {
+    orientation = "horizontal";
+    modules = [ "hyprland/workspaces" ];
+  };
+  "group/datetime#island" = {
     orientation = "horizontal";
     modules = [
       "custom/time"
@@ -88,7 +88,7 @@
       "custom/weather"
     ];
   };
-  "group/sysstats#cluster" = {
+  "group/sysstats#island" = {
     orientation = "horizontal";
     drawer = {
       transition-duration = 500;
@@ -101,13 +101,16 @@
       "memory"
     ];
   };
-  "group/systray#cluster" = {
+  "group/status#island" = {
     orientation = "horizontal";
     modules = [
+      "network"
+      "bluetooth"
       "pulseaudio"
       "privacy"
       "custom/swaync"
       "tray"
+      "custom/power"
     ];
   };
 }
@@ -115,7 +118,7 @@
 
 - [ ] **Step 2: `settings/modules.nix` を作成**
 
-アイコン glyph（``, `󰦬`, `󰥔`など）は旧`config.json` の値をそのまま使う。以下のコードブロック内の glyph は正しい Nerd Font 文字で書かれているので、コピーすればよい。
+アイコン glyph（``, `󰥔`など）は旧`config.json` の値をそのまま使う。以下のコードブロック内の glyph は正しい Nerd Font 文字で書かれているので、コピーすればよい。
 
 ```nix
 { username }:
@@ -124,34 +127,6 @@
     format = "  ${username}";
     tooltip = false;
     on-click = "qs -c shell ipc call launcher toggle";
-  };
-  "custom/mise" = {
-    format = "󰦬 {}";
-    tooltip-format = "Mise outdated tools: {}";
-    exec = "~/.config/waybar/scripts/pkg-update/pkg-check.sh mise outdated";
-    return-type = "json";
-    interval = 1800;
-    signal = 10;
-  };
-
-  bluetooth = {
-    format = "{icon} {status}";
-    format-icons = {
-      enabled = "󰂯";
-      disabled = "󰂲";
-    };
-    tooltip-format = "{device_alias}";
-  };
-  network = {
-    format = "{ifname}";
-    format-wifi = "󰖩 wifi";
-    format-ethernet = "󰈀 ethernet";
-    format-disconnected = "";
-    tooltip-format = "{ifname} via {gwaddr} 󰌘";
-    tooltip-format-wifi = "{essid} ({signalStrength}%) ";
-    tooltip-format-ethernet = "{ifname} ";
-    tooltip-format-disconnected = "Disconnected";
-    max-length = 50;
   };
   "hyprland/window" = {
     format = "{}";
@@ -221,6 +196,26 @@
     tooltip-format = "{used:0.1f}G/{total:0.1f}G";
   };
 
+  network = {
+    format = "{ifname}";
+    format-wifi = "󰖩 wifi";
+    format-ethernet = "󰈀 ethernet";
+    format-disconnected = "";
+    tooltip-format = "{ifname} via {gwaddr} 󰌘";
+    tooltip-format-wifi = "{essid} ({signalStrength}%) ";
+    tooltip-format-ethernet = "{ifname} ";
+    tooltip-format-disconnected = "Disconnected";
+    max-length = 50;
+  };
+  bluetooth = {
+    format = "{icon} {status}";
+    format-icons = {
+      enabled = "󰂯";
+      disabled = "󰂲";
+    };
+    tooltip-format = "{device_alias}";
+    on-click = "qs -c bluetooth -n";
+  };
   pulseaudio = {
     format = "{icon} {volume}%";
     format-bluetooth = "{icon} 󰂰 {volume}%";
@@ -235,7 +230,8 @@
         "󰕾"
       ];
     };
-    # 入口集約: スクロールでの音量変更を無効化（操作はコントロールセンターへ）
+    on-click = "qs -c audio -n";
+    # クリックはセレクタ起動に一本化し、スクロール音量変更は無効化
     scroll-step = 0;
     ignored-sinks = [ "Easy Effects Sink" ];
   };
@@ -272,17 +268,17 @@
       TelegramDesktop = "$HOME/.local/share/icons/hicolor/16x16/apps/telegram.png";
     };
   };
+  # 表示専用。電源操作はコントロールセンター側にあるため on-click を持たない
   "custom/power" = {
     format = "󰐥";
     tooltip = false;
-    on-click = "wlogout";
   };
 }
 ```
 
 - [ ] **Step 3: `default.nix` を書き換え**
 
-`lib` 引数と importJSON、username 連結ハックを消し、settings を 2 ファイルのマージで組む。`styles/` のリンク行は Task 2 で消すのではなく**このタスクで消さない**（まだ実ファイルがあるため）。現時点では現状のまま残す。
+`lib` 引数と importJSON、username 連結ハックを消し、settings を 2 ファイルのマージで組む。`styles/` のリンク行は実ファイルがまだあるため**このタスクでは残す**（Task 2 で削除）。
 
 ```nix
 {
@@ -304,35 +300,46 @@
 }
 ```
 
-- [ ] **Step 4: `config.json` を削除**
+- [ ] **Step 4: `config.json` と `scripts/pkg-update/` を削除**
 
 ```bash
 git rm home-manager/desktop/waybar/config.json
+git rm -r home-manager/desktop/waybar/scripts/pkg-update
 ```
 
 - [ ] **Step 5: settings の出力を確認**
 
 ```bash
-nix eval .#nixosConfigurations.nixos.config.home-manager.users.mkiin.programs.waybar.settings --json | jq '.[0] | {left: .["modules-left"], center: .["modules-center"], right: .["modules-right"], nix_format: .["custom/nix"].format}'
+nix eval .#nixosConfigurations.nixos.config.home-manager.users.mkiin.programs.waybar.settings --json | jq '.[0] | {left: .["modules-left"], center: .["modules-center"], right: .["modules-right"], nix_format: .["custom/nix"].format, status: .["group/status#island"].modules}'
 ```
 
 期待値:
 
 ```json
 {
-  "left": [
-    "custom/nix",
-    "custom/mise",
-    "group/connectivity#cluster",
-    "hyprland/window"
-  ],
-  "center": ["hyprland/workspaces", "group/datetime#cluster"],
-  "right": ["group/sysstats#cluster", "group/systray#cluster", "custom/power"],
-  "nix_format": "  mkiin"
+  "left": ["group/launcher#island", "hyprland/window"],
+  "center": ["group/workspaces#island", "group/datetime#island"],
+  "right": ["group/sysstats#island", "group/status#island"],
+  "nix_format": "  mkiin",
+  "status": [
+    "network",
+    "bluetooth",
+    "pulseaudio",
+    "privacy",
+    "custom/swaync",
+    "tray",
+    "custom/power"
+  ]
 }
 ```
 
-あわせて廃止確認: `... --json | jq '.[0] | has("custom/idle_inhibitor"), has("custom/separator"), has("battery"), has("cava")'` がすべて `false`。
+あわせて廃止確認:
+
+```bash
+nix eval .#nixosConfigurations.nixos.config.home-manager.users.mkiin.programs.waybar.settings --json | jq '.[0] | has("custom/mise"), has("custom/idle_inhibitor"), has("custom/separator"), has("battery"), has("cava"), (.["custom/power"] | has("on-click"))'
+```
+
+期待: すべて `false`。
 
 - [ ] **Step 6: ビルドと整形を通す**
 
@@ -347,7 +354,7 @@ nix run .#fmt -- --fail-on-change
 
 ```bash
 git add home-manager/desktop/waybar/
-git commit -m "refactor(waybar): config.jsonをNix分割構成に置き換え、クリックを4箇所に集約"
+git commit -m "refactor(waybar): config.jsonをNix分割構成に置き換え、島をOS準拠の6島に組み直し"
 ```
 
 ---
@@ -362,8 +369,10 @@ git commit -m "refactor(waybar): config.jsonをNix分割構成に置き換え、
 
 **Interfaces:**
 
-- Consumes: Task 1 のモジュール ID と `#cluster` クラス名。matugen トークン（`@primary`, `@on_primary`, `@on_surface`, `@secondary_container`, `@on_secondary_container`, `@tertiary`, `@on_tertiary`, `@error`, `@on_error`, `@state_critical`）
+- Consumes: Task 1 の `#island` クラス（全 group）とモジュール ID。matugen トークン（`@primary`, `@on_primary`, `@on_surface`, `@secondary_container`, `@on_secondary_container`, `@tertiary`, `@on_tertiary`, `@error`, `@on_error`, `@state_critical`）
 - Produces: なし（最終成果物）
+
+CSS の機構は 3 層だけ: `.island`（島の質感）, `.island > *`（島内リセット）, 状態セレクタ（効き色）。旧構成の「`.cluster` クラス + 単独モジュール ID 列挙」の二重機構を廃止する。
 
 - [ ] **Step 1: `style.css` を全面書き換え**
 
@@ -428,37 +437,24 @@ tooltip label {
 }
 
 /* ============================================================
-   Island 基礎
-   単独モジュール島と group 島 (.cluster) を同一の質感で描く。
+   Island
+   バーに載る group は全部 `group/<name>#island` で .island class を持つ。
+   #window だけは group で包むと空タイトル時に空枠が残るため裸のまま
+   同じ質感を当てる (唯一の例外)。
    ============================================================ */
-#custom-nix,
-#custom-mise,
-#window,
-#workspaces,
-#custom-power,
-.cluster {
+.island,
+#window {
   background-color: @glass_tint;
   border: 1px solid @glass_border;
   border-radius: 20px;
-  padding: 0 12px;
+  padding: 0 10px;
   margin: 0 5px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
   color: @on_surface;
 }
 
-/* cluster 内の個別モジュールは島の背景に乗るだけ */
-.cluster #bluetooth,
-.cluster #network,
-.cluster #custom-time,
-.cluster #custom-date,
-.cluster #custom-weather,
-.cluster #cpu,
-.cluster #temperature,
-.cluster #memory,
-.cluster #pulseaudio,
-.cluster #privacy,
-.cluster #custom-swaync,
-.cluster #tray {
+/* 島内モジュールは島の背景に乗るだけ。個別 ID は列挙しない */
+.island > * {
   background-color: transparent;
   border: none;
   border-radius: 0;
@@ -481,10 +477,6 @@ window#waybar.empty #window {
    非アクティブは小ドット (文字色を透明にして丸だけ見せる)、
    アクティブは @primary の横長ピル。
    ============================================================ */
-#workspaces {
-  padding: 0 6px;
-}
-
 #workspaces button {
   min-width: 20px;
   margin: 5px 3px;
@@ -519,7 +511,7 @@ window#waybar.empty #window {
 }
 
 /* ============================================================
-   モジュールの効き色と状態
+   状態色
    ============================================================ */
 #custom-nix {
   color: @primary;
@@ -527,10 +519,6 @@ window#waybar.empty #window {
 
 #custom-power {
   color: @primary;
-}
-
-#custom-mise.has-updates {
-  color: @tertiary;
 }
 
 #network.disconnected {
@@ -673,12 +661,13 @@ systemctl --user restart waybar
 - [ ] **Step 3: 目視チェックリスト**
 
 - 島がダークグラス（半透明 + 細フチ + 影 + 背面ブラー）で描画されている
+- `.island > *` のリセットが効いており、島の中に二重の枠や背景が出ていない
 - 明るい壁紙と暗い壁紙の両方で島の境界が識別できる（壁紙切替: 既存の壁紙スクリプトを使用）
 - 壁紙切替でアクセント色（アクティブ WS のピルなど）が追従する
-- 中央が「ws 単独島 + 時刻/日付/天気島」になっている
-- 右が「sysstats 島（drawer 開閉可）+ systray 島 + power」になっている
-- クリック: nix→ランチャー、ws→移動、swaync→コントロールセンター、power→wlogout の 4 つが動く
-- 廃止確認: pulseaudio スクロールで音量が変わらない、bluetooth クリックで何も起きない
+- 構成: 左 = launcher 島 + ウィンドウタイトル、中央 = ws 島 + 時刻/日付/天気島、右 = sysstats 島（drawer 開閉可）+ status 島（network, BT, 音量, privacy, ベル, tray, power）
+- ウィンドウを全部閉じたとき window の空枠が残らない
+- クリック: nix→ランチャー、ws→移動、BT→bluetooth ポップアップ、音量→オーディオセレクタ、ベル→コントロールセンター の 5 つが動く
+- 廃止確認: power クリックで何も起きない、pulseaudio スクロールで音量が変わらない、mise がバーに存在しない
 - tooltip が濃色背景で読める
 
 - [ ] **Step 4: 問題なければユーザーに push 判断を委ねる**
@@ -689,6 +678,6 @@ todo.md の waybar 関連項目（「waybarのリデザイン」「初回起動�
 
 ## Self-Review 結果
 
-- Spec coverage: バー構成変更 = Task 1、クリック集約 = Task 1、ダークグラス CSS と styles 廃止 = Task 2、wallust 依存削除 = Task 2（`@import "colors-waybar.css"` を含む旧 style.css の全面書き換えで消える）、Hyprland blur = Task 3、初回起動フォールバック = 実装済みのため Task 4 Step 1 で確認に変更（spec からの逸脱として明記）、検証 = Task 4。
+- Spec coverage: 島構造の組み直しと mise/pkg-update 削除 = Task 1、クリック 5 箇所 + power 表示専用 = Task 1、ダークグラス CSS と 3 層セレクタ構造・styles 廃止・wallust 依存削除 = Task 2、Hyprland blur = Task 3、フォールバック確認と検証 = Task 4。
 - Placeholder scan: なし（全コード完載）。
-- Type consistency: group 名 `#cluster` サフィックスと CSS `.cluster`、モジュール ID と CSS セレクタ、`username` 引数の受け渡しを照合済み。
+- Type consistency: 全 group の `#island` サフィックスと CSS `.island`、`#window` 例外の扱い、モジュール ID と CSS セレクタ、`username` 引数の受け渡しを照合済み。`.island > *` が workspaces ボタンへ波及しない点は specificity（`#workspaces button` が優位）で担保、実機確認は Task 4 のチェックリストに含めた。
