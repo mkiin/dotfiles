@@ -61,7 +61,7 @@ window#waybar {
   border: 1px solid @glass_border;
   border-radius: 20px;
   padding: 0 12px;
-  margin: 0 9px;
+  margin: 0 6px;
   color: @on_surface;
 }
 
@@ -81,7 +81,7 @@ window#waybar.empty #window {
    ============================================================ */
 .island .module {
   background-color: transparent;
-  margin: 0 12px;
+  margin: 0 7px;
   padding: 0;
 }
 

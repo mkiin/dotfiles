@@ -3,10 +3,10 @@
 # 個別 CSS ルールへの px 直書き・その場しのぎの調整は禁止 (CLAUDE.md 参照)。
 {
   # 島の外側
-  gapIsland = "9px"; # 島同士の間隔 (片側マージン)
+  gapIsland = "6px"; # 島同士の間隔 (片側マージン)
   # 島の内側
   padIslandX = "12px"; # 島の左右パディング
-  gapModule = "12px"; # 島内モジュール間 (片側パディング。モジュール間は 2 倍効く)
+  gapModule = "7px"; # 島内モジュール間 (片側マージン。モジュール間は 2 倍効く)
   # 形状
   radiusIsland = "20px";
   radiusTooltip = "12px";
