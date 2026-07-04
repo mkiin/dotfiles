@@ -70,7 +70,6 @@ t: ''
     border-radius: ${t.radiusIsland};
     padding: 0 ${t.padIslandX};
     margin: 0 ${t.gapIsland};
-    box-shadow: ${t.glassShadow};
     color: @on_surface;
   }
 
@@ -81,14 +80,12 @@ t: ''
     border-radius: 0;
     margin: 0;
     padding: 0 ${t.gapModule};
-    box-shadow: none;
   }
 
   /* フォーカスウィンドウが無いときは window 島ごと消す */
   window#waybar.empty #window {
     background-color: transparent;
     border: none;
-    box-shadow: none;
     padding: 0;
     margin: 0;
   }

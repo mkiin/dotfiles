@@ -20,7 +20,6 @@
   # ガラス質感 (色は matugen 非依存の固定値)
   glassTint = "rgba(10, 12, 18, 0.58)";
   glassBorder = "rgba(255, 255, 255, 0.08)";
-  glassShadow = "0 3px 10px rgba(0, 0, 0, 0.3)";
   tooltipBg = "rgba(10, 12, 18, 0.92)";
   # タイポグラフィ
   fontSize = "14px";
