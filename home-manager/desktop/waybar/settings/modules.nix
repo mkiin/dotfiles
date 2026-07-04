@@ -1,7 +1,7 @@
 { username }:
 {
   "custom/nix" = {
-    format = "  ${username}";
+    format = "  ${username}";
     tooltip = false;
     on-click = "qs -c shell ipc call launcher toggle";
   };
