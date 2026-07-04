@@ -6,6 +6,9 @@
 
     settings = {
       theme = "dark";
+      # settings.json は nix store の read-only symlink になり /effort が EROFS で失敗するため、
+      # effort はここで宣言する（既定モデルが Fable なので実質 Fable の effort になる）
+      effortLevel = "medium";
       env = {
         ENABLE_BACKGROUND_TASKS = "1";
         FORCE_AUTO_BACKGROUND_TASKS = "1";
@@ -34,7 +37,6 @@
       alwaysThinkingEnabled = true;
       autoMemoryEnabled = false;
       useAutoModeDuringPlan = true;
-      effortLevel = "high";
       awaySummaryEnabled = false;
       skipAutoPermissionPrompt = true;
       skipDangerousModePermissionPrompt = true;
