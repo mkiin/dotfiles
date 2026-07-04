@@ -692,6 +692,8 @@ systemctl --user restart waybar
 - control-center 島は idle・ベル・電源の**どこをクリックしても**コントロールセンターが開く
 - 廃止確認: pulseaudio スクロールで音量が変わらない、mise がバーに存在しない、wlogout がバーから起動できない
 - tooltip が濃色背景で読める
+- sysstats 島を collapsed にしたとき、隠れた子の padding が「空白」として残らない（残るなら collapsed 用の padding リセットを追加）
+- `hyprctl layers` で waybar の layer_rule が効いていること（透明なバー背景はブラーされず、島だけブラーされる = ignore_alpha 0.2 が正しく解釈されている）
 
 - [ ] **Step 4: 問題なければユーザーに push 判断を委ねる**
 
