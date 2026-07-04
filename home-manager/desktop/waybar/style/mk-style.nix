@@ -127,6 +127,14 @@ t: ''
     background-color: @tertiary;
   }
 
+  /* status 島の区画境界「情報 (cpu/memory) | 接続と音 | tray」。
+     線色は島の縁と同じ hairline (@glass_border) */
+  #network,
+  #tray {
+    border-left: 1px solid @glass_border;
+    padding-left: ${t.gapModule};
+  }
+
   /* ============================================================
      5 Role, State: 色のみ。寸法を持たない。
      .accent は #サフィックスで配るロールクラス (custom/nix, custom/power)。

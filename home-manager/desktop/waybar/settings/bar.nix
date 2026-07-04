@@ -13,7 +13,6 @@
     "group/datetime#island"
   ];
   modules-right = [
-    "group/sysstats#island"
     "group/status#island"
     "group/control-center#island"
   ];
@@ -34,16 +33,12 @@
       "custom/weather"
     ];
   };
-  "group/sysstats#island" = {
+  # status 島は「情報 (cpu/memory) | 接続と音 | tray」の 3 区画。境界線は CSS 側
+  "group/status#island" = {
     orientation = "horizontal";
     modules = [
       "cpu"
       "memory"
-    ];
-  };
-  "group/status#island" = {
-    orientation = "horizontal";
-    modules = [
       "network"
       "bluetooth"
       "pulseaudio"
