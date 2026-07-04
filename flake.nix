@@ -139,8 +139,6 @@
           );
         };
 
-        # シェル本体は scripts/ に分離。runtimeInputs で rbw/pinentry を PATH に載せ、
-        # writeShellApplication が build 時に shellcheck を通す。
         backup-agenix-key = {
           type = "app";
           program = pkgs.lib.getExe (
@@ -172,7 +170,6 @@
           );
         };
 
-        # copy(追加のみ)で R2 と往復。バケット直下 wallpaper/ プレフィックスを使う。
         backup-wallpaper = {
           type = "app";
           program = toString (
