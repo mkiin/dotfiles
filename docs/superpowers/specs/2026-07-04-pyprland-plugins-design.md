@@ -87,6 +87,7 @@ name = "stash"
 [scratchpads.term]
 command = "wezterm start --class scratch-term"
 class = "scratch-term"
+match_by = "class"
 size = "60% 60%"
 position = "20% 5%"
 lazy = true
@@ -94,6 +95,7 @@ lazy = true
 [scratchpads.btop]
 command = "wezterm start --class scratch-btop -- btop"
 class = "scratch-btop"
+match_by = "class"
 size = "70% 70%"
 position = "15% 5%"
 lazy = true
@@ -101,6 +103,7 @@ lazy = true
 [scratchpads.vesktop]
 command = "vesktop"
 class = "vesktop"
+match_by = "class"
 size = "60% 70%"
 position = "20% 5%"
 lazy = true
@@ -114,7 +117,8 @@ active_titles = []
 
 > `workspaces_follow_focus` のオプションは `max_workspaces` のみ（`default_workspaces` は存在しない）。
 > 初期WS配置は Hyprland のデフォルト割当（宣言順のモニターに WS1,2,3… が付く）に委ねる。desk では宣言順 DP-3→WS1, DP-2→WS2, DP-1→WS3 になり従来と同等。
-> `[toggle_special]` の `name` は native の `special:magic` と衝突しない名前（`stash`）にする。
+> `[toggle_special]` の `name` は native の `special:magic` と衝突しない名前（`stash`）にする。run 側は引数優先で config `name` を読まないため keybind でも `stash` を明示する。
+> scratchpad は wezterm の mux 接続で PID 追跡が外れうるため `match_by = "class"` を明示する。
 
 ### 責務分担
 
@@ -158,7 +162,7 @@ follow_focus 下で `monitor`/`default`/`persistent` 固定は follow の挙動�
   - `SUPER+SHIFT+I/O`（窓を隣WSへ move）は現状維持（native）。
 - `SUPER+D`（現 vesktop exec）→ `hl.dsp.exec_cmd("pypr toggle vesktop")`（vesktop scratchpad トグル）。
 - 追加: `SUPER+Z` → `pypr toggle term`、`SUPER+X` → `pypr toggle btop`。
-- `SUPER+S`（現 native `toggle_special("magic")`）→ `hl.dsp.exec_cmd("pypr toggle_special")`。
+- `SUPER+S`（現 native `toggle_special("magic")`）→ `hl.dsp.exec_cmd("pypr toggle_special stash")`（引数なしだと既定 `minimized` になるため `stash` を明示）。
 - `SUPER+SHIFT+S`（現 window.move special:magic）→ **削除**。
 - 追加: `SUPER+SHIFT+M` → `pypr lost_windows`。
 
