@@ -143,6 +143,34 @@
             ''
           );
         };
+
+        backup-agenix-key = {
+          type = "app";
+          program = toString (
+            pkgs.writeShellScript "backup-agenix-key" ''
+              set -eo pipefail
+              rbw="${pkgs.rbw}/bin/rbw"
+              key="$HOME/.config/agenix/key.txt"
+
+              [ -e "$key" ] || { echo "no key at $key" >&2; exit 1; }
+              "$rbw" unlocked || { echo "rbw is locked. run: rbw unlock" >&2; exit 1; }
+
+              tmp=$(mktemp)
+              trap 'rm -f "$tmp"' EXIT
+              grep '^AGE-SECRET-KEY-' "$key" > "$tmp"
+              [ -s "$tmp" ] || { echo "no AGE-SECRET-KEY line in $key" >&2; exit 1; }
+
+              # rbw は $EDITOR に一時ファイルを渡す。cp を editor に見せかけ内容を流し込む。
+              # 既存エントリに add すると重複するため、有無で add/edit を分ける。
+              if "$rbw" get agenix-age-key >/dev/null 2>&1; then
+                EDITOR="cp $tmp" "$rbw" edit agenix-age-key
+              else
+                EDITOR="cp $tmp" "$rbw" add agenix-age-key
+              fi
+              echo "Stored age key to Bitwarden entry 'agenix-age-key'."
+            ''
+          );
+        };
       };
     };
 }
