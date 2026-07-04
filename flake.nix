@@ -151,7 +151,11 @@
           program = pkgs.lib.getExe (
             pkgs.writeShellApplication {
               name = "backup-agenix-key";
-              runtimeInputs = [ pkgs.rbw ];
+              runtimeInputs = [
+                pkgs.rbw
+                pkgs.coreutils
+                pkgs.gnugrep
+              ];
               text = builtins.readFile ./scripts/backup-agenix-key.sh;
             }
           );
@@ -165,6 +169,8 @@
               runtimeInputs = [
                 pkgs.rbw
                 pkgs.pinentry-curses
+                pkgs.coreutils
+                pkgs.gnugrep
               ];
               text = builtins.readFile ./scripts/restore-agenix-key.sh;
             }

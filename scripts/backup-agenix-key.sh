@@ -30,4 +30,9 @@ if rbw get agenix-age-key >/dev/null 2>&1; then
 else
   EDITOR="cp $tmp" rbw add agenix-age-key
 fi
+# EDITOR トリックが将来の rbw で壊れても黙って空を保管しないよう、結果を読み戻して検証。
+rbw get agenix-age-key | grep -q '^AGE-SECRET-KEY-' || {
+  echo "stored value verification failed" >&2
+  exit 1
+}
 echo "Stored age key to Bitwarden entry 'agenix-age-key'."
