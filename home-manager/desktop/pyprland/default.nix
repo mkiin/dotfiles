@@ -10,7 +10,6 @@
     plugins = [
       "wallpapers",
       "workspaces_follow_focus",
-      "scratchpads",
       "toggle_special",
       "lost_windows",
       "fcitx5_switcher",
@@ -31,35 +30,13 @@
     [toggle_special]
     name = "stash"
 
-    # match_by="class": wezterm は mux 接続で PID 追跡が外れうるため class 一致で追う。
-    [scratchpads.term]
-    command = "wezterm start --class scratch-term"
-    class = "scratch-term"
-    match_by = "class"
-    size = "60% 60%"
-    position = "20% 5%"
-    lazy = true
-
-    [scratchpads.btop]
-    command = "wezterm start --class scratch-btop -- btop"
-    class = "scratch-btop"
-    match_by = "class"
-    size = "70% 70%"
-    position = "15% 5%"
-    lazy = true
-
-    [scratchpads.vesktop]
-    command = "vesktop"
-    class = "vesktop"
-    match_by = "class"
-    size = "60% 70%"
-    position = "20% 5%"
-    lazy = true
+    # scratchpads プラグインは見送り。vesktop(Electron 単一インスタンス)の窓追跡が
+    # 安定せず、手動スライドが Hyprland のアニメとも衝突するため。
 
     # ゲーム class は switch 後に hyprctl clients で採取して追加する(Task 4)。
     [fcitx5_switcher]
     active_classes = ["zen-beta"]
-    inactive_classes = ["scratch-term", "scratch-btop", "org.wezfurlong.wezterm"]
+    inactive_classes = ["org.wezfurlong.wezterm"]
     active_titles = []
     inactive_titles = []
   '';
@@ -87,6 +64,9 @@
         "awww-daemon.service"
       ];
       Requires = [ "awww-daemon.service" ];
+      # config.toml だけ変わっても unit は不変で switch 時に再起動されないため、
+      # 生成した config を再起動トリガに含めて設定変更を確実に反映させる。
+      X-Restart-Triggers = [ config.xdg.configFile."pypr/config.toml".source ];
     };
     Service = {
       ExecStart = "${pkgs.pyprland}/bin/pypr";

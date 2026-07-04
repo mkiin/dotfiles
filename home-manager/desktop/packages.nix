@@ -13,7 +13,6 @@
     pwvucontrol
     cava
     playerctl
-    btop
     # shell / panel (qs + quickshell on PATH for keybinds and matugen post_hook)
     quickshell
     pyprland

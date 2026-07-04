@@ -23,6 +23,8 @@
 
 ### scratchpads
 
+見送り。vesktop(Electron 単一インスタンス)の窓追跡が安定せず、pyprland の手動スライドが Hyprland のアニメと衝突するため撤去した。
+
 ### その他
 
 - toggle_special
