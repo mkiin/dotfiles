@@ -36,15 +36,12 @@ window#waybar {
   color: @on_surface;
 }
 
-.modules-center {
-  background-color: @surface_container;
-  border-radius: 20px;
-}
-
 /* Inside a cluster, individual modules drop their own pill bg
    so the cluster's single background owns the visual frame.
    Tighter horizontal padding so neighbours read as one merged group. */
-.cluster #clock,
+.cluster #custom-time,
+.cluster #custom-date,
+.cluster #custom-weather,
 .cluster #pulseaudio,
 .cluster #network,
 .cluster #bluetooth,
@@ -74,7 +71,6 @@ window#waybar {
    Default Module Capsule
    Each module renders as its own pill with uniform padding.
    ============================================================ */
-#clock,
 #pulseaudio,
 #network,
 #bluetooth,
@@ -167,14 +163,6 @@ window#waybar.empty #window {
 #workspaces button.special {
   color: @on_tertiary;
   background-color: @tertiary;
-}
-
-/* ============================================================
-   Clock
-   ============================================================ */
-#clock {
-  color: @on_primary;
-  background-color: @primary;
 }
 
 /* ============================================================

@@ -9,11 +9,19 @@
     "group/connectivity#cluster",
     "hyprland/window"
   ],
-  "modules-center": ["hyprland/workspaces", "custom/weather"],
-  "modules-right": ["group/control-center#cluster", "clock", "custom/power"],
+  "modules-center": ["group/nav#cluster", "group/datetime#cluster"],
+  "modules-right": ["group/control-center#cluster", "custom/power"],
   "group/connectivity#cluster": {
     "orientation": "horizontal",
     "modules": ["bluetooth", "network"]
+  },
+  "group/nav#cluster": {
+    "orientation": "horizontal",
+    "modules": ["hyprland/workspaces", "custom/weather"]
+  },
+  "group/datetime#cluster": {
+    "orientation": "horizontal",
+    "modules": ["custom/time", "custom/date"]
   },
   "group/control-center#cluster": {
     "orientation": "horizontal",
@@ -68,22 +76,17 @@
     },
     "format-charging": "{capacity}% "
   },
-  "clock": {
-    "format": "󰥔 {:%H:%M  󰸗 %b%e}",
-    "tooltip-format": "{calendar}",
-    "locale": "en_US.UTF-8",
-    "calendar": {
-      "mode": "month",
-      "mode-mon-col": 3,
-      "on-scroll": 1,
-      "format": {
-        "today": "<span color='#ff7f50'>{}</span>"
-      }
-    },
-    "actions": {
-      "on-scroll-up": "shift_up",
-      "on-scroll-down": "shift_down"
-    }
+  "custom/time": {
+    "format": "󰥔 {}",
+    "exec": "date '+%H:%M'",
+    "interval": 60,
+    "tooltip": false
+  },
+  "custom/date": {
+    "format": "󰸗 {}",
+    "exec": "date '+%m/%d'",
+    "interval": 3600,
+    "tooltip": false
   },
   "hyprland/workspaces": {
     "format": "{icon}",
