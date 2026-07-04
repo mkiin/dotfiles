@@ -6,10 +6,10 @@
 
   modules-left = [
     "group/launcher#island"
-    "hyprland/window"
+    "hyprland/window#island"
   ];
   modules-center = [
-    "group/workspaces#island"
+    "group/ws#island"
     "group/datetime#island"
   ];
   modules-right = [
@@ -20,9 +20,9 @@
 
   "group/launcher#island" = {
     orientation = "horizontal";
-    modules = [ "custom/nix" ];
+    modules = [ "custom/nix#accent" ];
   };
-  "group/workspaces#island" = {
+  "group/ws#island" = {
     orientation = "horizontal";
     modules = [ "hyprland/workspaces" ];
   };
@@ -56,7 +56,7 @@
     modules = [
       "custom/idle_inhibitor"
       "custom/notify"
-      "custom/power"
+      "custom/power#accent"
     ];
   };
 }

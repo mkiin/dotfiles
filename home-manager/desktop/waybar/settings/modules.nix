@@ -1,11 +1,11 @@
 { username }:
 {
-  "custom/nix" = {
+  "custom/nix#accent" = {
     format = "  ${username}";
     tooltip = false;
     on-click = "qs -c shell ipc call launcher toggle";
   };
-  "hyprland/window" = {
+  "hyprland/window#island" = {
     format = "{}";
     separate-outputs = true;
     max-length = 40;
@@ -151,7 +151,7 @@
     on-click = "qs -c shell ipc call cc toggle";
     escape = true;
   };
-  "custom/power" = {
+  "custom/power#accent" = {
     format = "󰐥";
     tooltip = false;
     on-click = "qs -c shell ipc call cc toggle";
