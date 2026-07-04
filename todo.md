@@ -25,7 +25,6 @@
 
 ### その他
 
-- wallpapers
 - toggle_special
 - lost_windows
 - fcitx5_switcher
@@ -44,6 +43,8 @@ quickshellで作成するが、参考になるデザインがまだみつかっ�
 - 画面録画 : gpu-screen-recorder(record.sh)を維持。wl-screenrec は NVIDIA proprietary driver だと VA-API 前提で HW エンコードが実質動かないため見送り。Super+R のトグルは実装済み(PIDファイル + SIGINT)。二重録画バグは解消。
 
 - hyprfocus : 導入済み(hyprwm/hyprland-plugins、flash アニメでフォーカス強調)。
+
+- fastfetch : システム情報を表示するCLI。
 
 ## 見た目・リファクタリング
 
