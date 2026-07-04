@@ -3,4 +3,5 @@ let
 in
 {
   "rclone-r2.conf.age".publicKeys = [ mkiin ];
+  "password.age".publicKeys = [ mkiin ];
 }
