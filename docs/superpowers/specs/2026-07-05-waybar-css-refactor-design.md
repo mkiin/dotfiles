@@ -52,15 +52,15 @@ SSID とインターフェース名は既存の tooltip で確認できる。
 `style/mk-style.nix` を、カスケード順に単方向の 7 層へ再構成する。
 下の層は上の層の寸法を上書きしない。色だけを持つ層（Role/State）に寸法を書かない。
 
-| 層 | セレクタ | 責務 |
-|---|---|---|
-| 0 Reset | `*` | box-model の初期化のみ（margin、padding、border のゼロ化） |
-| 1 Bar | `window#waybar` | タイポグラフィと基調色、透明背景 |
-| 2 Island | `.island` | ガラス質感、角丸、`padIslandX`、`gapIsland` |
-| 3 Module | `.module` | 透明化と `gapModule` |
-| 4 Component | `#workspaces button` 系 | workspaces 固有の形状と状態 |
-| 5 Role/State | `.accent`、`#<id>.<状態>` | 色のみ |
-| 6 Surface | `tooltip` | 別サーフェスの装飾 |
+| 層           | セレクタ                  | 責務                                                        |
+| ------------ | ------------------------- | ----------------------------------------------------------- |
+| 0 Reset      | `*`                       | box-model の初期化と GTK 既定装飾（button/tooltip）の無効化 |
+| 1 Bar        | `window#waybar`           | タイポグラフィと基調色、透明背景                            |
+| 2 Island     | `.island`                 | ガラス質感、角丸、`padIslandX`、`gapIsland`                 |
+| 3 Module     | `.module`                 | 透明化と `gapModule`                                        |
+| 4 Component  | `#workspaces button` 系   | workspaces 固有の形状と状態                                 |
+| 5 Role/State | `.accent`、`#<id>.<状態>` | 色のみ                                                      |
+| 6 Surface    | `tooltip`                 | 別サーフェスの装飾                                          |
 
 現在 `*` リセットに混ざっている font 指定は、層 1 の `window#waybar` へ移す。
 font 系プロパティは GTK CSS で継承されるため、`*` に置く必要がない。
