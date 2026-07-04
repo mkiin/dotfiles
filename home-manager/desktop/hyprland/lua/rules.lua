@@ -49,3 +49,10 @@ hl.layer_rule({
 	match = { namespace = "logout_dialog" },
 	dim_around = true,
 })
+
+hl.layer_rule({
+	name = "waybar-glass-blur",
+	match = { namespace = "waybar" },
+	blur = true,
+	ignore_alpha = 0.2,
+})
