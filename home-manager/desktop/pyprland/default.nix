@@ -6,10 +6,7 @@
 }:
 {
   # pypr CLI を keybind / 端末から使うため PATH に入れる。
-  home.packages = [
-    pkgs.pyprland
-    pkgs.btop
-  ];
+  home.packages = [ pkgs.pyprland ];
 
   # 宣言的な単一 config。transition 系は runtime 可変にするため state.env 側に置き、
   # ここには持たせない（command が set.sh 経由で都度読む）。interval は宣言的。
