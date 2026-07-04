@@ -20,7 +20,6 @@
     wezterm
     # session essentials (lock, screenshot, clipboard, media keys)
     hyprlock
-    hyprshutdown
     wl-clipboard
     brightnessctl
     pamixer

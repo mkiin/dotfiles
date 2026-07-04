@@ -24,7 +24,7 @@
 }
 {
     "label" : "logout",
-    "action" : "hyprshutdown --post-cmd 'uwsm stop'",
+    "action" : "uwsm stop",
     "text" : "Logout",
     "keybind" : "e"
 }
