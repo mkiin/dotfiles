@@ -2,8 +2,10 @@
 t: ''
   /* ===== 生成ファイル: 手編集禁止 =====
    * 寸法・質感は style/tokens.nix で変更し、style/render.sh で再生成する。
-   * ダークグラス・アイランド単一スタイル。色は matugen 生成の colors.css
-   * (MD3 トークン) のみに依存。すりガラスは hyprland 側 layerrule が担当。 */
+   * レイヤ構造 (カスケード順に単方向。下の層は上の層の寸法を上書きしない):
+   *   0 Reset / 1 Bar / 2 Island / 3 Module / 4 Component / 5 Role,State / 6 Surface
+   * 色は matugen 生成の colors.css (MD3 トークン) のみに依存。
+   * すりガラスは hyprland 側 layerrule が担当。 */
 
   @import "colors.css";
 
@@ -13,58 +15,50 @@ t: ''
   @define-color tooltip_bg ${t.tooltipBg};
 
   /* ============================================================
-     Reset
+     0 Reset: box-model の初期化と GTK テーマ既定装飾の無効化のみ
      ============================================================ */
   * {
     border: none;
     border-radius: 0;
-    font-family:
-      "JetBrainsMono Nerd Font", "Iosevka Nerd Font", "Font Awesome 6 Free";
-    font-size: ${t.fontSize};
     margin: 0;
     padding: 0;
     min-height: 1px;
   }
 
-  window#waybar {
-    background-color: transparent;
-    color: @on_surface;
-  }
-
-  /* GTK Adwaita 既定の button/tooltip 装飾を無効化 */
-  button {
-    box-shadow: none;
-    outline: none;
-    text-shadow: none;
-    background-image: none;
-  }
-
+  button,
   button:hover,
   button:focus,
   button:focus-visible {
     box-shadow: none;
     outline: none;
+    text-shadow: none;
     background-image: none;
   }
 
-  tooltip {
+  tooltip,
+  tooltip label {
     background-image: none;
     box-shadow: none;
     text-shadow: none;
   }
 
-  tooltip label {
-    background-image: none;
+  /* ============================================================
+     1 Bar: タイポグラフィと基調色 (font 系は GTK CSS で継承される)
+     ============================================================ */
+  window#waybar {
+    background-color: transparent;
+    color: @on_surface;
+    font-family:
+      "JetBrainsMono Nerd Font", "Iosevka Nerd Font", "Font Awesome 6 Free";
+    font-size: ${t.fontSize};
   }
 
   /* ============================================================
-     Island
-     バーに載る group は全部 `group/<name>#island` で .island class を持つ。
-     #window だけは group で包むと空タイトル時に空枠が残るため裸のまま
-     同じ質感を当てる (唯一の例外)。
+     2 Island: ガラス質感と島同士の間隔
+     `group/<name>#island` と `hyprland/window#island` の可視ノードが
+     .island クラスを持つ (waybar の #サフィックス機構)。
      ============================================================ */
-  .island,
-  #window {
+  .island {
     background-color: @glass_tint;
     border: 1px solid @glass_border;
     border-radius: ${t.radiusIsland};
@@ -73,19 +67,7 @@ t: ''
     color: @on_surface;
   }
 
-  /* 島内モジュールは島の背景に乗るだけ。個別 ID は列挙しない。
-     waybar は全モジュールの可視ノード (label / box) に .module クラスを付ける。
-     間隔は margin で取る: GTK3 では eventbox への padding がレイアウトに
-     反映されない (margin は全ウィジェットで効く)。 */
-  .island .module {
-    background-color: transparent;
-    border: none;
-    border-radius: 0;
-    margin: 0 ${t.gapModule};
-    padding: 0;
-  }
-
-  /* フォーカスウィンドウが無いときは window 島ごと消す */
+  /* フォーカスウィンドウが無いときは window 島を消灯 */
   window#waybar.empty #window {
     background-color: transparent;
     border: none;
@@ -94,7 +76,19 @@ t: ''
   }
 
   /* ============================================================
-     Workspaces
+     3 Module: 島の背景に乗るだけ。間隔は margin で取る
+     (GTK3 は eventbox への padding をレイアウトに反映しない)。
+     子孫コンビネータなので .island.module を両方持つ window の
+     label 自身にはマッチしない。
+     ============================================================ */
+  .island .module {
+    background-color: transparent;
+    margin: 0 ${t.gapModule};
+    padding: 0;
+  }
+
+  /* ============================================================
+     4 Component: workspaces
      非アクティブは小ドット (文字色を透明にして丸だけ見せる)、
      アクティブは @primary の横長ピル。
      ============================================================ */
@@ -134,13 +128,13 @@ t: ''
   }
 
   /* ============================================================
-     状態色
+     5 Role, State: 色のみ。寸法を持たない。
+     .accent は #サフィックスで配るロールクラス (custom/nix, custom/power)。
+     privacy は id クラス非対応の実装なので ID 指定で残す。
+     状態クラス (.muted 等) は waybar が動的に付与する。
      ============================================================ */
-  #custom-nix {
-    color: @primary;
-  }
-
-  #custom-power {
+  .accent,
+  #privacy {
     color: @primary;
   }
 
@@ -150,14 +144,6 @@ t: ''
 
   #pulseaudio.muted {
     color: @primary;
-  }
-
-  #privacy {
-    color: @primary;
-  }
-
-  #temperature.critical {
-    color: @state_critical;
   }
 
   #custom-idle_inhibitor.activated {
@@ -172,7 +158,7 @@ t: ''
   }
 
   /* ============================================================
-     Tooltip
+     6 Surface: tooltip (バー外の別サーフェス)
      ============================================================ */
   tooltip {
     background-color: @tooltip_bg;
