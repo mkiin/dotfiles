@@ -1,8 +1,9 @@
 name: "Bot: Update flake inputs"
 
 on:
-  schedule:
-    - cron: "0 6 * * *"
+  # Renovate 移行中は cron を停止し flake.lock の二重更新を避ける。撤去は Phase 3。
+  # schedule:
+  #   - cron: "0 6 * * *"
   workflow_dispatch:
     inputs:
       inputs:
