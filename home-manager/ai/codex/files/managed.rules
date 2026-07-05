@@ -1,0 +1,20 @@
+# Codex execpolicy — nix 管理の許可コマンドリスト（宣言的・版管理対象）。
+# ~/.codex/rules/ 内の全 .rules が自動ロードされる。default.rules は Codex が
+# TUI の「常に許可」で実行時追記するため触らず、こちらに恒久ルールを集約する。
+# decision="allow" は「サンドボックス外でも確認なしで実行」を意味する。
+# 検証: codex execpolicy check --pretty --rules ~/.codex/rules/managed.rules -- <cmd...>
+
+# git 読み取り系（副作用なし）。
+prefix_rule(pattern=["git", "status"], decision="allow")
+prefix_rule(pattern=["git", "diff"], decision="allow")
+prefix_rule(pattern=["git", "log"], decision="allow")
+prefix_rule(pattern=["git", "show"], decision="allow")
+
+# このリポジトリの検証コマンド（反映しないビルド/整形。/nix/store 書き込み+取得で
+# 本来サンドボックス外になり確認が入るのを、恒久的に許可してループを回す）。
+prefix_rule(pattern=["nix", "build"], decision="allow")
+prefix_rule(pattern=["nix", "run", ".#build"], decision="allow")
+prefix_rule(pattern=["nix", "run", ".#fmt"], decision="allow")
+
+# NOTE: git push / gh 等の outward-facing・不可逆なものは意図的に未許可（都度確認を残す）。
+# 緩めたい場合はここに prefix_rule を追記する。
