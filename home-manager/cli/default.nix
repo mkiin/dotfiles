@@ -6,6 +6,7 @@
     ./git
     ./mise
     ./lazygit
+    ./herdr
     ./starship
     ./sheldon
     ./yazi
