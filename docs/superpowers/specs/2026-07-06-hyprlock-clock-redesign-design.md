@@ -16,33 +16,33 @@ caelestia の `DesktopClock.qml` を実解析した結果、以下の構成だ�
 - フォント: `GoogleSansFlex`（バリアブル、丸み軸 `ROND=25`）を時刻・日付とも使用。
 - 配色は Material 3 の 3 ロール（primary / secondary / tertiary）を使い分ける。
 
-| 要素          | M3 ロール       | 装飾                          |
-| ------------- | --------------- | ----------------------------- |
-| 時 `12`       | primary         | Bold                          |
-| `:`           | tertiary @0.8   | 少し上へオフセット            |
-| 分 `22`       | secondary       | Bold                          |
-| `AM`/`PM`     | secondary       | 小・上寄せ                    |
-| 区切り線      | primary @0.8    | 幅4・角丸 full                |
-| 月 `JUNE`     | secondary       | letter_spacing 4・Bold・大文字 |
-| 日 `21`       | primary         | letter_spacing 2・Medium      |
-| 曜日 `Sunday` | secondary       | letter_spacing 2・Normal      |
+| 要素          | M3 ロール     | 装飾                           |
+| ------------- | ------------- | ------------------------------ |
+| 時 `12`       | primary       | Bold                           |
+| `:`           | tertiary @0.8 | 少し上へオフセット             |
+| 分 `22`       | secondary     | Bold                           |
+| `AM`/`PM`     | secondary     | 小・上寄せ                     |
+| 区切り線      | primary @0.8  | 幅4・角丸 full                 |
+| 月 `JUNE`     | secondary     | letter_spacing 4・Bold・大文字 |
+| 日 `21`       | primary       | letter_spacing 2・Medium       |
+| 曜日 `Sunday` | secondary     | letter_spacing 2・Normal       |
 
 レイアウトは左から `[時刻][区切り線][日付カラム]` を横に並べ、全体を右上に配置。日付カラムは月・日・曜日の縦積みで左揃え。
 
 ## 決定事項
 
-| 項目           | 決定                                                                       |
-| -------------- | -------------------------------------------------------------------------- |
-| 配置           | 画面右上（参考に忠実。`valign=top, halign=right`、右/上マージン ~60px）     |
-| 時刻形式       | 12 時間 + AM/PM（`%-I:%M %p`）                                              |
-| 日付形式       | 月 `%B`(大文字) / 日 `%d` / 曜日 `%A`（`LC_ALL=C` で英語強制）              |
-| フォント       | `Inter Display`（採用）。代打案は後述                                       |
-| 配色           | caelestia の M3 3 色スキームを踏襲（primary/secondary/tertiary + divider）  |
-| 時刻の色分け   | Pango マークアップ（1 ラベル）+ ヘルパースクリプトで現在時刻とマークアップ出力 |
-| 区切り線       | `shape`（細い角丸矩形）                                                     |
-| 日付カラム     | 複数行の単一ラベル（`text_align=left` + `halign=right` アンカー）           |
-| 入力欄         | 現状維持（中央・設定変更なし）                                              |
-| 追加要素       | 無し（アバター・挨拶・ヒントは足さない）                                    |
+| 項目         | 決定                                                                           |
+| ------------ | ------------------------------------------------------------------------------ |
+| 配置         | 画面右上（参考に忠実。`valign=top, halign=right`、右/上マージン ~60px）        |
+| 時刻形式     | 12 時間 + AM/PM（`%-I:%M %p`）                                                 |
+| 日付形式     | 月 `%B`(大文字) / 日 `%d` / 曜日 `%A`（`LC_ALL=C` で英語強制）                 |
+| フォント     | `Inter Display`（採用）。代打案は後述                                          |
+| 配色         | caelestia の M3 3 色スキームを踏襲（primary/secondary/tertiary + divider）     |
+| 時刻の色分け | Pango マークアップ（1 ラベル）+ ヘルパースクリプトで現在時刻とマークアップ出力 |
+| 区切り線     | `shape`（細い角丸矩形）                                                        |
+| 日付カラム   | 複数行の単一ラベル（`text_align=left` + `halign=right` アンカー）              |
+| 入力欄       | 現状維持（中央・設定変更なし）                                                 |
+| 追加要素     | 無し（アバター・挨拶・ヒントは足さない）                                       |
 
 ### フォント（採用と代打案）
 
@@ -72,14 +72,25 @@ caelestia の `DesktopClock.qml` を実解析した結果、以下の構成だ�
 
 ### 2. 時刻クラスタ（Pango マークアップ + ヘルパー）
 
-hyprlock のラベルは Pango マークアップを解釈するため、`<span foreground='...'>` で部分ごとの色分け、`<span rise='...'>` で AM の持ち上げ、`<span size='...'>` で AM の縮小が 1 ラベルで表現できる。時刻は毎分変わるためラベルは `cmd[update:60000]` でヘルパースクリプトを呼び、スクリプトが現在時刻を埋めたマークアップ文字列を出力する。
+hyprlock のラベルは Pango マークアップを解釈するため、`<span foreground='...'>` で部分ごとの色分け、`<span rise='...'>` で AM の持ち上げ、`<span size='...'>` で AM の縮小が 1 ラベルで表現できる。時刻は毎分変わるためラベルは `cmd[update:10000]` でヘルパースクリプトを呼び、スクリプトが現在時刻を埋めたマークアップ文字列を出力する。
 
-hyprlock は `cmd[]` の出力内では `$var` を展開しない。色の単一情報源は `lock-colors.conf` に保つため、色の受け渡しは実装時に次のどちらかへ確定する。
+色の受け渡しは**案A（hyprlang による `$var` 引数展開）で確定**する。hyprlock は `cmd[]` の出力内では `$var` を展開しないが、hyprlang は `parseLine` の段階で行内の `$トークン` を文字列置換するため、`text = cmd[...] lock-clock.sh "$lock_hour"` は **cmd を実行する前に** `$lock_hour` が `rgba(...)` へ置換される。`lock-colors.conf` を先頭で `source` しているため「定義が使用より先」の順序条件も満たし、hyprlang の置換は変数名の長い順に行われるため `$lock_...` 系トークンを増やしても誤置換は起きない（hyprlang ソースで確認済み）。
 
-- **案A（追加ファイル無し）**: `text = cmd[update:60000] lock-clock.sh "$lock_hour" "$lock_colon" "$lock_minute" "$lock_ampm"` のように hyprlock 側で `$var` を引数展開し、スクリプトが `rgba(rrggbbaa)` を Pango の `#rrggbb` + `fgalpha` に変換してマークアップを組む。hyprlock が text 値内の `$var` を展開する前提。実装時に v0.9.5 で要検証。
-- **案B（確実）**: `gen-lock-colors.sh` に matugen テンプレートを 1 つ追加し、shell から source 可能な `lock-colors.sh`（`hour_hex=...` 等）も生成・コミットする。ヘルパーはそれを source する。生成物が 1 つ増えるが色源は matugen のまま一元化される。
+```ini
+label {
+    text = cmd[update:10000] lock-clock.sh "$lock_hour" "$lock_colon" "$lock_minute" "$lock_ampm"
+    ...
+}
+```
 
-実装は案 A を先に検証し、動かなければ案 B にフォールバックする。
+- スクリプトは受け取った `rgba(rrggbbaa)` を Pango の `#rrggbb` + `fgalpha` に変換してマークアップを組む。色の単一情報源は `lock-colors.conf` のままで、追加の生成物は不要。
+- 案B（`lock-colors.sh` を別生成して source）は**採用しない**（案 A が hyprlang 仕様として成立するため不要）。
+
+**実装要件（レビュー指摘）:**
+
+- `cmd[]` は `/bin/sh -c` で実行されるため、`$var` に展開される `rgba(...)` の括弧がシェル構文エラーにならないよう、引数は**必ずダブルクォートで囲む**（`"$lock_hour"`）。これは省略可能な作法ではなく成立条件。
+- スクリプト出力は **Pango エスケープを一段入れる**。`pango_parse_markup` が失敗すると hyprlock はマークアップ文字列を生のまま画面表示する（`<span ...>` がそのまま見える）。英語の月名・曜日名に `&`/`<` は通常含まれないが、安全側に倒す。
+- 色は `rgba()` のまま渡し `#rrggbb` への変換をスクリプト側で行う現設計を維持する。hyprlang は行内の `#` をコメント開始として扱うため、conf 側に `#rrggbb` を直接書く形へ変えると壊れる。
 
 ### 3. 区切り線（shape）
 
@@ -102,7 +113,7 @@ hyprlock v0.9.5 の `shape` は `size/rounding/color/position/halign/valign` を
 ```ini
 label {
     monitor =
-    text = cmd[update:60000] lock-date.sh     # または lock-clock.sh に mode 引数
+    text = cmd[update:10000] lock-date.sh "$lock_month" "$lock_day" "$lock_weekday"   # または lock-clock.sh に mode 引数
     text_align = left
     halign = right
     valign = top
@@ -113,26 +124,26 @@ label {
 ```
 
 - ラベル 1 つに `\n` 区切りで月・日・曜日を格納し、`text_align=left` で左揃え、`halign=right` で右端を固定する。これによりモニタ幅に依存せず左揃えカラムになる。
-- 各行の色（secondary/primary/secondary）・サイズ・`letter_spacing` は Pango マークアップで行ごとに指定。時刻クラスタと同様、色源の受け渡しは 2 節の案 A/B に従う。
+- 各行の色（secondary/primary/secondary）・サイズ・`letter_spacing` は Pango マークアップで行ごとに指定。時刻クラスタと同様、色は 2 節の案 A（`$var` 引数展開）でスクリプトへ渡す。
 
 ### 5. カラートークン再設計
 
 現状の `$lock_clock`（primary 高アルファ）・`$lock_date`（primary_fixed）の 2 トークンでは 3 色スキームを表現できないため、matugen テンプレート `matugen/templates/lock-colors.conf` を役割別に作り直す。
 
-| トークン        | matugen ソース（目安）      | 用途           |
-| --------------- | --------------------------- | -------------- |
-| `$lock_hour`    | primary                     | 時             |
-| `$lock_colon`   | tertiary（低アルファ）      | コロン         |
-| `$lock_minute`  | secondary                   | 分             |
-| `$lock_ampm`    | secondary                   | AM/PM          |
-| `$lock_divider` | primary（低アルファ）       | 区切り線       |
-| `$lock_month`   | secondary                   | 月             |
-| `$lock_day`     | primary                     | 日             |
-| `$lock_weekday` | secondary                   | 曜日           |
+| トークン        | matugen ソース（目安） | 用途     |
+| --------------- | ---------------------- | -------- |
+| `$lock_hour`    | primary                | 時       |
+| `$lock_colon`   | tertiary（低アルファ） | コロン   |
+| `$lock_minute`  | secondary              | 分       |
+| `$lock_ampm`    | secondary              | AM/PM    |
+| `$lock_divider` | primary（低アルファ）  | 区切り線 |
+| `$lock_month`   | secondary              | 月       |
+| `$lock_day`     | primary                | 日       |
+| `$lock_weekday` | secondary              | 曜日     |
 
 - 入力欄系（`$lock_input_outline`/`$lock_input_bg`/`$lock_input_text`/`$lock_hint`）と `$lock_success`/`$lock_fail` は現状維持。
 - 旧 `$lock_clock`/`$lock_date`/`$lock_shadow` は用途消滅により廃止（`$lock_shadow` は左上ラベル前提だったが右上クラスタでは shadow_passes を各ラベルに直接指定する運用に変える。影の要否は実装時に判断）。
-- 生成は既存 `gen-lock-colors.sh`（`lock.jpg` 由来）を踏襲。テンプレート差し替え後に再生成し、生成物 `lock-colors.conf` をコミットする。案 B を採る場合は `lock-colors.sh` 用テンプレートと出力も追加する。
+- 生成は既存 `gen-lock-colors.sh`（`lock.jpg` 由来）を踏襲。テンプレート差し替え後に再生成し、生成物 `lock-colors.conf` をコミットする。
 
 ### 6. 背景・アニメーション
 
@@ -145,10 +156,9 @@ label {
   - `home-manager/desktop/hyprland/hyprlock.conf`（右上クラスタ・shape・日付ラベル・時刻ラベルの cmd 化）
   - `home-manager/desktop/matugen/templates/lock-colors.conf`（トークン役割別に再設計）
   - `home-manager/desktop/hyprland/lock-colors.conf`（再生成・コミット）
-  - `home-manager/desktop/hyprland/default.nix`（ヘルパースクリプトは `hypr/scripts` 配線済みのため基本追加不要。案 B 採用時は `lock-colors.sh` の lnk を追加）
+  - `home-manager/desktop/hyprland/default.nix`（ヘルパースクリプトは `hypr/scripts` 配線済みのため追加不要）
 - 新規:
   - `home-manager/desktop/hyprland/scripts/lock-clock.sh`（時刻クラスタのマークアップ出力。日付も mode 引数で兼ねるか `lock-date.sh` を別途）
-  - （案 B 時）`home-manager/desktop/matugen/templates/lock-colors.sh` と生成物 `home-manager/desktop/hyprland/lock-colors.sh`
 - 変更不要:
   - フォント（`Inter Display` は `nixos/core/fonts` の `inter` に同梱済み）
 
