@@ -21,6 +21,7 @@
       shellcheck
       shfmt
       tree-sitter
+      clang-tools
     ];
   };
 

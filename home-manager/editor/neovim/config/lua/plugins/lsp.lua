@@ -34,6 +34,18 @@ return {
 				},
 				nixd = {},
 				bashls = {},
+				clangd = {
+					cmd = {
+						"clangd",
+						"--background-index",
+						"--clang-tidy",
+						"--header-insertion=never",
+						"--query-driver=**/bin/xtensa-*-elf-*,**/bin/riscv32-*-elf-*",
+					},
+					capabilities = {
+						offsetEncoding = { "utf-16" },
+					},
+				},
 			},
 		},
 	},
@@ -41,6 +53,8 @@ return {
 		"stevearc/conform.nvim",
 		opts = {
 			formatters_by_ft = {
+				c = { "clang_format" },
+				cpp = { "clang_format" },
 				javascript = { "oxfmt" },
 				javascriptreact = { "oxfmt" },
 				typescript = { "oxfmt" },
