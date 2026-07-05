@@ -178,7 +178,7 @@
           program = toString (
             pkgs.writeShellScript "backup-wallpaper" ''
               set -eo pipefail
-              ${pkgs.rclone}/bin/rclone copy images/wallpaper \
+              ${pkgs.rclone}/bin/rclone sync images/wallpaper \
                 r2:dotfile-wallpaper/wallpaper --config /run/agenix/rclone-r2.conf --progress
               echo "Backed up wallpapers to R2."
             ''
