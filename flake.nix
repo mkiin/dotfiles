@@ -74,6 +74,9 @@
       url = "github:anthropics/skills";
       flake = false;
     };
+
+    herdr.url = "github:ogulcancelik/herdr";
+    herdr.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
