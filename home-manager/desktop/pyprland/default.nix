@@ -10,7 +10,6 @@
     plugins = [
       "wallpapers",
       "workspaces_follow_focus",
-      "toggle_special",
       "lost_windows",
       "fcitx5_switcher",
     ]
@@ -25,10 +24,6 @@
     # WS は 1..10 運用なので巡回上限を合わせる。
     [workspaces_follow_focus]
     max_workspaces = 10
-
-    # native special:magic と衝突しない退避先。
-    [toggle_special]
-    name = "stash"
 
     # scratchpads プラグインは見送り。vesktop(Electron 単一インスタンス)の窓追跡が
     # 安定せず、手動スライドが Hyprland のアニメとも衝突するため。
