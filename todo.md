@@ -6,9 +6,6 @@
 
 ## 初回セットアップの自動化
 
-- R2 から壁紙を復元するスクリプトの作成（現状は手動で `images/wallpaper/` に配置する必要がある）
-- 初回起動時に `colors.css` / `colors-waybar.css` が存在せず waybar が起動できない問題の恒久対応
-  - home-manager activation でフォールバック色ファイルを生成する案（R2 復元前でも waybar が起動できるようにする）
 - `~/.config/scripts/notify.sh` が存在せず壁紙適用の最後でエラーになる問題の調査・修正
 
 ## pyprlandの導入
@@ -54,6 +51,7 @@ quickshellで作成するが、参考になるデザインがまだみつかっ�
 - bluetoothモジュール・オーディオセレクタポップアップにて、一覧がなにもないときの幅と高さが壊れているのを修正
 - ↑のconfigボタンについて、クリックメニューを作っていないため空ナノを解消
 - ↑別途仕様作成が必要なので、後回し
+- スクリーンショット系をquickshellで自前で持っている。screen.shを統合する
 
 ## 壁紙ランダムスクリプトのリファクタリング
 
@@ -78,3 +76,12 @@ github actionかなんかで、自動でアップデートするようにした�
 ## パスワードの宣言的管理（agenix）✅ 完了
 
 root と mkiin に同一の yescrypt ハッシュを agenix で付与（`nixos/core/secrets/password.age`）。`mutableUsers = false`、両者に `hashedPasswordFile`、username 完全一致アサーション入り。復号鍵は個人 age 鍵マスター、rbw で保管/復元。実機の `sudo`/`su` で動作確認済み。設計・計画は `docs/superpowers/{specs,plans}/2026-07-04-declarative-password-agenix*`。
+
+## Cachix による CI ビルドキャッシュの導入
+
+`nix build`（特に nixos toplevel、CI で 1 回約 28 分）を短縮するため、自前 Cachix を CI に組み込む。Renovate 移行が落ち着いてから着手する。
+
+- OSS/public は 5GB 無料枠。private 化しない前提なので、この枠に収まる範囲でやりくりする。
+- 既存の `cache-nix-action`（GH Actions cache に `/nix/store`）と `hyprland.cachix.org` substituter に加え、自前 Cachix を substituter + push 先にする。一度ビルドした成果物を CI 間で substitute して再ビルドを避けるのが狙い。
+- 必要作業: cachix アカウントとキャッシュ作成、`CACHIX_AUTH_TOKEN` を secret 登録、`setup-nix` か `nix-build` に `cachix/cachix-action` を追加。
+- これは料金削減ではなく待ち時間の短縮（public なので Actions 自体は無料）。効果が薄ければ `lockFileMaintenance` の週次化で代替する。
