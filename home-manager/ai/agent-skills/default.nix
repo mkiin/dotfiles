@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, pkgs, ... }:
 let
   inherit (inputs)
     superpowers-skill
@@ -6,6 +6,12 @@ let
     anthropic-skills
     ;
   local-skills = inputs.self + "/home-manager/ai/agent-skills/files/skills";
+
+  # herdr の SKILL.md はリポジトリ直下にあり skills/<名前>/SKILL.md 構造でないため包み直す
+  herdr-skill = pkgs.runCommand "herdr-skill" { } ''
+    mkdir -p $out/herdr
+    cp ${inputs.herdr}/SKILL.md $out/herdr/SKILL.md
+  '';
 in
 {
   programs.agent-skills = {
@@ -36,6 +42,12 @@ in
         subdir = "skills";
         filter.maxDepth = 1;
       };
+      # External: herdr operate skill（HERDR_ENV=1 のときだけ herdr を CLI 操作）
+      herdr = {
+        path = herdr-skill;
+        subdir = ".";
+        filter.maxDepth = 1;
+      };
     };
 
     # local と superpowers は全 skill を有効化
@@ -55,6 +67,7 @@ in
       "workers-best-practices"
       "wrangler"
       "frontend-design"
+      "herdr"
     ];
 
     targets.claude = {
