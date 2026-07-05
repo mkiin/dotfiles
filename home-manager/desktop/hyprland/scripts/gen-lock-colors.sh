@@ -7,7 +7,7 @@
 set -euo pipefail
 
 ROOT="$(git rev-parse --show-toplevel)"
-IMG="$ROOT/home-manager/desktop/hyprland/lock.jpg"
+IMG="$ROOT/images/lock/lock.jpg"
 TEMPLATE="$ROOT/home-manager/desktop/matugen/templates/lock-colors.conf"
 OUT="$ROOT/home-manager/desktop/hyprland/lock-colors.conf"
 
