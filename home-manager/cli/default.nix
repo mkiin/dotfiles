@@ -13,5 +13,6 @@
     ./goclipboard
     ./python
     ./rbw
+    ./direnv
   ];
 }
