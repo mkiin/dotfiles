@@ -29,11 +29,8 @@ quickshellで作成するが、参考になるデザインがまだみつかっ�
 - 画像が低解像度(選択している画像が悪い？)
 - sddmに劣るデザイン
 
-- ロック画面のデザイン調整
-  - 時計と日付のサイズを大きくしたい。下参考例 リンク:https://www.reddit.com/r/hyprland/comments/1ubib86/bad_caelestia_apple/
-    AM |JUNE
-    12:12 |21
-    |Sunday
+- ロック画面のデザイン調整 ✅ 実装完了
+  - caelestia 風の右上時刻表示（12時間 + AM/PM・区切り線・日付カラム・Inter Display・M3 3色）へ刷新。設計 `docs/superpowers/specs/2026-07-06-hyprlock-clock-redesign-design.md` / 計画 `docs/superpowers/plans/2026-07-06-hyprlock-clock-redesign.md`。実機での見た目微調整（位置・サイズ）は残タスク。
 
 - waybarのリデザイン
 - 1つ1つのモジュールにクリックアクションを割り当てすぎ
