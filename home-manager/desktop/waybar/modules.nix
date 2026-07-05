@@ -115,9 +115,6 @@
       TelegramDesktop = "$HOME/.local/share/icons/hicolor/16x16/apps/telegram.png";
     };
   };
-
-  # control-center 島: 3 モジュールに同一 on-click を与え、島全体を CC の入口にする
-  # (waybar の group は on-click を持てないため)
   "custom/idle_inhibitor" = {
     format = "{}";
     return-type = "json";

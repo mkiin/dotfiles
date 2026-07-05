@@ -8,9 +8,9 @@
     enable = true;
     systemd.enable = true;
     settings = [
-      (import ./settings/bar.nix // import ./settings/modules.nix { inherit username; })
+      (import ./bar.nix // import ./modules.nix { inherit username; })
     ];
+    style = import ./style.nix;
   };
-  xdg.configFile."waybar/style.css".source = lnk ./style.css;
   xdg.configFile."waybar/scripts".source = lnk ./scripts;
 }

@@ -1,7 +1,35 @@
-# tokens.nix を受けて style.css の中身を返す。render.sh から使う。
-t: ''
+# waybar の style.css を生成する自己完結モジュール。
+# 寸法・質感の変更はこの先頭の t (セマンティックトークン) だけで行う。
+# 個別 CSS ルールへの px 直書き・その場しのぎの調整は禁止
+let
+  t = {
+    # 島の外側
+    gapIsland = "6px"; # 島同士の間隔 (片側マージン)
+    # 島の内側
+    padIslandX = "12px"; # 島の左右パディング
+    gapModule = "7px"; # 島内モジュール間 (片側マージン。モジュール間は 2 倍効く)
+    # 形状
+    radiusIsland = "20px";
+    radiusTooltip = "12px";
+    # workspaces ボタン (バー高 34 = 枠1x2 + 縦マージン6x2 + 丸20 で割り切る)
+    wsDotSize = "20px";
+    wsDotMarginY = "6px";
+    wsDotGap = "3px";
+    wsActiveMinWidth = "50px";
+    # tooltip
+    padTooltip = "6px 10px";
+    padTooltipLabel = "2px 4px";
+    # ガラス質感 (色は matugen 非依存の固定値)
+    glassTint = "rgba(10, 12, 18, 0.58)";
+    glassBorder = "rgba(255, 255, 255, 0.08)";
+    tooltipBg = "rgba(10, 12, 18, 0.92)";
+    # タイポグラフィ
+    fontSize = "14px";
+  };
+in
+''
   /* ===== 生成ファイル: 手編集禁止 =====
-   * 寸法・質感は style/tokens.nix で変更し、style/render.sh で再生成する。
+   * 寸法・質感は home-manager/desktop/waybar/style.nix の t で変更する。
    * レイヤ構造 (カスケード順に単方向。下の層は上の層の寸法を上書きしない):
    *   0 Reset / 1 Bar / 2 Island / 3 Module / 4 Component / 5 Role,State / 6 Surface
    * 色は matugen 生成の colors.css (MD3 トークン) のみに依存。
