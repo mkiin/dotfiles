@@ -81,6 +81,7 @@
     format = "{icon}";
     format-icons = {
       enabled = "󰂯";
+      off = "󰂲";
       disabled = "󰂲";
     };
     tooltip-format = "{device_alias}";
@@ -103,7 +104,7 @@
       ];
     };
     on-click = "qs -c audio -n";
-    # クリックはセレクタ起動に一本化し、スクロール音量変更は無効化
+    on-click-right = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
     scroll-step = 0;
     ignored-sinks = [ "Easy Effects Sink" ];
   };
