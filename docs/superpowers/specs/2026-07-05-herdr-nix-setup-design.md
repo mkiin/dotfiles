@@ -102,7 +102,7 @@ zoom             = ["prefix+z", "ctrl+alt+z"]
 制約メモ:
 
 - `navigate_pane_*` は navigate モード専用フィールドで、素のキー（`h`/`j`/`k`/`l`）のみ許され、`prefix+` は不可。
-- 直接 chord は `ctrl+alt+arrows` / `ctrl+alt+t` / `ctrl+alt+l`（KDE ロック）などデスクトップ環境が占有するものを避ける。上記は herdr 公式の推奨セットに沿っており衝突しない。
+- 直接 chord は `ctrl+alt+arrows` / `ctrl+alt+t` などデスクトップ環境が占有するものを避ける。`ctrl+alt+l` は KDE ではロック画面に取られるが、本環境は Hyprland で当該 bind が無いため `focus_pane_right` に採用する（Hyprland のキーバインドは `SUPER+CTRL+*` 系で衝突しない）。上記は herdr 公式の推奨セットに沿っている。
 - プレフィックス自体を変えたい場合は `prefix = "ctrl+a"` を足すだけで差し替え可能（本設計の既定は `ctrl+b` 据え置き）。
 
 ## マニュアル（`home-manager/cli/herdr/MANUAL.md`）
