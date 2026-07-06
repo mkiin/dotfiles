@@ -88,12 +88,12 @@ nixConfig = {
   extra-trusted-public-keys = [
     "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
     "ezkea.cachix.org-1:/Hcp/kUFmp+2FLdzXlmDF9SHFsMzQoPZWH8fXOTdVBM="
-    "mkiin-dotfiles.cachix.org-1:<公開鍵>"
+    "mkiin-dotfiles.cachix.org-1:LJ6X3uYDglOyphSEDcaz/wrwGDmetitbmrUDkwvUzjM="
   ];
 };
 ```
 
-公開鍵はキャッシュ作成時に Cachix が発行する値を入れる。
+公開鍵はキャッシュ作成時に Cachix が発行した値である。
 
 **`.github/workflows/nix-build.yaml`（push と timeout）**
 
@@ -104,7 +104,7 @@ nixConfig = {
 ```yaml
 - name: Setup Cachix
   if: needs.changes.outputs.nix == 'true' || github.event_name == 'workflow_dispatch'
-  uses: cachix/cachix-action@<pinned>
+  uses: cachix/cachix-action@5f2d7c5294214f71b873db4b969586b980625e71 # v17
   with:
     name: mkiin-dotfiles
     authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}

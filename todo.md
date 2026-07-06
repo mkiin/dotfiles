@@ -79,11 +79,8 @@ github actionかなんかで、自動でアップデートするようにした�
 
 root と mkiin に同一の yescrypt ハッシュを agenix で付与（`nixos/core/secrets/password.age`）。`mutableUsers = false`、両者に `hashedPasswordFile`、username 完全一致アサーション入り。復号鍵は個人 age 鍵マスター、rbw で保管/復元。実機の `sudo`/`su` で動作確認済み。設計・計画は `docs/superpowers/{specs,plans}/2026-07-04-declarative-password-agenix*`。
 
-## Cachix による CI ビルドキャッシュの導入
+## Cachix による CI ビルドキャッシュの導入 ✅ 完了
 
-`nix build`（特に nixos toplevel、CI で 1 回約 28 分）を短縮するため、自前 Cachix を CI に組み込む。Renovate 移行が落ち着いてから着手する。
+Renovate の lock 更新 PR で `build (nixos)` が 30 分タイムアウトしていた真因は、公開キャッシュに無い独自ビルドの Rust パッケージ `herdr` と `anime-games-launcher`（follows で nixpkgs 追従のため lock 更新ごとに再ビルド）。hyprland ではなかった。
 
-- OSS/public は 5GB 無料枠。private 化しない前提なので、この枠に収まる範囲でやりくりする。
-- 既存の `cache-nix-action`（GH Actions cache に `/nix/store`）と `hyprland.cachix.org` substituter に加え、自前 Cachix を substituter + push 先にする。一度ビルドした成果物を CI 間で substitute して再ビルドを避けるのが狙い。
-- 必要作業: cachix アカウントとキャッシュ作成、`CACHIX_AUTH_TOKEN` を secret 登録、`setup-nix` か `nix-build` に `cachix/cachix-action` を追加。
-- これは料金削減ではなく待ち時間の短縮（public なので Actions 自体は無料）。効果が薄ければ `lockFileMaintenance` の週次化で代替する。
+対策として public キャッシュ `mkiin-dotfiles.cachix.org` を作成し、CI の `nix-build.yaml` に `cachix/cachix-action` を追加してビルド成果物を push、`flake.nix` の substituter に追加してローカル/CI 両方で substitute する。あわせて `timeout-minutes` を 30→60 に緩和（初回ソースビルドの安全網。public ランナーは無料無制限）。1 回の push は約 42 MB で 5GB 枠に十分収まる。設計は `docs/superpowers/specs/2026-07-06-cachix-ci-build-cache-design.md`。

@@ -109,8 +109,26 @@ curl -s -o /dev/null -w "%{http_code}\n" "https://hyprland.cachix.org/${hash}.na
 `extra-substituters`（取得元 URL）と `extra-trusted-public-keys`（署名検証用の公開鍵）は必ずペア。
 鍵を登録しないと署名検証に失敗してキャッシュが無視され、結局ソースビルドになる。
 
-### 4. 他にキャッシュが要るパッケージは現状なし
+### 4. 独自ビルドの Rust パッケージは自前 Cachix でカバー（`herdr` / `anime-games-launcher`）
 
+`herdr` と `anime-games-launcher` は公開キャッシュに存在せず、`inputs.nixpkgs.follows = "nixpkgs"` で
+nixpkgs に追従するため、lock が nixpkgs を更新するたびに派生ハッシュが変わり必ずソース再ビルドになる。
+これが Renovate の lock 更新 PR で `build (nixos)` を 30 分タイムアウトさせていた真因（hyprland ではない）。
+
+→ public キャッシュ `mkiin-dotfiles.cachix.org` を作成し、`nix-build.yaml` の build ジョブに
+`cachix/cachix-action`（`name: mkiin-dotfiles` + `CACHIX_AUTH_TOKEN`）を追加。post-build-hook で
+ソースビルドされた成果物だけが push されるため、`cache.nixos.org` から来る依存は push されない
+（1 回約 42 MB、5GB 枠に十分収まる）。`flake.nix` の `nixConfig` にも substituter + 公開鍵を追加済みで、
+ローカルの `nix run .#switch` も同キャッシュから substitute する。将来 `herdr` 以外の独自ビルドが増えても
+パッケージ個別設定なしで自動的にカバーされる。設計は
+`docs/superpowers/specs/2026-07-06-cachix-ci-build-cache-design.md`。
+
+なお Cachix は「push 済みの成果物を substitute する」仕組みのため、Renovate PR の初回ビルドは依然
+ソースビルドになる。ここは `timeout-minutes: 60`（public ランナーは無料無制限）で完走させる分担。
+
+その他のキャッシュ事情:
+
+- `honkers-railway`（aagl 経由）は follows があっても `ezkea.cachix.org` に hit するため対策不要。
 - `zen-browser` は両キャッシュとも未ヒットだが、ソースビルドではなくビルド済みバイナリの展開だけなので
   数秒で終わり対策不要（公開 cachix も無い）。
 - `cantarell-fonts` は unstable 版がビルド失敗 & 未キャッシュのため、`lib/default.nix` の overlay で
@@ -120,7 +138,6 @@ curl -s -o /dev/null -w "%{http_code}\n" "https://hyprland.cachix.org/${hash}.na
 
 将来 hyprland 以外で「独自 nixpkgs を持つ重い flake 入力」を足したら、同じ手順
 （`extra-substituters` + `extra-trusted-public-keys` のペア追加 → narinfo 200 を確認）で対応する。
-自前ビルド成果物を CI 間で使い回して build(nixos) を短縮したくなったら、Cachix 導入を検討する（`todo.md` 参照）。
 
 ### 5. concurrency による cancelled は正常動作
 
