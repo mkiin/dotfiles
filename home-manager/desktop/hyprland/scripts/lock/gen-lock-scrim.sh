@@ -10,7 +10,7 @@ ALPHA=0.6
 
 nix run nixpkgs#imagemagick -- \
   -size "${W}x${H}" \
-  -define "gradient:center=${W},0" \
+  -define "gradient:center=0,${H}" \
   -define "gradient:radii=${W},${H}" \
   "radial-gradient:rgba(0,0,0,${ALPHA})-rgba(0,0,0,0)" \
   "PNG32:${OUT}"
