@@ -5,7 +5,7 @@
 #   2. このスクリプトを実行して色トークンを再生成する
 #   3. lock.jpg と lock-colors.conf をコミットする
 # scrim (lock-scrim.png) は壁紙非依存なので再生成不要。反映は lnk のライブ反映のみで
-# nixos-rebuild は不要。テンプレートは同階層の lock-colors.template.conf。
+# nixos-rebuild は不要。
 # 使い方: dotfiles リポジトリ内で実行する。
 #   ./home-manager/desktop/hyprland/scripts/lock/gen-lock-colors.sh
 set -euo pipefail

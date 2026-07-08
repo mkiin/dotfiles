@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 # hyprlock 右上の時計クラスタ用コーナー減光 PNG (lock-scrim.png) を生成する。
-# 右上角が最も濃い黒のラジアルグラデーションで、image ウィジェットとして
-# 壁紙の上・文字の下に重ねる（境界線のない減光で文字直載せの透明感を保つ）。
 # 使い方: dotfiles リポジトリ内で実行する。
 #   ./home-manager/desktop/hyprland/scripts/lock/gen-lock-scrim.sh
 set -euo pipefail
