@@ -1,14 +1,8 @@
 #!/usr/bin/env bash
 # hyprlock の時刻/日付ラベル用 Pango マークアップを出力する。
-# 色は hyprlock.conf 側で $lock_* トークン（rgba(rrggbbaa)）が展開され引数で渡る。
-# 使い方:
-#   lock-clock.sh time <hour> <colon> <minute> <ampm>
-#   lock-clock.sh date <month> <day> <weekday>
-# <...> は rgba(rrggbbaa) 形式。
 set -euo pipefail
 export LC_ALL=C
 
-# 検証用: LOCK_CLOCK_AT="2026-09-23 09:50" 等で任意日時の出力を再現できる
 d() {
   if [ -n "${LOCK_CLOCK_AT:-}" ]; then
     date -d "$LOCK_CLOCK_AT" "$@"
@@ -19,7 +13,6 @@ d() {
 
 esc() { printf '%s' "$1" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g'; }
 
-# $1=rgba(rrggbbaa), $2=追加属性 → <span ...> 開きタグ
 span_open() {
   local v="${1#rgba(}"
   v="${v%)}"
@@ -47,7 +40,6 @@ time)
   printf '%s %s</span>\n' "$(span_open "$5" "font_weight='medium' size='22528' rise='52000'")" "$p"
   ;;
 date)
-  # 月・曜日は3文字略記（幅をほぼ一定にして区切り線との隙間を安定させる）
   mo="$(esc "$(d +%b | tr '[:lower:]' '[:upper:]')")"
   dy="$(esc "$(d +%d)")"
   wd="$(esc "$(d +%a)")"
