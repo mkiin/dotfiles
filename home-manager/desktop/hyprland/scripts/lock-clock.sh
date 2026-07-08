@@ -8,6 +8,15 @@
 set -euo pipefail
 export LC_ALL=C
 
+# 検証用: LOCK_CLOCK_AT="2026-09-23 09:50" 等で任意日時の出力を再現できる
+d() {
+  if [ -n "${LOCK_CLOCK_AT:-}" ]; then
+    date -d "$LOCK_CLOCK_AT" "$@"
+  else
+    date "$@"
+  fi
+}
+
 esc() { printf '%s' "$1" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g'; }
 
 # $1=rgba(rrggbbaa), $2=追加属性 → <span ...> 開きタグ
@@ -26,9 +35,9 @@ span_open() {
 mode="$1"
 case "$mode" in
 time)
-  h="$(esc "$(date +%-I)")"
-  m="$(esc "$(date +%M)")"
-  p="$(esc "$(date +%p)")"
+  h="$(esc "$(d +%-I)")"
+  m="$(esc "$(d +%M)")"
+  p="$(esc "$(d +%p)")"
   sp='<span size="40000"> </span>'
   printf '%s%s</span>' "$(span_open "$2" "font_weight='800'")" "$h"
   printf '%s' "$sp"
@@ -38,11 +47,11 @@ time)
   printf '%s %s</span>\n' "$(span_open "$5" "font_weight='medium' size='22528' rise='52000'")" "$p"
   ;;
 date)
-  mo="$(esc "$(date +%B | tr '[:lower:]' '[:upper:]')")"
-  d="$(esc "$(date +%d)")"
-  wd="$(esc "$(date +%A)")"
+  mo="$(esc "$(d +%B | tr '[:lower:]' '[:upper:]')")"
+  dy="$(esc "$(d +%d)")"
+  wd="$(esc "$(d +%A)")"
   printf '%s%s</span>\n' "$(span_open "$2" "letter_spacing='3072' font_weight='800' size='24576'")" "$mo"
-  printf '%s%s</span>\n' "$(span_open "$3" "letter_spacing='2048' font_weight='medium' size='18432'")" "$d"
+  printf '%s%s</span>\n' "$(span_open "$3" "letter_spacing='2048' font_weight='medium' size='18432'")" "$dy"
   printf '%s%s</span>' "$(span_open "$4" "letter_spacing='1024' size='14336'")" "$wd"
   ;;
 *)
