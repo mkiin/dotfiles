@@ -39,9 +39,9 @@ quickshellで作成するが、参考になるデザインがまだみつかっ�
 - 画像が低解像度(選択している画像が悪い？)
 - sddmに劣るデザイン
 
-- ロック画面のデザイン調整 ✅ 完了
-  - caelestia 風の右上時刻表示に、コーナー減光（scrim PNG + image ウィジェット）と 3 文字略記（JUL / Wed）による幅一定の整列再構成を加えて完成。
-  - 設計 `docs/superpowers/specs/2026-07-08-hyprlock-clock-contrast-design.md` / 計画 `docs/superpowers/plans/2026-07-08-hyprlock-clock-contrast.md`（第一稿: `docs/superpowers/specs/2026-07-06-hyprlock-clock-redesign-design.md`）。
+- ロック画面のデザイン調整 ✅ 完了（左下ポスター時計へ再々設計）
+  - caelestia 風右上時計（2026-07-06 / 2026-07-08 spec）は不採用とし、左下ポスター型（Anton 極太 2 トーン時刻 + 大文字フルスペル日付 + 左下コーナー減光）で確定。
+  - 設計 `docs/superpowers/specs/2026-07-09-hyprlock-poster-clock-design.md` / 計画 `docs/superpowers/plans/2026-07-09-hyprlock-poster-clock.md`。
 
 - waybarのリデザイン
 - 1つ1つのモジュールにクリックアクションを割り当てすぎ
