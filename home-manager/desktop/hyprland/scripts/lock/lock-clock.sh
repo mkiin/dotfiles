@@ -34,7 +34,7 @@ time)
   printf '%s%s</span>' "$(span_open "$2" "")" "$h"
   printf '%s%s</span>' "$(span_open "$3" "")" ':'
   printf '%s%s</span>' "$(span_open "$4" "")" "$m"
-  printf '%s %s</span>\n' "$(span_open "$5" "size='40960' rise='81920'")" "$p"
+  printf '%s %s</span>\n' "$(span_open "$5" "size='40960' rise='112640'")" "$p"
   ;;
 date)
   printf '%s%s</span>\n' "$(span_open "$2" "letter_spacing='4096' font_weight='bold'")" \
