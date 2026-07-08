@@ -19,6 +19,16 @@
 quickshellで作成するが、参考になるデザインがまだみつかっていないため保留。
 機能としては、ロック画面およびログイン画面、デスクトップの壁紙を選択でき、ロック、ログイン画面は選択した際にバックグラウンドでmatugen由来のテーマを作成する。
 
+### UI とスクリプトの想定（2026-07-09 時点の設計メモ）
+
+- UI: quickshell 製。desktop / lock / login の 3 タブ。選択元 store は `images/wallpaper/`。
+- タブごとに切替時へ呼ぶ処理:
+  - **desktop**: 既存のランタイム機構（`hyprland/scripts/wallpaper/` + pyprland + matugen）を呼ぶだけ。リポジトリへのコミットなし。
+  - **lock**: `switch-lock` 相当のスクリプトを新設して呼ぶ。中身は store の画像を `images/lock/lock.jpg` へ cp（PNG は jpg 変換）→ `hyprland/scripts/lock/gen-lock-colors.sh` で色トークン再生成 → コミット促し。lnk のライブ反映のみで rebuild 不要。
+  - **login**: `switch-login` 相当のスクリプトを新設して呼ぶ。中身は store の画像を `images/login/login.png` へ cp（JPEG は png 変換）→ matugen 由来テーマ生成（regreet 用。未設計）。regreet は `inputs.self` で store に焼き込むため **`nix run .#switch` が必須**。
+- switch スクリプトの置き場は UI 実装時に決める（UI と同居 or `hyprland/scripts/lock/`）。呼び出し規約（引数・通知・store 走査）も UI 側の要件が出てから確定する。
+- 経緯・コロケーション方針は `docs/superpowers/specs/2026-07-08-wallpaper-scripts-colocation-design.md` を参照。
+
 ## 他パッケージの追加と設定
 
 - fastfetch : システム情報を表示するCLI。
