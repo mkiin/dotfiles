@@ -8,10 +8,10 @@ set -euo pipefail
 
 ROOT="$(git rev-parse --show-toplevel)"
 OUT="$ROOT/images/lock/lock-scrim.png"
-W=1100
-H=650
+W=1400
+H=800
 # 右上角の黒の濃さ (0.0-1.0)。実機スクショを見て調整する
-ALPHA=0.55
+ALPHA=0.6
 
 nix run nixpkgs#imagemagick -- \
   -size "${W}x${H}" \
