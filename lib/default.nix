@@ -54,6 +54,13 @@ let
       ln -s ${lib.escapeShellArg target} $out
     '';
 
+  # リポジトリルート相対の文字列を受ける lnk。`../..` と遡る相対パス参照の禁止用
+  mkLnkRoot =
+    pkgs: dotfilesDir: rel:
+    pkgs.runCommandLocal (baseNameOf rel) { } ''
+      ln -s ${lib.escapeShellArg "${dotfilesDir}/${rel}"} $out
+    '';
+
   homeBase = system: username: {
     home.username = username;
     home.homeDirectory = lib.mkForce (homeDirOf system username);
@@ -85,6 +92,7 @@ in
           ;
         homeDirectory = homeDirOf system username;
         lnk = mkLnk pkgs dotfilesDir;
+        lnkRoot = mkLnkRoot pkgs dotfilesDir;
       };
       modules = [ (homeBase system username) ] ++ modules;
     };
@@ -133,6 +141,7 @@ in
               ;
             homeDirectory = homeDirOf system username;
             lnk = mkLnk pkgs dotfilesDir;
+            lnkRoot = mkLnkRoot pkgs dotfilesDir;
           };
           home-manager.users.${username} = homeBase system username;
         }

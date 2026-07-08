@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 {
   services.greetd.enable = true;
 
@@ -32,7 +32,7 @@
 
     settings = {
       background = {
-        path = "${../../../images/login/login.png}";
+        path = "${inputs.self}/images/login/login.png";
         fit = "Cover";
       };
       GTK.application_prefer_dark_theme = true;
