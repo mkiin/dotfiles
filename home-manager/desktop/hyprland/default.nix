@@ -29,5 +29,6 @@
     "hypr/hyprlock.conf".source = lnk ./hyprlock.conf;
     "hypr/lock-colors.conf".source = lnk ./lock-colors.conf;
     "hypr/lock.jpg".source = lnk ../../../images/lock/lock.jpg;
+    "hypr/lock-scrim.png".source = lnk ../../../images/lock/lock-scrim.png;
   };
 }
