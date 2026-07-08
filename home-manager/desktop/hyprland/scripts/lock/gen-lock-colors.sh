@@ -1,14 +1,18 @@
 #!/usr/bin/env bash
 # lock.jpg から hyprlock 専用カラーパレット (lock-colors.conf) を再生成する。
-# Ambient ロック画面の固定背景画像に調和した色を matugen で生成し、
-# リポジトリ内の生成物を上書きする。生成後は git diff を確認してコミットすること。
+# 【lock 壁紙の変更手順】
+#   1. images/lock/lock.jpg を差し替える（参照名は lnk と hyprlock.conf で固定）
+#   2. このスクリプトを実行して色トークンを再生成する
+#   3. lock.jpg と lock-colors.conf をコミットする
+# scrim (lock-scrim.png) は壁紙非依存なので再生成不要。反映は lnk のライブ反映のみで
+# nixos-rebuild は不要。テンプレートは同階層の lock-colors.template.conf。
 # 使い方: dotfiles リポジトリ内で実行する。
-#   ./home-manager/desktop/hyprland/scripts/gen-lock-colors.sh
+#   ./home-manager/desktop/hyprland/scripts/lock/gen-lock-colors.sh
 set -euo pipefail
 
 ROOT="$(git rev-parse --show-toplevel)"
 IMG="$ROOT/images/lock/lock.jpg"
-TEMPLATE="$ROOT/home-manager/desktop/matugen/templates/lock-colors.conf"
+TEMPLATE="$ROOT/home-manager/desktop/hyprland/lock-colors.template.conf"
 OUT="$ROOT/home-manager/desktop/hyprland/lock-colors.conf"
 
 if [[ ! -f $IMG ]]; then
