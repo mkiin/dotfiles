@@ -54,6 +54,15 @@ NixOS & home-manager の個人 dotfiles。
 - `enable = true; # 有効化` のような逐条コメントや、設定項目を日本語で言い換えるだけのコメントは禁止。冗長なら消す。
 - Nix の未使用 let 束縛は treefmt の deadnix が検出する。`nix run .#fmt -- --fail-on-change` を build と併せて必ず通す。
 
+### 【IMPORTANT・禁止】`../` で遡るパス参照
+
+- **`../../../images/lock/lock.jpg` のように親ディレクトリへ遡る相対パス参照を書いてはならない。ユーザーが最も嫌うパス記述方法。** どこを指すか読めず、ファイル移動で黙って壊れる。
+- 代替:
+  - Nix でリポジトリ横断の参照: `lnkRoot "images/lock/lock.jpg"`（ルート相対文字列。`lib/default.nix` の `mkLnkRoot`）。store へ焼き込む場合は `"${inputs.self}/images/..."`。
+  - Nix で同階層のコロケーション参照: `lnk ./file` は遡らないので可。
+  - シェルスクリプト: `ROOT="$(git rev-parse --show-toplevel)"` を起点にした絶対パス。
+- zsh の `cd ../..` 等の対話ナビゲーション用 abbr はパス「参照」ではないので対象外。
+
 ### 【IMPORTANT・禁止】waybar CSS の寸法・余白
 
 - **waybar の CSS は `home-manager/desktop/waybar/style.nix` が単一情報源**。寸法（余白・角丸・幅）と質感の値はこのファイル先頭の `t`（セマンティックトークン）だけで定義する（GTK CSS に寸法用の変数機構が無いため Nix をプリプロセッサにしている）。`style` として `programs.waybar.style` に渡り、home-manager がビルド時に評価して `style.css` を生成するので、反映は `nix run .#switch` のみ（手動生成スクリプトは無い）。色の `colors.css` は matugen が実行時に別途書き出す独立ファイル。
