@@ -44,21 +44,20 @@ let
       config.allowUnfree = true;
     };
 
+  # Nix パス = モジュール同階層のコロケーション参照。
+  # 文字列 = 絶対パス（"''${dotfilesDir}/images/..." 等）。`../..` で遡る参照は書かない。
   mkLnk =
-    pkgs: dotfilesDir: path:
+    pkgs: dotfilesDir: p:
     let
-      rel = lib.removePrefix (toString inputs.self) (toString path);
-      target = dotfilesDir + rel;
+      target =
+        if builtins.isPath p then
+          dotfilesDir + lib.removePrefix (toString inputs.self) (toString p)
+        else
+          assert lib.assertMsg (lib.hasPrefix "/" p) "lnk: 文字列は絶対パスで渡す（\${dotfilesDir}/... を使う）";
+          p;
     in
-    pkgs.runCommandLocal (baseNameOf (toString path)) { } ''
+    pkgs.runCommandLocal (baseNameOf (toString p)) { } ''
       ln -s ${lib.escapeShellArg target} $out
-    '';
-
-  # リポジトリルート相対の文字列を受ける lnk。`../..` と遡る相対パス参照の禁止用
-  mkLnkRoot =
-    pkgs: dotfilesDir: rel:
-    pkgs.runCommandLocal (baseNameOf rel) { } ''
-      ln -s ${lib.escapeShellArg "${dotfilesDir}/${rel}"} $out
     '';
 
   homeBase = system: username: {
@@ -92,7 +91,6 @@ in
           ;
         homeDirectory = homeDirOf system username;
         lnk = mkLnk pkgs dotfilesDir;
-        lnkRoot = mkLnkRoot pkgs dotfilesDir;
       };
       modules = [ (homeBase system username) ] ++ modules;
     };
@@ -141,7 +139,6 @@ in
               ;
             homeDirectory = homeDirOf system username;
             lnk = mkLnk pkgs dotfilesDir;
-            lnkRoot = mkLnkRoot pkgs dotfilesDir;
           };
           home-manager.users.${username} = homeBase system username;
         }

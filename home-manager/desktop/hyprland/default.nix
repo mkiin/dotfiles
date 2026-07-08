@@ -2,7 +2,7 @@
   inputs,
   pkgs,
   lnk,
-  lnkRoot,
+  dotfilesDir,
   ...
 }:
 {
@@ -29,7 +29,7 @@
     "hypr/scripts".source = lnk ./scripts;
     "hypr/hyprlock.conf".source = lnk ./hyprlock.conf;
     "hypr/lock-colors.conf".source = lnk ./lock-colors.conf;
-    "hypr/lock.jpg".source = lnkRoot "images/lock/lock.jpg";
-    "hypr/lock-scrim.png".source = lnkRoot "images/lock/lock-scrim.png";
+    "hypr/lock.jpg".source = lnk "${dotfilesDir}/images/lock/lock.jpg";
+    "hypr/lock-scrim.png".source = lnk "${dotfilesDir}/images/lock/lock-scrim.png";
   };
 }

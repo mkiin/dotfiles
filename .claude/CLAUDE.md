@@ -58,7 +58,7 @@ NixOS & home-manager の個人 dotfiles。
 
 - **`../../../images/lock/lock.jpg` のように親ディレクトリへ遡る相対パス参照を書いてはならない。ユーザーが最も嫌うパス記述方法。** どこを指すか読めず、ファイル移動で黙って壊れる。
 - 代替:
-  - Nix でリポジトリ横断の参照: `lnkRoot "images/lock/lock.jpg"`（ルート相対文字列。`lib/default.nix` の `mkLnkRoot`）。store へ焼き込む場合は `"${inputs.self}/images/..."`。
+  - Nix でリポジトリ横断の参照: specialArgs の **`dotfilesDir` 定数**を起点に `lnk "${dotfilesDir}/images/lock/lock.jpg"`（`lnk` は Nix パス=同階層コロケーション / 絶対パス文字列の両対応）。store へ焼き込む場合は `"${inputs.self}/images/..."`。
   - Nix で同階層のコロケーション参照: `lnk ./file` は遡らないので可。
   - シェルスクリプト: `ROOT="$(git rev-parse --show-toplevel)"` を起点にした絶対パス。
 - zsh の `cd ../..` 等の対話ナビゲーション用 abbr はパス「参照」ではないので対象外。
