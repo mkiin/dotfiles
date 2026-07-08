@@ -29,13 +29,9 @@ quickshellで作成するが、参考になるデザインがまだみつかっ�
 - 画像が低解像度(選択している画像が悪い？)
 - sddmに劣るデザイン
 
-- ロック画面のデザイン調整 ⚠️ 要再設計（第一稿は不採用レベル）
-  - caelestia 風の右上時刻表示を hyprlock（label + shape + Pango マークアップ + `lock-clock.sh`）で実装したが、**実機の見た目が参考デザインを全く再現できていない**。フォント・数値調整以前の、構造・比率・レイアウトの問題。現状のまま実機に残してあるが未完。
-  - 実装物: `home-manager/desktop/hyprland/hyprlock.conf`（右上クラスタ）、`scripts/lock-clock.sh`（時刻/日付マークアップ生成）、`lock-colors.conf` / `matugen/templates/lock-colors.conf`（役割ベース色トークン）。設計 `docs/superpowers/specs/2026-07-06-hyprlock-clock-redesign-design.md` / 計画 `docs/superpowers/plans/2026-07-06-hyprlock-clock-redesign.md`。
-  - 問題点（再設計時の起点）:
-    - 参考（caelestia の `DesktopClock.qml`、ソース: `ghq/github.com/dim-ghub/caelestia-shell`）の見た目を hyprlock の絶対座標 + 個別ラベルで組む方式では、比率・間隔・整列が破綻しやすい。数字/区切り線/日付カラムの相対配置とサイズ比が肝で、px 手調整では追い込めていない。
-    - caelestia は QML の RowLayout/ColumnLayout で相対レイアウト＋バリアブルフォント（GoogleSansFlex, 丸み軸 ROND=25）。hyprlock は自動レイアウト無し・フォント軸制御不可のため、そもそも忠実再現に限界がある可能性。**quickshell で自前ウィジェットとして作る／別方式**も含めてアプローチから再検討する。
-    - 色は動くが、hour=primary / minute=colon=secondary / day=primary の割り当ての妥当性も要再考。
+- ロック画面のデザイン調整 ✅ 完了
+  - caelestia 風の右上時刻表示に、コーナー減光（scrim PNG + image ウィジェット）と最大幅基準（SEPTEMBER / Wednesday）の整列再構成を加えて完成。
+  - 設計 `docs/superpowers/specs/2026-07-08-hyprlock-clock-contrast-design.md` / 計画 `docs/superpowers/plans/2026-07-08-hyprlock-clock-contrast.md`（第一稿: `docs/superpowers/specs/2026-07-06-hyprlock-clock-redesign-design.md`）。
 
 - waybarのリデザイン
 - 1つ1つのモジュールにクリックアクションを割り当てすぎ
