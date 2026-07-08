@@ -30,7 +30,7 @@ quickshellで作成するが、参考になるデザインがまだみつかっ�
 - sddmに劣るデザイン
 
 - ロック画面のデザイン調整 ✅ 完了
-  - caelestia 風の右上時刻表示に、コーナー減光（scrim PNG + image ウィジェット）と最大幅基準（SEPTEMBER / Wednesday）の整列再構成を加えて完成。
+  - caelestia 風の右上時刻表示に、コーナー減光（scrim PNG + image ウィジェット）と 3 文字略記（JUL / Wed）による幅一定の整列再構成を加えて完成。
   - 設計 `docs/superpowers/specs/2026-07-08-hyprlock-clock-contrast-design.md` / 計画 `docs/superpowers/plans/2026-07-08-hyprlock-clock-contrast.md`（第一稿: `docs/superpowers/specs/2026-07-06-hyprlock-clock-redesign-design.md`）。
 
 - waybarのリデザイン

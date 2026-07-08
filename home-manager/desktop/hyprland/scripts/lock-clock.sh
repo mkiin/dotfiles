@@ -47,9 +47,10 @@ time)
   printf '%s %s</span>\n' "$(span_open "$5" "font_weight='medium' size='22528' rise='52000'")" "$p"
   ;;
 date)
-  mo="$(esc "$(d +%B | tr '[:lower:]' '[:upper:]')")"
+  # 月・曜日は3文字略記（幅をほぼ一定にして区切り線との隙間を安定させる）
+  mo="$(esc "$(d +%b | tr '[:lower:]' '[:upper:]')")"
   dy="$(esc "$(d +%d)")"
-  wd="$(esc "$(d +%A)")"
+  wd="$(esc "$(d +%a)")"
   printf '%s%s</span>\n' "$(span_open "$2" "letter_spacing='3072' font_weight='800' size='24576'")" "$mo"
   printf '%s%s</span>\n' "$(span_open "$3" "letter_spacing='2048' font_weight='medium' size='18432'")" "$dy"
   printf '%s%s</span>' "$(span_open "$4" "letter_spacing='1024' size='14336'")" "$wd"
