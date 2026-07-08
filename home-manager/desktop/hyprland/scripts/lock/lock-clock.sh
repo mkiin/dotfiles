@@ -31,21 +31,14 @@ time)
   h="$(esc "$(d +%-I)")"
   m="$(esc "$(d +%M)")"
   p="$(esc "$(d +%p)")"
-  sp='<span size="40000"> </span>'
-  printf '%s%s</span>' "$(span_open "$2" "font_weight='800'")" "$h"
-  printf '%s' "$sp"
-  printf '%s%s</span>' "$(span_open "$3" "font_weight='800'")" ':'
-  printf '%s' "$sp"
-  printf '%s%s</span>' "$(span_open "$4" "font_weight='800'")" "$m"
-  printf '%s %s</span>\n' "$(span_open "$5" "font_weight='medium' size='22528' rise='52000'")" "$p"
+  printf '%s%s</span>' "$(span_open "$2" "")" "$h"
+  printf '%s%s</span>' "$(span_open "$3" "")" ':'
+  printf '%s%s</span>' "$(span_open "$4" "")" "$m"
+  printf '%s %s</span>\n' "$(span_open "$5" "size='40960' rise='81920'")" "$p"
   ;;
 date)
-  mo="$(esc "$(d +%b | tr '[:lower:]' '[:upper:]')")"
-  dy="$(esc "$(d +%d)")"
-  wd="$(esc "$(d +%a)")"
-  printf '%s%s</span>\n' "$(span_open "$2" "letter_spacing='3072' font_weight='800' size='24576'")" "$mo"
-  printf '%s%s</span>\n' "$(span_open "$3" "letter_spacing='2048' font_weight='medium' size='18432'")" "$dy"
-  printf '%s%s</span>' "$(span_open "$4" "letter_spacing='1024' size='14336'")" "$wd"
+  printf '%s%s</span>\n' "$(span_open "$2" "letter_spacing='4096' font_weight='bold'")" \
+    "$(esc "$(d '+%A, %B %d' | tr '[:lower:]' '[:upper:]')")"
   ;;
 *)
   echo "usage: lock-clock.sh {time|date} <colors...>" >&2
