@@ -31,6 +31,7 @@
       "wheel"
       "video"
       "audio"
+      "dialout" # ESP32 等のシリアル(/dev/ttyACM*, ttyUSB*)書き込み
     ];
   };
 
