@@ -1,6 +1,7 @@
 { inputs, pkgs, ... }:
 let
   firefox-addons = inputs.firefox-addons.packages.${pkgs.stdenv.hostPlatform.system};
+  missav-keep-playing = import ./extensions/missav-keep-playing/xpi.nix { inherit pkgs; };
 in
 {
   imports = [ inputs.zen-browser.homeModules.beta ];
@@ -8,9 +9,11 @@ in
   programs.zen-browser = {
     enable = true;
     profiles.default = {
-      extensions.packages = with firefox-addons; [
-        ublock-origin
-      ];
+      extensions.packages =
+        (with firefox-addons; [
+          ublock-origin
+        ])
+        ++ [ missav-keep-playing ];
 
       settings = {
         "browser.tabs.warnOnClose" = false;
@@ -29,6 +32,12 @@ in
         "zen.tabs.dim-pending" = true;
         "zen.ctrlTab.show-pending-tabs" = true;
         "extensions.pocket.enabled" = false;
+
+        # 自作の未署名拡張(missav-keep-playing)を有効化するため。
+        # Zen は unbranded ビルドなので署名要求を無効にできる。
+        # autoDisableScopes=0 で sideload 拡張を確認なしに有効化する。
+        "xpinstall.signatures.required" = false;
+        "extensions.autoDisableScopes" = 0;
         "browser.urlbar.quicksuggest.enabled" = false;
         "browser.urlbar.suggest.quicksuggest.sponsored" = false;
         "browser.urlbar.suggest.quicksuggest.nonsponsored" = false;
