@@ -28,11 +28,13 @@ PREFIX="$PKG_DIR/prefixes/goddess_of_victory_nikke/pfx"
 PROTON=$(find "$PKG_DIR/versions" -maxdepth 1 -type d -name 'dwproton-*' 2>/dev/null | sort -V | tail -1)
 LAUNCHER="$PREFIX/drive_c/NIKKE/Launcher/nikke_launcher.exe"
 REG="$PREFIX/system.reg"
-UMU="$PKG_DIR/umu-run"
+# AGL 同梱 umu-run は NixOS 非対応で pressure-vessel が素 bwrap を拾い即死する。
+# NixOS 対応済みの pkgs.umu-launcher(-bwrap 版) を最優先し、無い時だけ同梱へフォールバック。
+UMU="$(command -v umu-run || true)"
 [ -e "$LAUNCHER" ] || die "nikke_launcher.exe が無い: $LAUNCHER"
 [ -d "$PROTON" ] || die "dwproton が無い: $PKG_DIR/versions"
-[ -x "$UMU" ] || UMU="$(command -v umu-run || true)"
-[ -n "$UMU" ] || die "umu-run が見つからない"
+[ -x "$UMU" ] || UMU="$PKG_DIR/umu-run"
+[ -x "$UMU" ] || die "umu-run が見つからない"
 
 # --- プロセス判定ヘルパ ---
 # 本体は ...\NIKKE\game\nikke.exe。ランチャー(...\Launcher\nikke_launcher.exe)や CrashHandler とは区別する。'.' で wine の '\' を吸収。

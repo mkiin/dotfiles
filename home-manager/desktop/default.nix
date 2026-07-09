@@ -20,7 +20,6 @@
     ./terminal/wezterm
     ./zen
     ./vesktop
-    ./games/anime-games-launcher
   ];
 
   programs.zsh = {

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 {
   home.packages = with pkgs; [
     # color / wallpaper pipeline
@@ -29,5 +29,9 @@
     slurp
     jq
     libnotify
+    # anime-games-launcher (NIKKE 等)。NixOS 非対応の AGL 同梱 umu-run は壊れるため
+    # NixOS 対応の umu-launcher(-bwrap 版)を PATH に置き nikke.sh に掴ませる
+    inputs.anime-games-launcher.packages.${pkgs.system}.default
+    umu-launcher
   ];
 }
