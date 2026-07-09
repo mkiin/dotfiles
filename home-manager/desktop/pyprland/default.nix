@@ -12,7 +12,6 @@
       "workspaces_follow_focus",
       "toggle_special",
       "lost_windows",
-      "fcitx5_switcher",
     ]
 
     [wallpapers]
@@ -32,13 +31,6 @@
 
     # scratchpads プラグインは見送り。vesktop(Electron 単一インスタンス)の窓追跡が
     # 安定せず、手動スライドが Hyprland のアニメとも衝突するため。
-
-    # ゲーム class は switch 後に hyprctl clients で採取して追加する(Task 4)。
-    [fcitx5_switcher]
-    active_classes = ["zen-beta"]
-    inactive_classes = ["org.wezfurlong.wezterm"]
-    active_titles = []
-    inactive_titles = []
   '';
 
   systemd.user.services.awww-daemon = {
