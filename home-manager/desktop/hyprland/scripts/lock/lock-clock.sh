@@ -28,8 +28,7 @@ span_open() {
 mode="$1"
 case "$mode" in
 time)
-  printf '%s%s</span>' "$(span_open "$2" "")" "$(esc "$(d +%I)")"
-  printf '%s%s</span>' "$(span_open "$3" "")" "$(esc ":$(d +%M)")"
+  printf '%s%s</span>' "$(span_open "$2" "")" "$(esc "$(d +%I):$(d +%M)")"
   printf '%s %s</span>\n' "$(span_open "$4" "size='28672' rise='45000'")" \
     "$(esc "$(d +%p)")"
   ;;
@@ -37,7 +36,7 @@ date)
   printf '%s%s</span>' "$(span_open "$2" "")" \
     "$(esc "$(d +%a | tr '[:lower:]' '[:upper:]')")"
   printf '%s%s</span>\n' "$(span_open "$3" "")" \
-    "$(esc " · $(d '+%b %d' | tr '[:lower:]' '[:upper:]')")"
+    "$(esc " / $(d '+%b %d' | tr '[:lower:]' '[:upper:]')")"
   ;;
 *)
   echo "usage: lock-clock.sh {time|date} <colors...>" >&2
