@@ -8,8 +8,7 @@ set -euo pipefail
 
 # --- 調整可能パラメータ ---
 STEAM_MAX_UPTIME_H="${STEAM_MAX_UPTIME_H:-3}" # Steam 常駐がこの時間を超えたら再起動を促す
-INIT_WINDOW_S="${INIT_WINDOW_S:-90}"          # 起動〜本体出現を待つ上限
-MAX_RETRIES="${MAX_RETRIES:-4}"               # lottery リトライ回数
+MAX_RETRIES="${MAX_RETRIES:-4}"               # 起動失敗(session 早期終了)時のリトライ回数
 WATCH_INTERVAL_S=5                            # ウォッチドッグのポーリング間隔
 
 log() { printf '\n\033[1;34m==>\033[0m %s\n' "$*"; }
@@ -28,29 +27,56 @@ PREFIX="$PKG_DIR/prefixes/goddess_of_victory_nikke/pfx"
 PROTON=$(find "$PKG_DIR/versions" -maxdepth 1 -type d -name 'dwproton-*' 2>/dev/null | sort -V | tail -1)
 LAUNCHER="$PREFIX/drive_c/NIKKE/Launcher/nikke_launcher.exe"
 REG="$PREFIX/system.reg"
-# AGL 同梱 umu-run は NixOS 非対応で pressure-vessel が素 bwrap を拾い即死する。
-# NixOS 対応済みの pkgs.umu-launcher(-bwrap 版) を最優先し、無い時だけ同梱へフォールバック。
-UMU="$(command -v umu-run || true)"
+# AGL の既知良好構成を再現する。AGL は同梱 umu-run を steam-run(FHS)でくるんで叩く。
+# steam-run が FHS を与えるので「同梱 umu-run が素 bwrap を拾い即死」問題は起きない。
+# pkgs.umu-launcher に差し替えるとランタイムコンテナの組み方が変わり体感が重くなるため、
+# 同梱 umu-run を最優先(無い時だけ pkgs へフォールバック)。
+UMU="$PKG_DIR/umu-run"
+[ -x "$UMU" ] || UMU="$(command -v umu-run || true)"
+STEAMRUN="$(command -v steam-run || true)"
 [ -e "$LAUNCHER" ] || die "nikke_launcher.exe が無い: $LAUNCHER"
 [ -d "$PROTON" ] || die "dwproton が無い: $PKG_DIR/versions"
-[ -x "$UMU" ] || UMU="$PKG_DIR/umu-run"
 [ -x "$UMU" ] || die "umu-run が見つからない"
 
 # --- プロセス判定ヘルパ ---
-# 本体は ...\NIKKE\game\nikke.exe。ランチャー(...\Launcher\nikke_launcher.exe)や CrashHandler とは区別する。'.' で wine の '\' を吸収。
-game_running() { pgrep -f 'NIKKE.game.nikke\.exe' >/dev/null 2>&1; }
+# 本体プロセス(nikke.exe)は pressure-vessel の PID namespace 内にあり host の pgrep から見えない。
+# よって本体の有無はウィンドウで判定する: steam_proton・title=NIKKE 窓はランチャー単体で 1 枚、
+# 本体(ゲーム画面)が出ると 2 枚以上になる。NIKKE はランチャーが常駐するのでこの判定で足りる。
+nikke_window_count() {
+  { command -v hyprctl && command -v jq; } >/dev/null 2>&1 || {
+    echo 0
+    return
+  }
+  hyprctl clients -j 2>/dev/null | jq -r '[.[] | select(.class == "steam_proton" and .title == "NIKKE")] | length' 2>/dev/null || echo 0
+}
+game_running() { [ "$(nikke_window_count)" -ge 2 ]; }
 session_running() { pgrep -f 'goddess_of_victory_nikke' >/dev/null 2>&1; }
 crashhandler_up() { pgrep -f 'UnityCrashHandler64\.exe' >/dev/null 2>&1; }
+
+# NIKKE ランチャーの枠/影は steam_proton・空タイトルの Xwayland override-redirect 窓として
+# 描かれ、本体を kill しても Hyprland のタイル境界に取り残され「端の残像」になる。
+# 本体が完全に消えている前提で、残った steam_proton 窓を閉じる(稼働中は誤爆しないよう即 return)。
+cleanup_stray_windows() {
+  session_running && return 0
+  command -v hyprctl >/dev/null 2>&1 || return 0
+  command -v jq >/dev/null 2>&1 || return 0
+  hyprctl clients -j 2>/dev/null |
+    jq -r '.[] | select(.class == "steam_proton") | .address' 2>/dev/null |
+    while read -r addr; do
+      [ -n "$addr" ] && hyprctl dispatch closewindow "address:$addr" >/dev/null 2>&1 || true
+    done
+}
 
 # 宙吊りセッションを畳む。prefix 固有トークンで一致(pkill は自 PID を除外するので self-match しない)。
 cleanup_session() {
   pkill -TERM -f 'goddess_of_victory_nikke' 2>/dev/null || true
   for _ in 1 2 3 4 5; do
-    session_running || return 0
+    session_running || break
     sleep 1
   done
-  pkill -KILL -f 'goddess_of_victory_nikke' 2>/dev/null || true
+  session_running && pkill -KILL -f 'goddess_of_victory_nikke' 2>/dev/null
   sleep 1
+  cleanup_stray_windows
 }
 
 # --- 1. Steam 健全化 ---
@@ -137,37 +163,41 @@ apply_reg_tweak() {
 
 # --- 3. lottery 起動 + ウォッチドッグ ---
 launch_once() {
-  log "NIKKE 起動(umu-run)"
-  GAMEID=umu-nikke STORE=none PROTONPATH="$PROTON" WINEPREFIX="$PREFIX" \
-    nohup "$UMU" "$LAUNCHER" >/dev/null 2>&1 &
-  local waited=0
-  while [ "$waited" -lt "$INIT_WINDOW_S" ]; do
+  log "NIKKE 起動(steam-run + umu-run / AGL 再現)"
+  # AGL の実起動を再現: PROTON_USE_WOW64=1 を付け、steam-run で umu-run をくるむ。
+  # STORE=none は AGL は付けない(付けると umu の GAMEID 解決経路が変わる)ので外す。
+  GAMEID=umu-nikke PROTON_USE_WOW64=1 PROTONPATH="$PROTON" WINEPREFIX="$PREFIX" \
+    nohup ${STEAMRUN:+"$STEAMRUN"} "$UMU" "$LAUNCHER" >/dev/null 2>&1 &
+  # session(umu)が生きている限り本体ウィンドウの出現を待つ。ログイン完了までの時間は
+  # ユーザー操作次第で読めないため固定タイムアウトは置かない。session が落ちれば起動失敗とみなす。
+  while session_running; do
     game_running && {
-      log "本体プロセス出現 → ACE ハンドシェイク成功"
+      log "本体ウィンドウ出現 → 起動成功"
       return 0
     }
-    session_running || {
-      warn "セッションが早期終了"
-      return 1
-    }
-    sleep 3
-    waited=$((waited + 3))
+    sleep "$WATCH_INTERVAL_S"
   done
-  warn "初期化ウィンドウ(${INIT_WINDOW_S}s)内に本体が出現せず → ACE レース失敗とみなす"
+  warn "セッションが終了(本体ウィンドウ未出現)"
   return 1
 }
 
 watchdog() {
-  log "ウォッチドッグ開始(本体終了を監視)。Ctrl-C で監視のみ終了(ゲームは残る)。"
-  while game_running; do sleep "$WATCH_INTERVAL_S"; done
-  sleep 3
-  if session_running && crashhandler_up; then
-    warn "本体が消えたのにセッションが宙吊り(ACE/Unity クラッシュ) → 自動復旧"
-    cleanup_session
-    notify "クラッシュを検知し、宙吊りセッションを自動で畳みました。再度起動できます。"
-    return 1
-  fi
+  log "ウォッチドッグ開始(セッション終了を監視)。ランチャー窓を閉じてもゲームは残る。Ctrl-C で監視のみ終了。"
+  # 生存判定は umu セッション(wine prefix)で行う。窓枚数だと「ランチャー窓を閉じた」と
+  # 「ゲームが終わった」を区別できず誤って終了扱いする。セッションはランチャー窓を閉じても
+  # 生きているので誤爆しない。ACE/Unity クラッシュで本体だけ消えセッションが宙吊りになる
+  # 場合のみ、crashhandler かつ本体窓なしを検知して畳む。
+  while session_running; do
+    if crashhandler_up && ! game_running; then
+      warn "本体が消えたのにセッションが宙吊り(ACE/Unity クラッシュ) → 自動復旧"
+      cleanup_session
+      notify "クラッシュを検知し、宙吊りセッションを自動で畳みました。再度起動できます。"
+      return 1
+    fi
+    sleep "$WATCH_INTERVAL_S"
+  done
   log "NIKKE 正常終了"
+  cleanup_stray_windows
   return 0
 }
 

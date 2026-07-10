@@ -33,5 +33,8 @@
     # NixOS 対応の umu-launcher(-bwrap 版)を PATH に置き nikke.sh に掴ませる
     inputs.anime-games-launcher.packages.${pkgs.system}.default
     umu-launcher
+    # NIKKE 起動ラッパー(scripts/nikke.sh)を `nikke` として PATH に載せる。
+    # Hyprland keybind(SHIFT+N)や端末から叩くため。store へ焼くので反映は switch。
+    (pkgs.writeShellScriptBin "nikke" (builtins.readFile "${inputs.self}/scripts/nikke.sh"))
   ];
 }
