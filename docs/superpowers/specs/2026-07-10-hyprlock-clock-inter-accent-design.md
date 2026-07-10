@@ -64,3 +64,13 @@ Anton の極太コンデンスをやめ、**Inter Display SemiBold の時計に�
 - 3 画面同一。入力欄（中央）は無変更で動作。
 - Anton 削除後も他のビルドが通る（参照が残っていない）。
 - `nix run .#build` / `nix run .#fmt -- --fail-on-change` 緑。
+
+## 改訂（2026-07-10 実機レビュー後）
+
+Inter Display SemiBold 案は実機確認で不採用となり、実写比較で選ばれたモノスペース案に置き換えた。
+
+- 数字: JetBrainsMono Nerd Font ExtraLight・font_size 115・2 トーン（時=`$lock_time`、コロンと分=`$lock_accent`）
+- AM/PM: 数字の右上に浮かせる（span size 30720・rise 56000）・`$lock_ampm` = `on_surface` 60%
+- 日付: `FRI · JUL 10` 短縮形・JetBrainsMono Nerd Font Light 24・曜日のみ `$lock_accent`
+- 罫線（shape）は廃止。`$lock_rule` を削除し `$lock_ampm` を追加
+- 配置は当初のポスター時計と同じ 70,85 / 74,80

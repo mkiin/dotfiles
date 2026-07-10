@@ -28,16 +28,16 @@ span_open() {
 mode="$1"
 case "$mode" in
 time)
-  printf '%s%s</span>' "$(span_open "$2" "")" "$(esc "$(d +%-I:%M)")"
-  printf '%s %s</span>\n' \
-    "$(span_open "$3" "size='34816' rise='75000' letter_spacing='3072' font_weight='semibold'")" \
+  printf '%s%s</span>' "$(span_open "$2" "")" "$(esc "$(d +%-I)")"
+  printf '%s%s</span>' "$(span_open "$3" "")" "$(esc ":$(d +%M)")"
+  printf '%s %s</span>\n' "$(span_open "$4" "size='30720' rise='56000'")" \
     "$(esc "$(d +%p)")"
   ;;
 date)
-  printf '%s%s</span>' "$(span_open "$2" "letter_spacing='8192' font_weight='bold'")" \
-    "$(esc "$(d +%A | tr '[:lower:]' '[:upper:]')")"
-  printf '%s%s</span>\n' "$(span_open "$3" "letter_spacing='8192' font_weight='bold'")" \
-    "$(esc "$(d '+, %B %d' | tr '[:lower:]' '[:upper:]')")"
+  printf '%s%s</span>' "$(span_open "$2" "")" \
+    "$(esc "$(d +%a | tr '[:lower:]' '[:upper:]')")"
+  printf '%s%s</span>\n' "$(span_open "$3" "")" \
+    "$(esc " · $(d '+%b %d' | tr '[:lower:]' '[:upper:]')")"
   ;;
 *)
   echo "usage: lock-clock.sh {time|date} <colors...>" >&2
