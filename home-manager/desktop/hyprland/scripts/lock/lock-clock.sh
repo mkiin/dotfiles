@@ -28,9 +28,9 @@ span_open() {
 mode="$1"
 case "$mode" in
 time)
-  printf '%s%s</span>' "$(span_open "$2" "")" "$(esc "$(d +%-I)")"
+  printf '%s%s</span>' "$(span_open "$2" "")" "$(esc "$(d +%I)")"
   printf '%s%s</span>' "$(span_open "$3" "")" "$(esc ":$(d +%M)")"
-  printf '%s %s</span>\n' "$(span_open "$4" "size='30720' rise='56000'")" \
+  printf '%s %s</span>\n' "$(span_open "$4" "size='28672' rise='45000'")" \
     "$(esc "$(d +%p)")"
   ;;
 date)
