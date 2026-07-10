@@ -21,10 +21,10 @@ in
     package = null;
 
     settings = {
-      # auto mode 相当。workspace 内の読み書き・コマンドは確認なしで実行し、
-      # ネットワーク/外部書き込み等サンドボックス外に出る操作だけ都度確認させる
+      # full-auto 相当。承認は一切求めず、workspace 内の読み書き・コマンドは
+      # そのまま実行する。サンドボックス外に出る操作は確認ではなく失敗させる
       # (network_access は既定 false)。
-      approval_policy = "on-request";
+      approval_policy = "never";
       sandbox_mode = "workspace-write";
 
       projects = lib.genAttrs trustedRepos (_: {
