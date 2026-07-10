@@ -12,6 +12,7 @@
       "workspaces_follow_focus",
       "toggle_special",
       "lost_windows",
+      "fcitx5_switcher",
     ]
 
     [wallpapers]
@@ -28,6 +29,9 @@
     # native special:magic と衝突しない退避先。SHIFT+S の退避/復帰(往復)に使う。
     [toggle_special]
     name = "stash"
+
+    [fcitx5_switcher]
+    inactive_classes = ["org.wezfurlong.wezterm", "com.mitchellh.ghostty"]
 
     # scratchpads プラグインは見送り。vesktop(Electron 単一インスタンス)の窓追跡が
     # 安定せず、手動スライドが Hyprland のアニメとも衝突するため。
