@@ -8,7 +8,6 @@
     nerd-fonts.jetbrains-mono
     udev-gothic
     inter
-    (google-fonts.override { fonts = [ "Anton" ]; })
     material-design-icons
   ];
   fonts.fontconfig.defaultFonts = {
