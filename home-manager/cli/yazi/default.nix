@@ -50,6 +50,14 @@
           run = "plugin toggle-pane max-preview";
           desc = "Maximize or restore the preview pane";
         }
+        {
+          on = [
+            "c"
+            "y"
+          ];
+          run = ''shell 'wl-copy -t "$(xdg-mime query filetype "$0")" < "$0"' '';
+          desc = "Copy hovered file content to clipboard";
+        }
       ];
     };
     initLua = ''
