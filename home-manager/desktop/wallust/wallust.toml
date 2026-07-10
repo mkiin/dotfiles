@@ -1,5 +1,5 @@
 backend = "wal"
-color_space = "lab"
+color_space = "lch"
 check_contrast = true
 saturation = 0
 
