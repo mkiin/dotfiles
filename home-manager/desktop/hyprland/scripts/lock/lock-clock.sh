@@ -28,16 +28,13 @@ span_open() {
 mode="$1"
 case "$mode" in
 time)
-  h="$(esc "$(d +%-I)")"
-  m="$(esc "$(d +%M)")"
-  p="$(esc "$(d +%p)")"
-  printf '%s%s</span>' "$(span_open "$2" "")" "$h"
-  printf '%s%s</span>' "$(span_open "$3" "")" ':'
-  printf '%s%s</span>' "$(span_open "$4" "")" "$m"
-  printf '%s %s</span>\n' "$(span_open "$5" "size='40960' rise='112640'")" "$p"
+  printf '%s%s</span>' "$(span_open "$2" "")" "$(esc "$(d +%-I:%M)")"
+  printf '%s %s</span>\n' \
+    "$(span_open "$3" "size='34816' rise='75000' letter_spacing='3072' font_weight='semibold'")" \
+    "$(esc "$(d +%p)")"
   ;;
 date)
-  printf '%s%s</span>\n' "$(span_open "$2" "letter_spacing='4096' font_weight='bold'")" \
+  printf '%s%s</span>\n' "$(span_open "$2" "letter_spacing='10240' font_weight='semibold'")" \
     "$(esc "$(d '+%A, %B %d' | tr '[:lower:]' '[:upper:]')")"
   ;;
 *)
