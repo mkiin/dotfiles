@@ -56,7 +56,7 @@ in
         "dom.push.enabled" = false;
         "media.autoplay.default" = 1;
 
-        "browser.download.useDownloadDir" = true;
+        "browser.download.useDownloadDir" = false;
         "browser.download.folderList" = 2;
         "browser.download.dir" = "/home/mkiin/Downloads";
 
