@@ -34,8 +34,10 @@ time)
     "$(esc "$(d +%p)")"
   ;;
 date)
-  printf '%s%s</span>\n' "$(span_open "$2" "letter_spacing='10240' font_weight='semibold'")" \
-    "$(esc "$(d '+%A, %B %d' | tr '[:lower:]' '[:upper:]')")"
+  printf '%s%s</span>' "$(span_open "$2" "letter_spacing='8192' font_weight='bold'")" \
+    "$(esc "$(d +%A | tr '[:lower:]' '[:upper:]')")"
+  printf '%s%s</span>\n' "$(span_open "$3" "letter_spacing='8192' font_weight='bold'")" \
+    "$(esc "$(d '+, %B %d' | tr '[:lower:]' '[:upper:]')")"
   ;;
 *)
   echo "usage: lock-clock.sh {time|date} <colors...>" >&2
