@@ -3,7 +3,7 @@
   "custom/nix#accent" = {
     format = "  ${username}";
     tooltip = false;
-    on-click = "qs -c shell ipc call launcher toggle";
+    on-click = "$HOME/.config/rofi/launch.sh";
   };
   "hyprland/window#island" = {
     format = "{}";

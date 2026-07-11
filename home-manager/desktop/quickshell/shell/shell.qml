@@ -9,7 +9,6 @@ import QtQuick
 import "services" as QsServices
 import "config" as QsConfig
 import "modules/controlcenter"
-import "modules/launcher"
 
 // 常駐デーモン: 通知サーバ ＋ トースト ＋ 通知センター(ControlCenter)。
 // bar/launcher/dashboard/sidebar/osd は読まない（休眠）。
@@ -45,20 +44,6 @@ ShellRoot {
     ControlCenterWindow {
         id: cc
         shouldShow: false
-    }
-
-    // アプリランチャー（archlinuxアイコン / Super+A から起動）
-    LauncherWindow {
-        id: launcher
-        shouldShow: false
-    }
-
-    // waybar / Super+A からのトグル
-    IpcHandler {
-        target: "launcher"
-        function toggle(): void { launcher.shouldShow ? launcher.closeLauncher() : launcher.openLauncher() }
-        function open(): void { launcher.openLauncher() }
-        function close(): void { launcher.closeLauncher() }
     }
 
     // waybar / Super+N からのトグル
