@@ -39,7 +39,7 @@
 
 - Produces: `pkgs.callPackage ./nikke { }`（=`./nikke/default.nix`）が dwproton を展開した store パス（`$out/proton` が実行ファイル）を返す。`packages.nix` 内の `dwproton` 束縛として後続タスクが参照する。
 
-- [ ] **Step 1: dwproton tarball の SRI ハッシュを取得**
+- [x] **Step 1: dwproton tarball の SRI ハッシュを取得**
 
 Run:
 
@@ -50,7 +50,7 @@ nix store prefetch-file --hash-type sha256 \
 
 Expected: 末尾に `hash: sha256-XXXX...=` の形で SRI ハッシュが出る。この値を次の Step で `hash =` に貼る（数百MB DL のため時間がかかる）。
 
-- [ ] **Step 2: derivation を作成**
+- [x] **Step 2: derivation を作成**
 
 `home-manager/desktop/nikke/default.nix`:
 
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
 
 （`sha256-REPLACE_WITH_STEP1_OUTPUT` を Step 1 の実値に置換する。）
 
-- [ ] **Step 3: packages.nix で dwproton を宣言し `nikke` ラッパーに注入**
+- [x] **Step 3: packages.nix で dwproton を宣言し `nikke` ラッパーに注入**
 
 `home-manager/desktop/packages.nix` を次の形に変更する。`let` で dwproton を束ね、AGL 行はこの時点では残したまま（並存でビルド緑を保つ）、ラッパーに `NIKKE_PROTON` を渡す:
 
@@ -113,7 +113,7 @@ in
 
 注: `''` リテラル内で Nix が解釈するのは `${dwproton}` と `${builtins.readFile ...}` の 2 つだけ。readFile が返す文字列は再スキャンされないため、`nikke.sh` 内の bash の `${...}` 展開は影響を受けない。
 
-- [ ] **Step 4: fmt とビルドを通す**
+- [x] **Step 4: fmt とビルドを通す**
 
 Run:
 
@@ -124,7 +124,7 @@ nix run .#build
 
 Expected: どちらも成功（緑）。dwproton が数百MB DL される。deadnix 警告なし。
 
-- [ ] **Step 5: dwproton の中身を検証**
+- [x] **Step 5: dwproton の中身を検証**
 
 Run:
 
@@ -135,7 +135,7 @@ ls "$DWP/proton"
 
 Expected: `$DWP/proton`（proton 実行ファイル）が存在する。
 
-- [ ] **Step 6: コミット**
+- [x] **Step 6: コミット**
 
 ```bash
 git add home-manager/desktop/nikke/default.nix home-manager/desktop/packages.nix
@@ -155,7 +155,7 @@ git commit -m "feat(nikke): dwproton を nix derivation 化しラッパーへ注
 - Consumes: 環境変数 `NIKKE_PROTON`（Task 1 の dwproton store パス）。
 - Produces: `nikke`（=`nikke run`）が `~/.local/share/nikke/prefix` の prefix と `$NIKKE_PROTON` で起動する。`cmd_run` / `usage` / `main` dispatcher と、共有変数 `NIKKE_HOME` / `PREFIX` / `PROTON` / `LAUNCHER` / `REG` / `UMU` / `STEAMRUN` を後続タスク（install / clean）が参照する。
 
-- [ ] **Step 1: パス解決ブロックを AGL 非依存へ差し替え**
+- [x] **Step 1: パス解決ブロックを AGL 非依存へ差し替え**
 
 `scripts/nikke.sh` の `# --- パス解決(AGL 更新で...) ---` から始まるブロック（`AGL=...` 〜 `[ -x "$UMU" ] || die "umu-run が見つからない"` まで）を丸ごと次に置換する。**インストーラ未導入でも通るよう、`LAUNCHER`/`PROTON` の存在アサートはここから外し、`cmd_run` 側へ移す**:
 
@@ -173,7 +173,7 @@ STEAMRUN="$(command -v steam-run || true)"
 [ -x "$UMU" ] || die "umu-run が見つからない(nixpkgs umu-launcher を導入してください)"
 ```
 
-- [ ] **Step 2: 現行 `main()` を `cmd_run()` にリネームし run ガードを追加**
+- [x] **Step 2: 現行 `main()` を `cmd_run()` にリネームし run ガードを追加**
 
 `scripts/nikke.sh` 末尾の `main() {` を `cmd_run() {` に変え、関数冒頭（`log "prefix: $PREFIX"` の直前）に未導入ガードを挿入する:
 
@@ -203,7 +203,7 @@ cmd_run() {
 
 （元の `main()` 本体と同一。冒頭 3 行のガードだけ追加。）
 
-- [ ] **Step 3: `usage` と dispatcher `main` を末尾に追加**
+- [x] **Step 3: `usage` と dispatcher `main` を末尾に追加**
 
 `cmd_run` 定義の後、ファイル末尾の `main "$@"` を次に置き換える:
 
@@ -235,7 +235,7 @@ main "$@"
 
 （`cmd_install` / `cmd_clean` は Task 3 / 4 で定義する。この時点で `nikke install`/`nikke clean` を呼ぶと未定義エラーになるが、Task 5 のビルド前に両方定義されるので問題ない。構文チェックは通る。）
 
-- [ ] **Step 4: bash 構文チェック**
+- [x] **Step 4: bash 構文チェック**
 
 Run:
 
@@ -245,7 +245,7 @@ bash -n scripts/nikke.sh && echo OK
 
 Expected: `OK`（構文エラーなし）。
 
-- [ ] **Step 5: run ガードのスモークテスト（未導入時に install を促す）**
+- [x] **Step 5: run ガードのスモークテスト（未導入時に install を促す）**
 
 Run:
 
@@ -259,7 +259,7 @@ rm -rf "$tmp"
 
 Expected: 1 回目は「dwproton が無い」で非0終了、2 回目は「NIKKE 未インストール。先に 'nikke install'」で非0終了（launch には進まない）。
 
-- [ ] **Step 6: fmt を通す（shell も treefmt 対象）**
+- [x] **Step 6: fmt を通す（shell も treefmt 対象）**
 
 Run:
 
@@ -269,7 +269,7 @@ nix run .#fmt -- --fail-on-change
 
 Expected: 成功。shfmt 整形差分なし。
 
-- [ ] **Step 7: コミット**
+- [x] **Step 7: コミット**
 
 ```bash
 git add scripts/nikke.sh
@@ -289,7 +289,7 @@ git commit -m "refactor(nikke): 安定パス化しサブコマンド dispatcher 
 - Consumes: `NIKKE_HOME` / `PREFIX` / `LAUNCHER` / `PROTON` / `UMU` / `STEAMRUN`（Task 2）、`preflight_steam` / `log` / `warn` / `die`（既存）。
 - Produces: `cmd_install`（`main` dispatcher が呼ぶ）。実行後 `$LAUNCHER` が存在する状態にする。
 
-- [ ] **Step 1: `cmd_install` と `bootstrap_install` を追加**
+- [x] **Step 1: `cmd_install` と `bootstrap_install` を追加**
 
 `scripts/nikke.sh` の `usage()` 定義の直前に追加する:
 
@@ -335,7 +335,7 @@ cmd_install() {
 }
 ```
 
-- [ ] **Step 2: bash 構文チェック**
+- [x] **Step 2: bash 構文チェック**
 
 Run:
 
@@ -345,7 +345,7 @@ bash -n scripts/nikke.sh && echo OK
 
 Expected: `OK`。
 
-- [ ] **Step 3: 冪等性のスモークテスト（導入済み検知）**
+- [x] **Step 3: 冪等性のスモークテスト（導入済み検知）**
 
 Run:
 
@@ -359,7 +359,7 @@ rm -rf "$tmp"
 
 Expected: 「既にインストール済み」を表示して `exit=0`（curl も umu も呼ばない）。
 
-- [ ] **Step 4: fmt を通す**
+- [x] **Step 4: fmt を通す**
 
 Run:
 
@@ -369,7 +369,7 @@ nix run .#fmt -- --fail-on-change
 
 Expected: 成功。
 
-- [ ] **Step 5: コミット**
+- [x] **Step 5: コミット**
 
 ```bash
 git add scripts/nikke.sh
@@ -389,7 +389,7 @@ git commit -m "feat(nikke): install サブコマンド(既存prefix移設/bootst
 - Consumes: `LAUNCHER`（Task 2）、`log` / `warn`（既存）。
 - Produces: `cmd_clean`（`main` dispatcher が呼ぶ）。
 
-- [ ] **Step 1: `cmd_clean` を追加**
+- [x] **Step 1: `cmd_clean` を追加**
 
 `scripts/nikke.sh` の `cmd_install` 定義の直後に追加する:
 
@@ -438,7 +438,7 @@ cmd_clean() {
 }
 ```
 
-- [ ] **Step 2: bash 構文チェック**
+- [x] **Step 2: bash 構文チェック**
 
 Run:
 
@@ -448,7 +448,7 @@ bash -n scripts/nikke.sh && echo OK
 
 Expected: `OK`。
 
-- [ ] **Step 3: 残骸なし時のスモークテスト**
+- [x] **Step 3: 残骸なし時のスモークテスト**
 
 Run:
 
@@ -461,7 +461,7 @@ rm -rf "$tmp"
 
 Expected: 「AGL 残骸なし。何もしません。」で `exit=0`（削除対象を作っていないため何も消さない）。
 
-- [ ] **Step 4: 非対話ガードのスモークテスト（残骸ありでも消さない）**
+- [x] **Step 4: 非対話ガードのスモークテスト（残骸ありでも消さない）**
 
 Run:
 
@@ -477,7 +477,7 @@ rm -rf "$tmp"
 
 Expected: 対象を列挙するが `</dev/null`（非対話）なのでスキップし、ディレクトリは残る（`STILL EXISTS(正しい)`）。
 
-- [ ] **Step 5: fmt を通す**
+- [x] **Step 5: fmt を通す**
 
 Run:
 
@@ -487,7 +487,7 @@ nix run .#fmt -- --fail-on-change
 
 Expected: 成功。
 
-- [ ] **Step 6: コミット**
+- [x] **Step 6: コミット**
 
 ```bash
 git add scripts/nikke.sh
@@ -507,7 +507,7 @@ git commit -m "feat(nikke): clean サブコマンド(AGL残骸を安全に撤去
 
 - Consumes: なし（削除のみ）。この時点で `nikke.sh` は AGL のパス/パッケージを一切参照しない（Task 2〜4 で除去済み）。
 
-- [ ] **Step 1: flake.nix の input を削除**
+- [x] **Step 1: flake.nix の input を削除**
 
 `flake.nix` から次のブロックを削除する（`aagl` は残す）:
 
@@ -518,7 +518,7 @@ git commit -m "feat(nikke): clean サブコマンド(AGL残骸を安全に撤去
     };
 ```
 
-- [ ] **Step 2: packages.nix の AGL 行を削除**
+- [x] **Step 2: packages.nix の AGL 行を削除**
 
 `home-manager/desktop/packages.nix` から次の 2 行（コメント + パッケージ）を削除する。`umu-launcher` と dwproton ラッパーは残す:
 
@@ -527,7 +527,7 @@ git commit -m "feat(nikke): clean サブコマンド(AGL残骸を安全に撤去
     inputs.anime-games-launcher.packages.${pkgs.system}.default
 ```
 
-- [ ] **Step 3: 参照が残っていないか確認**
+- [x] **Step 3: 参照が残っていないか確認**
 
 Run:
 
@@ -537,7 +537,7 @@ grep -rn "anime-games-launcher" --include="*.nix" . || echo "参照なし(OK)"
 
 Expected: `参照なし(OK)`。
 
-- [ ] **Step 4: lock を更新して fmt / build を通す**
+- [x] **Step 4: lock を更新して fmt / build を通す**
 
 Run:
 
@@ -549,7 +549,7 @@ nix run .#build
 
 Expected: すべて成功。`flake.lock` から `anime-games-launcher` ノードが消える。deadnix 警告なし。
 
-- [ ] **Step 5: コミット**
+- [x] **Step 5: コミット**
 
 ```bash
 git add flake.nix home-manager/desktop/packages.nix flake.lock
@@ -582,7 +582,9 @@ Run:
 nikke install
 ```
 
-Expected: 「既存 AGL prefix を検出 → 安定パスへ移設」と表示され、`~/.local/share/nikke/prefix/drive_c/NIKKE/Launcher/nikke_launcher.exe` が存在する。再DLは走らない。
+Expected: 既存 prefix が無いため bootstrap 経路。miniloader（`INSTALLER_URL`）を取得し、umu+dwproton でインストーラが起動する。ウィザードで導入先を `C:\NIKKE` にして数十GB をDL（ユーザーが実行）。完了後 `~/.local/share/nikke/prefix/drive_c/NIKKE/Launcher/nikke_launcher.exe` が生成される。
+
+> 補足: 本来は既存 AGL prefix を `mv` で移設し再DLを回避する設計だが、実装中に prefix 実体を喪失したため今回は bootstrap 再取得となる（移設経路は `cmd_install` に実装済み・サンドボックステスト済みで、次回以降の別PC移行では有効）。
 
 Run（確認）:
 
@@ -616,7 +618,7 @@ Run:
 nikke clean
 ```
 
-Expected: `~/.local/share/anime-games-launcher`（移設後の残り）・config・cache・desktop entry が列挙され、`y` で削除される。移設済みのため NIKKE データ巻き込み警告は出ない。
+Expected: `~/.local/share/anime-games-launcher`・config・cache・desktop entry が列挙され、`y` で削除される。安定パスに prefix がある状態なので NIKKE データ巻き込み警告は出ない。
 
 - [ ] **Step 5: 撤去後の再起動確認**
 
