@@ -27,6 +27,7 @@ hl.bind(mainMod .. " + SHIFT + N", hl.dsp.exec_cmd("nikke"))
 hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot.sh region"))
 hl.bind(mainMod .. " + SHIFT + P", hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot.sh window"))
 hl.bind(mainMod .. " + CTRL + P", hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot.sh output"))
+hl.bind(mainMod .. " + ALT + P", hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot.sh output DP-3"))
 
 -- 画面録画
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd("~/.config/hypr/scripts/record.sh"))
