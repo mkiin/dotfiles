@@ -3,7 +3,7 @@ set -euo pipefail
 
 # すでに開いていれば閉じる（Super+A / アイコンクリックの toggle 挙動）
 if pgrep -x rofi >/dev/null; then
-  pkill -x rofi
+  pkill -x rofi || true
   exit 0
 fi
 

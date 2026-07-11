@@ -32,14 +32,6 @@ Scope {
     }
 
     Loader {
-        id: launcherLoader
-        source: "../launcher/LauncherWindow.qml"
-        asynchronous: true
-
-        property var launcher: item
-    }
-
-    Loader {
         id: sidebarLoader
         source: "../sidebar/SidebarWindow.qml"
         asynchronous: true
@@ -91,7 +83,6 @@ Scope {
                         item.screen = Qt.binding(() => modelData)
                         item.barWindow = Qt.binding(() => window)
                         item.controlCenter = Qt.binding(() => controlCenterLoader.item)
-                        item.launcher = Qt.binding(() => launcherLoader.item)
                         item.sidebar = Qt.binding(() => sidebarLoader.item)
                         item.dashboard = Qt.binding(() => dashboardLoader.item)
                     }
