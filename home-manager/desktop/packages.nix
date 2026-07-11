@@ -34,8 +34,7 @@ in
     jq
     libnotify
     # NIKKE ランナー。umu-launcher(-bwrap 版)を PATH に置き nikke.sh に掴ませる。
-    # dwproton は nix store から NIKKE_PROTON でラッパーに渡す(Task 5 で AGL を撤去)。
-    inputs.anime-games-launcher.packages.${pkgs.system}.default
+    # dwproton は nix store から NIKKE_PROTON でラッパーに渡す(AGL 非依存)。
     umu-launcher
     # NIKKE 起動ラッパー(scripts/nikke.sh)を `nikke` として PATH に載せる。
     # Hyprland keybind(SHIFT+N)や端末から叩くため。store へ焼くので反映は switch。
