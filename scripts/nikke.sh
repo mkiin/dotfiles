@@ -217,6 +217,46 @@ cmd_run() {
   die "$MAX_RETRIES 回試みても ACE の初期化に失敗。時間を置くか、Steam 再起動後に再試行してください。"
 }
 
+# 公式ミニローダ(コミュニティ報告では Linux での DL/更新が最新版より安定)。
+# ローカルの exe を使いたい場合は NIKKE_INSTALLER_URL に file:// か別URLを指定。
+INSTALLER_URL="${NIKKE_INSTALLER_URL:-https://nikke-en.com/NikkeMiniloader0.0.6.143.exe}"
+
+# 空 prefix にインストーラを流して C:\NIKKE へ導入する(新PC用)。
+bootstrap_install() {
+  command -v curl >/dev/null 2>&1 || die "curl が無い。手動で prefix を用意するか curl を導入してください"
+  mkdir -p "$NIKKE_HOME"
+  local installer="$NIKKE_HOME/nikke_installer.exe"
+  if [ ! -e "$installer" ]; then
+    log "インストーラ取得: $INSTALLER_URL"
+    curl -fL "$INSTALLER_URL" -o "$installer" || die "インストーラ取得に失敗: $INSTALLER_URL"
+  fi
+  preflight_steam
+  log 'インストーラ起動。ウィザードで導入先を C:\NIKKE にしてください(完了まで数十GB DL)。'
+  GAMEID=umu-nikke PROTON_USE_WOW64=1 PROTONPATH="$PROTON" WINEPREFIX="$PREFIX" \
+    ${STEAMRUN:+"$STEAMRUN"} "$UMU" "$installer"
+  [ -e "$LAUNCHER" ] || warn "導入後に $LAUNCHER が見つかりません。導入先が C:\\NIKKE か確認してください。"
+}
+
+cmd_install() {
+  [ -n "$PROTON" ] && [ -d "$PROTON" ] || die "dwproton が無い。nikke ラッパー経由で実行してください"
+  if [ -e "$LAUNCHER" ]; then
+    log "既にインストール済み: $LAUNCHER"
+    return 0
+  fi
+  # 現行機では AGL が作った 32G prefix を再DLせず安定パスへ移設する。
+  local agl_pfx
+  agl_pfx=$(find "$HOME/.local/share/anime-games-launcher/packages/persistent" \
+    -maxdepth 4 -type d -path '*goddess_of_victory_nikke/pfx' 2>/dev/null | head -1)
+  if [ -n "$agl_pfx" ] && [ -e "$agl_pfx/drive_c/NIKKE/Launcher/nikke_launcher.exe" ]; then
+    log "既存 AGL prefix を検出 → 安定パスへ移設(再DL不要)"
+    mkdir -p "$NIKKE_HOME"
+    mv "$agl_pfx" "$PREFIX"
+    log "移設完了: $PREFIX。AGL 残骸は 'nikke clean' で撤去できます。"
+    return 0
+  fi
+  bootstrap_install
+}
+
 usage() {
   cat <<'EOF'
 usage: nikke [run|install|clean]
