@@ -27,8 +27,8 @@ hl.bind(mainMod .. " + SHIFT + N", hl.dsp.exec_cmd("nikke"))
 hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("~/.config/rofi/screenshot-menu.sh"))
 hl.bind(mainMod .. " + ALT + P", hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot.sh output DP-3"))
 
--- 画面録画
-hl.bind(mainMod .. " + R", hl.dsp.exec_cmd("~/.config/hypr/scripts/record.sh"))
+-- 画面録画 (Super+R で島 UI。facefusion ターゲット録画は特殊系として存続)
+hl.bind(mainMod .. " + R", hl.dsp.exec_cmd("~/.config/rofi/record-menu.sh"))
 hl.bind(
 	mainMod .. " + CTRL + R",
 	hl.dsp.exec_cmd("~/.config/hypr/scripts/record.sh ~/personal/tools/facefusion/media/target")
