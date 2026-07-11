@@ -17,7 +17,6 @@ die() {
   printf '\033[1;31m[err]\033[0m %s\n' "$*" >&2
   exit 1
 }
-notify() { command -v notify-send >/dev/null 2>&1 && notify-send "NIKKE" "$1" || true; }
 
 # --- パス解決(AGL 非依存。安定パス + nix store の dwproton) ---
 # 実体は AGL のハッシュパスではなく XDG 配下の固定パスに置く。dwproton は nix が
@@ -49,7 +48,6 @@ nikke_window_count() {
 }
 game_running() { [ "$(nikke_window_count)" -ge 2 ]; }
 session_running() { pgrep -f "$SESSION_MATCH" >/dev/null 2>&1; }
-crashhandler_up() { pgrep -f 'UnityCrashHandler64\.exe' >/dev/null 2>&1; }
 
 # NIKKE ランチャーの枠/影は steam_proton・空タイトルの Xwayland override-redirect 窓として
 # 描かれ、本体を kill しても Hyprland のタイル境界に取り残され「端の残像」になる。
@@ -180,18 +178,13 @@ launch_once() {
 }
 
 watchdog() {
-  log "ウォッチドッグ開始(セッション終了を監視)。ランチャー窓を閉じてもゲームは残る。Ctrl-C で監視のみ終了。"
-  # 生存判定は umu セッション(wine prefix)で行う。窓枚数だと「ランチャー窓を閉じた」と
-  # 「ゲームが終わった」を区別できず誤って終了扱いする。セッションはランチャー窓を閉じても
-  # 生きているので誤爆しない。ACE/Unity クラッシュで本体だけ消えセッションが宙吊りになる
-  # 場合のみ、crashhandler かつ本体窓なしを検知して畳む。
+  log "ウォッチドッグ開始(セッション終了を監視)。ランチャーを隠しても閉じてもゲームは残る。Ctrl-C で監視のみ終了。"
+  # 観測専用。生存判定は umu セッション(wine prefix)のみで行い、こちらからは決して kill しない。
+  # 旧実装は「crashhandler かつ本体窓なし」で宙吊りと見なし cleanup_session で強制 kill していたが、
+  # ランチャーを「隠す」と窓が減って game_running=false になり、健全なセッションを誤って皆殺しにした。
+  # 窓枚数でゲームの生死を判定するのが誤りの根。宙吊りの後始末は cmd_run 起動時の判定に委ね、
+  # ここでは何も殺さない(健全なプレイを殺すより、稀な宙吊りを手動で畳む方が遥かにマシ)。
   while session_running; do
-    if crashhandler_up && ! game_running; then
-      warn "本体が消えたのにセッションが宙吊り(ACE/Unity クラッシュ) → 自動復旧"
-      cleanup_session
-      notify "クラッシュを検知し、宙吊りセッションを自動で畳みました。再度起動できます。"
-      return 1
-    fi
     sleep "$WATCH_INTERVAL_S"
   done
   log "NIKKE 正常終了"
