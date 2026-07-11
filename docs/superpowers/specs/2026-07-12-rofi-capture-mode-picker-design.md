@@ -50,15 +50,49 @@ Super+R → record/menu.sh    → 島(全体/範囲/停止)      → record.sh <
 ### 3. `record.sh` への region 対応追加
 
 現状の `record.sh` はフォーカスモニタ全体録画のトグルのみ。範囲録画を新設する。
+**範囲＝録画開始時に選択した固定矩形**とし、録画中のウィンドウ移動・リサイズには
+追従しない。停止・保存・通知・moov atom 対策（SIGINT 停止）・pid 管理は全体録画と
+共通で、範囲かどうかは開始時の引数の違いだけ。
 
-- 第 1 引数（または専用フラグ）で region モードを受け、`slurp` で領域を取得してから
-  `gpu-screen-recorder` の領域指定で録画する。
-- **【要実機検証】** `gpu-screen-recorder` の領域指定フラグはバージョン依存
-  （`-w region -region WxH+X+Y` 等）。この設計を書いた WSL 環境には gsr が無く検証
-  できていない。実装時に実機で `gpu-screen-recorder --help` を確認し、対応フラグを
-  確定する。もし gsr が領域録画に非対応なら、region のときだけ `wf-recorder -g "$(slurp)"`
-  へフォールバックする案を代替とする（その場合 `wf-recorder` を packages に追加）。
-- 既存の moov atom 対策（SIGINT 停止）・保存先・日本語通知はそのまま踏襲する。
+#### バックエンドは gpu-screen-recorder 一本（フォールバックしない）
+
+gsr が領域録画に非対応でも **`wf-recorder` へフォールバックしない**。利用者から見て
+同じ「範囲録画」なのに、バックエンドが変わるとコーデック・画質・音声トラック・GPU 負荷・
+停止処理・pid 管理が全体録画と食い違い、録画機能の一貫性が崩れて保守しづらくなるため。
+gsr が範囲非対応なら**範囲録画を開始せず**、「このバージョンの gpu-screen-recorder は
+範囲録画に対応していない」と `notify-send` で通知して終了する。
+
+#### 実装フロー
+
+1. 第 1 引数（または専用フラグ）で region モードを受ける。
+2. `slurp` で領域を取得（Esc / 空選択でキャンセル終了）。
+3. slurp 出力 `X,Y WxH` を gsr が要求する形式へ確定的に変換する。**マルチモニタでは
+   X・Y が負になり得るので符号付き整数で受ける**:
+   ```bash
+   selection=$(slurp) || exit 1
+   if [[ $selection =~ ^(-?[0-9]+),(-?[0-9]+)[[:space:]]+([0-9]+)x([0-9]+)$ ]]; then
+     x=${BASH_REMATCH[1]}; y=${BASH_REMATCH[2]}
+     width=${BASH_REMATCH[3]}; height=${BASH_REMATCH[4]}
+     region="${width}x${height}+${x}+${y}"   # 例: 100,200 800x600 → 800x600+100+200
+   else
+     printf 'Unexpected slurp output: %s\n' "$selection" >&2; exit 1
+   fi
+   ```
+4. `gpu-screen-recorder` に `-w region` と領域引数を渡して録画開始（→ pid_file 記録・通知）。
+
+#### 【実装時に実機で確認する 4 点】
+
+この設計を書いた WSL 環境には gsr が無く未検証。実装時に実機で
+`gpu-screen-recorder --version` / `--help` / `--list-capture-options` を確認し、以下を正とする:
+
+1. `region` がキャプチャ対象の一覧に存在するか。
+2. 領域座標を指定する**引数の正確な名前と形式**（`-region WxH+X+Y` とは限らない）。
+3. **負の座標**を受理するか。
+4. Wayland セッションで利用できるか。
+
+上記が確認できた場合のみ、変換した矩形を渡す。`region` が無ければ非対応として上記の
+「開始せず通知」パスに入る。変換ロジック自体はシェルで確定的だが、最終的な引数名・形式は
+`--help` の結果を正とする。
 
 ### 4. theme.rasi の配色連動（ハマりどころ）
 
@@ -114,7 +148,9 @@ CLAUDE.md の集約ルールに従い `home-manager/desktop/packages.nix` へ宣
 - `Super+P` で右端に島が出て、region / window / output を選ぶと従来と同じ結果
   （保存先・クリップボードコピー・日本語通知）で撮影できる。
 - `Super+R` で島が出て、非録画中は「全体 / 範囲」、録画中は「停止」が出る。範囲を選ぶと
-  `slurp` で領域選択して録画が始まり、停止で正常な mp4 が保存される。
+  `slurp` で領域選択（負座標含む）して録画が始まり、停止で正常な mp4 が保存される。
+  gsr が範囲非対応のバージョンなら、範囲は開始せず「範囲録画に対応していない」と通知する
+  （wf-recorder へのフォールバックはしない）。
 - 島の配色が現壁紙の matugen テーマに連動している。
 - `Super+Alt+P`（DP-3）・`Super+Ctrl+R`（facefusion）は従来どおり動く。
 - `nix run .#build` と `nix run .#fmt -- --fail-on-change` が通る。
