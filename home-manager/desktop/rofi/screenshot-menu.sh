@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+theme="$HOME/.config/rofi/themes/capture.rasi"
+scripts="$HOME/.config/hypr/scripts"
+
+# 󰩭 region / 󰖯 window / 󰍹 output
+sel=$(printf '%s\n' "󰩭" "󰖯" "󰍹" | rofi -dmenu -theme "$theme") || exit 0
+
+case "$sel" in
+"󰩭") "$scripts/screenshot.sh" region ;;
+"󰖯") "$scripts/screenshot.sh" window ;;
+"󰍹") "$scripts/screenshot.sh" output ;;
+esac
