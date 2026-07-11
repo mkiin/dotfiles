@@ -20,6 +20,7 @@
     ./terminal/wezterm
     ./zen
     ./vesktop
+    ./upscayl
   ];
 
   programs.zsh = {
