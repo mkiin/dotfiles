@@ -53,7 +53,8 @@ element-text {
     expand:           true;
     horizontal-align: 0.5;
     vertical-align:   0.5;
-    padding:          22px 0px;
+    /* 実測補正: 行高53px + 上6/下25 = 84px(タイル幅と一致)。MDI グリフが線ボックス中心より 9px 下に描かれるため非対称 */
+    padding:          6px 0px 25px 0px;
 }
 
 element selected {
