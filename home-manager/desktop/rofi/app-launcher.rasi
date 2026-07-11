@@ -25,6 +25,9 @@ window {
     anchor:                      center;
     fullscreen:                  false;
     width:                       600px;
+    /* filebrowser はモード固有の枠を確保して背が伸びる(message では消せない)。
+       drun/window が自然に取る高さに固定し全モードで不変にする。 */
+    height:                      516px;
     x-offset:                    0px;
     y-offset:                    0px;
 
