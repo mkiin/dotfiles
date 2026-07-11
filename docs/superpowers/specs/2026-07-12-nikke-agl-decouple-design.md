@@ -117,9 +117,17 @@ PREFIX="$NIKKE_HOME/prefix"          # wine prefix（旧: AGL の .../pfx）
 3. **install の入口**。公式インストーラと旧 miniloader（`NikkeMiniloader0.0.6.143.exe`）の
    どちらが Linux で安定か。コミュニティは「miniloader の方が DL/更新が安定」と報告。
    install サブコマンドはどちらを既定にするか実機で決める。
+4. **ACE リジェクト率が上がった場合の Steam 文脈強化**。ACE 要件（Steam 常駐）は
+   現行の `preflight_steam` で満たすが、リジェクトが増えるなら起動時に
+   `STEAM_COMPAT_APP_ID`/`SteamAppId` を明示し「正規の Steam アプリ文脈」へ寄せて対処する。
 
 ## やらないこと（YAGNI）
 
 - rclone による prefix 同期（bootstrap 方針のため不要）。
 - GE-Proton への置換（dwproton 維持）。
 - honkers 側（`aagl`）への変更（別系統・無関係）。
+- **Steam 経由起動（非Steamゲーム登録 + `steam://rungameid`）への切り替え**。ACE が要るのは
+  Steam 常駐（=residency、`preflight_steam` で充足）であり、Steam がプロセスを起こすこと
+  ではない。umu は Steam の起動環境（SteamAppId / Steam Linux Runtime / proton）を再現する
+  道具で、現行 umu 方式で実機起動できている。Lottery はどちらの方式でも残るため、
+  `shortcuts.vdf` 注入で真の Steam 起動を得る上積みは不確実でコストに見合わず不採用。
