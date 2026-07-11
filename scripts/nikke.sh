@@ -19,24 +19,18 @@ die() {
 }
 notify() { command -v notify-send >/dev/null 2>&1 && notify-send "NIKKE" "$1" || true; }
 
-# --- パス解決(AGL 更新でパッケージハッシュが変わっても追随) ---
-AGL="$HOME/.local/share/anime-games-launcher"
-PKG_DIR=$(find "$AGL/packages/persistent" -maxdepth 1 -type d -name '*lua_proton' 2>/dev/null | head -1)
-[ -n "$PKG_DIR" ] || die "lua_proton パッケージが見つからない。先に AGL で NIKKE を一度導入してください。"
-PREFIX="$PKG_DIR/prefixes/goddess_of_victory_nikke/pfx"
-PROTON=$(find "$PKG_DIR/versions" -maxdepth 1 -type d -name 'dwproton-*' 2>/dev/null | sort -V | tail -1)
+# --- パス解決(AGL 非依存。安定パス + nix store の dwproton) ---
+# 実体は AGL のハッシュパスではなく XDG 配下の固定パスに置く。dwproton は nix が
+# NIKKE_PROTON で渡す(= ラッパー経由起動が前提)。umu は nixpkgs umu-launcher を使う。
+# steam-run で umu をくるむのは AGL の既知良好構成の踏襲(FHS を与え bwrap 即死を避ける)。
+NIKKE_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/nikke"
+PREFIX="$NIKKE_HOME/prefix"
+PROTON="${NIKKE_PROTON:-}"
 LAUNCHER="$PREFIX/drive_c/NIKKE/Launcher/nikke_launcher.exe"
 REG="$PREFIX/system.reg"
-# AGL の既知良好構成を再現する。AGL は同梱 umu-run を steam-run(FHS)でくるんで叩く。
-# steam-run が FHS を与えるので「同梱 umu-run が素 bwrap を拾い即死」問題は起きない。
-# pkgs.umu-launcher に差し替えるとランタイムコンテナの組み方が変わり体感が重くなるため、
-# 同梱 umu-run を最優先(無い時だけ pkgs へフォールバック)。
-UMU="$PKG_DIR/umu-run"
-[ -x "$UMU" ] || UMU="$(command -v umu-run || true)"
+UMU="$(command -v umu-run || true)"
 STEAMRUN="$(command -v steam-run || true)"
-[ -e "$LAUNCHER" ] || die "nikke_launcher.exe が無い: $LAUNCHER"
-[ -d "$PROTON" ] || die "dwproton が無い: $PKG_DIR/versions"
-[ -x "$UMU" ] || die "umu-run が見つからない"
+[ -x "$UMU" ] || die "umu-run が見つからない(nixpkgs umu-launcher を導入してください)"
 
 # --- プロセス判定ヘルパ ---
 # 本体プロセス(nikke.exe)は pressure-vessel の PID namespace 内にあり host の pgrep から見えない。
@@ -201,7 +195,10 @@ watchdog() {
   return 0
 }
 
-main() {
+cmd_run() {
+  [ -n "$PROTON" ] || die "NIKKE_PROTON 未設定。端末直叩きでなく nix の nikke ラッパー経由で起動してください"
+  [ -d "$PROTON" ] || die "dwproton が無い: $PROTON"
+  [ -e "$LAUNCHER" ] || die "NIKKE 未インストール。先に 'nikke install' を実行してください"
   log "prefix: $PREFIX"
   log "proton: $(basename "$PROTON")"
   preflight_steam
@@ -218,6 +215,28 @@ main() {
     sleep 2
   done
   die "$MAX_RETRIES 回試みても ACE の初期化に失敗。時間を置くか、Steam 再起動後に再試行してください。"
+}
+
+usage() {
+  cat <<'EOF'
+usage: nikke [run|install|clean]
+  run     (既定) NIKKE を起動(Lottery + watchdog)
+  install 初回セットアップ。既存 AGL prefix があれば移設、無ければ再DL
+  clean   AGL の残骸(prefix/config/cache/desktop entry)を撤去
+EOF
+}
+
+main() {
+  case "${1:-run}" in
+  run | "") cmd_run ;;
+  install) cmd_install ;;
+  clean) cmd_clean ;;
+  -h | --help | help) usage ;;
+  *)
+    usage
+    exit 1
+    ;;
+  esac
 }
 
 main "$@"
