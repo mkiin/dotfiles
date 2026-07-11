@@ -1,4 +1,7 @@
 { inputs, pkgs, ... }:
+let
+  dwproton = pkgs.callPackage ./nikke { };
+in
 {
   home.packages = with pkgs; [
     # color / wallpaper pipeline
@@ -30,12 +33,15 @@
     slurp
     jq
     libnotify
-    # anime-games-launcher (NIKKE 等)。NixOS 非対応の AGL 同梱 umu-run は壊れるため
-    # NixOS 対応の umu-launcher(-bwrap 版)を PATH に置き nikke.sh に掴ませる
+    # NIKKE ランナー。umu-launcher(-bwrap 版)を PATH に置き nikke.sh に掴ませる。
+    # dwproton は nix store から NIKKE_PROTON でラッパーに渡す(Task 5 で AGL を撤去)。
     inputs.anime-games-launcher.packages.${pkgs.system}.default
     umu-launcher
     # NIKKE 起動ラッパー(scripts/nikke.sh)を `nikke` として PATH に載せる。
     # Hyprland keybind(SHIFT+N)や端末から叩くため。store へ焼くので反映は switch。
-    (pkgs.writeShellScriptBin "nikke" (builtins.readFile "${inputs.self}/scripts/nikke.sh"))
+    (pkgs.writeShellScriptBin "nikke" ''
+      export NIKKE_PROTON=${dwproton}
+      ${builtins.readFile "${inputs.self}/scripts/nikke.sh"}
+    '')
   ];
 }

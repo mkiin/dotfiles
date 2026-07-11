@@ -21,7 +21,7 @@
 
 ## File Structure
 
-- `home-manager/desktop/nikke/dwproton.nix` — **新規**。dwproton を fetchurl で取得・展開する derivation（定義のみ）。
+- `home-manager/desktop/nikke/default.nix` — **新規**。dwproton を fetchurl で取得・展開する derivation（定義のみ）。「1 ディレクトリ = 1 `default.nix`」規約に沿う。
 - `home-manager/desktop/packages.nix` — **変更**。AGL 行を削除、dwproton を callPackage して宣言、`nikke` ラッパーに `NIKKE_PROTON` を注入。
 - `flake.nix` — **変更**。input `anime-games-launcher` ブロックを削除。
 - `scripts/nikke.sh` — **変更**。パス解決を安定パス + `$NIKKE_PROTON` へ張り替え、`main` をサブコマンド dispatcher（install / run / clean）に再構成。
@@ -32,12 +32,12 @@
 
 **Files:**
 
-- Create: `home-manager/desktop/nikke/dwproton.nix`
+- Create: `home-manager/desktop/nikke/default.nix`
 - Modify: `home-manager/desktop/packages.nix`
 
 **Interfaces:**
 
-- Produces: `pkgs.callPackage ./nikke/dwproton.nix { }` が dwproton を展開した store パス（`$out/proton` が実行ファイル）を返す。`packages.nix` 内の `dwproton` 束縛として後続タスクが参照する。
+- Produces: `pkgs.callPackage ./nikke { }`（=`./nikke/default.nix`）が dwproton を展開した store パス（`$out/proton` が実行ファイル）を返す。`packages.nix` 内の `dwproton` 束縛として後続タスクが参照する。
 
 - [ ] **Step 1: dwproton tarball の SRI ハッシュを取得**
 
@@ -52,7 +52,7 @@ Expected: 末尾に `hash: sha256-XXXX...=` の形で SRI ハッシュが出る�
 
 - [ ] **Step 2: derivation を作成**
 
-`home-manager/desktop/nikke/dwproton.nix`:
+`home-manager/desktop/nikke/default.nix`:
 
 ```nix
 {
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
 ```nix
 { inputs, pkgs, ... }:
 let
-  dwproton = pkgs.callPackage ./nikke/dwproton.nix { };
+  dwproton = pkgs.callPackage ./nikke { };
 in
 {
   home.packages = with pkgs; [
@@ -129,14 +129,7 @@ Expected: どちらも成功（緑）。dwproton が数百MB DL される。dead
 Run:
 
 ```bash
-ls "$(nix eval --raw .#nixosConfigurations.nixos.config.home-manager.users.mkiin.home.path 2>/dev/null)" 2>/dev/null || \
-nix build --no-link --print-out-paths --expr 'let f = import ./home-manager/desktop/nikke/dwproton.nix; p = (import <nixpkgs> {}); in p.callPackage f {}'
-```
-
-より簡便には:
-
-```bash
-DWP=$(nix build --no-link --print-out-paths --impure --expr '(import <nixpkgs> {}).callPackage ./home-manager/desktop/nikke/dwproton.nix {}')
+DWP=$(nix build --no-link --print-out-paths --impure --expr '(import <nixpkgs> {}).callPackage ./home-manager/desktop/nikke {}')
 ls "$DWP/proton"
 ```
 
@@ -145,7 +138,7 @@ Expected: `$DWP/proton`（proton 実行ファイル）が存在する。
 - [ ] **Step 6: コミット**
 
 ```bash
-git add home-manager/desktop/nikke/dwproton.nix home-manager/desktop/packages.nix
+git add home-manager/desktop/nikke/default.nix home-manager/desktop/packages.nix
 git commit -m "feat(nikke): dwproton を nix derivation 化しラッパーへ注入"
 ```
 
