@@ -162,8 +162,12 @@ launch_once() {
   log "NIKKE 起動(steam-run + umu-run / AGL 再現)"
   # AGL の実起動を再現: PROTON_USE_WOW64=1 を付け、steam-run で umu-run をくるむ。
   # STORE=none は AGL は付けない(付けると umu の GAMEID 解決経路が変わる)ので外す。
+  # setsid で新セッション化し、nikke スクリプト/端末のプロセスグループから切り離す。
+  # nohup だけだと SIGHUP は防げても Ctrl-C(SIGINT)は同一 pgroup 経由でゲームまで届き
+  # セッションごと落ちる。setsid + </dev/null で端末を完全に手放し、watchdog や端末が
+  # 死んでもゲームは残す。umu/proton の出力は死因追跡のため umu.log に残す。
   GAMEID=umu-nikke PROTON_USE_WOW64=1 PROTONPATH="$PROTON" WINEPREFIX="$PREFIX" \
-    nohup ${STEAMRUN:+"$STEAMRUN"} "$UMU" "$LAUNCHER" >/dev/null 2>&1 &
+    setsid ${STEAMRUN:+"$STEAMRUN"} "$UMU" "$LAUNCHER" </dev/null >"$NIKKE_HOME/umu.log" 2>&1 &
   # session(umu)が生きている限り本体ウィンドウの出現を待つ。ログイン完了までの時間は
   # ユーザー操作次第で読めないため固定タイムアウトは置かない。session が落ちれば起動失敗とみなす。
   while session_running; do
