@@ -28,6 +28,10 @@ PREFIX="$NIKKE_HOME/prefix"
 PROTON="${NIKKE_PROTON:-}"
 LAUNCHER="$PREFIX/drive_c/NIKKE/Launcher/nikke_launcher.exe"
 REG="$PREFIX/system.reg"
+# umu/proton/launcher の各プロセス argv には $LAUNCHER(=prefix 絶対パス)が乗る。
+# これをセッション生存判定/kill のトークンにする(旧 AGL の goddess_of_victory_nikke 相当)。
+# nikke ラッパー自身の argv には prefix パスが出ないため pkill の self-match は起きない。
+SESSION_MATCH="$PREFIX"
 UMU="$(command -v umu-run || true)"
 STEAMRUN="$(command -v steam-run || true)"
 [ -x "$UMU" ] || die "umu-run が見つからない(nixpkgs umu-launcher を導入してください)"
@@ -44,7 +48,7 @@ nikke_window_count() {
   hyprctl clients -j 2>/dev/null | jq -r '[.[] | select(.class == "steam_proton" and .title == "NIKKE")] | length' 2>/dev/null || echo 0
 }
 game_running() { [ "$(nikke_window_count)" -ge 2 ]; }
-session_running() { pgrep -f 'goddess_of_victory_nikke' >/dev/null 2>&1; }
+session_running() { pgrep -f "$SESSION_MATCH" >/dev/null 2>&1; }
 crashhandler_up() { pgrep -f 'UnityCrashHandler64\.exe' >/dev/null 2>&1; }
 
 # NIKKE ランチャーの枠/影は steam_proton・空タイトルの Xwayland override-redirect 窓として
@@ -63,12 +67,12 @@ cleanup_stray_windows() {
 
 # 宙吊りセッションを畳む。prefix 固有トークンで一致(pkill は自 PID を除外するので self-match しない)。
 cleanup_session() {
-  pkill -TERM -f 'goddess_of_victory_nikke' 2>/dev/null || true
+  pkill -TERM -f "$SESSION_MATCH" 2>/dev/null || true
   for _ in 1 2 3 4 5; do
     session_running || break
     sleep 1
   done
-  session_running && pkill -KILL -f 'goddess_of_victory_nikke' 2>/dev/null
+  session_running && pkill -KILL -f "$SESSION_MATCH" 2>/dev/null
   sleep 1
   cleanup_stray_windows
 }
