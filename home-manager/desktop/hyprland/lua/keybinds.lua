@@ -23,11 +23,11 @@ hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("qs -c shell ipc call cc toggle"))
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd("pkill -x wlogout || wlogout"))
 hl.bind(mainMod .. " + SHIFT + N", hl.dsp.exec_cmd("nikke"))
 
--- スクリーンショット (Super+P で島 UI。DP-3 直撮りは特殊系として存続)
+-- スクリーンショット
 hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("~/.config/rofi/screenshot-menu.sh"))
 hl.bind(mainMod .. " + ALT + P", hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot.sh output DP-3"))
 
--- 画面録画 (Super+R で島 UI。facefusion ターゲット録画は特殊系として存続)
+-- 画面録画
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd("~/.config/rofi/record-menu.sh"))
 hl.bind(
 	mainMod .. " + CTRL + R",
