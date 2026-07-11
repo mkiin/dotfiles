@@ -257,6 +257,49 @@ cmd_install() {
   bootstrap_install
 }
 
+cmd_clean() {
+  local agl="$HOME/.local/share/anime-games-launcher"
+  # 未移設の NIKKE データを巻き込み削除しないよう警告(先に install で移設させる)。
+  if [ ! -e "$LAUNCHER" ] &&
+    find "$agl" -maxdepth 8 -path '*goddess_of_victory_nikke/pfx/drive_c/NIKKE*' -print -quit 2>/dev/null | grep -q .; then
+    warn "AGL 内に未移設の NIKKE データがあります。先に 'nikke install'(自動移設)を実行しないと再DLになります。"
+  fi
+  local targets=(
+    "$agl"
+    "$HOME/.config/anime-games-launcher"
+    "$HOME/.cache/anime-games-launcher"
+    "$HOME/.local/share/applications/anime-games-launcher.desktop"
+  )
+  local found=() t
+  for t in "${targets[@]}"; do
+    [ -e "$t" ] && {
+      printf '  %s (%s)\n' "$t" "$(du -sh "$t" 2>/dev/null | cut -f1)"
+      found+=("$t")
+    }
+  done
+  if [ "${#found[@]}" -eq 0 ]; then
+    log "AGL 残骸なし。何もしません。"
+    return 0
+  fi
+  log "上記を削除します。"
+  if [ -t 0 ]; then
+    read -r -p "本当に削除しますか? [y/N] " ans
+    case "$ans" in
+    [yY]*) ;;
+    *)
+      log "中止"
+      return 0
+      ;;
+    esac
+  else
+    warn "非対話のためスキップ(対話端末で実行してください)"
+    return 0
+  fi
+  for t in "${found[@]}"; do
+    rm -rf "$t" && log "削除: $t"
+  done
+}
+
 usage() {
   cat <<'EOF'
 usage: nikke [run|install|clean]
