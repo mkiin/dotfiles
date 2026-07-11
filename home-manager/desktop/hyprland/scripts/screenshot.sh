@@ -26,7 +26,18 @@ window)
   [ -z "$geom" ] && exit 0
   ;;
 output)
-  monitor=$(hyprctl monitors -j | jq -r '.[] | select(.focused) | .name // "unknown"')
+  target="${2:-}"
+  if [ -n "$target" ]; then
+    # 指定モニターの存在確認。無ければ撮らずに通知して終了（誤った画面を撮らない）
+    exists=$(hyprctl monitors -j | jq -r --arg n "$target" 'any(.[]; .name == $n)')
+    if [ "$exists" != "true" ]; then
+      notify-send -a "screenshot" "スクリーンショット" "モニター ${target} が見つかりません"
+      exit 0
+    fi
+    monitor="$target"
+  else
+    monitor=$(hyprctl monitors -j | jq -r '.[] | select(.focused) | .name // "unknown"')
+  fi
   out_dir="${base_dir}/output/${monitor}"
   ;;
 *)
