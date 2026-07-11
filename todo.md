@@ -2,7 +2,7 @@
 
 ## GitHubActionのPR内容と成功・失敗のディスコード通知
 
--
+- 未着手
 
 ## 初回セットアップの自動化
 
@@ -43,12 +43,12 @@ quickshellで作成するが、参考になるデザインがまだみつかっ�
   - caelestia 風右上時計（2026-07-06 / 2026-07-08 spec）は不採用とし、左下ポスター型（Anton 極太 2 トーン時刻 + 大文字フルスペル日付 + 左下コーナー減光）で確定。
   - 設計 `docs/superpowers/specs/2026-07-09-hyprlock-poster-clock-design.md` / 計画 `docs/superpowers/plans/2026-07-09-hyprlock-poster-clock.md`。
 
-- waybarのリデザイン
+- waybarのリデザイン ✅ 完了
 - 1つ1つのモジュールにクリックアクションを割り当てすぎ
 - quickshellのコントロールセンターなどがあるため、クリック範囲をまとめるか、消すか
   - idle_inhibitor、通知アイコン、等々
 
-- バー全体のデザインをリキッドグラス風のモダンなものにしたい
+- バー全体のデザインをリキッドグラス風のモダンなものにしたい ✅ 完了
 - 色ベタ塗り感が強め
 - もう少し壁紙から浮いている感出したい
 
@@ -63,7 +63,7 @@ quickshellで作成するが、参考になるデザインがまだみつかっ�
 
 ## 壁紙ランダムスクリプトのリファクタリング
 
-- pyparlandのwallpapersを利用して、自作を代替えする
+- [x] pyparlandのwallpapersを利用して、自作を代替えする
 
 ## README.mdの改修
 
@@ -90,3 +90,21 @@ root と mkiin に同一の yescrypt ハッシュを agenix で付与（`nixos/c
 Renovate の lock 更新 PR で `build (nixos)` が 30 分タイムアウトしていた真因は、公開キャッシュに無い独自ビルドの Rust パッケージ `herdr` と `anime-games-launcher`（follows で nixpkgs 追従のため lock 更新ごとに再ビルド）。hyprland ではなかった。
 
 対策として public キャッシュ `mkiin-dotfiles.cachix.org` を作成し、CI の `nix-build.yaml` に `cachix/cachix-action` を追加してビルド成果物を push、`flake.nix` の substituter に追加してローカル/CI 両方で substitute する。あわせて `timeout-minutes` を 30→60 に緩和（初回ソースビルドの安全網。public ランナーは無料無制限）。1 回の push は約 42 MB で 5GB 枠に十分収まる。設計は `docs/superpowers/specs/2026-07-06-cachix-ci-build-cache-design.md`。
+
+## スクリーンショットの画面範囲セレクトをショートカットではなくquikcshellによるUIで選択させる方式にする
+
+- BlackNodeの機能をインスパイア[https://github.com/zhaleff/BlackNode/blob/master/Assets/HyprShot.png]
+
+## アプリランチャーをrofiに変更 ✅ 完了
+
+HynDuf 風 rofi ランチャー(3モード drun/filebrowser/window)に置換。配色は matugen 連動
+(surface 階層で凹み/浮きを表現)、検索バー上部は launch.sh が last_wallpaper を読み
+-theme-str で現壁紙をプレビュー注入。quickshell ランチャーは撤去。
+設計 `docs/superpowers/specs/2026-07-11-rofi-app-launcher-design.md` /
+計画 `docs/superpowers/plans/2026-07-11-rofi-app-launcher.md`。
+
+## weztermでclaudecodeの生成終了時に通知を出す
+
+- swayncでできる？
+- 設計判断必要
+- claude code標準でできるか
