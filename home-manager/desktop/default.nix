@@ -11,6 +11,7 @@
     ./hypridle
     ./quickshell
     ./wlogout
+    ./rofi
     ./fcitx5
     ./mouse
     ./matugen

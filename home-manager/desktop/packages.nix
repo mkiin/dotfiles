@@ -8,6 +8,7 @@
     rclone
     # desktop utilities (waybar=programs.waybar, cliphist/hypridle=services)
     wlogout
+    rofi
     socat
     resvg
     mpv
