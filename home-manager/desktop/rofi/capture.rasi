@@ -53,8 +53,7 @@ element-text {
     expand:           true;
     horizontal-align: 0.5;
     vertical-align:   0.5;
-    padding:          12px 0px 25px 7px;
-    margin:           4px 0px 4px 0px;
+    padding:          28px 0px;
 }
 
 element selected {
