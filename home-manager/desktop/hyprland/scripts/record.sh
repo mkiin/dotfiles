@@ -28,8 +28,9 @@ mkdir -p "$out_dir"
 file="$out_dir/rec_$(date +%Y%m%d_%H%M%S).mp4"
 
 if [[ $mode == region ]]; then
-  # gsr が region キャプチャに対応していなければ開始せず通知（wf-recorder へフォールバックしない）
-  if ! gpu-screen-recorder --list-capture-options 2>/dev/null | grep -qw region; then
+  # gsr が region キャプチャに対応していなければ開始せず通知（wf-recorder へフォールバックしない）。
+  # 判定は usage の -w 選択肢を見る。--list-capture-options は実デバイスのみで region を列挙しない。
+  if ! gpu-screen-recorder --help 2>&1 | grep -qw region; then
     notify-send -a "record" "画面録画" "このバージョンの gpu-screen-recorder は範囲録画に対応していません"
     exit 0
   fi
