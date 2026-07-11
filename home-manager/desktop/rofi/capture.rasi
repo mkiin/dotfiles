@@ -1,7 +1,7 @@
 @import "colors.rasi"
 
 configuration {
-    font:            "JetBrains Mono Nerd Font 12";
+    font:            "JetBrainsMono Nerd Font 12";
     disable-history: true;
     fullscreen:      false;
     hide-scrollbar:  true;
@@ -49,7 +49,8 @@ element {
 }
 
 element-text {
-    font:             "JetBrains Mono Nerd Font 20";
+    /* Mono バリアント必須: 無印はアイコンのインクがセル送り幅から右にあふれ中央寄せがズレる */
+    font:             "JetBrainsMono Nerd Font Mono 20";
     expand:           true;
     horizontal-align: 0.5;
     vertical-align:   0.5;
