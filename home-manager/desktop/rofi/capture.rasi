@@ -3,7 +3,9 @@
 configuration {
     font:            "JetBrains Mono Nerd Font 12";
     disable-history: true;
+    fullscreen:      false;
     hide-scrollbar:  true;
+    sidebar-mode:    false;
 }
 
 * {
@@ -13,50 +15,51 @@ configuration {
 
 window {
     transparency:     "real";
+    border-radius:    12px;
     location:         east;
     anchor:           east;
     width:            100px;
     x-offset:         -15px;
     y-offset:         0px;
-    border-radius:    12px;
     background-color: @background;
-}
-
-mainbox {
-    children:         [ "listview" ];
-    margin:           8px;
-    background-color: transparent;
 }
 
 listview {
     columns:          1;
-    layout:           vertical;
+    lines:            3;
     spacing:          0px;
     cycle:            true;
     dynamic:          true;
+    layout:           vertical;
     scrollbar:        false;
     background-color: transparent;
 }
 
+mainbox {
+    children:         [ "listview" ];
+    spacing:          10px;
+    margin:           8px;
+}
+
 element {
+    text-color:       @foreground;
     orientation:      vertical;
-    padding:          14px 0px;
     border-radius:    8px;
     background-color: transparent;
-    text-color:       @foreground;
 }
 
 element-text {
     font:             "JetBrains Mono Nerd Font 20";
+    expand:           true;
     horizontal-align: 0.5;
     vertical-align:   0.5;
-    background-color: transparent;
-    text-color:       inherit;
+    padding:          12px 0px 25px 7px;
+    margin:           4px 0px 4px 0px;
 }
 
 element selected {
-    text-color:    @active;
-    border:        1px;
-    border-color:  @active;
+    text-color:   @active;
     border-radius: 8px;
+    border:       1px;
+    border-color: @active;
 }
