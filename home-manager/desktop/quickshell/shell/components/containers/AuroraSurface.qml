@@ -1,6 +1,6 @@
 import QtQuick 6.10
-import "../services" as QsServices
-import "../config" as QsConfig
+import "../../config" as QsConfig
+import "../effects"
 
 Item {
     id: root

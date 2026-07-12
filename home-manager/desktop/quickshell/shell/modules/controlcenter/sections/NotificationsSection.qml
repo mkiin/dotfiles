@@ -2,6 +2,7 @@ import QtQuick 6.10
 import QtQuick.Layouts 6.10
 import QtQuick.Controls 6.10
 import "../../../services" as QsServices
+import "../../../utils" as QsUtils
 import "../../../config" as QsConfig
 
 Item {
@@ -78,7 +79,7 @@ Item {
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
                     onClicked: {
-                        QsServices.Logger.debug("NotificationsSection", "Clearing all notifications")
+                        QsUtils.Logger.debug("NotificationsSection", "Clearing all notifications")
                         notifs.clearAll()
                     }
                 }
@@ -228,7 +229,7 @@ Item {
                                     hoverEnabled: true
                                     cursorShape: Qt.PointingHandCursor
                                     onClicked: {
-                                        QsServices.Logger.debug("NotificationsSection", `Deleting notification: ${modelData.summary}`)
+                                        QsUtils.Logger.debug("NotificationsSection", `Deleting notification: ${modelData.summary}`)
                                         notifs.deleteNotification(modelData)
                                     }
                                 }

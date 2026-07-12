@@ -4,6 +4,7 @@ import QtQuick.Controls 6.10
 import Quickshell
 import Quickshell.Io
 import "../../../services" as QsServices
+import "../../../utils" as QsUtils
 import "../../../config" as QsConfig
 
 Item {
@@ -194,7 +195,7 @@ Item {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
                         onClicked: {
-                            QsServices.Logger.debug("SettingsSection", "Power off")
+                            QsUtils.Logger.debug("SettingsSection", "Power off")
                         }
                         
                         onPressed: parent.color = QsConfig.Theme.withAlpha(QsConfig.Theme.error, 0.15)

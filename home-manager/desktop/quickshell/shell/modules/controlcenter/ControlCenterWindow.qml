@@ -6,8 +6,9 @@ import Quickshell.Wayland
 import Quickshell.Io
 import Quickshell.Hyprland
 import "../../services" as QsServices
+import "../../utils" as QsUtils
 import "../../config" as QsConfig
-import "../../components"
+import "../../components/containers"
 import "../../components/effects"
 import "components"
 
@@ -15,7 +16,7 @@ PanelWindow {
     id: root
     
     // Services
-    readonly property var logger: QsServices.Logger
+    readonly property var logger: QsUtils.Logger
     readonly property var config: QsConfig.Config
     readonly property var network: QsServices.Network
     readonly property var bluetooth: QsServices.Bluetooth

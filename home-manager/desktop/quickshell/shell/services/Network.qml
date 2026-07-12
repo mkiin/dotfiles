@@ -3,7 +3,7 @@ pragma Singleton
 import Quickshell
 import Quickshell.Io
 import QtQuick
-import "." as QsServices
+import "../utils" as QsUtils
 
 Singleton {
     id: root
@@ -40,7 +40,7 @@ Singleton {
     function connectToNetwork(ssid: string, password: string): void {
         // Validate SSID to prevent command injection
         if (!ssid || ssid.trim().length === 0) {
-            QsServices.Logger.warn("Network", "Invalid SSID: empty")
+            QsUtils.Logger.warn("Network", "Invalid SSID: empty")
             return
         }
         
@@ -48,12 +48,12 @@ Singleton {
         const dangerousChars = [";", "`", "$", "|", "&", "\n", "\r", "\\"]
         for (let i = 0; i < dangerousChars.length; i++) {
             if (ssid.includes(dangerousChars[i])) {
-                QsServices.Logger.warn("Network", "Invalid SSID: contains dangerous character")
+                QsUtils.Logger.warn("Network", "Invalid SSID: contains dangerous character")
                 return
             }
         }
         
-        QsServices.Logger.info("Network", `Connecting to: ${ssid} ${password.length > 0 ? "(with password)" : "(saved)"}`)
+        QsUtils.Logger.info("Network", `Connecting to: ${ssid} ${password.length > 0 ? "(with password)" : "(saved)"}`)
         
         if (password && password.length > 0) {
             // Connect to new network with password
@@ -130,19 +130,19 @@ Singleton {
 
         stdout: SplitParser {
             onRead: data => {
-                QsServices.Logger.debug("Network", `Connection output: ${data}`)
+                QsUtils.Logger.debug("Network", `Connection output: ${data}`)
                 getNetworks.running = true
             }
         }
         stderr: StdioCollector {
             onStreamFinished: {
                 if (text.trim().length > 0) {
-                    QsServices.Logger.warn("Network", `Connection error: ${text.trim()}`)
+                    QsUtils.Logger.warn("Network", `Connection error: ${text.trim()}`)
                 }
             }
         }
         onExited: (code, status) => {
-            QsServices.Logger.debug("Network", `Connection exited code=${code} status=${status}`)
+            QsUtils.Logger.debug("Network", `Connection exited code=${code} status=${status}`)
             getNetworks.running = true
         }
     }
@@ -180,7 +180,7 @@ Singleton {
                 }
                 if (changed) {
                     root._prevSavedNetworks = current.slice(0)
-                    QsServices.Logger.debug("Network", `Saved networks: ${root.savedNetworks.length}`)
+                    QsUtils.Logger.debug("Network", `Saved networks: ${root.savedNetworks.length}`)
                 }
             }
         }

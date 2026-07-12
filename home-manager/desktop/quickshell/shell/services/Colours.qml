@@ -4,7 +4,7 @@ import Quickshell
 import Quickshell.Io
 import QtQuick 6.10
 import "../config" as QsConfig
-import "." as QsServices
+import "../utils" as QsUtils
 
 Singleton {
     id: root
@@ -79,9 +79,9 @@ Singleton {
             set("inverseSurface"); set("inverseOnSurface"); set("inversePrimary");
             set("scrim"); set("shadow");
 
-            QsServices.Logger.debug("Colours", "matugen-colors.json loaded")
+            QsUtils.Logger.debug("Colours", "matugen-colors.json loaded")
         } catch (e) {
-            QsServices.Logger.error("Colours", "Failed to parse matugen-colors.json", e?.message ?? e)
+            QsUtils.Logger.error("Colours", "Failed to parse matugen-colors.json", e?.message ?? e)
         }
     }
 
@@ -96,6 +96,6 @@ Singleton {
         watchChanges: true
         onLoaded: root.loadColors(text())
         onFileChanged: root.loadColors(text())
-        onLoadFailed: err => QsServices.Logger.warn("Colours", `matugen-colors.json not loaded: ${FileViewError.toString(err)}`)
+        onLoadFailed: err => QsUtils.Logger.warn("Colours", `matugen-colors.json not loaded: ${FileViewError.toString(err)}`)
     }
 }

@@ -3,7 +3,7 @@ pragma Singleton
 import QtQuick 6.10
 import Quickshell
 import Quickshell.Services.Notifications
-import "." as QsServices
+import "../utils" as QsUtils
 
 Singleton {
     id: root
@@ -73,7 +73,7 @@ Singleton {
             root.notifications = root.notifications.filter(n => n && n.timestamp && n.timestamp.getTime() > oneDayAgo)
             const cleaned = oldCount - root.notifications.length
             if (cleaned > 0) {
-                QsServices.Logger.debug("Notifs", `Cleaned up ${cleaned} old notifications`)
+                QsUtils.Logger.debug("Notifs", `Cleaned up ${cleaned} old notifications`)
             }
         }
     }
@@ -82,25 +82,25 @@ Singleton {
     function addNotification(notif) {
         // Check DND mode
         if (dnd && notif.urgency !== NotificationUrgency.Critical) {
-            QsServices.Logger.debug("Notifs", `DND active - suppressing: ${notif.summary}`)
+            QsUtils.Logger.debug("Notifs", `DND active - suppressing: ${notif.summary}`)
             return;
         }
 
-        QsServices.Logger.debug("Notifs", `Adding notification: ${notif.summary}`)
+        QsUtils.Logger.debug("Notifs", `Adding notification: ${notif.summary}`)
 
         const notifWrapper = notifComponent.createObject(root, {
             notification: notif
         })
 
         if (!notifWrapper) {
-            QsServices.Logger.error("Notifs", "Failed to create notification wrapper")
+            QsUtils.Logger.error("Notifs", "Failed to create notification wrapper")
             return
         }
         
         // Cap maximum notifications to prevent memory leaks
         root.notifications = [notifWrapper, ...root.notifications].slice(0, root.maxNotifications)
-        QsServices.Logger.debug("Notifs", `Total notifications: ${root.notifications.length}`)
-        QsServices.Logger.debug("Notifs", `Queued: ${notifWrapper.appName ?? ""} ${notifWrapper.summary ?? ""}`)
+        QsUtils.Logger.debug("Notifs", `Total notifications: ${root.notifications.length}`)
+        QsUtils.Logger.debug("Notifs", `Queued: ${notifWrapper.appName ?? ""} ${notifWrapper.summary ?? ""}`)
     }
 
     function markAllRead() {
@@ -134,7 +134,7 @@ Singleton {
     // Toggle DND mode
     function toggleDnd() {
         dnd = !dnd;
-        QsServices.Logger.info("Notifs", `DND mode: ${dnd ? "enabled" : "disabled"}`)
+        QsUtils.Logger.info("Notifs", `DND mode: ${dnd ? "enabled" : "disabled"}`)
     }
     
     // Clear all notifications
@@ -147,13 +147,13 @@ Singleton {
                 n.notification.dismiss();
             n.destroy();
         });
-        QsServices.Logger.info("Notifs", "All notifications cleared")
+        QsUtils.Logger.info("Notifs", "All notifications cleared")
     }
     
     // Clear notifications from specific app
     function clearApp(appName) {
         notifications.filter(n => n.appName === appName).forEach(n => n.close());
-        QsServices.Logger.info("Notifs", `Cleared notifications from: ${appName}`)
+        QsUtils.Logger.info("Notifs", `Cleared notifications from: ${appName}`)
     }
 
     // Notification wrapper component
@@ -238,7 +238,7 @@ Singleton {
                 notification.dismiss();
             }
 
-            QsServices.Logger.debug("Notifs", `Notification closed (kept in history): ${summary}`)
+            QsUtils.Logger.debug("Notifs", `Notification closed (kept in history): ${summary}`)
         }
         
         function invokeAction(actionId) {
@@ -278,7 +278,7 @@ Singleton {
                 notif.notification.dismiss();
             }
             notif.destroy();
-            QsServices.Logger.debug("Notifs", "Notification permanently deleted")
+            QsUtils.Logger.debug("Notifs", "Notification permanently deleted")
         }
     }
 }

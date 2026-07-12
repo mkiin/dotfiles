@@ -3,7 +3,7 @@ pragma Singleton
 import Quickshell
 import Quickshell.Io
 import QtQuick
-import "../services" as QsServices
+import "../utils" as QsUtils
 
 Singleton {
     id: root
@@ -51,9 +51,9 @@ Singleton {
             try {
                 const parsed = JSON.parse(text())
                 root.data = parsed
-                QsServices.Logger.debug("Config", "shell.json loaded")
+                QsUtils.Logger.debug("Config", "shell.json loaded")
             } catch (e) {
-                QsServices.Logger.warn("Config", `Failed to parse shell.json: ${e?.message ?? e}`)
+                QsUtils.Logger.warn("Config", `Failed to parse shell.json: ${e?.message ?? e}`)
             }
         }
 
@@ -63,7 +63,7 @@ Singleton {
 
         onLoadFailed: err => {
             if (err !== FileViewError.FileNotFound)
-                QsServices.Logger.warn("Config", `Failed to read shell.json: ${FileViewError.toString(err)}`)
+                QsUtils.Logger.warn("Config", `Failed to read shell.json: ${FileViewError.toString(err)}`)
         }
     }
 

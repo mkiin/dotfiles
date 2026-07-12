@@ -3,7 +3,7 @@ pragma Singleton
 import Quickshell
 import Quickshell.Io
 import QtQuick
-import "." as QsServices
+import "../utils" as QsUtils
 
 Singleton {
     id: root
@@ -12,7 +12,7 @@ Singleton {
     property int inhibitorPid: -1
     
     onInhibitedChanged: {
-        QsServices.Logger.debug("IdleInhibitor", `Inhibited changed: ${inhibited}`)
+        QsUtils.Logger.debug("IdleInhibitor", `Inhibited changed: ${inhibited}`)
         if (inhibited) {
             enableInhibitor()
         } else {
@@ -21,12 +21,12 @@ Singleton {
     }
     
     function enableInhibitor() {
-        QsServices.Logger.info("IdleInhibitor", "Enabling")
+        QsUtils.Logger.info("IdleInhibitor", "Enabling")
         enableProcess.running = true
     }
     
     function disableInhibitor() {
-        QsServices.Logger.info("IdleInhibitor", "Disabling")
+        QsUtils.Logger.info("IdleInhibitor", "Disabling")
         disableProcess.running = true
     }
     
@@ -41,7 +41,7 @@ Singleton {
                 const pid = parseInt(data.trim())
                 if (!isNaN(pid) && pid > 0) {
                     root.inhibitorPid = pid
-                    QsServices.Logger.debug("IdleInhibitor", `Started PID=${pid}`)
+                    QsUtils.Logger.debug("IdleInhibitor", `Started PID=${pid}`)
                 }
             }
         }
@@ -57,11 +57,11 @@ Singleton {
         
         onExited: {
             root.inhibitorPid = -1
-            QsServices.Logger.debug("IdleInhibitor", "Stopped")
+            QsUtils.Logger.debug("IdleInhibitor", "Stopped")
         }
     }
     
     Component.onCompleted: {
-        QsServices.Logger.debug("IdleInhibitor", "Service loaded")
+        QsUtils.Logger.debug("IdleInhibitor", "Service loaded")
     }
 }

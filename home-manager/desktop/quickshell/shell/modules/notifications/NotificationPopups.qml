@@ -6,6 +6,7 @@ import Quickshell.Services.Notifications
 import Quickshell.Wayland
 import Quickshell.Hyprland
 import "../../services" as QsServices
+import "../../utils" as QsUtils
 import "../../config" as QsConfig
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -15,7 +16,7 @@ PanelWindow {
     id: root
 
     readonly property var notifs: QsServices.Notifs
-    readonly property var logger: QsServices.Logger
+    readonly property var logger: QsUtils.Logger
     readonly property var config: QsConfig.Config
 
     // ── Color Tokens (semantic, from Theme) ──

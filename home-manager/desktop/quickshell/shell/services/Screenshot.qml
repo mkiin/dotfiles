@@ -4,7 +4,7 @@ import QtQuick 6.10
 import Quickshell
 import Quickshell.Io
 import "../config" as QsConfig
-import "." as QsServices
+import "../utils" as QsUtils
 
 // Screenshot/Screen Recording Service
 Singleton {
@@ -71,11 +71,11 @@ Singleton {
                 const filename = `screenshot-${timestamp}.png`
                 const filepath = `${root.screenshotsDir}/${filename}`
 
-                QsServices.Logger.debug("Screenshot", `Capturing region: ${geometry}`)
+                QsUtils.Logger.debug("Screenshot", `Capturing region: ${geometry}`)
                 screenshotProc.exec(["grim", "-g", geometry, filepath])
                 root.lastScreenshotPath = filepath
             } else if (code !== 0) {
-                QsServices.Logger.error("Screenshot", `slurp failed with code: ${code}`)
+                QsUtils.Logger.error("Screenshot", `slurp failed with code: ${code}`)
             }
         }
     }
@@ -96,12 +96,12 @@ Singleton {
                 const parts = out.split(' ')
                 if (parts.length === 4) {
                     const geometry = `${parts[0]},${parts[1]} ${parts[2]}x${parts[3]}`
-                    QsServices.Logger.debug("Screenshot", `Capturing window: ${geometry}`)
+                    QsUtils.Logger.debug("Screenshot", `Capturing window: ${geometry}`)
                     screenshotProc.exec(["grim", "-g", geometry, filepath])
                     root.lastScreenshotPath = filepath
                 }
             } else if (code !== 0) {
-                QsServices.Logger.error("Screenshot", `window geometry failed with code: ${code}`)
+                QsUtils.Logger.error("Screenshot", `window geometry failed with code: ${code}`)
             }
         }
     }
@@ -110,7 +110,7 @@ Singleton {
         id: screenshotProc
         onExited: code => {
             if (code === 0) {
-                QsServices.Logger.info("Screenshot", `Saved: ${root.lastScreenshotPath}`)
+                QsUtils.Logger.info("Screenshot", `Saved: ${root.lastScreenshotPath}`)
                 
                 // Copy to clipboard using wl-copy with shell redirection
                 clipboardProc.exec(["sh", "-c", `wl-copy < "${root.lastScreenshotPath}"`])
@@ -122,7 +122,7 @@ Singleton {
                     `Saved and copied to clipboard`
                 ])
             } else {
-                QsServices.Logger.error("Screenshot", `Failed with code: ${code}`)
+                QsUtils.Logger.error("Screenshot", `Failed with code: ${code}`)
             }
         }
     }
@@ -139,7 +139,7 @@ Singleton {
         if (isRecording) return
 
         if (!recorderAvailable) {
-            QsServices.Logger.error("Screenshot", "wf-recorder not installed; recording unavailable")
+            QsUtils.Logger.error("Screenshot", "wf-recorder not installed; recording unavailable")
             notifyProc.exec([
                 "notify-send",
                 "-i", "dialog-error",
@@ -168,12 +168,12 @@ Singleton {
         // start never leaves the UI stuck in "Recording in progress".
         onStarted: {
             root.isRecording = true
-            QsServices.Logger.info("Screenshot", "Recording started")
+            QsUtils.Logger.info("Screenshot", "Recording started")
         }
         onExited: code => {
             root.isRecording = false
             if (code === 0) {
-                QsServices.Logger.info("Screenshot", `Recording saved: ${root.lastRecordingPath}`)
+                QsUtils.Logger.info("Screenshot", `Recording saved: ${root.lastRecordingPath}`)
                 notifyProc.exec([
                     "notify-send",
                     "-i", "video-x-generic",
@@ -224,7 +224,7 @@ Singleton {
         id: deleteProc
         onExited: code => {
             if (code === 0) {
-                QsServices.Logger.info("Screenshot", `Deleted: ${root.lastScreenshotPath}`)
+                QsUtils.Logger.info("Screenshot", `Deleted: ${root.lastScreenshotPath}`)
                 root.lastScreenshotPath = ""
             }
         }

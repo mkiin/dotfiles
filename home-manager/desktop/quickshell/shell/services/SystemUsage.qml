@@ -3,7 +3,7 @@ pragma Singleton
 import Quickshell
 import Quickshell.Io
 import QtQuick
-import "." as QsServices
+import "../utils" as QsUtils
 
 Singleton {
     id: root
@@ -210,7 +210,7 @@ Singleton {
                 const type = data.trim()
                 gpuType = type
                 hasGpu = type !== "none"
-                QsServices.Logger.debug("SystemUsage", `GPU detected: ${type}`)
+                QsUtils.Logger.debug("SystemUsage", `GPU detected: ${type}`)
                 if (hasGpu) {
                     updateGpu()
                 }
