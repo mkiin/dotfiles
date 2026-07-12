@@ -20,6 +20,7 @@ in
   programs.codex = {
     enable = true;
     package = pkgs.llm-agents.codex;
+    enableMcpIntegration = true;
 
     settings = {
       # full-auto 相当。承認は一切求めず、workspace 内の読み書き・コマンドは
