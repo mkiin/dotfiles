@@ -284,12 +284,15 @@ PanelWindow {
                                 Layout.columnSpan: 2
                                 icon: "󰹑"
                                 label: "Screenshot"
-                                subLabel: "Capture Screen"
+                                subLabel: "Region / Window / Output"
                                 active: false
                                 activeColor: QsConfig.Theme.secondary
                                 surfaceColor: QsConfig.Theme.card
                                 textColor: QsConfig.Theme.text
-                                onClicked: root.screenshot.takeScreenshot("screen")
+                                onClicked: {
+                                    root.shouldShow = false
+                                    root.screenshot.openMenu()
+                                }
                             }
 
                             QuickToggle {
