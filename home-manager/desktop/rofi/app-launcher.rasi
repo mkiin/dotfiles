@@ -2,10 +2,10 @@
 configuration {
     modi:                       "window,run,drun";
     show-icons:                 true;
-    icon-theme:                 "Colloid";
-    display-drun:               " ";
-    display-run:                " ";
-    display-window:             " ";
+    icon-theme:                 "Papirus-Dark";
+    display-drun:               "Applications";
+    display-run:                "Run";
+    display-window:             "Windows";
     drun-display-format:        "{name}";
     window-format:              "{w} · {c} · {t}";
 }
@@ -29,8 +29,6 @@ window {
     y-offset:                    0px;
 
     enabled:                     true;
-    border:                      2px solid;
-    border-color:                @secondary-container;
     border-radius:               15px;
     cursor:                      "default";
     background-color:            @on-primary-fixed;
