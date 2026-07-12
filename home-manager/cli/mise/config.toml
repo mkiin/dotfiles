@@ -10,10 +10,5 @@ node = "24"
 # --- インフラ・バックエンド ---
 supabase = "latest"
 
-# --- AI ---
-claude-code = "latest"
-"pipx:serena-agent" = "latest"
-"aqua:openai/codex" = "latest"
-
 [settings]
 node.compile = false
