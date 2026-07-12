@@ -314,6 +314,19 @@ claude-code = "latest"
 
 削除後の `# --- AI ---` コメントは配下エントリが無くなるため一緒に削除する。
 
+- [ ] **Step 1.5: mise の既存インストールをアンインストール（重要・config 削除だけでは残る）**
+
+`config.toml` から消しても mise は既にインストール済みの版と shim を保持し続ける。
+shim は PATH で nix profile を隠すため、明示的にアンインストールする:
+
+```bash
+mise uninstall claude-code
+mise uninstall "aqua:openai/codex"
+mise uninstall "pipx:serena-agent"
+```
+
+Expected: `mise ls` に AI 3件が出ない。`~/.local/share/mise/shims/` に `claude`/`codex` の shim が残らない。
+
 - [ ] **Step 2: ビルド検証**
 
 Run: `nix run .#build`
