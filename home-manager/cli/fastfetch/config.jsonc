@@ -13,7 +13,8 @@
       "keys": "blue"
     },
     "key": {
-      "type": "icon"
+      "type": "icon",
+      "width": 4
     }
   },
   "modules": [
