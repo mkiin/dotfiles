@@ -20,7 +20,7 @@
 ## 裏取り済みの確定値（`nix eval` / 一次情報で確認済み）
 
 - llm-agents.nix overlay 名: `default`（隔離 nixpkgs）/ `shared-nixpkgs`（共有）→ **`shared-nixpkgs` を使用**。
-- パッケージ attribute: `pkgs.claude-code`（実体 `claude-code-2.1.207`）/ `pkgs.codex`（実体 `codex-0.144.1`）。
+- パッケージ attribute: `shared-nixpkgs` overlay は top-level ではなく **`pkgs.llm-agents` 名前空間**に提供する。参照は **`pkgs.llm-agents.claude-code`**（実体 `claude-code-2.1.207`）/ **`pkgs.llm-agents.codex`**（実体 `codex-0.144.1`）。top-level `pkgs.claude-code` は nixpkgs の古い版を掴むため使わない。
 - numtide cache: substituter `https://cache.numtide.com` / 公開鍵 `niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g=`。
 - mcp-servers-nix HM モジュール: import 名 `inputs.mcp-servers-nix.homeManagerModules.default`。サーバ宣言 `mcp-servers.programs.<name>`。中央レジストリ有効化 `programs.mcp.enable = true;`。クライアント配線 `programs.<client>.enableMcpIntegration = true;`。
 - 現状 `home-manager/default.nix` は `inputs.agent-skills.homeManagerModules.default` を import 済み（同じ場所に mcp-servers-nix を追加する）。
@@ -34,12 +34,12 @@
 
 - Modify: `flake.nix`（inputs へ `llm-agents` 追加、`nixConfig` の substituter/key 追加）
 - Modify: `lib/default.nix:12-28`（`defaultOverlays` に overlay 追加）
-- Modify: `home-manager/ai/claude-code/default.nix`（module 引数に `pkgs`、`package = null;` → `package = pkgs.claude-code;`）
-- Modify: `home-manager/ai/codex/default.nix`（`package = null;` → `package = pkgs.codex;`。`pkgs` は既存引数に無いので追加）
+- Modify: `home-manager/ai/claude-code/default.nix`（module 引数に `pkgs`、`package = null;` → `package = pkgs.llm-agents.claude-code;`）
+- Modify: `home-manager/ai/codex/default.nix`（`package = null;` → `package = pkgs.llm-agents.codex;`。`pkgs` は既存引数に無いので追加）
 
 **Interfaces:**
 
-- Produces: overlay 経由で `pkgs.claude-code` / `pkgs.codex` が全 `pkgs` に露出。Task 2 の serena 配線とは独立。
+- Produces: overlay 経由で `pkgs.llm-agents.claude-code` / `pkgs.llm-agents.codex` が全 `pkgs` に露出。Task 2 の serena 配線とは独立。
 
 - [ ] **Step 1: flake input を追加**
 
@@ -107,7 +107,7 @@
 {
   programs.claude-code = {
     enable = true;
-    package = pkgs.claude-code;
+    package = pkgs.llm-agents.claude-code;
 ```
 
 （`settings` 以下は変更しない。）
@@ -131,7 +131,7 @@
 
 ```nix
     enable = true;
-    package = pkgs.codex;
+    package = pkgs.llm-agents.codex;
 ```
 
 - [ ] **Step 6: lock 更新とビルド検証**
@@ -154,7 +154,7 @@ nix eval --raw .#nixosConfigurations.nixos.config.home-manager.users.mkiin.progr
 nix eval --raw .#nixosConfigurations.nixos.config.home-manager.users.mkiin.programs.codex.package.name
 ```
 
-Expected: それぞれ `claude-code-2.1.x` / `codex-0.14x.x` を出力。
+Expected: **llm-agents 由来の版**（`claude-code-2.1.207` 以上 / `codex-0.144.1` 以上）を出力すること。nixpkgs の古い版（`claude-code-2.1.204` / `codex-0.142.5`）が出たら overlay 参照ミス（top-level `pkgs.claude-code` を掴んでいる）。必ず `pkgs.llm-agents.claude-code` / `pkgs.llm-agents.codex` を参照する。
 
 - [ ] **Step 8: フォーマット**
 
@@ -244,7 +244,7 @@ Create `home-manager/ai/serena/default.nix`:
 ```nix
   programs.claude-code = {
     enable = true;
-    package = pkgs.claude-code;
+    package = pkgs.llm-agents.claude-code;
     enableMcpIntegration = true;
 ```
 
@@ -255,7 +255,7 @@ Create `home-manager/ai/serena/default.nix`:
 ```nix
   programs.codex = {
     enable = true;
-    package = pkgs.codex;
+    package = pkgs.llm-agents.codex;
     enableMcpIntegration = true;
 ```
 

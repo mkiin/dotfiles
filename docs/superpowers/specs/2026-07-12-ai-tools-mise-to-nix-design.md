@@ -53,9 +53,11 @@
   `inputs.llm-agents.overlays.shared-nixpkgs` を追加（ピン留め nixpkgs を共有し
   二重 eval を避ける。overlay 名は実装時に確認）。
 - **`home-manager/ai/claude-code/default.nix`**: `package = null;` →
-  `package = pkgs.claude-code;`（`pkgs` を module 引数に追加）。
+  `package = pkgs.llm-agents.claude-code;`（`pkgs` を module 引数に追加）。
 - **`home-manager/ai/codex/default.nix`**: `package = null;` →
-  `package = pkgs.codex;`（同上）。
+  `package = pkgs.llm-agents.codex;`（同上）。
+  ※ `shared-nixpkgs` overlay は top-level ではなく `pkgs.llm-agents.*` 名前空間に
+  提供する。top-level `pkgs.claude-code` は nixpkgs の古い版を掴むので使わない。
 
 ### 2. serena を mcp-servers-nix の home-manager モジュールで宣言
 
