@@ -12,6 +12,8 @@ in
     # desktop utilities (waybar=programs.waybar, cliphist/hypridle=services)
     wlogout
     rofi
+    # rofi ランチャー専用アイコンテーマ(icon-theme: "Colloid")。GTK 全体は Papirus 据置。
+    colloid-icon-theme
     socat
     resvg
     mpv

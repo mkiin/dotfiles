@@ -1,13 +1,13 @@
 /*****----- Configuration -----*****/
 configuration {
-	modi:                       "drun,filebrowser,window";
+    modi:                       "window,run,drun";
     show-icons:                 true;
-    display-drun:               " ";
-    display-run:                " ";
-    display-filebrowser:        " ";
-    display-window:             " ";
-	drun-display-format:        "{name}";
-	window-format:              "{w} · {c} · {t}";
+    icon-theme:                 "Colloid";
+    display-drun:               " ";
+    display-run:                " ";
+    display-window:             " ";
+    drun-display-format:        "{name}";
+    window-format:              "{w} · {c} · {t}";
 }
 
 /*****----- Global Properties -----*****/
@@ -15,27 +15,25 @@ configuration {
 
 * {
     font:                        "JetBrains Mono Nerd Font 11";
+    highlight:                   underline;
 }
 
 /*****----- Main Window -----*****/
 window {
-    /* properties for window widget */
     transparency:                "real";
     location:                    center;
     anchor:                      center;
     fullscreen:                  false;
-    width:                       600px;
-    /* filebrowser はモード固有の枠を確保して背が伸びる(message では消せない)。
-       drun/window が自然に取る高さに固定し全モードで不変にする。 */
-    height:                      516px;
+    width:                       1000px;
     x-offset:                    0px;
     y-offset:                    0px;
 
-    /* properties for all widgets */
     enabled:                     true;
-    border-radius:               20px;
+    border:                      2px solid;
+    border-color:                @secondary-container;
+    border-radius:               15px;
     cursor:                      "default";
-    background-color:            @background;
+    background-color:            @on-primary-fixed;
 }
 
 /*****----- Main Box -----*****/
@@ -43,90 +41,91 @@ mainbox {
     enabled:                     true;
     spacing:                     0px;
     background-color:            transparent;
+    orientation:                 horizontal;
+    children:                    [ "imagebox", "listbox" ];
+}
+
+imagebox {
+    padding:                     20px;
+    background-color:            transparent;
+    /* 壁紙は launch.sh が -theme-str で background-image を注入する */
     orientation:                 vertical;
-    children:                    [ "inputbar", "listbox" ];
+    children:                    [ "inputbar", "dummy", "mode-switcher" ];
 }
 
 listbox {
-    spacing:                     10px;
-    padding:                     10px 10px 10px 15px;
+    spacing:                     20px;
+    padding:                     20px;
     background-color:            transparent;
     orientation:                 vertical;
     children:                    [ "message", "listview" ];
+}
+
+dummy {
+    background-color:            transparent;
 }
 
 /*****----- Inputbar -----*****/
 inputbar {
     enabled:                     true;
     spacing:                     10px;
-    padding:                     50px 40px 50px 30px;
-    background-color:            transparent;
-    text-color:                  @foreground;
-    orientation:                 horizontal;
-    children:                    [ "textbox-prompt-colon", "entry", "dummy", "mode-switcher" ];
+    padding:                     15px;
+    border-radius:               10px;
+    background-color:            @on-primary;
+    text-color:                  @on-surface;
+    children:                    [ "textbox-prompt-colon", "entry" ];
 }
 textbox-prompt-colon {
     enabled:                     true;
     expand:                      false;
-    str:                         "";
-    padding:                     12px 22px 12px 16px;
-    border-radius:               100%;
-    background-color:            @background-alt;
+    str:                         "  ";
+    background-color:            inherit;
     text-color:                  inherit;
 }
 entry {
     enabled:                     true;
-    expand:                      false;
-    width:                       300px;
-    padding:                     12px 15px;
-    border-radius:               100%;
-    background-color:            @background-alt;
+    background-color:            inherit;
     text-color:                  inherit;
     cursor:                      text;
     placeholder:                 "Search";
     placeholder-color:           inherit;
 }
-dummy {
-    expand:                      true;
-    background-color:            transparent;
-}
 
 /*****----- Mode Switcher -----*****/
 mode-switcher{
     enabled:                     true;
-    spacing:                     10px;
+    spacing:                     20px;
     background-color:            transparent;
-    text-color:                  @foreground;
+    text-color:                  @primary-fixed;
 }
 button {
-    width:                       48px;
-    padding:                     8px 5px 8px 8px;
-    border-radius:               100%;
-    background-color:            @background-alt;
+    padding:                     15px;
+    border-radius:               10px;
+    background-color:            @on-primary;
     text-color:                  inherit;
     cursor:                      pointer;
 }
 button selected {
-    background-color:            @selected;
-    text-color:                  @foreground;
+    background-color:            @primary;
+    text-color:                  @on-secondary;
 }
 
 /*****----- Listview -----*****/
 listview {
     enabled:                     true;
     columns:                     1;
-    lines:                       7;
+    lines:                       8;
     cycle:                       true;
-    dynamic:                     false;
+    dynamic:                     true;
     scrollbar:                   false;
     layout:                      vertical;
     reverse:                     false;
     fixed-height:                true;
     fixed-columns:               true;
-    
-    spacing:                     5px;
+
+    spacing:                     10px;
     background-color:            transparent;
-    text-color:                  @foreground;
+    text-color:                  @on-surface;
     cursor:                      "default";
 }
 
@@ -134,10 +133,10 @@ listview {
 element {
     enabled:                     true;
     spacing:                     15px;
-    padding:                     7px;
-    border-radius:               100%;
+    padding:                     8px;
+    border-radius:               10px;
     background-color:            transparent;
-    text-color:                  @foreground;
+    text-color:                  @on-surface;
     cursor:                      pointer;
 }
 element normal.normal {
@@ -145,24 +144,24 @@ element normal.normal {
     text-color:                  inherit;
 }
 element normal.urgent {
-    background-color:            @urgent;
-    text-color:                  @foreground;
+    background-color:            @error;
+    text-color:                  @on-surface;
 }
 element normal.active {
-    background-color:            @background;
-    text-color:                  @active;
+    background-color:            @primary;
+    text-color:                  @on-surface;
 }
 element selected.normal {
-    background-color:            @selected;
-    text-color:                  @foreground;
+    background-color:            @primary;
+    text-color:                  @on-secondary;
 }
 element selected.urgent {
-    background-color:            @urgent;
-    text-color:                  @foreground;
+    background-color:            @error;
+    text-color:                  @on-secondary;
 }
 element selected.active {
-    background-color:            @urgent;
-    text-color:                  @active;
+    background-color:            @error;
+    text-color:                  @on-secondary;
 }
 element-icon {
     background-color:            transparent;
@@ -183,17 +182,16 @@ message {
     background-color:            transparent;
 }
 textbox {
-    padding:                     12px;
-    border-radius:               100%;
-    background-color:            @background-alt;
-    text-color:                  @foreground;
+    padding:                     15px;
+    border-radius:               10px;
+    background-color:            @on-primary;
+    text-color:                  @on-surface;
     vertical-align:              0.5;
     horizontal-align:            0.0;
 }
 error-message {
-    padding:                     12px;
+    padding:                     15px;
     border-radius:               20px;
-    background-color:            @background;
-    text-color:                  @foreground;
+    background-color:            @on-primary;
+    text-color:                  @on-surface;
 }
-
