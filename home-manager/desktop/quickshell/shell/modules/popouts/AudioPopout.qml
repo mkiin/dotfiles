@@ -103,9 +103,7 @@ PanelWindow {
         }
     }
 
-    // waybar の audio モジュール基準の固定配置（audio は右側なので右上固定）
-    property real barBottom: 40
-    property real popupRightMargin: 8  // 8 = waybar 右端と一致
+    // バー直下・右上固定。配置値は Appearance.panel（CC / popouts 共通）
 
     // クリックしたモニター（フォーカス中の出力）に追従
     screen: [...Quickshell.screens].find(s => s.name === Hyprland.focusedMonitor?.name) ?? Quickshell.screens[0]
@@ -118,7 +116,7 @@ PanelWindow {
         bottom: true
     }
     margins {
-        top: barBottom
+        top: QsConfig.Appearance.panel.barOffset
     }
     exclusionMode: ExclusionMode.Ignore
     color: "transparent"
@@ -144,7 +142,7 @@ PanelWindow {
             anchors.top: parent.top
             anchors.right: parent.right
             anchors.topMargin: QsConfig.Appearance.margin.s
-            anchors.rightMargin: popupWindow.popupRightMargin
+            anchors.rightMargin: QsConfig.Appearance.panel.edgeGap
             implicitWidth: popupWindow.popoutWidth
             implicitHeight: contentColumn.implicitHeight + popupWindow.cardPadding * 2
             width: implicitWidth

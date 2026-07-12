@@ -76,6 +76,12 @@ Singleton {
         }
     }
 
+    // バー直下に出るフローティングパネル（CC / popouts）共通の画面配置
+    readonly property var panel: QtObject {
+        property int barOffset: 40 // waybar 下端（モニタ上端から px）
+        property int edgeGap: 8 // 画面端との隙間。waybar の外周ギャップと揃える
+    }
+
     readonly property var alpha: QtObject {
         property real hover: 0.06
         property real border: 0.08

@@ -40,9 +40,7 @@ PanelWindow {
         onStarted: popupWindow.shouldShow = false
     }
 
-    // waybar の Bluetooth モジュール基準の固定配置（クリック位置に依らず一定）
-    property real barBottom: 40       // waybar 下端（モニタ上端から px）。window をこの下に置きバーと被らせない
-    property real popupLeftMargin: 8  // 左上角寄せ。8 = waybar 左端と一致（シャドウ切れ防止の最小余白）
+    // バー直下・右上固定（audio と同位置）。配置値は Appearance.panel（CC / popouts 共通）
 
     // クリックしたモニター（フォーカス中の出力）に追従
     screen: [...Quickshell.screens].find(s => s.name === Hyprland.focusedMonitor?.name) ?? Quickshell.screens[0]
@@ -55,7 +53,7 @@ PanelWindow {
         bottom: true
     }
     margins {
-        top: barBottom
+        top: QsConfig.Appearance.panel.barOffset
     }
     exclusionMode: ExclusionMode.Ignore
     color: "transparent"
@@ -80,9 +78,9 @@ PanelWindow {
         Item {
             id: card
             anchors.top: parent.top
-            anchors.left: parent.left
+            anchors.right: parent.right
             anchors.topMargin: QsConfig.Appearance.margin.s
-            anchors.leftMargin: popupWindow.popupLeftMargin
+            anchors.rightMargin: QsConfig.Appearance.panel.edgeGap
             implicitWidth: popupWindow.popoutWidth
             implicitHeight: contentColumn.implicitHeight + popupWindow.cardPadding * 2
             width: implicitWidth
@@ -90,7 +88,7 @@ PanelWindow {
 
             scale: 0.94
             opacity: 0
-            transformOrigin: Item.TopLeft
+            transformOrigin: Item.TopRight
 
             // カード上のクリックはバックドロップへ伝播させない
             MouseArea { anchors.fill: parent }

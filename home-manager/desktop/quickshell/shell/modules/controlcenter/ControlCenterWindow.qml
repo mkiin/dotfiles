@@ -53,10 +53,6 @@ PanelWindow {
         onStarted: root.shouldShow = false
     }
     
-    // Solid UI Color Tokens - Professional dark theme
-    
-    property real barBottom: 40
-
     // クリックしたモニター（フォーカス中の出力）に追従
     screen: [...Quickshell.screens].find(s => s.name === Hyprland.focusedMonitor?.name) ?? Quickshell.screens[0]
 
@@ -68,7 +64,7 @@ PanelWindow {
         bottom: true
     }
     margins {
-        top: barBottom
+        top: QsConfig.Appearance.panel.barOffset
     }
     exclusionMode: ExclusionMode.Ignore
     color: "transparent"
@@ -128,7 +124,7 @@ PanelWindow {
             anchors.top: parent.top
             anchors.right: parent.right
             anchors.topMargin: QsConfig.Appearance.margin.s
-            anchors.rightMargin: QsConfig.Appearance.margin.m
+            anchors.rightMargin: QsConfig.Appearance.panel.edgeGap
             width: 420
             height: Math.min(innerCol.implicitHeight + 40, root.screen.height - 56)
             color: QsConfig.Theme.panel
