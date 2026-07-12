@@ -256,7 +256,10 @@ PanelWindow {
                     // Device List
                     Rectangle {
                         Layout.fillWidth: true
-                        Layout.preferredHeight: Math.min(deviceList.contentHeight + 8, popupWindow.listMaxHeight)
+                        // 0 件時は contentHeight が 0 になり empty-state が clip されるため最小高さを確保
+                        Layout.preferredHeight: popupWindow.devices.length === 0
+                            ? popupWindow.rowHeight * 2
+                            : Math.min(deviceList.contentHeight + 8, popupWindow.listMaxHeight)
                         radius: QsConfig.Appearance.radius.s
                         color: QsConfig.Theme.card
                         clip: true
@@ -473,7 +476,8 @@ PanelWindow {
 
                             Text {
                                 Layout.alignment: Qt.AlignHCenter
-                                text: adapter?.enabled ? "No devices found" : "Bluetooth disabled"
+                                text: !adapter?.enabled ? "Bluetooth disabled"
+                                    : (adapter?.discovering ? "Scanning..." : "No devices found")
                                 font.family: QsConfig.Appearance.typography.family
                                 font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
                                 color: QsConfig.Theme.textMuted
