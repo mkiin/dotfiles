@@ -9,8 +9,8 @@ configuration {
 }
 
 * {
-    background-color: @background;
-    text-color:       @foreground;
+    background-color: @surface;
+    text-color:       @on-surface;
 }
 
 window {
@@ -21,7 +21,7 @@ window {
     width:            100px;
     x-offset:         -15px;
     y-offset:         0px;
-    background-color: @background;
+    background-color: @surface;
 }
 
 listview {
@@ -42,7 +42,7 @@ mainbox {
 }
 
 element {
-    text-color:       @foreground;
+    text-color:       @on-surface;
     orientation:      vertical;
     border-radius:    8px;
     background-color: transparent;
@@ -59,8 +59,8 @@ element-text {
 }
 
 element selected {
-    text-color:   @active;
+    text-color:   @primary;
     border-radius: 8px;
     border:       1px;
-    border-color: @active;
+    border-color: @primary;
 }
