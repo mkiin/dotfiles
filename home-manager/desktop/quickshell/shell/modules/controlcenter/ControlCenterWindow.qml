@@ -107,19 +107,19 @@ PanelWindow {
         }
         
         Behavior on scale {
-            NumberAnimation { duration: 260; easing.bezierCurve: [0.22, 1.0, 0.36, 1.0] }
+            NumberAnimation { duration: QsConfig.Appearance.anim.durations.medium; easing.bezierCurve: [0.22, 1.0, 0.36, 1.0] }
         }
 
         Behavior on opacity {
-            NumberAnimation { duration: 180; easing.bezierCurve: Material3Anim.standard }
+            NumberAnimation { duration: QsConfig.Appearance.anim.durations.normal; easing.bezierCurve: Material3Anim.standard }
         }
 
         Behavior on revealOffsetX {
-            NumberAnimation { duration: 260; easing.bezierCurve: Material3Anim.emphasizedDecelerate }
+            NumberAnimation { duration: QsConfig.Appearance.anim.durations.medium; easing.bezierCurve: Material3Anim.emphasizedDecelerate }
         }
 
         Behavior on revealOffsetY {
-            NumberAnimation { duration: 260; easing.bezierCurve: Material3Anim.emphasizedDecelerate }
+            NumberAnimation { duration: QsConfig.Appearance.anim.durations.medium; easing.bezierCurve: Material3Anim.emphasizedDecelerate }
         }
         
         // Main Panel Background
@@ -127,12 +127,12 @@ PanelWindow {
             id: panel
             anchors.top: parent.top
             anchors.right: parent.right
-            anchors.topMargin: 8
-            anchors.rightMargin: 12
+            anchors.topMargin: QsConfig.Appearance.margin.s
+            anchors.rightMargin: QsConfig.Appearance.margin.m
             width: 420
             height: Math.min(innerCol.implicitHeight + 40, root.screen.height - 56)
             color: QsConfig.Theme.panel
-            radius: 24
+            radius: QsConfig.Appearance.radius.l
             strokeColor: QsConfig.Theme.border
             clip: true
             accentColor: QsConfig.Theme.accent
@@ -156,32 +156,32 @@ PanelWindow {
             ColumnLayout {
                 id: innerCol
                 anchors.fill: parent
-                anchors.margins: 20
-                spacing: 16
+                anchors.margins: QsConfig.Appearance.margin.l
+                spacing: QsConfig.Appearance.spacing.l
                 
                 // Header Section
                 RowLayout {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 56
-                    spacing: 12
+                    spacing: QsConfig.Appearance.spacing.m
                     
                     // Time & Date
                     ColumnLayout {
-                        spacing: 2
+                        spacing: QsConfig.Appearance.spacing.xs
                         
                         Text {
                             id: timeText
                             text: Qt.formatTime(new Date(), "hh:mm")
-                            font.family: "Inter"
-                            font.pixelSize: 32
+                            font.family: QsConfig.Appearance.typography.family
+                            font.pixelSize: QsConfig.Appearance.typography.headlineLarge.size
                             font.weight: Font.Bold
                             color: QsConfig.Theme.text
                         }
                         
                         Text {
                             text: Qt.formatDate(new Date(), "dddd, MMMM d")
-                            font.family: "Inter"
-                            font.pixelSize: 13
+                            font.family: QsConfig.Appearance.typography.family
+                            font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
                             font.weight: Font.Medium
                             color: QsConfig.Theme.textMuted
                         }
@@ -198,8 +198,8 @@ PanelWindow {
                     
                     // Header Actions
                     RowLayout {
-                        spacing: 6
-                        
+                        spacing: QsConfig.Appearance.spacing.s
+
                         HeaderButton {
                             icon: "󰒓"
                             tooltip: "Settings"
@@ -222,14 +222,14 @@ PanelWindow {
                 ColumnLayout {
                     id: upperCol
                     Layout.fillWidth: true
-                    spacing: 14
+                    spacing: QsConfig.Appearance.spacing.l
 
                         // Quick Toggles
                         GridLayout {
                             Layout.fillWidth: true
                             columns: 2
-                            columnSpacing: 10
-                            rowSpacing: 10
+                            columnSpacing: QsConfig.Appearance.spacing.m
+                            rowSpacing: QsConfig.Appearance.spacing.m
                             
                             QuickToggle {
                                 Layout.fillWidth: true
@@ -336,7 +336,7 @@ PanelWindow {
                         // Sliders Section
                         ColumnLayout {
                             Layout.fillWidth: true
-                            spacing: 10
+                            spacing: QsConfig.Appearance.spacing.m
                             
                             VolumeSlider {
                                 Layout.fillWidth: true
@@ -347,9 +347,9 @@ PanelWindow {
                             ColumnLayout {
                                 id: mixerSection
                                 Layout.fillWidth: true
-                                Layout.leftMargin: 4
-                                Layout.rightMargin: 4
-                                spacing: 8
+                                Layout.leftMargin: QsConfig.Appearance.spacing.xs
+                                Layout.rightMargin: QsConfig.Appearance.spacing.xs
+                                spacing: QsConfig.Appearance.spacing.s
 
                                 property bool expanded: false
 
@@ -359,28 +359,28 @@ PanelWindow {
 
                                     RowLayout {
                                         anchors.fill: parent
-                                        spacing: 6
+                                        spacing: QsConfig.Appearance.spacing.s
 
                                         Text {
                                             text: "󰕾"
-                                            font.family: "Material Design Icons"
-                                            font.pixelSize: 14
+                                            font.family: QsConfig.Appearance.typography.iconFamily
+                                            font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
                                             color: QsConfig.Theme.textMuted
                                         }
 
                                         Text {
                                             Layout.fillWidth: true
                                             text: "アプリ音量"
-                                            font.family: "Inter"
-                                            font.pixelSize: 12
+                                            font.family: QsConfig.Appearance.typography.family
+                                            font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
                                             font.weight: Font.DemiBold
                                             color: QsConfig.Theme.textMuted
                                         }
 
                                         Text {
                                             text: mixerSection.expanded ? "󰅀" : "󰅂"
-                                            font.family: "Material Design Icons"
-                                            font.pixelSize: 16
+                                            font.family: QsConfig.Appearance.typography.iconFamily
+                                            font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
                                             color: QsConfig.Theme.textMuted
                                         }
                                     }
@@ -461,7 +461,7 @@ PanelWindow {
         
         width: 40
         height: 40
-        radius: 20
+        radius: height / 2
         color: headerBtnMouse.containsMouse 
             ? Qt.rgba(QsConfig.Theme.text.r, QsConfig.Theme.text.g, QsConfig.Theme.text.b, 0.1) 
             : QsConfig.Theme.card
@@ -485,8 +485,8 @@ PanelWindow {
         Text {
             anchors.centerIn: parent
             text: headerBtn.icon
-            font.family: "Material Design Icons"
-            font.pixelSize: 18
+            font.family: QsConfig.Appearance.typography.iconFamily
+            font.pixelSize: QsConfig.Appearance.typography.titleMedium.size
             color: QsConfig.Theme.text
         }
         
@@ -506,14 +506,14 @@ PanelWindow {
 
             contentItem: Text {
                 text: headerBtnTip.text
-                font.family: "Inter"
-                font.pixelSize: 12
+                font.family: QsConfig.Appearance.typography.family
+                font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
                 font.weight: Font.Medium
                 color: QsConfig.Theme.text
             }
 
             background: Rectangle {
-                radius: 8
+                radius: QsConfig.Appearance.radius.s
                 color: QsConfig.Theme.card
                 border.width: 1
                 border.color: QsConfig.Theme.border

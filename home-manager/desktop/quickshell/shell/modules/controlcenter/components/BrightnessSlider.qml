@@ -9,7 +9,8 @@ Rectangle {
     id: root
     
     required property var brightness
-    
+    readonly property int rowSpacing: 0
+
     // Current brightness value
     readonly property int currentBrightness: brightness ? Math.round((brightness.percentage ?? 0)) : 0
     
@@ -21,7 +22,7 @@ Rectangle {
     Layout.fillWidth: true
     Layout.preferredHeight: 54
     
-    radius: 22
+    radius: QsConfig.Appearance.radius.l
     color: surfaceColor
     border.width: 1
     border.color: QsConfig.Theme.border
@@ -35,14 +36,14 @@ Rectangle {
 
     RowLayout {
         anchors.fill: parent
-        spacing: 0
+        spacing: root.rowSpacing
         
         // Icon
         Rectangle {
             id: iconBtn
             Layout.preferredWidth: 52
             Layout.fillHeight: true
-            radius: 20
+            radius: QsConfig.Appearance.radius.l
             color: iconMouse.containsMouse 
                 ? Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.1) 
                 : "transparent"
@@ -57,8 +58,8 @@ Rectangle {
             Text {
                 anchors.centerIn: parent
                 text: root.currentBrightness > 70 ? "󰃠" : (root.currentBrightness > 30 ? "󰃟" : "󰃞")
-                font.family: "Material Design Icons"
-                font.pixelSize: 20
+                font.family: QsConfig.Appearance.typography.iconFamily
+                font.pixelSize: QsConfig.Appearance.typography.titleLarge.size
                 color: root.accentColor
             }
             
@@ -74,8 +75,8 @@ Rectangle {
             id: slider
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.rightMargin: 12
-            
+            Layout.rightMargin: QsConfig.Appearance.margin.m
+
             from: 0
             to: 100
             value: root.currentBrightness
@@ -90,14 +91,14 @@ Rectangle {
                 implicitHeight: 30
                 width: slider.availableWidth
                 height: implicitHeight
-                radius: 15
+                radius: height / 2
                 color: Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.08)
 
                 // Progress fill
                 Rectangle {
                     width: slider.position * parent.width
                     height: parent.height
-                    radius: 15
+                    radius: height / 2
                     color: root.accentColor
                     opacity: 0.34
 
@@ -112,7 +113,7 @@ Rectangle {
                 Rectangle {
                     width: 10
                     height: 10
-                    radius: 5
+                    radius: height / 2
                     x: Math.max(0, Math.min(parent.width - width, slider.position * parent.width - width / 2))
                     y: (parent.height - height) / 2
                     color: root.accentColor
@@ -128,11 +129,11 @@ Rectangle {
 
         // Percentage Text
         Text {
-            Layout.rightMargin: 16
+            Layout.rightMargin: QsConfig.Appearance.margin.m
             Layout.preferredWidth: 44
             text: Math.round(slider.value) + "%"
-            font.family: "Inter"
-            font.pixelSize: 13
+            font.family: QsConfig.Appearance.typography.family
+            font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
             font.weight: Font.DemiBold
             color: root.textColor
             horizontalAlignment: Text.AlignRight

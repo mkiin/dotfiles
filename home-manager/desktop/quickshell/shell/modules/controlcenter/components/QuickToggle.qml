@@ -3,6 +3,7 @@ import QtQuick.Layouts 6.10
 import QtQuick.Controls 6.10
 import Quickshell
 import "../../../components/effects"
+import "../../../config" as QsConfig
 
 Rectangle {
     id: root
@@ -23,7 +24,7 @@ Rectangle {
     Layout.fillWidth: true
     Layout.preferredHeight: 72
 
-    radius: 24
+    radius: QsConfig.Appearance.radius.l
     clip: true
 
     color: active ? activeColor : surfaceColor
@@ -83,15 +84,15 @@ Rectangle {
     
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: 20
-        anchors.rightMargin: 20
-        spacing: 14
+        anchors.leftMargin: QsConfig.Appearance.margin.l
+        anchors.rightMargin: QsConfig.Appearance.margin.l
+        spacing: QsConfig.Appearance.spacing.l
         
         // Icon Circle
         Rectangle {
             Layout.preferredWidth: 40
             Layout.preferredHeight: 40
-            radius: 20
+            radius: height / 2
             color: active
                 ? Qt.rgba(root.onActiveColor.r, root.onActiveColor.g, root.onActiveColor.b, 0.16)
                 : Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.10)
@@ -106,8 +107,8 @@ Rectangle {
             Text {
                 anchors.centerIn: parent
                 text: root.icon
-                font.family: "Material Design Icons"
-                font.pixelSize: 22
+                font.family: QsConfig.Appearance.typography.iconFamily
+                font.pixelSize: QsConfig.Appearance.typography.titleLarge.size
                 color: root.active ? root.onActiveColor : root.textColor
                 
                 Behavior on color {
@@ -121,12 +122,12 @@ Rectangle {
         
         ColumnLayout {
             Layout.fillWidth: true
-            spacing: 2
+            spacing: QsConfig.Appearance.spacing.xs
             
             Text {
                 text: root.label
-                font.family: "Inter"
-                font.pixelSize: 14
+                font.family: QsConfig.Appearance.typography.family
+                font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
                 font.weight: Font.DemiBold
                 color: root.active ? root.onActiveColor : root.textColor
                 elide: Text.ElideRight
@@ -142,8 +143,8 @@ Rectangle {
             
             Text {
                 text: root.subLabel
-                font.family: "Inter"
-                font.pixelSize: 12
+                font.family: QsConfig.Appearance.typography.family
+                font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
                 color: active
                     ? Qt.rgba(root.onActiveColor.r, root.onActiveColor.g, root.onActiveColor.b, 0.78)
                     : Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.6)

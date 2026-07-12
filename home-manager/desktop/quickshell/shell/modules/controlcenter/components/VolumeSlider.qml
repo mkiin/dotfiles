@@ -9,7 +9,8 @@ Rectangle {
     id: root
     
     required property var audio
-    
+    readonly property int rowSpacing: 0
+
     // Current volume value - use PipeWire audio service
     readonly property int currentVolume: audio.percentage
     readonly property bool isMuted: audio.muted
@@ -22,7 +23,7 @@ Rectangle {
     Layout.fillWidth: true
     Layout.preferredHeight: 54
     
-    radius: 22
+    radius: QsConfig.Appearance.radius.l
     color: surfaceColor
     border.width: 1
     border.color: QsConfig.Theme.border
@@ -36,14 +37,14 @@ Rectangle {
 
     RowLayout {
         anchors.fill: parent
-        spacing: 0
+        spacing: root.rowSpacing
         
         // Mute Button
         Rectangle {
             id: muteBtn
             Layout.preferredWidth: 52
             Layout.fillHeight: true
-            radius: 20
+            radius: QsConfig.Appearance.radius.l
             color: muteMouse.containsMouse 
                 ? Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.1) 
                 : "transparent"
@@ -58,8 +59,8 @@ Rectangle {
             Text {
                 anchors.centerIn: parent
                 text: root.isMuted ? "󰝟" : (root.currentVolume > 66 ? "󰕾" : (root.currentVolume > 33 ? "󰖀" : "󰕿"))
-                font.family: "Material Design Icons"
-                font.pixelSize: 20
+                font.family: QsConfig.Appearance.typography.iconFamily
+                font.pixelSize: QsConfig.Appearance.typography.titleLarge.size
                 color: root.isMuted ? Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.5) : root.accentColor
                 
                 Behavior on color {
@@ -84,7 +85,7 @@ Rectangle {
             id: slider
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.rightMargin: 12
+            Layout.rightMargin: QsConfig.Appearance.margin.m
 
             value: root.currentVolume
             surfaceColor: root.surfaceColor
@@ -95,11 +96,11 @@ Rectangle {
 
         // Percentage Text
         Text {
-            Layout.rightMargin: 16
+            Layout.rightMargin: QsConfig.Appearance.margin.m
             Layout.preferredWidth: 44
             text: Math.round(slider.value) + "%"
-            font.family: "Inter"
-            font.pixelSize: 13
+            font.family: QsConfig.Appearance.typography.family
+            font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
             font.weight: Font.DemiBold
             color: root.textColor
             horizontalAlignment: Text.AlignRight

@@ -32,13 +32,13 @@ Slider {
         implicitHeight: 30
         width: control.availableWidth
         height: implicitHeight
-        radius: 15
+        radius: height / 2
         color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.08)
 
         Rectangle {
             width: control.position * parent.width
             height: parent.height
-            radius: 15
+            radius: height / 2
             color: QsConfig.Theme.accent
 
             Behavior on width {
@@ -52,7 +52,7 @@ Slider {
         Rectangle {
             width: 10
             height: 10
-            radius: 5
+            radius: height / 2
             x: Math.max(0, Math.min(parent.width - width, control.position * parent.width - width / 2))
             y: (parent.height - height) / 2
             color: QsConfig.Theme.accent

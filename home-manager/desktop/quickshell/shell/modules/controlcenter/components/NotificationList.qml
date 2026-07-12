@@ -9,7 +9,8 @@ Rectangle {
     id: root
     
     required property var notifs
-    
+    readonly property int emptyIconSize: 48
+
     // Solid color tokens (Theme)
     readonly property color surfaceColor: QsConfig.Theme.inset
     readonly property color surfaceVariant: QsConfig.Theme.card
@@ -21,7 +22,7 @@ Rectangle {
     Layout.fillWidth: true
     implicitHeight: Math.max(contentCol.implicitHeight + 32, 160)
 
-    radius: 20
+    radius: QsConfig.Appearance.radius.l
     color: surfaceColor
     border.color: borderColor
     border.width: 1
@@ -36,8 +37,8 @@ Rectangle {
     ColumnLayout {
         id: contentCol
         anchors.fill: parent
-        anchors.margins: 16
-        spacing: 12
+        anchors.margins: QsConfig.Appearance.margin.m
+        spacing: QsConfig.Appearance.spacing.m
         
         // Header
         RowLayout {
@@ -45,8 +46,8 @@ Rectangle {
             
             Text {
                 text: "Notifications"
-                font.family: "Inter"
-                font.pixelSize: 16
+                font.family: QsConfig.Appearance.typography.family
+                font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
                 font.weight: Font.Bold
                 color: root.textColor
             }
@@ -59,7 +60,7 @@ Rectangle {
                 visible: (notifs.recentNotifications?.length ?? 0) > 0
                 width: clearAllText.implicitWidth + 16
                 height: 28
-                radius: 14
+                radius: height / 2
                 color: clearAllMouse.containsMouse 
                     ? Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.12)
                     : root.surfaceVariant
@@ -75,8 +76,8 @@ Rectangle {
                     id: clearAllText
                     anchors.centerIn: parent
                     text: "Clear All"
-                    font.family: "Inter"
-                    font.pixelSize: 12
+                    font.family: QsConfig.Appearance.typography.family
+                    font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
                     font.weight: Font.Medium
                     color: root.textVariant
                 }
@@ -99,7 +100,7 @@ Rectangle {
             Layout.preferredHeight: (notifs.recentNotifications?.length ?? 0) > 0 ? notifListView.contentHeight : 120
             Layout.minimumHeight: 0
             clip: true
-            spacing: 8
+            spacing: QsConfig.Appearance.spacing.s
 
             ScrollBar.vertical: ScrollBar {
                 policy: ScrollBar.AsNeeded
@@ -142,7 +143,7 @@ Rectangle {
                 
                 width: notifListView.width
                 height: notifContent.implicitHeight + 20
-                radius: 14
+                radius: QsConfig.Appearance.radius.m
                 color: notifMouse.containsMouse 
                     ? Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.08)
                     : root.surfaceVariant
@@ -178,15 +179,15 @@ Rectangle {
                 RowLayout {
                     id: notifContent
                     anchors.fill: parent
-                    anchors.margins: 10
-                    spacing: 12
+                    anchors.margins: QsConfig.Appearance.margin.s
+                    spacing: QsConfig.Appearance.spacing.m
                     
                     // Icon
                     Rectangle {
                         Layout.preferredWidth: 42
                         Layout.preferredHeight: 42
                         Layout.alignment: Qt.AlignTop
-                        radius: 12
+                        radius: QsConfig.Appearance.radius.s
                         color: Qt.rgba(root.accentColor.r, root.accentColor.g, root.accentColor.b, 0.15)
                         
                         Image {
@@ -204,8 +205,8 @@ Rectangle {
                         Text {
                             anchors.centerIn: parent
                             text: "󰂚"
-                            font.family: "Material Design Icons"
-                            font.pixelSize: 20
+                            font.family: QsConfig.Appearance.typography.iconFamily
+                            font.pixelSize: QsConfig.Appearance.typography.titleLarge.size
                             color: root.accentColor
                             visible: !parent.children[0].visible
                         }
@@ -214,12 +215,12 @@ Rectangle {
                     // Text Content
                     ColumnLayout {
                         Layout.fillWidth: true
-                        spacing: 4
+                        spacing: QsConfig.Appearance.spacing.xs
                         
                         Text {
                             text: notifDelegate.modelData.summary ?? "Notification"
-                            font.family: "Inter"
-                            font.pixelSize: 13
+                            font.family: QsConfig.Appearance.typography.family
+                            font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
                             font.weight: Font.DemiBold
                             color: root.textColor
                             elide: Text.ElideRight
@@ -228,8 +229,8 @@ Rectangle {
                         
                         Text {
                             text: notifDelegate.modelData.body ?? ""
-                            font.family: "Inter"
-                            font.pixelSize: 12
+                            font.family: QsConfig.Appearance.typography.family
+                            font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
                             color: root.textVariant
                             elide: Text.ElideRight
                             maximumLineCount: 2
@@ -240,8 +241,8 @@ Rectangle {
                         
                         Text {
                             text: notifDelegate.modelData.appName ?? ""
-                            font.family: "Inter"
-                            font.pixelSize: 11
+                            font.family: QsConfig.Appearance.typography.family
+                            font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
                             color: Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.5)
                             Layout.fillWidth: true
                             visible: text !== ""
@@ -254,7 +255,7 @@ Rectangle {
                         Layout.preferredWidth: 28
                         Layout.preferredHeight: 28
                         Layout.alignment: Qt.AlignTop
-                        radius: 14
+                        radius: height / 2
                         color: closeMouse.containsMouse 
                             ? Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.15)
                             : "transparent"
@@ -269,9 +270,9 @@ Rectangle {
                         Text {
                             anchors.centerIn: parent
                             text: "󰅖"
-                            font.family: "Material Design Icons"
-                            font.pixelSize: 16
-                            color: closeMouse.containsMouse 
+                            font.family: QsConfig.Appearance.typography.iconFamily
+                            font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
+                            color: closeMouse.containsMouse
                                 ? root.textColor 
                                 : root.textVariant
                             
@@ -297,7 +298,7 @@ Rectangle {
             // Empty State
             ColumnLayout {
                 anchors.centerIn: parent
-                spacing: 8
+                spacing: QsConfig.Appearance.spacing.s
                 visible: (notifs.recentNotifications?.length ?? 0) === 0
                 opacity: visible ? 1 : 0
                 
@@ -311,16 +312,16 @@ Rectangle {
                 Text {
                     Layout.alignment: Qt.AlignHCenter
                     text: "󰂚"
-                    font.family: "Material Design Icons"
-                    font.pixelSize: 48
+                    font.family: QsConfig.Appearance.typography.iconFamily
+                    font.pixelSize: root.emptyIconSize
                     color: Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.2)
                 }
                 
                 Text {
                     Layout.alignment: Qt.AlignHCenter
                     text: "No Notifications"
-                    font.family: "Inter"
-                    font.pixelSize: 14
+                    font.family: QsConfig.Appearance.typography.family
+                    font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
                     font.weight: Font.Medium
                     color: Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.4)
                 }

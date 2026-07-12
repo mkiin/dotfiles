@@ -8,7 +8,8 @@ Rectangle {
     id: root
     
     required property var systemUsage
-    
+    readonly property int rowSpacing: 0
+
     // Color tokens
     readonly property color surfaceColor: QsConfig.Theme.card
     readonly property color textColor: QsConfig.Theme.text
@@ -17,7 +18,7 @@ Rectangle {
     Layout.fillWidth: true
     Layout.preferredHeight: 86
     
-    radius: 24
+    radius: QsConfig.Appearance.radius.l
     color: surfaceColor
     
     Behavior on color {
@@ -29,11 +30,11 @@ Rectangle {
     
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: 16
-        anchors.rightMargin: 16
-        anchors.topMargin: 8
-        anchors.bottomMargin: 8
-        spacing: 0
+        anchors.leftMargin: QsConfig.Appearance.margin.m
+        anchors.rightMargin: QsConfig.Appearance.margin.m
+        anchors.topMargin: QsConfig.Appearance.margin.s
+        anchors.bottomMargin: QsConfig.Appearance.margin.s
+        spacing: root.rowSpacing
         
         Item { Layout.fillWidth: true }
         
@@ -113,25 +114,25 @@ Rectangle {
         property string label
         property real value
         property color accentColor
-        
-        spacing: 4
+
+        spacing: QsConfig.Appearance.spacing.xs
         
         // Icon + Value row
         RowLayout {
             Layout.alignment: Qt.AlignHCenter
-            spacing: 6
+            spacing: QsConfig.Appearance.spacing.s
             
             Text {
                 text: icon
-                font.family: "Material Design Icons"
-                font.pixelSize: 16
+                font.family: QsConfig.Appearance.typography.iconFamily
+                font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
                 color: accentColor
             }
             
             Text {
                 text: Math.round(value) + "%"
-                font.family: "Inter"
-                font.pixelSize: 16
+                font.family: QsConfig.Appearance.typography.family
+                font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
                 font.weight: Font.Bold
                 color: root.textColor
                 
@@ -146,13 +147,13 @@ Rectangle {
             Layout.alignment: Qt.AlignHCenter
             Layout.preferredWidth: 56
             Layout.preferredHeight: 4
-            radius: 2
+            radius: height / 2
             color: Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.1)
             
             Rectangle {
                 width: parent.width * Math.min(value / 100, 1)
                 height: parent.height
-                radius: 1.5
+                radius: height / 2
                 color: accentColor
                 
                 Behavior on width {
@@ -168,8 +169,8 @@ Rectangle {
         Text {
             Layout.alignment: Qt.AlignHCenter
             text: label
-            font.family: "Inter"
-            font.pixelSize: 11
+            font.family: QsConfig.Appearance.typography.family
+            font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
             font.weight: Font.Medium
             color: root.textDim
         }

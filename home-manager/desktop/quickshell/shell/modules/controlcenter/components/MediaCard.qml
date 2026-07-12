@@ -64,7 +64,7 @@ Rectangle {
     Layout.fillWidth: true
     Layout.preferredHeight: hasPlayer ? 100 : 0
     
-    radius: 18
+    radius: QsConfig.Appearance.radius.m
     color: surfaceColor
     clip: true
     visible: hasPlayer
@@ -153,14 +153,14 @@ Rectangle {
     // Content
     RowLayout {
         anchors.fill: parent
-        anchors.margins: 14
-        spacing: 14
+        anchors.margins: QsConfig.Appearance.margin.m
+        spacing: QsConfig.Appearance.spacing.l
         
         // Album Art
         Rectangle {
             Layout.preferredWidth: 72
             Layout.preferredHeight: 72
-            radius: 12
+            radius: QsConfig.Appearance.radius.s
             color: Qt.rgba(1, 1, 1, 0.1)
             clip: true
             
@@ -194,8 +194,8 @@ Rectangle {
             Text {
                 anchors.centerIn: parent
                 text: "󰝚"
-                font.family: "Material Design Icons"
-                font.pixelSize: 32
+                font.family: QsConfig.Appearance.typography.iconFamily
+                font.pixelSize: QsConfig.Appearance.typography.headlineLarge.size
                 color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.3)
                 visible: albumArt.status !== Image.Ready
             }
@@ -205,15 +205,15 @@ Rectangle {
         ColumnLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: 4
+            spacing: QsConfig.Appearance.spacing.xs
             
             Item { Layout.fillHeight: true }
             
             Text {
                 Layout.fillWidth: true
                 text: root.trackTitle || "No Media"
-                font.family: "Inter"
-                font.pixelSize: 15
+                font.family: QsConfig.Appearance.typography.family
+                font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
                 font.weight: Font.Bold
                 color: root.textColor
                 elide: Text.ElideRight
@@ -231,8 +231,8 @@ Rectangle {
             Text {
                 Layout.fillWidth: true
                 text: root.trackArtist
-                font.family: "Inter"
-                font.pixelSize: 13
+                font.family: QsConfig.Appearance.typography.family
+                font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
                 color: root.textDim
                 elide: Text.ElideRight
                 maximumLineCount: 1
@@ -251,7 +251,7 @@ Rectangle {
         
         // Controls
         RowLayout {
-            spacing: 2
+            spacing: QsConfig.Appearance.spacing.xs
             
             // Previous
             ControlButton {
@@ -266,7 +266,7 @@ Rectangle {
                 id: playBtn
                 width: 48
                 height: 48
-                radius: 24
+                radius: height / 2
                 color: root.accentColor
                 
                 scale: playMouse.pressed ? 0.92 : (playMouse.containsMouse ? 1.05 : 1.0)
@@ -290,8 +290,8 @@ Rectangle {
                 Text {
                     anchors.centerIn: parent
                     text: root.isPlaying ? "󰏤" : "󰐊"
-                    font.family: "Material Design Icons"
-                    font.pixelSize: 24
+                    font.family: QsConfig.Appearance.typography.iconFamily
+                    font.pixelSize: QsConfig.Appearance.typography.headlineSmall.size
                     color: QsConfig.Theme.background
                 }
                 
@@ -322,7 +322,7 @@ Rectangle {
         
         width: 40
         height: 40
-        radius: 20
+        radius: height / 2
         color: btnMouse.containsMouse 
             ? Qt.rgba(1, 1, 1, 0.15) 
             : Qt.rgba(1, 1, 1, 0.05)
@@ -346,8 +346,8 @@ Rectangle {
         Text {
             anchors.centerIn: parent
             text: parent.icon
-            font.family: "Material Design Icons"
-            font.pixelSize: 22
+            font.family: QsConfig.Appearance.typography.iconFamily
+            font.pixelSize: QsConfig.Appearance.typography.titleLarge.size
             color: root.textColor
         }
         

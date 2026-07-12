@@ -5,16 +5,18 @@ import "../../../config" as QsConfig
 
 Item {
     readonly property var sysUsage: QsServices.SystemUsage
-    
+    readonly property int chartAnimDuration: 800
+    readonly property int legendSwatchRadius: 2
+
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 20
-        spacing: 20
+        anchors.margins: QsConfig.Appearance.margin.l
+        spacing: QsConfig.Appearance.spacing.xl
         
         Text {
             text: "System Performance"
-            font.family: "Inter"
-            font.pixelSize: 16
+            font.family: QsConfig.Appearance.typography.family
+            font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
             font.weight: Font.Bold
             color: QsConfig.Theme.text
         }
@@ -23,26 +25,26 @@ Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
             columns: 3
-            rowSpacing: 12
-            columnSpacing: 12
+            rowSpacing: QsConfig.Appearance.spacing.m
+            columnSpacing: QsConfig.Appearance.spacing.m
             
             // CPU Usage
             Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.minimumHeight: 100
-                radius: 10
+                radius: QsConfig.Appearance.radius.s
                 color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                 
                 ColumnLayout {
                     anchors.fill: parent
-                    anchors.margins: 12
-                    spacing: 6
+                    anchors.margins: QsConfig.Appearance.margin.m
+                    spacing: QsConfig.Appearance.spacing.s
                     
                     Text {
                         text: "CPU"
-                        font.family: "Inter"
-                        font.pixelSize: 11
+                        font.family: QsConfig.Appearance.typography.family
+                        font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
                         font.weight: Font.DemiBold
                         color: QsConfig.Theme.text
                     }
@@ -61,7 +63,7 @@ Item {
                             property real animatedPercentage: 0
                             
                             Behavior on animatedPercentage {
-                                NumberAnimation { duration: 800; easing.type: Easing.OutCubic }
+                                NumberAnimation { duration: chartAnimDuration; easing.type: Easing.OutCubic }
                             }
                             
                             onPercentageChanged: animatedPercentage = percentage
@@ -111,8 +113,8 @@ Item {
                         Text {
                             anchors.centerIn: cpuChart
                             text: Math.round(sysUsage.cpuPerc * 100) + "%"
-                            font.family: "Inter"
-                            font.pixelSize: 16
+                            font.family: QsConfig.Appearance.typography.family
+                            font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
                             font.weight: Font.Bold
                             color: QsConfig.Theme.text
                         }
@@ -125,18 +127,18 @@ Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.minimumHeight: 100
-                radius: 10
+                radius: QsConfig.Appearance.radius.s
                 color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                 
                 ColumnLayout {
                     anchors.fill: parent
-                    anchors.margins: 12
-                    spacing: 6
+                    anchors.margins: QsConfig.Appearance.margin.m
+                    spacing: QsConfig.Appearance.spacing.s
                     
                     Text {
                         text: "Memory"
-                        font.family: "Inter"
-                        font.pixelSize: 11
+                        font.family: QsConfig.Appearance.typography.family
+                        font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
                         font.weight: Font.DemiBold
                         color: QsConfig.Theme.text
                     }
@@ -155,7 +157,7 @@ Item {
                             property real animatedPercentage: 0
                             
                             Behavior on animatedPercentage {
-                                NumberAnimation { duration: 800; easing.type: Easing.OutCubic }
+                                NumberAnimation { duration: chartAnimDuration; easing.type: Easing.OutCubic }
                             }
                             
                             onPercentageChanged: animatedPercentage = percentage
@@ -201,8 +203,8 @@ Item {
                         Text {
                             anchors.centerIn: memChart
                             text: Math.round(sysUsage.memPerc * 100) + "%"
-                            font.family: "Inter"
-                            font.pixelSize: 16
+                            font.family: QsConfig.Appearance.typography.family
+                            font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
                             font.weight: Font.Bold
                             color: QsConfig.Theme.text
                         }
@@ -215,18 +217,18 @@ Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.minimumHeight: 100
-                radius: 10
+                radius: QsConfig.Appearance.radius.s
                 color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                 
                 ColumnLayout {
                     anchors.fill: parent
-                    anchors.margins: 12
-                    spacing: 6
+                    anchors.margins: QsConfig.Appearance.margin.m
+                    spacing: QsConfig.Appearance.spacing.s
                     
                     Text {
                         text: "Disk"
-                        font.family: "Inter"
-                        font.pixelSize: 11
+                        font.family: QsConfig.Appearance.typography.family
+                        font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
                         font.weight: Font.DemiBold
                         color: QsConfig.Theme.text
                     }
@@ -245,7 +247,7 @@ Item {
                             property real animatedPercentage: 0
                             
                             Behavior on animatedPercentage {
-                                NumberAnimation { duration: 800; easing.type: Easing.OutCubic }
+                                NumberAnimation { duration: chartAnimDuration; easing.type: Easing.OutCubic }
                             }
                             
                             onPercentageChanged: animatedPercentage = percentage
@@ -291,8 +293,8 @@ Item {
                         Text {
                             anchors.centerIn: diskChart
                             text: Math.round(sysUsage.diskPerc * 100) + "%"
-                            font.family: "Inter"
-                            font.pixelSize: 16
+                            font.family: QsConfig.Appearance.typography.family
+                            font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
                             font.weight: Font.Bold
                             color: QsConfig.Theme.text
                         }
@@ -305,57 +307,57 @@ Item {
                 Layout.fillWidth: true
                 Layout.columnSpan: 3
                 Layout.preferredHeight: 60
-                radius: 10
+                radius: QsConfig.Appearance.radius.s
                 color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                 
                 RowLayout {
                     anchors.centerIn: parent
-                    spacing: 16
+                    spacing: QsConfig.Appearance.spacing.l
                     
                     RowLayout {
-                        spacing: 6
+                        spacing: QsConfig.Appearance.spacing.s
                         Rectangle {
                             width: 10
                             height: 10
-                            radius: 2
+                            radius: legendSwatchRadius
                             color: QsConfig.Theme.tertiary
                         }
                         Text {
                             text: "Good (< 50%)"
-                            font.family: "Inter"
-                            font.pixelSize: 10
+                            font.family: QsConfig.Appearance.typography.family
+                            font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
                             color: QsConfig.Theme.text
                         }
                     }
                     
                     RowLayout {
-                        spacing: 6
+                        spacing: QsConfig.Appearance.spacing.s
                         Rectangle {
                             width: 10
                             height: 10
-                            radius: 2
+                            radius: legendSwatchRadius
                             color: QsConfig.Theme.secondary
                         }
                         Text {
                             text: "Moderate (50-80%)"
-                            font.family: "Inter"
-                            font.pixelSize: 10
+                            font.family: QsConfig.Appearance.typography.family
+                            font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
                             color: QsConfig.Theme.text
                         }
                     }
                     
                     RowLayout {
-                        spacing: 6
+                        spacing: QsConfig.Appearance.spacing.s
                         Rectangle {
                             width: 10
                             height: 10
-                            radius: 2
+                            radius: legendSwatchRadius
                             color: QsConfig.Theme.error
                         }
                         Text {
                             text: "High (> 80%)"
-                            font.family: "Inter"
-                            font.pixelSize: 10
+                            font.family: QsConfig.Appearance.typography.family
+                            font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
                             color: QsConfig.Theme.text
                         }
                     }

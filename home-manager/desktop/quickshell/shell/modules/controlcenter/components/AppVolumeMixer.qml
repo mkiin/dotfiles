@@ -12,18 +12,18 @@ ColumnLayout {
     readonly property var streams: QsServices.AudioStreams.streams
     readonly property var groups: QsServices.AudioStreams.groups
 
-    spacing: 8
+    spacing: QsConfig.Appearance.spacing.s
 
     PwObjectTracker { objects: root.streams }
 
     Text {
         Layout.fillWidth: true
-        Layout.topMargin: 4
-        Layout.bottomMargin: 4
+        Layout.topMargin: QsConfig.Appearance.spacing.xs
+        Layout.bottomMargin: QsConfig.Appearance.spacing.xs
         visible: root.groups.length === 0
         text: "再生中のアプリはありません"
-        font.family: "Inter"
-        font.pixelSize: 12
+        font.family: QsConfig.Appearance.typography.family
+        font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
         color: QsConfig.Theme.textMuted
         horizontalAlignment: Text.AlignHCenter
     }
@@ -42,37 +42,37 @@ ColumnLayout {
 
             Layout.fillWidth: true
             Layout.preferredHeight: 70
-            radius: 18
+            radius: QsConfig.Appearance.radius.m
             color: QsConfig.Theme.cardHigh
             border.width: 1
             border.color: QsConfig.Theme.border
 
             ColumnLayout {
                 anchors.fill: parent
-                anchors.leftMargin: 14
-                anchors.rightMargin: 14
-                anchors.topMargin: 8
-                anchors.bottomMargin: 8
-                spacing: 4
+                anchors.leftMargin: QsConfig.Appearance.margin.m
+                anchors.rightMargin: QsConfig.Appearance.margin.m
+                anchors.topMargin: QsConfig.Appearance.margin.s
+                anchors.bottomMargin: QsConfig.Appearance.margin.s
+                spacing: QsConfig.Appearance.spacing.xs
 
                 Text {
                     Layout.fillWidth: true
                     text: row.modelData.name
                     elide: Text.ElideRight
-                    font.family: "Inter"
-                    font.pixelSize: 12
+                    font.family: QsConfig.Appearance.typography.family
+                    font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
                     font.weight: Font.DemiBold
                     color: QsConfig.Theme.text
                 }
 
                 RowLayout {
                     Layout.fillWidth: true
-                    spacing: 8
+                    spacing: QsConfig.Appearance.spacing.s
 
                     Rectangle {
                         Layout.preferredWidth: 30
                         Layout.preferredHeight: 30
-                        radius: 15
+                        radius: height / 2
                         color: muteMouse.containsMouse
                             ? QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.1)
                             : "transparent"
@@ -87,8 +87,8 @@ ColumnLayout {
                         Text {
                             anchors.centerIn: parent
                             text: row.isMuted ? "󰝟" : (row.currentVolume > 66 ? "󰕾" : (row.currentVolume > 33 ? "󰖀" : "󰕿"))
-                            font.family: "Material Design Icons"
-                            font.pixelSize: 16
+                            font.family: QsConfig.Appearance.typography.iconFamily
+                            font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
                             color: row.isMuted
                                 ? QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.5)
                                 : QsConfig.Theme.accent
@@ -115,8 +115,8 @@ ColumnLayout {
                     Text {
                         Layout.preferredWidth: 44
                         text: row.currentVolume + "%"
-                        font.family: "Inter"
-                        font.pixelSize: 13
+                        font.family: QsConfig.Appearance.typography.family
+                        font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
                         font.weight: Font.DemiBold
                         color: QsConfig.Theme.text
                         horizontalAlignment: Text.AlignRight

@@ -9,7 +9,12 @@ Item {
     id: root
     
     readonly property var players: QsServices.Players
-    
+    readonly property int pulseDuration: 1000
+    readonly property int trackInfoSpacing: 1
+    readonly property int breatheDuration: 1200
+    readonly property int emptyIconSize: 56
+    readonly property int artFallbackIconSize: 72
+
     // Selected player - automatically update when active player changes
     property var selectedPlayer: players.active
     
@@ -25,18 +30,18 @@ Item {
     
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 20
-        spacing: 8
+        anchors.margins: QsConfig.Appearance.margin.l
+        spacing: QsConfig.Appearance.spacing.s
         
         // Header with player selector
         RowLayout {
             Layout.fillWidth: true
-            spacing: 12
-            
+            spacing: QsConfig.Appearance.spacing.m
+
             Text {
                 text: "Media Player"
-                font.family: "Inter"
-                font.pixelSize: 16
+                font.family: QsConfig.Appearance.typography.family
+                font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
                 font.weight: Font.Bold
                 color: QsConfig.Theme.text
                 Layout.fillWidth: true
@@ -46,36 +51,36 @@ Item {
             Rectangle {
                 Layout.preferredHeight: 32
                 Layout.preferredWidth: 160
-                radius: 8
+                radius: QsConfig.Appearance.radius.s
                 color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.08)
                 visible: players.list.length > 1
                 z: 200  // Ensure dropdown appears above other content
                 
                 RowLayout {
                     anchors.fill: parent
-                    anchors.margins: 8
-                    spacing: 6
+                    anchors.margins: QsConfig.Appearance.margin.s
+                    spacing: QsConfig.Appearance.spacing.s
                     
                     Text {
                         text: "󰓃"
-                        font.family: "Material Design Icons"
-                        font.pixelSize: 16
+                        font.family: QsConfig.Appearance.typography.iconFamily
+                        font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
                         color: QsConfig.Theme.tertiary
                     }
                     
                     Text {
                         Layout.fillWidth: true
                         text: selectedPlayer?.identity ?? "Select Player"
-                        font.family: "Inter"
-                        font.pixelSize: 11
+                        font.family: QsConfig.Appearance.typography.family
+                        font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
                         color: QsConfig.Theme.text
                         elide: Text.ElideRight
                     }
                     
                     Text {
                         text: playerSelectorMenu.visible ? "󰅃" : "󰅀"
-                        font.family: "Material Design Icons"
-                        font.pixelSize: 14
+                        font.family: QsConfig.Appearance.typography.iconFamily
+                        font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
                         color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.6)
                     }
                 }
@@ -91,11 +96,11 @@ Item {
                     id: playerSelectorMenu
                     visible: false
                     anchors.top: parent.bottom
-                    anchors.topMargin: 4
+                    anchors.topMargin: QsConfig.Appearance.spacing.xs
                     anchors.left: parent.left
                     width: parent.width
                     height: Math.min(playerMenuColumn.implicitHeight + 8, 200)  // Max height to prevent overflow
-                    radius: 8
+                    radius: QsConfig.Appearance.radius.s
                     color: QsConfig.Theme.background
                     border.width: 1
                     border.color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.15)
@@ -109,15 +114,15 @@ Item {
                             color: "transparent"
                             border.color: Qt.rgba(0, 0, 0, 0.2)
                             border.width: 1
-                            radius: 8
+                            radius: QsConfig.Appearance.radius.s
                         }
                     }
                     
                     ColumnLayout {
                         id: playerMenuColumn
                         anchors.fill: parent
-                        anchors.margins: 4
-                        spacing: 2
+                        anchors.margins: QsConfig.Appearance.spacing.xs
+                        spacing: QsConfig.Appearance.spacing.xs
                         
                         Repeater {
                             model: players.list
@@ -125,36 +130,36 @@ Item {
                             Rectangle {
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: 32
-                                radius: 6
+                                radius: QsConfig.Appearance.radius.xs
                                 color: playerMouseArea.containsMouse ? 
                                        QsConfig.Theme.withAlpha(QsConfig.Theme.tertiary, 0.2) : 
                                        "transparent"
                                 
                                 RowLayout {
                                     anchors.fill: parent
-                                    anchors.margins: 6
-                                    spacing: 8
+                                    anchors.margins: QsConfig.Appearance.margin.xs
+                                    spacing: QsConfig.Appearance.spacing.s
                                     
                                     Text {
                                         text: modelData.isPlaying ? "󰐊" : "󰏤"
-                                        font.family: "Material Design Icons"
-                                        font.pixelSize: 14
+                                        font.family: QsConfig.Appearance.typography.iconFamily
+                                        font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
                                         color: modelData.isPlaying ? QsConfig.Theme.tertiary : QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.5)
                                     }
                                     
                                     Text {
                                         Layout.fillWidth: true
                                         text: modelData.identity ?? "Unknown"
-                                        font.family: "Inter"
-                                        font.pixelSize: 11
+                                        font.family: QsConfig.Appearance.typography.family
+                                        font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
                                         color: QsConfig.Theme.text
                                         elide: Text.ElideRight
                                     }
                                     
                                     Text {
                                         text: "󰄬"
-                                        font.family: "Material Design Icons"
-                                        font.pixelSize: 12
+                                        font.family: QsConfig.Appearance.typography.iconFamily
+                                        font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
                                         color: QsConfig.Theme.tertiary
                                         visible: selectedPlayer === modelData
                                     }
@@ -186,22 +191,22 @@ Item {
             // No player active
             ColumnLayout {
                 anchors.centerIn: parent
-                spacing: 16
+                spacing: QsConfig.Appearance.spacing.l
                 visible: !selectedPlayer
                 
                 Text {
                     Layout.alignment: Qt.AlignHCenter
                     text: "󰝚"
-                    font.family: "Material Design Icons"
-                    font.pixelSize: 56
+                    font.family: QsConfig.Appearance.typography.iconFamily
+                    font.pixelSize: root.emptyIconSize
                     color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.2)
                 }
                 
                 Text {
                     Layout.alignment: Qt.AlignHCenter
                     text: "No media playing"
-                    font.family: "Inter"
-                    font.pixelSize: 15
+                    font.family: QsConfig.Appearance.typography.family
+                    font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
                     font.weight: Font.Medium
                     color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.5)
                 }
@@ -209,8 +214,8 @@ Item {
                 Text {
                     Layout.alignment: Qt.AlignHCenter
                     text: "Start playing media to control it here"
-                    font.family: "Inter"
-                    font.pixelSize: 12
+                    font.family: QsConfig.Appearance.typography.family
+                    font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
                     color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.35)
                 }
             }
@@ -218,7 +223,7 @@ Item {
             // Active player
             ColumnLayout {
                 anchors.fill: parent
-                spacing: 8
+                spacing: QsConfig.Appearance.spacing.s
                 visible: selectedPlayer
                 
                 // Album art with glow effect
@@ -231,12 +236,12 @@ Item {
                         anchors.centerIn: parent
                         width: parent.width - 20
                         height: parent.height - 20
-                        radius: 16
+                        radius: QsConfig.Appearance.radius.m
                         color: QsConfig.Theme.tertiary
                         opacity: selectedPlayer?.trackArtUrl ? 0.15 : 0
                         
                         Behavior on opacity {
-                            NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
+                            NumberAnimation { duration: QsConfig.Appearance.anim.durations.medium; easing.type: Easing.OutCubic }
                         }
                     }
                     
@@ -245,16 +250,16 @@ Item {
                         anchors.centerIn: parent
                         width: parent.width - 24
                         height: parent.height - 24
-                        radius: 14
+                        radius: QsConfig.Appearance.radius.m
                         color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                         clip: true
                         
                         scale: albumMouseArea.containsMouse ? 1.02 : 1.0
                         
                         Behavior on scale {
-                            NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
+                            NumberAnimation { duration: QsConfig.Appearance.anim.durations.normal; easing.type: Easing.OutCubic }
                         }
-                        
+
                         Image {
                             id: albumArtImage
                             anchors.fill: parent
@@ -266,7 +271,7 @@ Item {
                             opacity: status === Image.Ready ? 1 : 0
                             
                             Behavior on opacity {
-                                NumberAnimation { duration: 250; easing.type: Easing.OutCubic }
+                                NumberAnimation { duration: QsConfig.Appearance.anim.durations.medium; easing.type: Easing.OutCubic }
                             }
                         }
                         
@@ -274,16 +279,16 @@ Item {
                         Text {
                             anchors.centerIn: parent
                             text: "󰝚"
-                            font.family: "Material Design Icons"
-                            font.pixelSize: 72
+                            font.family: QsConfig.Appearance.typography.iconFamily
+                            font.pixelSize: root.artFallbackIconSize
                             color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.15)
                             visible: albumArtImage.status !== Image.Ready
                             
                             SequentialAnimation on opacity {
                                 running: visible
                                 loops: Animation.Infinite
-                                NumberAnimation { from: 0.15; to: 0.3; duration: 1200; easing.type: Easing.InOutCubic }
-                                NumberAnimation { from: 0.3; to: 0.15; duration: 1200; easing.type: Easing.InOutCubic }
+                                NumberAnimation { from: 0.15; to: 0.3; duration: root.breatheDuration; easing.type: Easing.InOutCubic }
+                                NumberAnimation { from: 0.3; to: 0.15; duration: root.breatheDuration; easing.type: Easing.InOutCubic }
                             }
                         }
                         
@@ -298,21 +303,21 @@ Item {
                         Rectangle {
                             anchors.bottom: parent.bottom
                             anchors.right: parent.right
-                            anchors.margins: 12
+                            anchors.margins: QsConfig.Appearance.margin.m
                             width: 36
                             height: 36
-                            radius: 18
+                            radius: height / 2
                             color: selectedPlayer?.isPlaying ? QsConfig.Theme.tertiary : QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.3)
                             
                             Behavior on color {
-                                ColorAnimation { duration: 200 }
+                                ColorAnimation { duration: QsConfig.Appearance.anim.durations.normal }
                             }
                             
                             Text {
                                 anchors.centerIn: parent
                                 text: selectedPlayer?.isPlaying ? "󰐊" : "󰏤"
-                                font.family: "Material Design Icons"
-                                font.pixelSize: 18
+                                font.family: QsConfig.Appearance.typography.iconFamily
+                                font.pixelSize: QsConfig.Appearance.typography.titleMedium.size
                                 color: selectedPlayer?.isPlaying ? QsConfig.Theme.background : QsConfig.Theme.text
                             }
                         }
@@ -328,14 +333,14 @@ Item {
                 // Track info with better spacing
                 ColumnLayout {
                     Layout.fillWidth: true
-                    spacing: 1
-                    Layout.topMargin: 4
+                    spacing: root.trackInfoSpacing
+                    Layout.topMargin: QsConfig.Appearance.spacing.xs
                     
                     Text {
                         Layout.fillWidth: true
                         text: selectedPlayer?.trackTitle ?? "Unknown Track"
-                        font.family: "Inter"
-                        font.pixelSize: 16
+                        font.family: QsConfig.Appearance.typography.family
+                        font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
                         font.weight: Font.Bold
                         color: QsConfig.Theme.text
                         elide: Text.ElideRight
@@ -346,8 +351,8 @@ Item {
                     Text {
                         Layout.fillWidth: true
                         text: selectedPlayer?.trackArtist ?? "Unknown Artist"
-                        font.family: "Inter"
-                        font.pixelSize: 13
+                        font.family: QsConfig.Appearance.typography.family
+                        font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
                         color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.7)
                         elide: Text.ElideRight
                         maximumLineCount: 1
@@ -357,8 +362,8 @@ Item {
                     Text {
                         Layout.fillWidth: true
                         text: selectedPlayer?.trackAlbum ?? ""
-                        font.family: "Inter"
-                        font.pixelSize: 11
+                        font.family: QsConfig.Appearance.typography.family
+                        font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
                         color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.5)
                         elide: Text.ElideRight
                         maximumLineCount: 1
@@ -370,8 +375,8 @@ Item {
                 // Seek bar with improved design
                 ColumnLayout {
                     Layout.fillWidth: true
-                    spacing: 6
-                    
+                    spacing: QsConfig.Appearance.spacing.s
+
                     Slider {
                         id: seekSlider
                         Layout.fillWidth: true
@@ -390,17 +395,17 @@ Item {
                             y: seekSlider.topPadding + seekSlider.availableHeight / 2 - height / 2
                             width: seekSlider.availableWidth
                             height: 6
-                            radius: 3
+                            radius: height / 2
                             color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.1)
                             
                             Rectangle {
                                 width: seekSlider.visualPosition * parent.width
                                 height: parent.height
                                 color: QsConfig.Theme.tertiary
-                                radius: 3
-                                
+                                radius: height / 2
+
                                 Behavior on width {
-                                    NumberAnimation { duration: 100 }
+                                    NumberAnimation { duration: QsConfig.Appearance.anim.durations.fast }
                                 }
                             }
                         }
@@ -410,7 +415,7 @@ Item {
                             y: seekSlider.topPadding + seekSlider.availableHeight / 2 - height / 2
                             width: 18
                             height: 18
-                            radius: 9
+                            radius: height / 2
                             color: QsConfig.Theme.background
                             border.color: QsConfig.Theme.tertiary
                             border.width: 2
@@ -418,7 +423,7 @@ Item {
                             scale: seekSlider.pressed ? 1.2 : 1.0
                             
                             Behavior on scale {
-                                NumberAnimation { duration: 100 }
+                                NumberAnimation { duration: QsConfig.Appearance.anim.durations.fast }
                             }
                         }
                     }
@@ -429,8 +434,8 @@ Item {
                         
                         Text {
                             text: formatTime(selectedPlayer?.position ?? 0)
-                            font.family: "Inter"
-                            font.pixelSize: 11
+                            font.family: QsConfig.Appearance.typography.family
+                            font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
                             font.weight: Font.Medium
                             color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.6)
                         }
@@ -439,8 +444,8 @@ Item {
                         
                         Text {
                             text: formatTime(selectedPlayer?.length ?? 0)
-                            font.family: "Inter"
-                            font.pixelSize: 11
+                            font.family: QsConfig.Appearance.typography.family
+                            font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
                             font.weight: Font.Medium
                             color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.6)
                         }
@@ -451,14 +456,14 @@ Item {
                 RowLayout {
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.topMargin: 2
-                    spacing: 10
+                    Layout.topMargin: QsConfig.Appearance.spacing.xs
+                    spacing: QsConfig.Appearance.spacing.m
                     
                     // Previous button
                     Rectangle {
                         width: 48
                         height: 48
-                        radius: 24
+                        radius: height / 2
                         color: prevHover.containsMouse ? 
                                QsConfig.Theme.withAlpha(QsConfig.Theme.error, 0.15) : 
                                QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
@@ -466,18 +471,18 @@ Item {
                         scale: prevHover.pressed ? 0.92 : 1.0
                         
                         Behavior on color {
-                            ColorAnimation { duration: 150 }
+                            ColorAnimation { duration: QsConfig.Appearance.anim.durations.fast }
                         }
-                        
+
                         Behavior on scale {
-                            NumberAnimation { duration: 100; easing.type: Easing.OutCubic }
+                            NumberAnimation { duration: QsConfig.Appearance.anim.durations.fast; easing.type: Easing.OutCubic }
                         }
                         
                         Text {
                             anchors.centerIn: parent
                             text: "󰒮"
-                            font.family: "Material Design Icons"
-                            font.pixelSize: 26
+                            font.family: QsConfig.Appearance.typography.iconFamily
+                            font.pixelSize: QsConfig.Appearance.typography.headlineSmall.size
                             color: QsConfig.Theme.text
                         }
                         
@@ -499,13 +504,13 @@ Item {
                     Rectangle {
                         width: 60
                         height: 60
-                        radius: 30
+                        radius: height / 2
                         color: QsConfig.Theme.tertiary
                         
                         scale: playHover.pressed ? 0.92 : (playHover.containsMouse ? 1.05 : 1.0)
                         
                         Behavior on scale {
-                            NumberAnimation { duration: 150; easing.type: Easing.OutBack }
+                            NumberAnimation { duration: QsConfig.Appearance.anim.durations.fast; easing.type: Easing.OutBack }
                         }
                         
                         // Pulsing effect when playing
@@ -518,23 +523,23 @@ Item {
                             SequentialAnimation on opacity {
                                 running: selectedPlayer?.isPlaying ?? false
                                 loops: Animation.Infinite
-                                NumberAnimation { from: 0; to: 0.3; duration: 1000; easing.type: Easing.OutCubic }
-                                NumberAnimation { from: 0.3; to: 0; duration: 1000; easing.type: Easing.InCubic }
+                                NumberAnimation { from: 0; to: 0.3; duration: root.pulseDuration; easing.type: Easing.OutCubic }
+                                NumberAnimation { from: 0.3; to: 0; duration: root.pulseDuration; easing.type: Easing.InCubic }
                             }
                             
                             SequentialAnimation on scale {
                                 running: selectedPlayer?.isPlaying ?? false
                                 loops: Animation.Infinite
-                                NumberAnimation { from: 1.0; to: 1.15; duration: 1000; easing.type: Easing.OutCubic }
-                                NumberAnimation { from: 1.15; to: 1.0; duration: 1000; easing.type: Easing.InCubic }
+                                NumberAnimation { from: 1.0; to: 1.15; duration: root.pulseDuration; easing.type: Easing.OutCubic }
+                                NumberAnimation { from: 1.15; to: 1.0; duration: root.pulseDuration; easing.type: Easing.InCubic }
                             }
                         }
                         
                         Text {
                             anchors.centerIn: parent
                             text: (selectedPlayer?.isPlaying ?? false) ? "󰏤" : "󰐊"
-                            font.family: "Material Design Icons"
-                            font.pixelSize: 36
+                            font.family: QsConfig.Appearance.typography.iconFamily
+                            font.pixelSize: QsConfig.Appearance.typography.displaySmall.size
                             color: QsConfig.Theme.background
                         }
                         
@@ -556,7 +561,7 @@ Item {
                     Rectangle {
                         width: 48
                         height: 48
-                        radius: 24
+                        radius: height / 2
                         color: nextHover.containsMouse ? 
                                QsConfig.Theme.withAlpha(QsConfig.Theme.error, 0.15) : 
                                QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
@@ -564,18 +569,18 @@ Item {
                         scale: nextHover.pressed ? 0.92 : 1.0
                         
                         Behavior on color {
-                            ColorAnimation { duration: 150 }
+                            ColorAnimation { duration: QsConfig.Appearance.anim.durations.fast }
                         }
-                        
+
                         Behavior on scale {
-                            NumberAnimation { duration: 100; easing.type: Easing.OutCubic }
+                            NumberAnimation { duration: QsConfig.Appearance.anim.durations.fast; easing.type: Easing.OutCubic }
                         }
                         
                         Text {
                             anchors.centerIn: parent
                             text: "󰒭"
-                            font.family: "Material Design Icons"
-                            font.pixelSize: 26
+                            font.family: QsConfig.Appearance.typography.iconFamily
+                            font.pixelSize: QsConfig.Appearance.typography.headlineSmall.size
                             color: QsConfig.Theme.text
                         }
                         

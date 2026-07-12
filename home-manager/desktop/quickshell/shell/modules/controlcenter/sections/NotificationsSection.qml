@@ -17,17 +17,17 @@ Item {
     
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 20
-        spacing: 16
+        anchors.margins: QsConfig.Appearance.margin.l
+        spacing: QsConfig.Appearance.spacing.l
         
         // Header with title and actions
         RowLayout {
             Layout.fillWidth: true
-            spacing: 12
+            spacing: QsConfig.Appearance.spacing.m
             
             Text {
                 text: "Notifications"
-                font.pixelSize: 20
+                font.pixelSize: QsConfig.Appearance.typography.titleLarge.size
                 font.weight: Font.Bold
                 color: root.textColor
                 Layout.fillWidth: true
@@ -37,14 +37,14 @@ Item {
             Rectangle {
                 width: 36
                 height: 36
-                radius: 18
+                radius: height / 2
                 color: notifs.dnd ? root.accentColor : Qt.rgba(1, 1, 1, 0.1)
                 
                 Text {
                     anchors.centerIn: parent
                     text: notifs.dnd ? "󰂛" : "󰂚"
-                    font.family: "Material Design Icons"
-                    font.pixelSize: 18
+                    font.family: QsConfig.Appearance.typography.iconFamily
+                    font.pixelSize: QsConfig.Appearance.typography.titleMedium.size
                     color: notifs.dnd ? "#000000" : root.textColor
                 }
                 
@@ -55,7 +55,7 @@ Item {
                 }
                 
                 Behavior on color {
-                    ColorAnimation { duration: 200 }
+                    ColorAnimation { duration: QsConfig.Appearance.anim.durations.normal }
                 }
             }
             
@@ -63,15 +63,15 @@ Item {
             Rectangle {
                 width: 36
                 height: 36
-                radius: 18
+                radius: height / 2
                 color: Qt.rgba(1, 1, 1, 0.1)
                 visible: (notifs.recentNotifications?.length ?? 0) > 0
                 
                 Text {
                     anchors.centerIn: parent
                     text: "󰎟"
-                    font.family: "Material Design Icons"
-                    font.pixelSize: 18
+                    font.family: QsConfig.Appearance.typography.iconFamily
+                    font.pixelSize: QsConfig.Appearance.typography.titleMedium.size
                     color: root.textColor
                 }
                 
@@ -91,14 +91,14 @@ Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
             color: Qt.rgba(0, 0, 0, 0.2)
-            radius: 12
+            radius: QsConfig.Appearance.radius.s
             
             ListView {
                 id: notificationsList
                 
                 anchors.fill: parent
-                anchors.margins: 8
-                spacing: 8
+                anchors.margins: QsConfig.Appearance.margin.s
+                spacing: QsConfig.Appearance.spacing.s
                 clip: true
                 
                 model: notifs.recentNotifications ?? []
@@ -108,8 +108,8 @@ Item {
                     anchors.centerIn: parent
                     visible: notificationsList.count === 0
                     text: notifs.dnd ? "Do Not Disturb is enabled\n󰂛" : "No notifications\n󰂚"
-                    font.pixelSize: 16
-                    color: Qt.rgba(root.textColor.r, 
+                    font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
+                    color: Qt.rgba(root.textColor.r,
                                    root.textColor.g, 
                                    root.textColor.b, 0.5)
                     horizontalAlignment: Text.AlignHCenter
@@ -123,7 +123,7 @@ Item {
                     
                     width: notificationsList.width
                     height: contentColumn.height + 16
-                    radius: 10
+                    radius: QsConfig.Appearance.radius.s
                     color: modelData.urgency === 2 ? 
                            Qt.rgba(root.urgentColor.r,
                                   root.urgentColor.g,
@@ -147,7 +147,7 @@ Item {
                         opacity: notifMouseArea.containsMouse ? 1 : 0
                         
                         Behavior on opacity {
-                            NumberAnimation { duration: 150 }
+                            NumberAnimation { duration: QsConfig.Appearance.anim.durations.fast }
                         }
                     }
                     
@@ -163,19 +163,19 @@ Item {
                         anchors.left: parent.left
                         anchors.right: parent.right
                         anchors.top: parent.top
-                        anchors.margins: 12
-                        spacing: 8
+                        anchors.margins: QsConfig.Appearance.margin.m
+                        spacing: QsConfig.Appearance.spacing.s
                         
                         // Header: App icon, name, time, close button
                         RowLayout {
                             Layout.fillWidth: true
-                            spacing: 8
+                            spacing: QsConfig.Appearance.spacing.s
                             
                             // App Icon
                             Rectangle {
                                 width: 24
                                 height: 24
-                                radius: 6
+                                radius: QsConfig.Appearance.radius.xs
                                 color: Qt.rgba(1, 1, 1, 0.1)
                                 visible: modelData.appIcon.length > 0
                                 
@@ -191,7 +191,7 @@ Item {
                             // App Name
                             Text {
                                 text: modelData.appName || "Application"
-                                font.pixelSize: 12
+                                font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
                                 font.weight: Font.Medium
                                 color: root.textColor
                                 opacity: 0.7
@@ -202,7 +202,7 @@ Item {
                             // Timestamp
                             Text {
                                 text: modelData.timeString
-                                font.pixelSize: 11
+                                font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
                                 color: root.textColor
                                 opacity: 0.5
                             }
@@ -211,15 +211,15 @@ Item {
                             Rectangle {
                                 width: 24
                                 height: 24
-                                radius: 12
+                                radius: height / 2
                                 color: closeMouseArea.containsMouse ? 
                                        Qt.rgba(1, 1, 1, 0.2) : "transparent"
                                 
                                 Text {
                                     anchors.centerIn: parent
                                     text: "󰅖"
-                                    font.family: "Material Design Icons"
-                                    font.pixelSize: 14
+                                    font.family: QsConfig.Appearance.typography.iconFamily
+                                    font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
                                     color: root.textColor
                                 }
                                 
@@ -235,7 +235,7 @@ Item {
                                 }
                                 
                                 Behavior on color {
-                                    ColorAnimation { duration: 150 }
+                                    ColorAnimation { duration: QsConfig.Appearance.anim.durations.fast }
                                 }
                             }
                         }
@@ -244,7 +244,7 @@ Item {
                         Text {
                             Layout.fillWidth: true
                             text: modelData.summary
-                            font.pixelSize: 14
+                            font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
                             font.weight: Font.DemiBold
                             color: root.textColor
                             wrapMode: Text.Wrap
@@ -256,7 +256,7 @@ Item {
                         Text {
                             Layout.fillWidth: true
                             text: modelData.body
-                            font.pixelSize: 12
+                            font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
                             color: root.textColor
                             opacity: 0.8
                             wrapMode: Text.Wrap
@@ -269,7 +269,7 @@ Item {
                         Rectangle {
                             Layout.fillWidth: true
                             Layout.preferredHeight: 120
-                            radius: 8
+                            radius: QsConfig.Appearance.radius.s
                             clip: true
                             visible: modelData.image.length > 0
                             color: "transparent"
@@ -284,7 +284,7 @@ Item {
                         // Actions
                         Flow {
                             Layout.fillWidth: true
-                            spacing: 8
+                            spacing: QsConfig.Appearance.spacing.s
                             visible: modelData.actions && modelData.actions.length > 0
                             
                             Repeater {
@@ -293,7 +293,7 @@ Item {
                                 Rectangle {
                                     width: actionText.width + 16
                                     height: 28
-                                    radius: 6
+                                    radius: QsConfig.Appearance.radius.xs
                                     color: actionMouseArea.containsMouse ?
                                            root.accentColor :
                                            Qt.rgba(1, 1, 1, 0.1)
@@ -302,7 +302,7 @@ Item {
                                         id: actionText
                                         anchors.centerIn: parent
                                         text: modelData.text || modelData.identifier
-                                        font.pixelSize: 11
+                                        font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
                                         font.weight: Font.Medium
                                         color: actionMouseArea.containsMouse ?
                                                "#000000" : root.textColor
@@ -320,7 +320,7 @@ Item {
                                     }
                                     
                                     Behavior on color {
-                                        ColorAnimation { duration: 150 }
+                                        ColorAnimation { duration: QsConfig.Appearance.anim.durations.fast }
                                     }
                                 }
                             }
@@ -334,7 +334,7 @@ Item {
         Text {
             Layout.fillWidth: true
             text: notifs.dnd ? "󰂛 Do Not Disturb enabled - notifications are silenced" : ""
-            font.pixelSize: 12
+            font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
             color: root.accentColor
             horizontalAlignment: Text.AlignHCenter
             visible: notifs.dnd

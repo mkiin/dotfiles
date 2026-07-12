@@ -27,46 +27,46 @@ Item {
     
     ScrollView {
         anchors.fill: parent
-        anchors.margins: 16
+        anchors.margins: QsConfig.Appearance.margin.m
         clip: true
         
         ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
         
         ColumnLayout {
             width: parent.parent.width - 32
-            spacing: 16
+            spacing: QsConfig.Appearance.spacing.l
             
             // Power buttons section
             GridLayout {
                 Layout.fillWidth: true
                 columns: 4
-                rowSpacing: 8
-                columnSpacing: 8
+                rowSpacing: QsConfig.Appearance.spacing.s
+                columnSpacing: QsConfig.Appearance.spacing.s
                 
                 // Lock button
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 80
-                    radius: 12
+                    radius: QsConfig.Appearance.radius.s
                     color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                     
                     ColumnLayout {
                         anchors.centerIn: parent
-                        spacing: 6
+                        spacing: QsConfig.Appearance.spacing.s
                         
                         Text {
                             Layout.alignment: Qt.AlignHCenter
                             text: "󰌾"
-                            font.family: "Material Design Icons"
-                            font.pixelSize: 28
+                            font.family: QsConfig.Appearance.typography.iconFamily
+                            font.pixelSize: QsConfig.Appearance.typography.headlineMedium.size
                             color: QsConfig.Theme.secondary
                         }
                         
                         Text {
                             Layout.alignment: Qt.AlignHCenter
                             text: "Lock"
-                            font.family: "Inter"
-                            font.pixelSize: 11
+                            font.family: QsConfig.Appearance.typography.family
+                            font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
                             color: QsConfig.Theme.text
                         }
                     }
@@ -87,26 +87,26 @@ Item {
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 80
-                    radius: 12
+                    radius: QsConfig.Appearance.radius.s
                     color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                     
                     ColumnLayout {
                         anchors.centerIn: parent
-                        spacing: 6
+                        spacing: QsConfig.Appearance.spacing.s
                         
                         Text {
                             Layout.alignment: Qt.AlignHCenter
                             text: "󰗼"
-                            font.family: "Material Design Icons"
-                            font.pixelSize: 28
+                            font.family: QsConfig.Appearance.typography.iconFamily
+                            font.pixelSize: QsConfig.Appearance.typography.headlineMedium.size
                             color: QsConfig.Theme.tertiary
                         }
                         
                         Text {
                             Layout.alignment: Qt.AlignHCenter
                             text: "Logout"
-                            font.family: "Inter"
-                            font.pixelSize: 11
+                            font.family: QsConfig.Appearance.typography.family
+                            font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
                             color: QsConfig.Theme.text
                         }
                     }
@@ -127,26 +127,26 @@ Item {
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 80
-                    radius: 12
+                    radius: QsConfig.Appearance.radius.s
                     color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                     
                     ColumnLayout {
                         anchors.centerIn: parent
-                        spacing: 6
+                        spacing: QsConfig.Appearance.spacing.s
                         
                         Text {
                             Layout.alignment: Qt.AlignHCenter
                             text: "󰒲"
-                            font.family: "Material Design Icons"
-                            font.pixelSize: 28
+                            font.family: QsConfig.Appearance.typography.iconFamily
+                            font.pixelSize: QsConfig.Appearance.typography.headlineMedium.size
                             color: QsConfig.Theme.text
                         }
                         
                         Text {
                             Layout.alignment: Qt.AlignHCenter
                             text: "Sleep"
-                            font.family: "Inter"
-                            font.pixelSize: 11
+                            font.family: QsConfig.Appearance.typography.family
+                            font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
                             color: QsConfig.Theme.text
                         }
                     }
@@ -167,26 +167,26 @@ Item {
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 80
-                    radius: 12
+                    radius: QsConfig.Appearance.radius.s
                     color: QsConfig.Theme.withAlpha(QsConfig.Theme.error, 0.1)
                     
                     ColumnLayout {
                         anchors.centerIn: parent
-                        spacing: 6
+                        spacing: QsConfig.Appearance.spacing.s
                         
                         Text {
                             Layout.alignment: Qt.AlignHCenter
                             text: "󰐥"
-                            font.family: "Material Design Icons"
-                            font.pixelSize: 28
+                            font.family: QsConfig.Appearance.typography.iconFamily
+                            font.pixelSize: QsConfig.Appearance.typography.headlineMedium.size
                             color: QsConfig.Theme.error
                         }
                         
                         Text {
                             Layout.alignment: Qt.AlignHCenter
                             text: "Power"
-                            font.family: "Inter"
-                            font.pixelSize: 11
+                            font.family: QsConfig.Appearance.typography.family
+                            font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
                             color: QsConfig.Theme.text
                         }
                     }
@@ -214,8 +214,8 @@ Item {
             // Quick toggles
             Text {
                 text: "Quick Settings"
-                font.family: "Inter"
-                font.pixelSize: 13
+                font.family: QsConfig.Appearance.typography.family
+                font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
                 font.weight: Font.DemiBold
                 color: QsConfig.Theme.text
             }
@@ -223,54 +223,54 @@ Item {
             GridLayout {
                 Layout.fillWidth: true
                 columns: 2
-                rowSpacing: 8
-                columnSpacing: 8
+                rowSpacing: QsConfig.Appearance.spacing.s
+                columnSpacing: QsConfig.Appearance.spacing.s
                 
                 // DND Toggle
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 60
-                    radius: 10
+                    radius: QsConfig.Appearance.radius.s
                     color: dndEnabled ? 
                            QsConfig.Theme.withAlpha(QsConfig.Theme.error, 0.15) : 
                            QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                     
                     Behavior on color {
-                        ColorAnimation { duration: 200; easing.type: Easing.OutCubic }
+                        ColorAnimation { duration: QsConfig.Appearance.anim.durations.normal; easing.type: Easing.OutCubic }
                     }
                     
                     RowLayout {
                         anchors.fill: parent
-                        anchors.margins: 12
-                        spacing: 10
+                        anchors.margins: QsConfig.Appearance.margin.m
+                        spacing: QsConfig.Appearance.spacing.m
                         
                         Text {
                             text: "󰂛"
-                            font.family: "Material Design Icons"
-                            font.pixelSize: 24
+                            font.family: QsConfig.Appearance.typography.iconFamily
+                            font.pixelSize: QsConfig.Appearance.typography.headlineSmall.size
                             color: dndEnabled ? QsConfig.Theme.error : QsConfig.Theme.text
                             
                             Behavior on color {
-                                ColorAnimation { duration: 200; easing.type: Easing.OutCubic }
+                                ColorAnimation { duration: QsConfig.Appearance.anim.durations.normal; easing.type: Easing.OutCubic }
                             }
                         }
                         
                         ColumnLayout {
                             Layout.fillWidth: true
-                            spacing: 2
+                            spacing: QsConfig.Appearance.spacing.xs
                             
                             Text {
                                 text: "Do Not Disturb"
-                                font.family: "Inter"
-                                font.pixelSize: 12
+                                font.family: QsConfig.Appearance.typography.family
+                                font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
                                 font.weight: Font.Medium
                                 color: QsConfig.Theme.text
                             }
                             
                             Text {
                                 text: dndEnabled ? "On" : "Off"
-                                font.family: "Inter"
-                                font.pixelSize: 10
+                                font.family: QsConfig.Appearance.typography.family
+                                font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
                                 color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.6)
                             }
                         }
@@ -287,47 +287,47 @@ Item {
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 60
-                    radius: 10
+                    radius: QsConfig.Appearance.radius.s
                     color: idleInhibitor.inhibited ? 
                            QsConfig.Theme.withAlpha(QsConfig.Theme.tertiary, 0.15) : 
                            QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                     
                     Behavior on color {
-                        ColorAnimation { duration: 200; easing.type: Easing.OutCubic }
+                        ColorAnimation { duration: QsConfig.Appearance.anim.durations.normal; easing.type: Easing.OutCubic }
                     }
                     
                     RowLayout {
                         anchors.fill: parent
-                        anchors.margins: 12
-                        spacing: 10
+                        anchors.margins: QsConfig.Appearance.margin.m
+                        spacing: QsConfig.Appearance.spacing.m
                         
                         Text {
                             text: idleInhibitor.inhibited ? "󰅶" : "󰾪"
-                            font.family: "Material Design Icons"
-                            font.pixelSize: 24
+                            font.family: QsConfig.Appearance.typography.iconFamily
+                            font.pixelSize: QsConfig.Appearance.typography.headlineSmall.size
                             color: idleInhibitor.inhibited ? QsConfig.Theme.tertiary : QsConfig.Theme.text
                             
                             Behavior on color {
-                                ColorAnimation { duration: 200; easing.type: Easing.OutCubic }
+                                ColorAnimation { duration: QsConfig.Appearance.anim.durations.normal; easing.type: Easing.OutCubic }
                             }
                         }
                         
                         ColumnLayout {
                             Layout.fillWidth: true
-                            spacing: 2
+                            spacing: QsConfig.Appearance.spacing.xs
                             
                             Text {
                                 text: "Keep Awake"
-                                font.family: "Inter"
-                                font.pixelSize: 12
+                                font.family: QsConfig.Appearance.typography.family
+                                font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
                                 font.weight: Font.Medium
                                 color: QsConfig.Theme.text
                             }
                             
                             Text {
                                 text: idleInhibitor.inhibited ? "On" : "Off"
-                                font.family: "Inter"
-                                font.pixelSize: 10
+                                font.family: QsConfig.Appearance.typography.family
+                                font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
                                 color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.6)
                             }
                         }
@@ -351,8 +351,8 @@ Item {
             // Network Controls
             Text {
                 text: "Network"
-                font.family: "Inter"
-                font.pixelSize: 13
+                font.family: QsConfig.Appearance.typography.family
+                font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
                 font.weight: Font.DemiBold
                 color: QsConfig.Theme.text
             }
@@ -361,37 +361,37 @@ Item {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 70
-                radius: 10
+                radius: QsConfig.Appearance.radius.s
                 color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
-                
+
                 RowLayout {
                     anchors.fill: parent
-                    anchors.margins: 12
-                    spacing: 12
+                    anchors.margins: QsConfig.Appearance.margin.m
+                    spacing: QsConfig.Appearance.spacing.m
                     
                     Rectangle {
                         Layout.preferredWidth: 40
                         Layout.preferredHeight: 40
-                        radius: 20
+                        radius: height / 2
                         color: network.connected ? QsConfig.Theme.withAlpha(QsConfig.Theme.tertiary, 0.2) : "transparent"
                         
                         Text {
                             anchors.centerIn: parent
                             text: network.connected ? "󰖩" : "󰖪"
-                            font.family: "Material Design Icons"
-                            font.pixelSize: 22
+                            font.family: QsConfig.Appearance.typography.iconFamily
+                            font.pixelSize: QsConfig.Appearance.typography.titleLarge.size
                             color: network.connected ? QsConfig.Theme.tertiary : QsConfig.Theme.text
                         }
                     }
                     
                     ColumnLayout {
                         Layout.fillWidth: true
-                        spacing: 2
+                        spacing: QsConfig.Appearance.spacing.xs
                         
                         Text {
                             text: network.connected ? network.ssid : "WiFi Disconnected"
-                            font.family: "Inter"
-                            font.pixelSize: 13
+                            font.family: QsConfig.Appearance.typography.family
+                            font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
                             font.weight: Font.Medium
                             color: QsConfig.Theme.text
                             elide: Text.ElideRight
@@ -400,16 +400,16 @@ Item {
                         
                         Text {
                             text: network.connected ? "Connected" : "Click to connect"
-                            font.family: "Inter"
-                            font.pixelSize: 10
+                            font.family: QsConfig.Appearance.typography.family
+                            font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
                             color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.6)
                         }
                     }
                     
                     Text {
                         text: "󰅂"
-                        font.family: "Material Design Icons"
-                        font.pixelSize: 18
+                        font.family: QsConfig.Appearance.typography.iconFamily
+                        font.pixelSize: QsConfig.Appearance.typography.titleMedium.size
                         color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.5)
                     }
                 }
@@ -430,25 +430,25 @@ Item {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 60
-                radius: 10
+                radius: QsConfig.Appearance.radius.s
                 color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
-                
+
                 RowLayout {
                     anchors.fill: parent
-                    anchors.margins: 12
-                    spacing: 12
+                    anchors.margins: QsConfig.Appearance.margin.m
+                    spacing: QsConfig.Appearance.spacing.m
                     
                     Rectangle {
                         Layout.preferredWidth: 36
                         Layout.preferredHeight: 36
-                        radius: 18
+                        radius: height / 2
                         color: bluetooth.connected ? QsConfig.Theme.withAlpha(QsConfig.Theme.tertiary, 0.2) : "transparent"
                         
                         Text {
                             anchors.centerIn: parent
                             text: bluetooth.connected ? "󰂯" : "󰂲"
-                            font.family: "Material Design Icons"
-                            font.pixelSize: 20
+                            font.family: QsConfig.Appearance.typography.iconFamily
+                            font.pixelSize: QsConfig.Appearance.typography.titleLarge.size
                             color: bluetooth.connected ? QsConfig.Theme.tertiary : QsConfig.Theme.text
                         }
                     }
@@ -459,8 +459,8 @@ Item {
                         text: bluetooth.connected ? 
                               (bluetooth.deviceName || "Connected") :
                               "Bluetooth Disconnected"
-                        font.family: "Inter"
-                        font.pixelSize: 13
+                        font.family: QsConfig.Appearance.typography.family
+                        font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
                         font.weight: Font.Medium
                         color: QsConfig.Theme.text
                         elide: Text.ElideRight
@@ -468,8 +468,8 @@ Item {
                     
                     Text {
                         text: "󰅂"
-                        font.family: "Material Design Icons"
-                        font.pixelSize: 18
+                        font.family: QsConfig.Appearance.typography.iconFamily
+                        font.pixelSize: QsConfig.Appearance.typography.titleMedium.size
                         color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.5)
                     }
                 }
@@ -489,25 +489,25 @@ Item {
             // Volume Control
             Text {
                 text: "Volume"
-                font.family: "Inter"
-                font.pixelSize: 13
+                font.family: QsConfig.Appearance.typography.family
+                font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
                 font.weight: Font.DemiBold
                 color: QsConfig.Theme.text
             }
             
             ColumnLayout {
                 Layout.fillWidth: true
-                spacing: 12
+                spacing: QsConfig.Appearance.spacing.m
                 
                 // Output volume
                 RowLayout {
                     Layout.fillWidth: true
-                    spacing: 12
+                    spacing: QsConfig.Appearance.spacing.m
                     
                     Text {
                         text: audio.muted ? "󰖁" : "󰕾"
-                        font.family: "Material Design Icons"
-                        font.pixelSize: 24
+                        font.family: QsConfig.Appearance.typography.iconFamily
+                        font.pixelSize: QsConfig.Appearance.typography.headlineSmall.size
                         color: QsConfig.Theme.text
                     }
                     
@@ -526,14 +526,14 @@ Item {
                             y: parent.topPadding + parent.availableHeight / 2 - height / 2
                             width: parent.availableWidth
                             height: 6
-                            radius: 3
+                            radius: height / 2
                             color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.1)
-                            
+
                             Rectangle {
                                 width: parent.parent.visualPosition * parent.width
                                 height: parent.height
                                 color: QsConfig.Theme.tertiary
-                                radius: 3
+                                radius: height / 2
                             }
                         }
                         
@@ -542,7 +542,7 @@ Item {
                             y: parent.topPadding + parent.availableHeight / 2 - height / 2
                             width: 18
                             height: 18
-                            radius: 9
+                            radius: height / 2
                             color: QsConfig.Theme.text
                             border.color: QsConfig.Theme.tertiary
                             border.width: 2
@@ -551,8 +551,8 @@ Item {
                     
                     Text {
                         text: audio.percentage + "%"
-                        font.family: "Inter"
-                        font.pixelSize: 12
+                        font.family: QsConfig.Appearance.typography.family
+                        font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
                         font.weight: Font.Medium
                         color: QsConfig.Theme.text
                         Layout.preferredWidth: 45
@@ -563,20 +563,20 @@ Item {
             // Brightness Control
             Text {
                 text: "Brightness"
-                font.family: "Inter"
-                font.pixelSize: 13
+                font.family: QsConfig.Appearance.typography.family
+                font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
                 font.weight: Font.DemiBold
                 color: QsConfig.Theme.text
             }
             
             RowLayout {
                 Layout.fillWidth: true
-                spacing: 12
+                spacing: QsConfig.Appearance.spacing.m
                 
                 Text {
                     text: "󰃠"
-                    font.family: "Material Design Icons"
-                    font.pixelSize: 24
+                    font.family: QsConfig.Appearance.typography.iconFamily
+                    font.pixelSize: QsConfig.Appearance.typography.headlineSmall.size
                     color: QsConfig.Theme.text
                 }
                 
@@ -593,14 +593,14 @@ Item {
                         y: parent.topPadding + parent.availableHeight / 2 - height / 2
                         width: parent.availableWidth
                         height: 6
-                        radius: 3
+                        radius: height / 2
                         color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.1)
-                        
+
                         Rectangle {
                             width: parent.parent.visualPosition * parent.width
                             height: parent.height
                             color: QsConfig.Theme.secondary
-                            radius: 3
+                            radius: height / 2
                         }
                     }
                     
@@ -609,7 +609,7 @@ Item {
                         y: parent.topPadding + parent.availableHeight / 2 - height / 2
                         width: 18
                         height: 18
-                        radius: 9
+                        radius: height / 2
                         color: QsConfig.Theme.text
                         border.color: QsConfig.Theme.secondary
                         border.width: 2
@@ -618,8 +618,8 @@ Item {
                 
                 Text {
                     text: brightness.percentage + "%"
-                    font.family: "Inter"
-                    font.pixelSize: 12
+                    font.family: QsConfig.Appearance.typography.family
+                    font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
                     font.weight: Font.Medium
                     color: QsConfig.Theme.text
                     Layout.preferredWidth: 45
