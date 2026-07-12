@@ -11,7 +11,6 @@ import "config" as QsConfig
 import "modules/controlcenter"
 
 // 常駐デーモン: 通知サーバ ＋ トースト ＋ 通知センター(ControlCenter)。
-// bar/launcher/dashboard/sidebar/osd は読まない（休眠）。
 ShellRoot {
     id: root
 
@@ -37,7 +36,7 @@ ShellRoot {
 
     // トースト（右上）
     Loader {
-        source: "modules/bar/components/NotificationPopups.qml"
+        source: "modules/notifications/NotificationPopups.qml"
     }
 
     // 通知センター本体（クイックトグル/スライダ/MPRIS/通知リスト/電源）

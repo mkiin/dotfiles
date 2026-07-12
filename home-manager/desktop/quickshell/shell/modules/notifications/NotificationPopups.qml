@@ -5,8 +5,8 @@ import Quickshell
 import Quickshell.Services.Notifications
 import Quickshell.Wayland
 import Quickshell.Hyprland
-import "../../../services" as QsServices
-import "../../../config" as QsConfig
+import "../../services" as QsServices
+import "../../config" as QsConfig
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Material 3 Expressive Notification Popups — Revamped
