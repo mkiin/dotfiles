@@ -299,8 +299,8 @@ PanelWindow {
                                 icon: root.screenshot.isRecording ? "󰛿" : "󰻃"
                                 label: root.screenshot.isRecording ? "Stop Recording" : "Record Screen"
                                 subLabel: !root.screenshot.recorderAvailable
-                                    ? "Install wf-recorder"
-                                    : (root.screenshot.isRecording ? "Recording in progress" : "Start wf-recorder")
+                                    ? "Install gpu-screen-recorder"
+                                    : (root.screenshot.isRecording ? "Recording in progress" : "Start recording")
                                 active: root.screenshot.isRecording
                                 activeColor: QsConfig.Theme.error
                                 surfaceColor: QsConfig.Theme.card

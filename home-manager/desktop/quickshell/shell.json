@@ -4,8 +4,7 @@
     "materialIconFont": "Material Design Icons"
   },
   "paths": {
-    "colours": "~/.cache/quickshell/matugen-colors.json",
-    "screenshotsDir": "~/Pictures/Screenshots"
+    "colours": "~/.cache/quickshell/matugen-colors.json"
   },
   "notifications": {
     "registerServer": true,

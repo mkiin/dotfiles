@@ -24,8 +24,7 @@ Singleton {
     })
 
     readonly property var paths: ({
-        colours: _expandHome(data.paths?.colours ?? "~/.cache/quickshell/matugen-colors.json"),
-        screenshotsDir: _expandHome(data.paths?.screenshotsDir ?? "~/Pictures/Screenshots")
+        colours: _expandHome(data.paths?.colours ?? "~/.cache/quickshell/matugen-colors.json")
     })
 
     readonly property var notifications: ({
