@@ -28,18 +28,25 @@
     },
     "separator",
     "os",
-    "host",
+    {
+      "type": "host",
+      "keyIcon": ""
+    },
     "kernel",
     "uptime",
     {
       "type": "packages",
-      "key": "Packages"
+      "key": "Packages",
+      "keyIcon": ""
     },
     "shell",
     "wm",
     "terminal",
     "cpu",
-    "gpu",
+    {
+      "type": "gpu",
+      "keyIcon": ""
+    },
     "memory",
     "disk",
     "break",

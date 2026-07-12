@@ -22,10 +22,8 @@ end)
 config.audible_bell = "Disabled"
 
 -- フォント
--- Mono 変種は Nerd グリフ(特に U+F0000+ の MD 系)を 1 セル幅に強制する。
--- 非 Mono だと MD アイコンが 2 セルで描画され fastfetch 等の桁揃えが崩れるため。
 config.font = wezterm.font_with_fallback({
-	"JetBrainsMono Nerd Font Mono",
+	"JetBrainsMono Nerd Font",
 	"UDEV Gothic",
 })
 config.font_size = 14.0
