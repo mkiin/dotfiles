@@ -1,8 +1,13 @@
-{ inputs, config, ... }:
+{
+  inputs,
+  config,
+  pkgs,
+  ...
+}:
 {
   programs.claude-code = {
     enable = true;
-    package = null;
+    package = pkgs.claude-code;
 
     settings = {
       theme = "dark";

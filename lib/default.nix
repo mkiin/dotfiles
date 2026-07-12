@@ -10,6 +10,9 @@ let
     system: username: "${homeDirOf system username}/ghq/github.com/${username}/dotfiles";
 
   defaultOverlays = [
+    # claude-code / codex を numtide/llm-agents.nix（日次更新・prebuilt）から供給する。
+    inputs.llm-agents.overlays.shared-nixpkgs
+
     # unstable の cantarell-fonts 0.311 は上流で otfautohint がビルド失敗し、かつ
     # バイナリキャッシュにも無い（steam-run の FHS 環境が間接的に引き込む）。
     # キャッシュ済みで動作する stable 版 (0.303.1) にピン留めして switch ブロックを回避する。
