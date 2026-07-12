@@ -7,6 +7,7 @@ import Quickshell.Bluetooth
 import Quickshell.Hyprland
 import Quickshell.Io
 import "../../services" as QsServices
+import "../../config" as QsConfig
 
 // Solid Bluetooth Popup - Matching Control Center style
 PanelWindow {
@@ -14,21 +15,12 @@ PanelWindow {
 
     property bool shouldShow: false
     readonly property var adapter: Bluetooth.defaultAdapter
-    readonly property var pywal: QsServices.Pywal
     readonly property var devices: [...Bluetooth.devices.values].sort((a, b) => {
         if (a.connected !== b.connected) return b.connected - a.connected
         if (a.bonded !== b.bonded) return b.bonded - a.bonded
         return a.name.localeCompare(b.name)
     })
 
-    // Solid colors like Control Center
-    readonly property color cSurface: pywal.surfaceContainer
-    readonly property color cSurfaceContainer: pywal.surfaceContainerHigh
-    readonly property color cPrimary: pywal.primary
-    readonly property color cText: pywal.foreground
-    readonly property color cSubText: Qt.rgba(cText.r, cText.g, cText.b, 0.6)
-    readonly property color cBorder: Qt.rgba(cText.r, cText.g, cText.b, 0.08)
-    readonly property color cHover: Qt.rgba(cText.r, cText.g, cText.b, 0.06)
 
     // Settings launcher
     Process {
@@ -119,9 +111,9 @@ PanelWindow {
             Rectangle {
                 id: backgroundRect
                 anchors.fill: parent
-                color: cSurface
+                color: QsConfig.Theme.panel
                 radius: 16
-                border.color: cBorder
+                border.color: QsConfig.Theme.borderFaint
                 border.width: 1
 
                 layer.enabled: true
@@ -147,14 +139,14 @@ PanelWindow {
                             width: 36
                             height: 36
                             radius: 12
-                            color: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15)
+                            color: Qt.rgba(QsConfig.Theme.accent.r, QsConfig.Theme.accent.g, QsConfig.Theme.accent.b, 0.15)
 
                             Text {
                                 anchors.centerIn: parent
                                 text: "󰂯"
                                 font.family: "Material Design Icons"
                                 font.pixelSize: 18
-                                color: cPrimary
+                                color: QsConfig.Theme.accent
                             }
                         }
 
@@ -167,7 +159,7 @@ PanelWindow {
                                 font.family: "Inter"
                                 font.pixelSize: 15
                                 font.weight: Font.Bold
-                                color: cText
+                                color: QsConfig.Theme.text
                             }
 
                             Text {
@@ -175,7 +167,7 @@ PanelWindow {
                                 text: connected.length > 0 ? connected[0].name : "No device connected"
                                 font.family: "Inter"
                                 font.pixelSize: 11
-                                color: cSubText
+                                color: QsConfig.Theme.textMuted
                             }
                         }
 
@@ -184,7 +176,7 @@ PanelWindow {
                             width: 44
                             height: 24
                             radius: 12
-                            color: adapter?.enabled ? cPrimary : Qt.rgba(cText.r, cText.g, cText.b, 0.15)
+                            color: adapter?.enabled ? QsConfig.Theme.accent : Qt.rgba(QsConfig.Theme.text.r, QsConfig.Theme.text.g, QsConfig.Theme.text.b, 0.15)
 
                             Behavior on color { ColorAnimation { duration: 150 } }
 
@@ -212,7 +204,7 @@ PanelWindow {
                         Layout.fillWidth: true
                         Layout.preferredHeight: 36
                         radius: 10
-                        color: scanArea.containsMouse ? pywal.surfaceContainerHighest : cSurfaceContainer
+                        color: scanArea.containsMouse ? QsConfig.Theme.cardHigh : QsConfig.Theme.card
 
                         Behavior on color { ColorAnimation { duration: 100 } }
 
@@ -224,7 +216,7 @@ PanelWindow {
                                 text: adapter?.discovering ? "󰑐" : "󰑓"
                                 font.family: "Material Design Icons"
                                 font.pixelSize: 16
-                                color: adapter?.discovering ? cPrimary : cText
+                                color: adapter?.discovering ? QsConfig.Theme.accent : QsConfig.Theme.text
 
                                 RotationAnimation on rotation {
                                     running: adapter?.discovering ?? false
@@ -237,7 +229,7 @@ PanelWindow {
                                 font.family: "Inter"
                                 font.pixelSize: 12
                                 font.weight: Font.Medium
-                                color: cText
+                                color: QsConfig.Theme.text
                             }
                         }
 
@@ -255,7 +247,7 @@ PanelWindow {
                         Layout.fillWidth: true
                         Layout.preferredHeight: Math.min(deviceList.contentHeight + 8, 260)
                         radius: 12
-                        color: cSurfaceContainer
+                        color: QsConfig.Theme.card
                         clip: true
 
                         ListView {
@@ -271,7 +263,7 @@ PanelWindow {
                                 width: deviceList.width
                                 height: 52
                                 radius: 10
-                                color: itemArea.containsMouse ? cHover : "transparent"
+                                color: itemArea.containsMouse ? QsConfig.Theme.hover : "transparent"
 
                                 required property var modelData
                                 property bool isConnected: modelData.connected
@@ -316,7 +308,7 @@ PanelWindow {
                                         }
                                         font.family: "Material Design Icons"
                                         font.pixelSize: 18
-                                        color: isConnected ? cPrimary : cText
+                                        color: isConnected ? QsConfig.Theme.accent : QsConfig.Theme.text
                                     }
 
                                     ColumnLayout {
@@ -328,7 +320,7 @@ PanelWindow {
                                             font.family: "Inter"
                                             font.pixelSize: 12
                                             font.weight: Font.Medium
-                                            color: cText
+                                            color: QsConfig.Theme.text
                                             elide: Text.ElideRight
                                             Layout.fillWidth: true
                                         }
@@ -344,7 +336,7 @@ PanelWindow {
                                             }
                                             font.family: "Inter"
                                             font.pixelSize: 10
-                                            color: isConnected ? cPrimary : cSubText
+                                            color: isConnected ? QsConfig.Theme.accent : QsConfig.Theme.textMuted
                                         }
                                     }
 
@@ -358,16 +350,16 @@ PanelWindow {
                                             Layout.preferredWidth: 26
                                             Layout.preferredHeight: 26
                                             radius: 13
-                                            color: trustArea.containsMouse ? cHover : "transparent"
+                                            color: trustArea.containsMouse ? QsConfig.Theme.hover : "transparent"
                                             border.width: 1
-                                            border.color: deviceItem.modelData.trusted ? cPrimary : Qt.rgba(cText.r, cText.g, cText.b, 0.15)
+                                            border.color: deviceItem.modelData.trusted ? QsConfig.Theme.accent : Qt.rgba(QsConfig.Theme.text.r, QsConfig.Theme.text.g, QsConfig.Theme.text.b, 0.15)
 
                                             Text {
                                                 anchors.centerIn: parent
                                                 text: deviceItem.modelData.trusted ? "󰕥" : "󰒙"
                                                 font.family: "Material Design Icons"
                                                 font.pixelSize: 13
-                                                color: deviceItem.modelData.trusted ? cPrimary : cSubText
+                                                color: deviceItem.modelData.trusted ? QsConfig.Theme.accent : QsConfig.Theme.textMuted
                                             }
 
                                             MouseArea {
@@ -385,16 +377,16 @@ PanelWindow {
                                             Layout.preferredWidth: 26
                                             Layout.preferredHeight: 26
                                             radius: 13
-                                            color: forgetArea.containsMouse ? cHover : "transparent"
+                                            color: forgetArea.containsMouse ? QsConfig.Theme.hover : "transparent"
                                             border.width: 1
-                                            border.color: Qt.rgba(cText.r, cText.g, cText.b, 0.15)
+                                            border.color: Qt.rgba(QsConfig.Theme.text.r, QsConfig.Theme.text.g, QsConfig.Theme.text.b, 0.15)
 
                                             Text {
                                                 anchors.centerIn: parent
                                                 text: "󰆴"
                                                 font.family: "Material Design Icons"
                                                 font.pixelSize: 13
-                                                color: cSubText
+                                                color: QsConfig.Theme.textMuted
                                             }
 
                                             MouseArea {
@@ -411,16 +403,16 @@ PanelWindow {
                                             Layout.preferredWidth: 28
                                             Layout.preferredHeight: 28
                                             radius: 14
-                                            color: actionArea.containsMouse ? Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15) : "transparent"
+                                            color: actionArea.containsMouse ? Qt.rgba(QsConfig.Theme.accent.r, QsConfig.Theme.accent.g, QsConfig.Theme.accent.b, 0.15) : "transparent"
                                             border.width: 1
-                                            border.color: isConnected ? cPrimary : Qt.rgba(cText.r, cText.g, cText.b, 0.15)
+                                            border.color: isConnected ? QsConfig.Theme.accent : Qt.rgba(QsConfig.Theme.text.r, QsConfig.Theme.text.g, QsConfig.Theme.text.b, 0.15)
 
                                             Text {
                                                 anchors.centerIn: parent
                                                 text: deviceItem.busy ? "󰑓" : isConnected ? "󰌊" : "󰌘"
                                                 font.family: "Material Design Icons"
                                                 font.pixelSize: 14
-                                                color: isConnected ? cPrimary : cSubText
+                                                color: isConnected ? QsConfig.Theme.accent : QsConfig.Theme.textMuted
 
                                                 RotationAnimation on rotation {
                                                     running: deviceItem.busy
@@ -465,7 +457,7 @@ PanelWindow {
                                 text: "󰂲"
                                 font.family: "Material Design Icons"
                                 font.pixelSize: 32
-                                color: Qt.rgba(cText.r, cText.g, cText.b, 0.2)
+                                color: Qt.rgba(QsConfig.Theme.text.r, QsConfig.Theme.text.g, QsConfig.Theme.text.b, 0.2)
                             }
 
                             Text {
@@ -473,7 +465,7 @@ PanelWindow {
                                 text: adapter?.enabled ? "No devices found" : "Bluetooth disabled"
                                 font.family: "Inter"
                                 font.pixelSize: 12
-                                color: cSubText
+                                color: QsConfig.Theme.textMuted
                             }
                         }
                     }
@@ -483,7 +475,7 @@ PanelWindow {
                         Layout.fillWidth: true
                         Layout.preferredHeight: 36
                         radius: 10
-                        color: settingsArea.containsMouse ? cHover : "transparent"
+                        color: settingsArea.containsMouse ? QsConfig.Theme.hover : "transparent"
 
                         RowLayout {
                             anchors.centerIn: parent
@@ -493,14 +485,14 @@ PanelWindow {
                                 text: "󰒓"
                                 font.family: "Material Design Icons"
                                 font.pixelSize: 14
-                                color: cSubText
+                                color: QsConfig.Theme.textMuted
                             }
 
                             Text {
                                 text: "Bluetooth Settings"
                                 font.family: "Inter"
                                 font.pixelSize: 12
-                                color: cSubText
+                                color: QsConfig.Theme.textMuted
                             }
                         }
 

@@ -18,7 +18,7 @@ PanelWindow {
     readonly property var logger: QsServices.Logger
     readonly property var config: QsConfig.Config
 
-    // ── Color Tokens (semantic, from Pywal) ──
+    // ── Color Tokens (semantic, from Theme) ──
     readonly property color m3Surface: QsConfig.Theme.card
     readonly property color m3SurfaceContainer: QsConfig.Theme.panel
     readonly property color m3SurfaceContainerHigh: QsConfig.Theme.cardHigh

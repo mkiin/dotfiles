@@ -2,21 +2,17 @@ import QtQuick 6.10
 import QtQuick.Layouts 6.10
 import QtQuick.Controls 6.10
 import "../../../services" as QsServices
+import "../../../config" as QsConfig
 
 Item {
     id: root
-    
+
     readonly property var notifs: QsServices.Notifs
-    readonly property var pywal: QsServices.Pywal
-    
-    // Wait for pywal to load before showing content
-    readonly property bool pywalLoaded: pywal && pywal.foreground !== undefined
-    
-    // Safe color accessors with fallbacks
-    readonly property color textColor: pywalLoaded ? pywal.foreground : "#ffffff"
-    readonly property color accentColor: pywalLoaded ? pywal.color4 : "#a6e3a1"
-    readonly property color urgentColor: pywalLoaded ? pywal.color1 : "#f38ba8"
-    readonly property color surfaceColor: pywalLoaded ? pywal.background : "#1e1e2e"
+
+    readonly property color textColor: QsConfig.Theme.text
+    readonly property color accentColor: QsConfig.Theme.accent
+    readonly property color urgentColor: QsConfig.Theme.error
+    readonly property color surfaceColor: QsConfig.Theme.background
     
     ColumnLayout {
         anchors.fill: parent

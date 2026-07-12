@@ -97,7 +97,7 @@ ShellRoot {
     // 壁紙変更後に matugen post_hook から呼ぶカラーリロード
     IpcHandler {
         target: "theme"
-        function reload(): void { QsServices.Pywal.reload() }
+        function reload(): void { QsServices.Colours.reload() }
     }
 
     // アイドルインヒビター(Caffeine)を waybar と共有。状態の真実はこの IdleInhibitor サービス。

@@ -4,11 +4,11 @@ import QtQuick.Controls 6.10
 import Quickshell
 import Quickshell.Io
 import "../../../services" as QsServices
+import "../../../config" as QsConfig
 
 Item {
     id: root
     
-    readonly property var pywal: QsServices.Pywal
     readonly property var audio: QsServices.Audio
     readonly property var brightness: QsServices.Brightness
     readonly property var network: QsServices.Network
@@ -47,7 +47,7 @@ Item {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 80
                     radius: 12
-                    color: Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.05)
+                    color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                     
                     ColumnLayout {
                         anchors.centerIn: parent
@@ -58,7 +58,7 @@ Item {
                             text: "󰌾"
                             font.family: "Material Design Icons"
                             font.pixelSize: 28
-                            color: pywal.color3
+                            color: QsConfig.Theme.secondary
                         }
                         
                         Text {
@@ -66,7 +66,7 @@ Item {
                             text: "Lock"
                             font.family: "Inter"
                             font.pixelSize: 11
-                            color: pywal.foreground
+                            color: QsConfig.Theme.text
                         }
                     }
                     
@@ -77,8 +77,8 @@ Item {
                             lockProc.running = true
                         }
                         
-                        onPressed: parent.color = Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.1)
-                        onReleased: parent.color = Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.05)
+                        onPressed: parent.color = QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.1)
+                        onReleased: parent.color = QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                     }
                 }
                 
@@ -87,7 +87,7 @@ Item {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 80
                     radius: 12
-                    color: Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.05)
+                    color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                     
                     ColumnLayout {
                         anchors.centerIn: parent
@@ -98,7 +98,7 @@ Item {
                             text: "󰗼"
                             font.family: "Material Design Icons"
                             font.pixelSize: 28
-                            color: pywal.color2
+                            color: QsConfig.Theme.tertiary
                         }
                         
                         Text {
@@ -106,7 +106,7 @@ Item {
                             text: "Logout"
                             font.family: "Inter"
                             font.pixelSize: 11
-                            color: pywal.foreground
+                            color: QsConfig.Theme.text
                         }
                     }
                     
@@ -117,8 +117,8 @@ Item {
                             logoutProc.running = true
                         }
                         
-                        onPressed: parent.color = Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.1)
-                        onReleased: parent.color = Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.05)
+                        onPressed: parent.color = QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.1)
+                        onReleased: parent.color = QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                     }
                 }
                 
@@ -127,7 +127,7 @@ Item {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 80
                     radius: 12
-                    color: Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.05)
+                    color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                     
                     ColumnLayout {
                         anchors.centerIn: parent
@@ -138,7 +138,7 @@ Item {
                             text: "󰒲"
                             font.family: "Material Design Icons"
                             font.pixelSize: 28
-                            color: pywal.foreground
+                            color: QsConfig.Theme.text
                         }
                         
                         Text {
@@ -146,7 +146,7 @@ Item {
                             text: "Sleep"
                             font.family: "Inter"
                             font.pixelSize: 11
-                            color: pywal.foreground
+                            color: QsConfig.Theme.text
                         }
                     }
                     
@@ -157,8 +157,8 @@ Item {
                             sleepProc.running = true
                         }
                         
-                        onPressed: parent.color = Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.1)
-                        onReleased: parent.color = Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.05)
+                        onPressed: parent.color = QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.1)
+                        onReleased: parent.color = QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                     }
                 }
                 
@@ -167,7 +167,7 @@ Item {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 80
                     radius: 12
-                    color: Qt.rgba(pywal.color1.r, pywal.color1.g, pywal.color1.b, 0.1)
+                    color: QsConfig.Theme.withAlpha(QsConfig.Theme.error, 0.1)
                     
                     ColumnLayout {
                         anchors.centerIn: parent
@@ -178,7 +178,7 @@ Item {
                             text: "󰐥"
                             font.family: "Material Design Icons"
                             font.pixelSize: 28
-                            color: pywal.color1
+                            color: QsConfig.Theme.error
                         }
                         
                         Text {
@@ -186,7 +186,7 @@ Item {
                             text: "Power"
                             font.family: "Inter"
                             font.pixelSize: 11
-                            color: pywal.foreground
+                            color: QsConfig.Theme.text
                         }
                     }
                     
@@ -197,8 +197,8 @@ Item {
                             QsServices.Logger.debug("SettingsSection", "Power off")
                         }
                         
-                        onPressed: parent.color = Qt.rgba(pywal.color1.r, pywal.color1.g, pywal.color1.b, 0.15)
-                        onReleased: parent.color = Qt.rgba(pywal.color1.r, pywal.color1.g, pywal.color1.b, 0.1)
+                        onPressed: parent.color = QsConfig.Theme.withAlpha(QsConfig.Theme.error, 0.15)
+                        onReleased: parent.color = QsConfig.Theme.withAlpha(QsConfig.Theme.error, 0.1)
                     }
                 }
             }
@@ -207,7 +207,7 @@ Item {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 1
-                color: Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.1)
+                color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.1)
             }
             
             // Quick toggles
@@ -216,7 +216,7 @@ Item {
                 font.family: "Inter"
                 font.pixelSize: 13
                 font.weight: Font.DemiBold
-                color: pywal.foreground
+                color: QsConfig.Theme.text
             }
             
             GridLayout {
@@ -231,8 +231,8 @@ Item {
                     Layout.preferredHeight: 60
                     radius: 10
                     color: dndEnabled ? 
-                           Qt.rgba(pywal.color1.r, pywal.color1.g, pywal.color1.b, 0.15) : 
-                           Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.05)
+                           QsConfig.Theme.withAlpha(QsConfig.Theme.error, 0.15) : 
+                           QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                     
                     Behavior on color {
                         ColorAnimation { duration: 200; easing.type: Easing.OutCubic }
@@ -247,7 +247,7 @@ Item {
                             text: "󰂛"
                             font.family: "Material Design Icons"
                             font.pixelSize: 24
-                            color: dndEnabled ? pywal.color1 : pywal.foreground
+                            color: dndEnabled ? QsConfig.Theme.error : QsConfig.Theme.text
                             
                             Behavior on color {
                                 ColorAnimation { duration: 200; easing.type: Easing.OutCubic }
@@ -263,14 +263,14 @@ Item {
                                 font.family: "Inter"
                                 font.pixelSize: 12
                                 font.weight: Font.Medium
-                                color: pywal.foreground
+                                color: QsConfig.Theme.text
                             }
                             
                             Text {
                                 text: dndEnabled ? "On" : "Off"
                                 font.family: "Inter"
                                 font.pixelSize: 10
-                                color: Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.6)
+                                color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.6)
                             }
                         }
                     }
@@ -288,8 +288,8 @@ Item {
                     Layout.preferredHeight: 60
                     radius: 10
                     color: idleInhibitor.inhibited ? 
-                           Qt.rgba(pywal.color2.r, pywal.color2.g, pywal.color2.b, 0.15) : 
-                           Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.05)
+                           QsConfig.Theme.withAlpha(QsConfig.Theme.tertiary, 0.15) : 
+                           QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                     
                     Behavior on color {
                         ColorAnimation { duration: 200; easing.type: Easing.OutCubic }
@@ -304,7 +304,7 @@ Item {
                             text: idleInhibitor.inhibited ? "󰅶" : "󰾪"
                             font.family: "Material Design Icons"
                             font.pixelSize: 24
-                            color: idleInhibitor.inhibited ? pywal.color2 : pywal.foreground
+                            color: idleInhibitor.inhibited ? QsConfig.Theme.tertiary : QsConfig.Theme.text
                             
                             Behavior on color {
                                 ColorAnimation { duration: 200; easing.type: Easing.OutCubic }
@@ -320,14 +320,14 @@ Item {
                                 font.family: "Inter"
                                 font.pixelSize: 12
                                 font.weight: Font.Medium
-                                color: pywal.foreground
+                                color: QsConfig.Theme.text
                             }
                             
                             Text {
                                 text: idleInhibitor.inhibited ? "On" : "Off"
                                 font.family: "Inter"
                                 font.pixelSize: 10
-                                color: Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.6)
+                                color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.6)
                             }
                         }
                     }
@@ -344,7 +344,7 @@ Item {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 1
-                color: Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.1)
+                color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.1)
             }
             
             // Network Controls
@@ -353,7 +353,7 @@ Item {
                 font.family: "Inter"
                 font.pixelSize: 13
                 font.weight: Font.DemiBold
-                color: pywal.foreground
+                color: QsConfig.Theme.text
             }
             
             // WiFi Control
@@ -361,7 +361,7 @@ Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 70
                 radius: 10
-                color: Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.05)
+                color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                 
                 RowLayout {
                     anchors.fill: parent
@@ -372,14 +372,14 @@ Item {
                         Layout.preferredWidth: 40
                         Layout.preferredHeight: 40
                         radius: 20
-                        color: network.connected ? Qt.rgba(pywal.color2.r, pywal.color2.g, pywal.color2.b, 0.2) : "transparent"
+                        color: network.connected ? QsConfig.Theme.withAlpha(QsConfig.Theme.tertiary, 0.2) : "transparent"
                         
                         Text {
                             anchors.centerIn: parent
                             text: network.connected ? "󰖩" : "󰖪"
                             font.family: "Material Design Icons"
                             font.pixelSize: 22
-                            color: network.connected ? pywal.color2 : pywal.foreground
+                            color: network.connected ? QsConfig.Theme.tertiary : QsConfig.Theme.text
                         }
                     }
                     
@@ -392,7 +392,7 @@ Item {
                             font.family: "Inter"
                             font.pixelSize: 13
                             font.weight: Font.Medium
-                            color: pywal.foreground
+                            color: QsConfig.Theme.text
                             elide: Text.ElideRight
                             Layout.fillWidth: true
                         }
@@ -401,7 +401,7 @@ Item {
                             text: network.connected ? "Connected" : "Click to connect"
                             font.family: "Inter"
                             font.pixelSize: 10
-                            color: Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.6)
+                            color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.6)
                         }
                     }
                     
@@ -409,7 +409,7 @@ Item {
                         text: "󰅂"
                         font.family: "Material Design Icons"
                         font.pixelSize: 18
-                        color: Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.5)
+                        color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.5)
                     }
                 }
                 
@@ -420,8 +420,8 @@ Item {
                         wifiSettingsProc.running = true
                     }
                     
-                    onPressed: parent.color = Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.1)
-                    onReleased: parent.color = Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.05)
+                    onPressed: parent.color = QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.1)
+                    onReleased: parent.color = QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                 }
             }
             
@@ -430,7 +430,7 @@ Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 60
                 radius: 10
-                color: Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.05)
+                color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                 
                 RowLayout {
                     anchors.fill: parent
@@ -441,14 +441,14 @@ Item {
                         Layout.preferredWidth: 36
                         Layout.preferredHeight: 36
                         radius: 18
-                        color: bluetooth.connected ? Qt.rgba(pywal.color2.r, pywal.color2.g, pywal.color2.b, 0.2) : "transparent"
+                        color: bluetooth.connected ? QsConfig.Theme.withAlpha(QsConfig.Theme.tertiary, 0.2) : "transparent"
                         
                         Text {
                             anchors.centerIn: parent
                             text: bluetooth.connected ? "󰂯" : "󰂲"
                             font.family: "Material Design Icons"
                             font.pixelSize: 20
-                            color: bluetooth.connected ? pywal.color2 : pywal.foreground
+                            color: bluetooth.connected ? QsConfig.Theme.tertiary : QsConfig.Theme.text
                         }
                     }
                     
@@ -461,7 +461,7 @@ Item {
                         font.family: "Inter"
                         font.pixelSize: 13
                         font.weight: Font.Medium
-                        color: pywal.foreground
+                        color: QsConfig.Theme.text
                         elide: Text.ElideRight
                     }
                     
@@ -469,7 +469,7 @@ Item {
                         text: "󰅂"
                         font.family: "Material Design Icons"
                         font.pixelSize: 18
-                        color: Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.5)
+                        color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.5)
                     }
                 }
                 
@@ -480,8 +480,8 @@ Item {
                         bluetoothSettingsProc.running = true
                     }
                     
-                    onPressed: parent.color = Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.1)
-                    onReleased: parent.color = Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.05)
+                    onPressed: parent.color = QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.1)
+                    onReleased: parent.color = QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                 }
             }
             
@@ -491,7 +491,7 @@ Item {
                 font.family: "Inter"
                 font.pixelSize: 13
                 font.weight: Font.DemiBold
-                color: pywal.foreground
+                color: QsConfig.Theme.text
             }
             
             ColumnLayout {
@@ -507,7 +507,7 @@ Item {
                         text: audio.muted ? "󰖁" : "󰕾"
                         font.family: "Material Design Icons"
                         font.pixelSize: 24
-                        color: pywal.foreground
+                        color: QsConfig.Theme.text
                     }
                     
                     Slider {
@@ -526,12 +526,12 @@ Item {
                             width: parent.availableWidth
                             height: 6
                             radius: 3
-                            color: Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.1)
+                            color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.1)
                             
                             Rectangle {
                                 width: parent.parent.visualPosition * parent.width
                                 height: parent.height
-                                color: pywal.color2
+                                color: QsConfig.Theme.tertiary
                                 radius: 3
                             }
                         }
@@ -542,8 +542,8 @@ Item {
                             width: 18
                             height: 18
                             radius: 9
-                            color: pywal.foreground
-                            border.color: pywal.color2
+                            color: QsConfig.Theme.text
+                            border.color: QsConfig.Theme.tertiary
                             border.width: 2
                         }
                     }
@@ -553,7 +553,7 @@ Item {
                         font.family: "Inter"
                         font.pixelSize: 12
                         font.weight: Font.Medium
-                        color: pywal.foreground
+                        color: QsConfig.Theme.text
                         Layout.preferredWidth: 45
                     }
                 }
@@ -565,7 +565,7 @@ Item {
                 font.family: "Inter"
                 font.pixelSize: 13
                 font.weight: Font.DemiBold
-                color: pywal.foreground
+                color: QsConfig.Theme.text
             }
             
             RowLayout {
@@ -576,7 +576,7 @@ Item {
                     text: "󰃠"
                     font.family: "Material Design Icons"
                     font.pixelSize: 24
-                    color: pywal.foreground
+                    color: QsConfig.Theme.text
                 }
                 
                 Slider {
@@ -593,12 +593,12 @@ Item {
                         width: parent.availableWidth
                         height: 6
                         radius: 3
-                        color: Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.1)
+                        color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.1)
                         
                         Rectangle {
                             width: parent.parent.visualPosition * parent.width
                             height: parent.height
-                            color: pywal.color3
+                            color: QsConfig.Theme.secondary
                             radius: 3
                         }
                     }
@@ -609,8 +609,8 @@ Item {
                         width: 18
                         height: 18
                         radius: 9
-                        color: pywal.foreground
-                        border.color: pywal.color3
+                        color: QsConfig.Theme.text
+                        border.color: QsConfig.Theme.secondary
                         border.width: 2
                     }
                 }
@@ -620,7 +620,7 @@ Item {
                     font.family: "Inter"
                     font.pixelSize: 12
                     font.weight: Font.Medium
-                    color: pywal.foreground
+                    color: QsConfig.Theme.text
                     Layout.preferredWidth: 45
                 }
             }

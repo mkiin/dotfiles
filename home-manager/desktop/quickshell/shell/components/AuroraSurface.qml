@@ -1,13 +1,14 @@
 import QtQuick 6.10
 import "../services" as QsServices
+import "../config" as QsConfig
 
 Item {
     id: root
 
-    property color color: pywal.surfaceContainer
-    property color strokeColor: pywal.outlineVariant
-    property color accentColor: pywal.primary
-    property color shadowColor: pywal.shadow
+    property color color: QsConfig.Theme.panel
+    property color strokeColor: QsConfig.Theme.border
+    property color accentColor: QsConfig.Theme.accent
+    property color shadowColor: QsConfig.Theme.shadow
     property real radius: 20
     property real borderWidth: 1
     property int elevation: 2
@@ -17,7 +18,6 @@ Item {
     property bool highlighted: false
     property bool clipContent: true
 
-    readonly property var pywal: QsServices.Pywal
     default property alias content: contentItem.data
     readonly property alias backgroundItem: surface
 
@@ -25,14 +25,14 @@ Item {
     implicitHeight: contentItem.implicitHeight
 
     readonly property color resolvedSurfaceColor: root.highlighted
-        ? pywal.surfaceContainerHighest
+        ? QsConfig.Theme.cardHigh
         : root.hovered
-            ? pywal.surfaceContainerHigh
+            ? QsConfig.Theme.card
             : root.color
     readonly property color resolvedBorderColor: root.highlighted
         ? Qt.rgba(root.accentColor.r, root.accentColor.g, root.accentColor.b, 0.28)
         : root.hovered
-            ? Qt.rgba(pywal.outline.r, pywal.outline.g, pywal.outline.b, 0.7)
+            ? QsConfig.Theme.withAlpha(QsConfig.Theme.outline, 0.7)
             : root.strokeColor
     readonly property real stateLayerOpacity: root.highlighted
         ? root.accentOpacity

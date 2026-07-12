@@ -4,12 +4,12 @@ import Quickshell
 import QtQuick
 import "../services" as QsServices
 
-// 意味色トークンの単一定義層。プリミティブ(Pywal=matugen)から派生し、全コンポーネントはここだけを参照する。
+// 意味色トークンの単一定義層。プリミティブ(Colours=matugen)から派生し、全コンポーネントはここだけを参照する。
 // 面(panel/card/inset)やアクセントの割当を変えたいときはこのファイルだけ直せば全UIに伝播する。
 Singleton {
     id: root
 
-    readonly property var p: QsServices.Pywal
+    readonly property var p: QsServices.Colours
 
     // ── Surfaces (elevation 低→高) ──
     readonly property color background: p.background
@@ -39,6 +39,11 @@ Singleton {
     // ── Lines ──
     readonly property color border: p.outlineVariant
     readonly property color outline: p.outline
+    readonly property color borderFaint: withAlpha(p.foreground, 0.08)
+
+    // ── Interaction / Effects ──
+    readonly property color hover: withAlpha(p.foreground, 0.06)
+    readonly property color shadow: p.shadow
 
     // alpha 付き派生用ヘルパ
     function withAlpha(c, a) { return Qt.rgba(c.r, c.g, c.b, a) }

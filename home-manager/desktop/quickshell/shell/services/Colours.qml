@@ -62,40 +62,6 @@ Singleton {
     readonly property color onWarning: background
     readonly property color onError: background
 
-    // Legacy flat palette (color0..15)
-    property color color0: surface
-    property color color1: error
-    property color color2: tertiary
-    property color color3: secondary
-    property color color4: primary
-    property color color5: secondary
-    property color color6: tertiary
-    property color color7: onSurface
-    property color color8: onSurfaceVariant
-    property color color9: error
-    property color color10: tertiary
-    property color color11: secondary
-    property color color12: primary
-    property color color13: secondary
-    property color color14: tertiary
-    property color color15: onSurface
-
-    property var colors: ({
-        color0: color0, color1: color1, color2: color2, color3: color3,
-        color4: color4, color5: color5, color6: color6, color7: color7,
-        color8: color8, color9: color9, color10: color10, color11: color11,
-        color12: color12, color13: color13, color14: color14, color15: color15
-    })
-
-    // Compatibility aliases
-    readonly property color glassLow: surfaceContainerLow
-    readonly property color glassHigh: surfaceContainerHigh
-    readonly property color glassHighest: surfaceContainerHighest
-    readonly property color glassBorder: outlineVariant
-    readonly property color glassBorderStrong: Qt.rgba(primary.r, primary.g, primary.b, 0.28)
-    readonly property color stateLayerLight: Qt.rgba(foreground.r, foreground.g, foreground.b, 1)
-    readonly property color stateLayerDark: Qt.rgba(background.r, background.g, background.b, 1)
-
     function loadColors(text: string): void {
         try {
             const d = JSON.parse(text);
@@ -113,17 +79,9 @@ Singleton {
             set("inverseSurface"); set("inverseOnSurface"); set("inversePrimary");
             set("scrim"); set("shadow");
 
-            const c = d.colors;
-            if (c) {
-                for (let i = 0; i <= 15; i++) {
-                    const k = "color" + i;
-                    if (c[k] !== undefined && c[k] !== null) root[k] = c[k];
-                }
-                root.colors = c;
-            }
-            QsServices.Logger.debug("Pywal", "matugen-colors.json loaded")
+            QsServices.Logger.debug("Colours", "matugen-colors.json loaded")
         } catch (e) {
-            QsServices.Logger.error("Pywal", "Failed to parse matugen-colors.json", e?.message ?? e)
+            QsServices.Logger.error("Colours", "Failed to parse matugen-colors.json", e?.message ?? e)
         }
     }
 
@@ -134,10 +92,10 @@ Singleton {
 
     FileView {
         id: matugenFile
-        path: QsConfig.Config.paths.pywalColors
+        path: QsConfig.Config.paths.colours
         watchChanges: true
         onLoaded: root.loadColors(text())
         onFileChanged: root.loadColors(text())
-        onLoadFailed: err => QsServices.Logger.warn("Pywal", `matugen-colors.json not loaded: ${FileViewError.toString(err)}`)
+        onLoadFailed: err => QsServices.Logger.warn("Colours", `matugen-colors.json not loaded: ${FileViewError.toString(err)}`)
     }
 }

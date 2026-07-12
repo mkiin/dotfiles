@@ -53,15 +53,6 @@ PanelWindow {
     }
     
     // Solid UI Color Tokens - Professional dark theme
-    readonly property color cSurface: QsConfig.Theme.panel
-    readonly property color cSurfaceContainer: QsConfig.Theme.card
-    readonly property color cSurfaceContainerHigh: QsConfig.Theme.card
-    readonly property color cBorder: QsConfig.Theme.border
-    readonly property color cPrimary: QsConfig.Theme.accent
-    readonly property color cSecondary: QsConfig.Theme.secondary
-    readonly property color cOnSurface: QsConfig.Theme.text
-    readonly property color cOnSurfaceVariant: QsConfig.Theme.textMuted
-    readonly property color cOnSurfaceDim: QsConfig.Theme.textDim
     
     property real barBottom: 40
 
@@ -139,11 +130,11 @@ PanelWindow {
             anchors.rightMargin: 12
             width: 420
             height: Math.min(innerCol.implicitHeight + 40, root.screen.height - 56)
-            color: root.cSurface
+            color: QsConfig.Theme.panel
             radius: 24
-            strokeColor: root.cBorder
+            strokeColor: QsConfig.Theme.border
             clip: true
-            accentColor: root.cPrimary
+            accentColor: QsConfig.Theme.accent
             elevation: 4
             highlighted: false
             
@@ -183,7 +174,7 @@ PanelWindow {
                             font.family: "Inter"
                             font.pixelSize: 32
                             font.weight: Font.Bold
-                            color: root.cOnSurface
+                            color: QsConfig.Theme.text
                         }
                         
                         Text {
@@ -191,7 +182,7 @@ PanelWindow {
                             font.family: "Inter"
                             font.pixelSize: 13
                             font.weight: Font.Medium
-                            color: root.cOnSurfaceVariant
+                            color: QsConfig.Theme.textMuted
                         }
                         
                         Timer {
@@ -245,9 +236,9 @@ PanelWindow {
                                 label: "Wi-Fi"
                                 subLabel: root.network.connected ? root.network.ssid : "Disconnected"
                                 active: root.network.wifiEnabled
-                                activeColor: root.cPrimary
-                                surfaceColor: root.cSurfaceContainerHigh
-                                textColor: root.cOnSurface
+                                activeColor: QsConfig.Theme.accent
+                                surfaceColor: QsConfig.Theme.card
+                                textColor: QsConfig.Theme.text
                                 onClicked: root.network.toggleWifi()
                             }
                             
@@ -257,9 +248,9 @@ PanelWindow {
                                 label: "Bluetooth"
                                 subLabel: root.bluetooth.powered ? "On" : "Off"
                                 active: root.bluetooth.powered
-                                activeColor: root.cPrimary
-                                surfaceColor: root.cSurfaceContainerHigh
-                                textColor: root.cOnSurface
+                                activeColor: QsConfig.Theme.accent
+                                surfaceColor: QsConfig.Theme.card
+                                textColor: QsConfig.Theme.text
                                 onClicked: root.bluetooth.togglePower()
                             }
                             
@@ -270,8 +261,8 @@ PanelWindow {
                                 subLabel: root.notifs.dnd ? "On" : "Off"
                                 active: root.notifs.dnd
                                 activeColor: QsConfig.Theme.accent
-                                surfaceColor: root.cSurfaceContainerHigh
-                                textColor: root.cOnSurface
+                                surfaceColor: QsConfig.Theme.card
+                                textColor: QsConfig.Theme.text
                                 onClicked: root.notifs.toggleDnd()
                             }
                             
@@ -282,8 +273,8 @@ PanelWindow {
                                 subLabel: root.idleInhibitor.inhibited ? "Active" : "Off"
                                 active: root.idleInhibitor.inhibited
                                 activeColor: QsConfig.Theme.info
-                                surfaceColor: root.cSurfaceContainerHigh
-                                textColor: root.cOnSurface
+                                surfaceColor: QsConfig.Theme.card
+                                textColor: QsConfig.Theme.text
                                 onClicked: root.idleInhibitor.inhibited = !root.idleInhibitor.inhibited
                             }
                             
@@ -294,9 +285,9 @@ PanelWindow {
                                 label: "Screenshot"
                                 subLabel: "Capture Screen"
                                 active: false
-                                activeColor: root.cSecondary
-                                surfaceColor: root.cSurfaceContainerHigh
-                                textColor: root.cOnSurface
+                                activeColor: QsConfig.Theme.secondary
+                                surfaceColor: QsConfig.Theme.card
+                                textColor: QsConfig.Theme.text
                                 onClicked: root.screenshot.takeScreenshot("screen")
                             }
 
@@ -311,8 +302,8 @@ PanelWindow {
                                     : (root.screenshot.isRecording ? "Recording in progress" : "Start wf-recorder")
                                 active: root.screenshot.isRecording
                                 activeColor: QsConfig.Theme.error
-                                surfaceColor: root.cSurfaceContainerHigh
-                                textColor: root.cOnSurface
+                                surfaceColor: QsConfig.Theme.card
+                                textColor: QsConfig.Theme.text
                                 onClicked: {
                                     if (root.screenshot.isRecording)
                                         root.screenshot.stopRecording()
@@ -327,9 +318,9 @@ PanelWindow {
                                 label: "Open Captures"
                                 subLabel: "Screenshots & recordings"
                                 active: false
-                                activeColor: root.cSecondary
-                                surfaceColor: root.cSurfaceContainerHigh
-                                textColor: root.cOnSurface
+                                activeColor: QsConfig.Theme.secondary
+                                surfaceColor: QsConfig.Theme.card
+                                textColor: QsConfig.Theme.text
                                 onClicked: screenshotsProcess.running = true
                             }
                         }
@@ -338,7 +329,7 @@ PanelWindow {
                         Rectangle {
                             Layout.fillWidth: true
                             Layout.preferredHeight: 1
-                            color: root.cBorder
+                            color: QsConfig.Theme.border
                         }
                         
                         // Sliders Section
@@ -373,7 +364,7 @@ PanelWindow {
                                             text: "󰕾"
                                             font.family: "Material Design Icons"
                                             font.pixelSize: 14
-                                            color: root.cOnSurfaceVariant
+                                            color: QsConfig.Theme.textMuted
                                         }
 
                                         Text {
@@ -382,14 +373,14 @@ PanelWindow {
                                             font.family: "Inter"
                                             font.pixelSize: 12
                                             font.weight: Font.DemiBold
-                                            color: root.cOnSurfaceVariant
+                                            color: QsConfig.Theme.textMuted
                                         }
 
                                         Text {
                                             text: mixerSection.expanded ? "󰅀" : "󰅂"
                                             font.family: "Material Design Icons"
                                             font.pixelSize: 16
-                                            color: root.cOnSurfaceVariant
+                                            color: QsConfig.Theme.textMuted
                                         }
                                     }
 
@@ -433,7 +424,7 @@ PanelWindow {
                         Rectangle {
                             Layout.fillWidth: true
                             Layout.preferredHeight: 1
-                            color: root.cBorder
+                            color: QsConfig.Theme.border
                         }
                         
                         // System Stats
@@ -471,8 +462,8 @@ PanelWindow {
         height: 40
         radius: 20
         color: headerBtnMouse.containsMouse 
-            ? Qt.rgba(root.cOnSurface.r, root.cOnSurface.g, root.cOnSurface.b, 0.1) 
-            : root.cSurfaceContainer
+            ? Qt.rgba(QsConfig.Theme.text.r, QsConfig.Theme.text.g, QsConfig.Theme.text.b, 0.1) 
+            : QsConfig.Theme.card
         
         Behavior on color {
             ColorAnimation {
@@ -495,7 +486,7 @@ PanelWindow {
             text: headerBtn.icon
             font.family: "Material Design Icons"
             font.pixelSize: 18
-            color: root.cOnSurface
+            color: QsConfig.Theme.text
         }
         
         MouseArea {
@@ -517,14 +508,14 @@ PanelWindow {
                 font.family: "Inter"
                 font.pixelSize: 12
                 font.weight: Font.Medium
-                color: root.cOnSurface
+                color: QsConfig.Theme.text
             }
 
             background: Rectangle {
                 radius: 8
-                color: root.cSurfaceContainerHigh
+                color: QsConfig.Theme.card
                 border.width: 1
-                border.color: root.cBorder
+                border.color: QsConfig.Theme.border
             }
         }
     }

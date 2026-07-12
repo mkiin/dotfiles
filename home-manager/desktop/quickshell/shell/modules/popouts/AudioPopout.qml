@@ -7,13 +7,13 @@ import Quickshell.Hyprland
 import Quickshell.Io
 import Quickshell.Services.Pipewire
 import "../../services" as QsServices
+import "../../config" as QsConfig
 
 // Audio device selector — Bluetooth ポップアップと同じ作り
 PanelWindow {
     id: popupWindow
 
     property bool shouldShow: false
-    readonly property var pywal: QsServices.Pywal
 
     // 出力(sink)/入力(source) デバイス。アプリのストリームは除外。
     readonly property var sinks: Pipewire.nodes.values.filter(n => n.audio && n.isSink && !n.isStream)
@@ -27,14 +27,6 @@ PanelWindow {
         return "󰓃"
     }
 
-    // Solid colors like Control Center（Bluetooth と共通）
-    readonly property color cSurface: pywal.surfaceContainer
-    readonly property color cSurfaceContainer: pywal.surfaceContainerHigh
-    readonly property color cPrimary: pywal.primary
-    readonly property color cText: pywal.foreground
-    readonly property color cSubText: Qt.rgba(cText.r, cText.g, cText.b, 0.6)
-    readonly property color cBorder: Qt.rgba(cText.r, cText.g, cText.b, 0.08)
-    readonly property color cHover: Qt.rgba(cText.r, cText.g, cText.b, 0.06)
 
     // 表示中ノードをトラッキング（state を確実に bind）
     PwObjectTracker { objects: [...popupWindow.sinks, ...popupWindow.sources] }
@@ -58,7 +50,7 @@ PanelWindow {
         Layout.fillWidth: true
         Layout.preferredHeight: 44
         radius: 10
-        color: rowArea.containsMouse ? cHover : "transparent"
+        color: rowArea.containsMouse ? QsConfig.Theme.hover : "transparent"
         Behavior on color { ColorAnimation { duration: 80 } }
 
         RowLayout {
@@ -71,7 +63,7 @@ PanelWindow {
                 text: row.isOutput ? popupWindow.audioIcon(row.node) : "󰍬"
                 font.family: "Material Design Icons"
                 font.pixelSize: 16
-                color: row.isDefault ? cPrimary : cText
+                color: row.isDefault ? QsConfig.Theme.accent : QsConfig.Theme.text
             }
 
             Text {
@@ -81,7 +73,7 @@ PanelWindow {
                 font.family: "Inter"
                 font.pixelSize: 12
                 font.weight: row.isDefault ? Font.Medium : Font.Normal
-                color: row.isDefault ? cPrimary : cText
+                color: row.isDefault ? QsConfig.Theme.accent : QsConfig.Theme.text
             }
 
             Text {
@@ -89,7 +81,7 @@ PanelWindow {
                 text: "󰄬"
                 font.family: "Material Design Icons"
                 font.pixelSize: 14
-                color: cPrimary
+                color: QsConfig.Theme.accent
             }
         }
 
@@ -184,9 +176,9 @@ PanelWindow {
             Rectangle {
                 id: backgroundRect
                 anchors.fill: parent
-                color: cSurface
+                color: QsConfig.Theme.panel
                 radius: 16
-                border.color: cBorder
+                border.color: QsConfig.Theme.borderFaint
                 border.width: 1
 
                 layer.enabled: true
@@ -212,14 +204,14 @@ PanelWindow {
                             width: 36
                             height: 36
                             radius: 12
-                            color: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15)
+                            color: Qt.rgba(QsConfig.Theme.accent.r, QsConfig.Theme.accent.g, QsConfig.Theme.accent.b, 0.15)
 
                             Text {
                                 anchors.centerIn: parent
                                 text: "󰓃"
                                 font.family: "Material Design Icons"
                                 font.pixelSize: 18
-                                color: cPrimary
+                                color: QsConfig.Theme.accent
                             }
                         }
 
@@ -232,7 +224,7 @@ PanelWindow {
                                 font.family: "Inter"
                                 font.pixelSize: 15
                                 font.weight: Font.Bold
-                                color: cText
+                                color: QsConfig.Theme.text
                             }
 
                             Text {
@@ -246,7 +238,7 @@ PanelWindow {
                                 elide: Text.ElideRight
                                 font.family: "Inter"
                                 font.pixelSize: 11
-                                color: cSubText
+                                color: QsConfig.Theme.textMuted
                             }
                         }
                     }
@@ -257,14 +249,14 @@ PanelWindow {
                         font.family: "Inter"
                         font.pixelSize: 12
                         font.weight: Font.Medium
-                        color: cSubText
+                        color: QsConfig.Theme.textMuted
                     }
 
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.preferredHeight: outColumn.implicitHeight + 8
                         radius: 12
-                        color: cSurfaceContainer
+                        color: QsConfig.Theme.card
 
                         ColumnLayout {
                             id: outColumn
@@ -289,7 +281,7 @@ PanelWindow {
                                 text: "No output devices"
                                 font.family: "Inter"
                                 font.pixelSize: 12
-                                color: cSubText
+                                color: QsConfig.Theme.textMuted
                             }
                         }
                     }
@@ -301,7 +293,7 @@ PanelWindow {
                         font.family: "Inter"
                         font.pixelSize: 12
                         font.weight: Font.Medium
-                        color: cSubText
+                        color: QsConfig.Theme.textMuted
                     }
 
                     Rectangle {
@@ -309,7 +301,7 @@ PanelWindow {
                         Layout.fillWidth: true
                         Layout.preferredHeight: inColumn.implicitHeight + 8
                         radius: 12
-                        color: cSurfaceContainer
+                        color: QsConfig.Theme.card
 
                         ColumnLayout {
                             id: inColumn
@@ -333,7 +325,7 @@ PanelWindow {
                         Layout.fillWidth: true
                         Layout.preferredHeight: 36
                         radius: 10
-                        color: settingsArea.containsMouse ? cHover : "transparent"
+                        color: settingsArea.containsMouse ? QsConfig.Theme.hover : "transparent"
 
                         RowLayout {
                             anchors.centerIn: parent
@@ -343,14 +335,14 @@ PanelWindow {
                                 text: "󰒓"
                                 font.family: "Material Design Icons"
                                 font.pixelSize: 14
-                                color: cSubText
+                                color: QsConfig.Theme.textMuted
                             }
 
                             Text {
                                 text: "Sound Settings"
                                 font.family: "Inter"
                                 font.pixelSize: 12
-                                color: cSubText
+                                color: QsConfig.Theme.textMuted
                             }
                         }
 

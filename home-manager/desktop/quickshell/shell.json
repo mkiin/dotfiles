@@ -4,7 +4,7 @@
     "materialIconFont": "Material Design Icons"
   },
   "paths": {
-    "pywalColors": "~/.cache/quickshell/matugen-colors.json",
+    "colours": "~/.cache/quickshell/matugen-colors.json",
     "screenshotsDir": "~/Pictures/Screenshots"
   },
   "notifications": {
@@ -14,8 +14,5 @@
     "timeoutMs": 5000,
     "spacing": 10,
     "margin": 10
-  },
-  "launcher": { "enabled": true },
-  "sidebar": { "enabled": false },
-  "dashboard": { "enabled": false }
+  }
 }

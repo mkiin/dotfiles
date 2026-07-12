@@ -1,9 +1,9 @@
 import QtQuick 6.10
 import QtQuick.Layouts 6.10
 import "../../../services" as QsServices
+import "../../../config" as QsConfig
 
 Item {
-    readonly property var pywal: QsServices.Pywal
     readonly property var sysUsage: QsServices.SystemUsage
     
     ColumnLayout {
@@ -16,7 +16,7 @@ Item {
             font.family: "Inter"
             font.pixelSize: 16
             font.weight: Font.Bold
-            color: pywal.foreground
+            color: QsConfig.Theme.text
         }
         
         GridLayout {
@@ -32,7 +32,7 @@ Item {
                 Layout.fillHeight: true
                 Layout.minimumHeight: 100
                 radius: 10
-                color: Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.05)
+                color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                 
                 ColumnLayout {
                     anchors.fill: parent
@@ -44,7 +44,7 @@ Item {
                         font.family: "Inter"
                         font.pixelSize: 11
                         font.weight: Font.DemiBold
-                        color: pywal.foreground
+                        color: QsConfig.Theme.text
                     }
                     
                     Item {
@@ -78,7 +78,7 @@ Item {
                                 // Background circle
                                 ctx.beginPath()
                                 ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI)
-                                ctx.fillStyle = Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.1)
+                                ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.1)
                                 ctx.fill()
                                 
                                 // Usage arc
@@ -90,18 +90,18 @@ Item {
                                 
                                 // Color based on usage
                                 if (animatedPercentage < 50) {
-                                    ctx.fillStyle = Qt.rgba(pywal.color2.r, pywal.color2.g, pywal.color2.b, 0.8)
+                                    ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.tertiary, 0.8)
                                 } else if (animatedPercentage < 80) {
-                                    ctx.fillStyle = Qt.rgba(pywal.color3.r, pywal.color3.g, pywal.color3.b, 0.8)
+                                    ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.secondary, 0.8)
                                 } else {
-                                    ctx.fillStyle = Qt.rgba(pywal.color1.r, pywal.color1.g, pywal.color1.b, 0.8)
+                                    ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.error, 0.8)
                                 }
                                 ctx.fill()
                                 
                                 // Inner circle (donut)
                                 ctx.beginPath()
                                 ctx.arc(centerX, centerY, radius * 0.6, 0, 2 * Math.PI)
-                                ctx.fillStyle = Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.05)
+                                ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                                 ctx.fill()
                             }
                             
@@ -114,7 +114,7 @@ Item {
                             font.family: "Inter"
                             font.pixelSize: 16
                             font.weight: Font.Bold
-                            color: pywal.foreground
+                            color: QsConfig.Theme.text
                         }
                     }
                 }
@@ -126,7 +126,7 @@ Item {
                 Layout.fillHeight: true
                 Layout.minimumHeight: 100
                 radius: 10
-                color: Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.05)
+                color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                 
                 ColumnLayout {
                     anchors.fill: parent
@@ -138,7 +138,7 @@ Item {
                         font.family: "Inter"
                         font.pixelSize: 11
                         font.weight: Font.DemiBold
-                        color: pywal.foreground
+                        color: QsConfig.Theme.text
                     }
                     
                     Item {
@@ -171,7 +171,7 @@ Item {
                                 
                                 ctx.beginPath()
                                 ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI)
-                                ctx.fillStyle = Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.1)
+                                ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.1)
                                 ctx.fill()
                                 
                                 var angle = (animatedPercentage / 100) * 2 * Math.PI
@@ -181,17 +181,17 @@ Item {
                                 ctx.closePath()
                                 
                                 if (animatedPercentage < 50) {
-                                    ctx.fillStyle = Qt.rgba(pywal.color2.r, pywal.color2.g, pywal.color2.b, 0.8)
+                                    ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.tertiary, 0.8)
                                 } else if (animatedPercentage < 80) {
-                                    ctx.fillStyle = Qt.rgba(pywal.color3.r, pywal.color3.g, pywal.color3.b, 0.8)
+                                    ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.secondary, 0.8)
                                 } else {
-                                    ctx.fillStyle = Qt.rgba(pywal.color1.r, pywal.color1.g, pywal.color1.b, 0.8)
+                                    ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.error, 0.8)
                                 }
                                 ctx.fill()
                                 
                                 ctx.beginPath()
                                 ctx.arc(centerX, centerY, radius * 0.6, 0, 2 * Math.PI)
-                                ctx.fillStyle = Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.05)
+                                ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                                 ctx.fill()
                             }
                             
@@ -204,7 +204,7 @@ Item {
                             font.family: "Inter"
                             font.pixelSize: 16
                             font.weight: Font.Bold
-                            color: pywal.foreground
+                            color: QsConfig.Theme.text
                         }
                     }
                 }
@@ -216,7 +216,7 @@ Item {
                 Layout.fillHeight: true
                 Layout.minimumHeight: 100
                 radius: 10
-                color: Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.05)
+                color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                 
                 ColumnLayout {
                     anchors.fill: parent
@@ -228,7 +228,7 @@ Item {
                         font.family: "Inter"
                         font.pixelSize: 11
                         font.weight: Font.DemiBold
-                        color: pywal.foreground
+                        color: QsConfig.Theme.text
                     }
                     
                     Item {
@@ -261,7 +261,7 @@ Item {
                                 
                                 ctx.beginPath()
                                 ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI)
-                                ctx.fillStyle = Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.1)
+                                ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.1)
                                 ctx.fill()
                                 
                                 var angle = (animatedPercentage / 100) * 2 * Math.PI
@@ -271,17 +271,17 @@ Item {
                                 ctx.closePath()
                                 
                                 if (animatedPercentage < 50) {
-                                    ctx.fillStyle = Qt.rgba(pywal.color2.r, pywal.color2.g, pywal.color2.b, 0.8)
+                                    ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.tertiary, 0.8)
                                 } else if (animatedPercentage < 80) {
-                                    ctx.fillStyle = Qt.rgba(pywal.color3.r, pywal.color3.g, pywal.color3.b, 0.8)
+                                    ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.secondary, 0.8)
                                 } else {
-                                    ctx.fillStyle = Qt.rgba(pywal.color1.r, pywal.color1.g, pywal.color1.b, 0.8)
+                                    ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.error, 0.8)
                                 }
                                 ctx.fill()
                                 
                                 ctx.beginPath()
                                 ctx.arc(centerX, centerY, radius * 0.6, 0, 2 * Math.PI)
-                                ctx.fillStyle = Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.05)
+                                ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                                 ctx.fill()
                             }
                             
@@ -294,7 +294,7 @@ Item {
                             font.family: "Inter"
                             font.pixelSize: 16
                             font.weight: Font.Bold
-                            color: pywal.foreground
+                            color: QsConfig.Theme.text
                         }
                     }
                 }
@@ -306,7 +306,7 @@ Item {
                 Layout.columnSpan: 3
                 Layout.preferredHeight: 60
                 radius: 10
-                color: Qt.rgba(pywal.foreground.r, pywal.foreground.g, pywal.foreground.b, 0.05)
+                color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
                 
                 RowLayout {
                     anchors.centerIn: parent
@@ -318,13 +318,13 @@ Item {
                             width: 10
                             height: 10
                             radius: 2
-                            color: pywal.color2
+                            color: QsConfig.Theme.tertiary
                         }
                         Text {
                             text: "Good (< 50%)"
                             font.family: "Inter"
                             font.pixelSize: 10
-                            color: pywal.foreground
+                            color: QsConfig.Theme.text
                         }
                     }
                     
@@ -334,13 +334,13 @@ Item {
                             width: 10
                             height: 10
                             radius: 2
-                            color: pywal.color3
+                            color: QsConfig.Theme.secondary
                         }
                         Text {
                             text: "Moderate (50-80%)"
                             font.family: "Inter"
                             font.pixelSize: 10
-                            color: pywal.foreground
+                            color: QsConfig.Theme.text
                         }
                     }
                     
@@ -350,13 +350,13 @@ Item {
                             width: 10
                             height: 10
                             radius: 2
-                            color: pywal.color1
+                            color: QsConfig.Theme.error
                         }
                         Text {
                             text: "High (> 80%)"
                             font.family: "Inter"
                             font.pixelSize: 10
-                            color: pywal.foreground
+                            color: QsConfig.Theme.text
                         }
                     }
                 }
