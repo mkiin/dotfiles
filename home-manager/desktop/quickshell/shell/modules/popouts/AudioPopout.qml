@@ -6,7 +6,7 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 import Quickshell.Io
 import Quickshell.Services.Pipewire
-import "../../../services" as QsServices
+import "../../services" as QsServices
 
 // Audio device selector — Bluetooth ポップアップと同じ作り
 PanelWindow {

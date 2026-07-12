@@ -85,7 +85,7 @@
       disabled = "󰂲";
     };
     tooltip-format = "{device_alias}";
-    on-click = "qs -c bluetooth -n";
+    on-click = "qs -c shell ipc call bluetooth toggle";
   };
   pulseaudio = {
     format = "{icon} {volume}% {format_source}";
@@ -103,7 +103,7 @@
         "󰕾"
       ];
     };
-    on-click = "qs -c audio -n";
+    on-click = "qs -c shell ipc call audio toggle";
     on-click-right = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
     scroll-step = 0;
     ignored-sinks = [ "Easy Effects Sink" ];

@@ -6,7 +6,7 @@ import Quickshell.Wayland
 import Quickshell.Bluetooth
 import Quickshell.Hyprland
 import Quickshell.Io
-import "../../../services" as QsServices
+import "../../services" as QsServices
 
 // Solid Bluetooth Popup - Matching Control Center style
 PanelWindow {

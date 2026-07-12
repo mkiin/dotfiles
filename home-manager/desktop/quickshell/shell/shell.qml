@@ -9,12 +9,24 @@ import QtQuick
 import "services" as QsServices
 import "config" as QsConfig
 import "modules/controlcenter"
+import "modules/popouts"
 
-// 常駐デーモン: 通知サーバ ＋ トースト ＋ 通知センター(ControlCenter)。
+// 常駐デーモン: 通知サーバ ＋ トースト ＋ 通知センター(ControlCenter) ＋ audio/bluetooth ポップアウト。
 ShellRoot {
     id: root
 
     readonly property var notifs: QsServices.Notifs
+
+    // パネルは同時に 1 つだけ開く（別プロセス時代は重なりが起きていた）
+    function openPanel(name: string): void {
+        const next = { cc: cc.shouldShow, audio: audioPopout.shouldShow, bluetooth: bluetoothPopout.shouldShow }[name]
+        cc.shouldShow = false
+        audioPopout.shouldShow = false
+        bluetoothPopout.shouldShow = false
+        if (name === "cc") cc.shouldShow = !next
+        else if (name === "audio") audioPopout.shouldShow = !next
+        else if (name === "bluetooth") bluetoothPopout.shouldShow = !next
+    }
 
     // org.freedesktop.Notifications を所有してアプリ通知を受ける
     Loader {
@@ -45,11 +57,32 @@ ShellRoot {
         shouldShow: false
     }
 
+    AudioPopout {
+        id: audioPopout
+        shouldShow: false
+    }
+
+    BluetoothPopout {
+        id: bluetoothPopout
+        shouldShow: false
+    }
+
+    // waybar のオーディオ/Bluetooth アイコンからのトグル
+    IpcHandler {
+        target: "audio"
+        function toggle(): void { root.openPanel("audio") }
+    }
+
+    IpcHandler {
+        target: "bluetooth"
+        function toggle(): void { root.openPanel("bluetooth") }
+    }
+
     // waybar / Super+N からのトグル
     IpcHandler {
         target: "cc"
-        function toggle(): void { cc.shouldShow = !cc.shouldShow }
-        function open(): void { cc.shouldShow = true }
+        function toggle(): void { root.openPanel("cc") }
+        function open(): void { cc.shouldShow = false; root.openPanel("cc") }
         function close(): void { cc.shouldShow = false }
         function dnd(): void { root.notifs.toggleDnd() }
         // waybar custom モジュール互換 JSON（alt で format-icons を選択）
