@@ -52,14 +52,18 @@ quickshellで作成するが、参考になるデザインがまだみつかっ�
 - 色ベタ塗り感が強め
 - もう少し壁紙から浮いている感出したい
 
-## quickshellの大規模リファクタリング
+## quickshellの大規模リファクタリング ✅ 完了
 
-- wallustを使用しているのに、変数名がpywal
-- コード量が単純に多いため、スメルコードが大量にあると予想
-- bluetoothモジュール・オーディオセレクタポップアップにて、一覧がなにもないときの幅と高さが壊れているのを修正
-- ↑のconfigボタンについて、クリックメニューを作っていないため空ナノを解消
-- ↑別途仕様作成が必要なので、後回し
-- スクリーンショット系をquickshellで自前で持っている。screen.shを統合する
+23,000 行 → 8,000 行。死蔵モジュール（quickshell 製バー/sidebar/dashboard/osd）を削除し、
+audio/bluetooth の別 config（shell のほぼ完全コピー ×2）を shell 常駐の popouts + IPC へ統合。
+Pywal→Colours 改名と Theme 意味トークンへの参照統一、Appearance 寸法トークンの一本化と
+生数値 400+ 箇所の全面置換（caelestia-dots/shell の QML 構造に準拠）。
+bluetooth ポップアップの空リスト時に高さが潰れる問題も修正。
+スクリーンショット/録画は hyprland/scripts/{screenshot,record}.sh を正とし quickshell 側は呼ぶだけに縮小。
+設計 `docs/superpowers/specs/2026-07-12-quickshell-refactor-design.md` /
+計画 `docs/superpowers/plans/2026-07-12-quickshell-refactor.md`。
+
+- 残: popouts の config ボタンのクリックメニューが空（別途仕様作成が必要なので後回し）
 
 ## 壁紙ランダムスクリプトのリファクタリング
 
