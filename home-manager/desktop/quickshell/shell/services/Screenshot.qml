@@ -27,20 +27,14 @@ Singleton {
         Quickshell.execDetached([Quickshell.env("HOME") + "/.config/rofi/screenshot-menu.sh"])
     }
 
-    // record.sh は呼ぶたびに開始/停止が切り替わるトグル。
-    // Process で起動すると script 終了時に background の recorder が道連れに殺されるため execDetached。
-    function startRecording(): void { toggleRecording() }
-    function stopRecording(): void { toggleRecording() }
-    function toggleRecording(): void {
-        Quickshell.execDetached([`${root.scriptsDir}/record.sh`])
-        refreshTimer.restart()
-    }
+    // record.sh は呼ぶたびに開始/停止が切り替わるトグル（recorder 本体は script が孤児化させる）
+    function startRecording(): void { recordProc.running = true }
+    function stopRecording(): void { recordProc.running = true }
 
-    // execDetached は exit を拾えないので、少し待ってから状態を取り直す
-    Timer {
-        id: refreshTimer
-        interval: 800
-        onTriggered: statusProc.running = true
+    Process {
+        id: recordProc
+        command: [`${root.scriptsDir}/record.sh`]
+        onExited: statusProc.running = true
     }
 
     Process {
