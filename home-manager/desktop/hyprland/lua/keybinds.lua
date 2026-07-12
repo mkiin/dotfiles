@@ -74,6 +74,7 @@ hl.bind(mainMod .. " + SHIFT + 0", hl.dsp.window.move({ workspace = 10 }))
 hl.bind(mainMod .. " + S", hl.dsp.workspace.toggle_special("stash"))
 hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("pypr toggle_special stash"))
 hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd("pypr lost_windows"))
+hl.bind(mainMod .. " + SHIFT + F", hl.dsp.exec_cmd("pypr toggle fetch"))
 
 -- マウス
 hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))

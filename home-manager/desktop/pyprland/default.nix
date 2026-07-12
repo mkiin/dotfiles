@@ -8,6 +8,7 @@
   xdg.configFile."pypr/config.toml".text = ''
     [pyprland]
     plugins = [
+      "scratchpads",
       "wallpapers",
       "workspaces_follow_focus",
       "toggle_special",
@@ -33,8 +34,16 @@
     [fcitx5_switcher]
     inactive_classes = ["org.wezfurlong.wezterm", "com.mitchellh.ghostty"]
 
-    # scratchpads プラグインは見送り。vesktop(Electron 単一インスタンス)の窓追跡が
-    # 安定せず、手動スライドが Hyprland のアニメとも衝突するため。
+    # fetch 用は行儀のよい単一 wezterm ウィンドウなので scratchpads を採用。
+    # vesktop(Electron 単一インスタンス)は窓追跡が不安定なため引き続き除外。
+    [scratchpads.fetch]
+    command = "wezterm start --class fetch-scratch -- sh -c 'fastfetch; exec $SHELL'"
+    class = "fetch-scratch"
+    size = "50% 55%"
+    position = "25% 22%"
+    animation = "fromTop"
+    lazy = true
+    unfocus = "hide"
   '';
 
   systemd.user.services.awww-daemon = {
