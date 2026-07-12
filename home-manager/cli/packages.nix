@@ -21,6 +21,7 @@
       mo
       # dev tools
       gh
+      fastfetch
       lazydocker
       mise
       # codex の workspace-write サンドボックスが要求する bwrap 本体

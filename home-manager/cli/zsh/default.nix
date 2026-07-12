@@ -93,6 +93,7 @@
       abbr gco="git checkout"
       abbr gb="git branch"
       abbr lg="lazygit"
+      abbr ff="fastfetch"
       abbr pn="pnpm"
       abbr nvc="cd ~/.config/nvim"
       abbr ai="claude"

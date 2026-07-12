@@ -14,5 +14,6 @@
     ./python
     ./rbw
     ./direnv
+    ./fastfetch
   ];
 }
