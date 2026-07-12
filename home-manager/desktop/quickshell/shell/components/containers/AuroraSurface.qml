@@ -9,7 +9,7 @@ Item {
     property color strokeColor: QsConfig.Theme.border
     property color accentColor: QsConfig.Theme.accent
     property color shadowColor: QsConfig.Theme.shadow
-    property real radius: 20
+    property real radius: QsConfig.Appearance.radius.l
     property real borderWidth: 1
     property int elevation: 2
     property real accentOpacity: 0.10
@@ -58,14 +58,14 @@ Item {
 
         Behavior on color {
             ColorAnimation {
-                duration: 220
+                duration: QsConfig.Appearance.anim.durations.normal
                 easing.type: Easing.OutCubic
             }
         }
 
         Behavior on border.color {
             ColorAnimation {
-                duration: 180
+                duration: QsConfig.Appearance.anim.durations.normal
                 easing.type: Easing.OutCubic
             }
         }
@@ -79,7 +79,7 @@ Item {
 
             Behavior on color {
                 ColorAnimation {
-                    duration: 180
+                    duration: QsConfig.Appearance.anim.durations.normal
                     easing.type: Easing.OutCubic
                 }
             }

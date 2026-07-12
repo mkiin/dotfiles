@@ -4,6 +4,7 @@
 
 import QtQuick 6.10
 import QtQuick.Effects
+import "../../config" as QsConfig
 
 Item {
     id: root
@@ -92,7 +93,7 @@ Item {
     // Animate elevation changes smoothly
     Behavior on level {
         NumberAnimation {
-            duration: 150
+            duration: QsConfig.Appearance.anim.durations.fast
             easing.type: Easing.OutCubic
         }
     }

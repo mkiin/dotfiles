@@ -34,6 +34,9 @@ PanelWindow {
     // Swipe dismiss threshold (fraction of popup width)
     readonly property real swipeThreshold: 0.30
 
+    readonly property int hairline: 1
+    readonly property int pulseDuration: 1000
+
     function _urgencyColor(u) {
         if (u === NotificationUrgency.Critical) return m3Error
         if (u === NotificationUrgency.Low) return m3OnSurfaceVariant
@@ -60,7 +63,7 @@ PanelWindow {
     implicitHeight: notifStack.height
 
     Behavior on implicitHeight {
-        NumberAnimation { duration: 160; easing.type: Easing.OutCubic }
+        NumberAnimation { duration: QsConfig.Appearance.anim.durations.normal; easing.type: Easing.OutCubic }
     }
 
     // ═══════════════════════════════════════════════════════════════════════
@@ -104,7 +107,7 @@ PanelWindow {
                 visible: notifCard.index <= root.stackDepth
 
                 Behavior on y {
-                    NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
+                    NumberAnimation { duration: QsConfig.Appearance.anim.durations.normal; easing.type: Easing.OutCubic }
                 }
 
                 Binding {
@@ -151,18 +154,18 @@ PanelWindow {
                         NumberAnimation {
                             target: notifCard; property: "entryOpacity"
                             from: 0; to: 1.0
-                            duration: 90; easing.type: Easing.OutQuad
+                            duration: QsConfig.Appearance.anim.durations.fast; easing.type: Easing.OutQuad
                         }
                         NumberAnimation {
                             target: notifCard; property: "entryScale"
                             from: 0.92; to: 1.0
-                            duration: 220
+                            duration: QsConfig.Appearance.anim.durations.normal
                             easing.type: Easing.OutBack; easing.overshoot: 1.05
                         }
                         NumberAnimation {
                             target: notifCard; property: "entryY"
                             from: -16; to: 0
-                            duration: 220
+                            duration: QsConfig.Appearance.anim.durations.normal
                             easing.type: Easing.OutBack; easing.overshoot: 1.05
                         }
                     }
@@ -176,20 +179,20 @@ PanelWindow {
                         NumberAnimation {
                             target: notifCard; property: "dragX"
                             to: config.notifications.popupWidth + 60
-                            duration: 180; easing.type: Easing.InCubic
+                            duration: QsConfig.Appearance.anim.durations.normal; easing.type: Easing.InCubic
                         }
                         NumberAnimation {
                             target: notifCard; property: "entryRotation"
-                            to: 4; duration: 180; easing.type: Easing.InQuad
+                            to: 4; duration: QsConfig.Appearance.anim.durations.normal; easing.type: Easing.InQuad
                         }
                         NumberAnimation {
                             target: notifCard; property: "entryOpacity"
-                            to: 0.3; duration: 180; easing.type: Easing.InQuad
+                            to: 0.3; duration: QsConfig.Appearance.anim.durations.normal; easing.type: Easing.InQuad
                         }
                     }
                     NumberAnimation {
                         target: notifCard; property: "height"
-                        to: 0; duration: 120; easing.type: Easing.InCubic
+                        to: 0; duration: QsConfig.Appearance.anim.durations.fast; easing.type: Easing.InCubic
                     }
                     ScriptAction { script: modelData.close() }
                 }
@@ -202,20 +205,20 @@ PanelWindow {
                         NumberAnimation {
                             target: notifCard; property: "dragX"
                             to: -(config.notifications.popupWidth + 60)
-                            duration: 180; easing.type: Easing.InCubic
+                            duration: QsConfig.Appearance.anim.durations.normal; easing.type: Easing.InCubic
                         }
                         NumberAnimation {
                             target: notifCard; property: "entryRotation"
-                            to: -4; duration: 180; easing.type: Easing.InQuad
+                            to: -4; duration: QsConfig.Appearance.anim.durations.normal; easing.type: Easing.InQuad
                         }
                         NumberAnimation {
                             target: notifCard; property: "entryOpacity"
-                            to: 0.3; duration: 180; easing.type: Easing.InQuad
+                            to: 0.3; duration: QsConfig.Appearance.anim.durations.normal; easing.type: Easing.InQuad
                         }
                     }
                     NumberAnimation {
                         target: notifCard; property: "height"
-                        to: 0; duration: 120; easing.type: Easing.InCubic
+                        to: 0; duration: QsConfig.Appearance.anim.durations.fast; easing.type: Easing.InCubic
                     }
                     ScriptAction { script: modelData.close() }
                 }
@@ -226,12 +229,12 @@ PanelWindow {
 
                     NumberAnimation {
                         target: notifCard; property: "dragX"
-                        to: 0; duration: 280
+                        to: 0; duration: QsConfig.Appearance.anim.durations.medium
                         easing.type: Easing.OutBack; easing.overshoot: 1.3
                     }
                     NumberAnimation {
                         target: notifCard; property: "entryRotation"
-                        to: 0; duration: 200; easing.type: Easing.OutCubic
+                        to: 0; duration: QsConfig.Appearance.anim.durations.normal; easing.type: Easing.OutCubic
                     }
                 }
 
@@ -242,15 +245,15 @@ PanelWindow {
                     ParallelAnimation {
                         NumberAnimation {
                             target: notifCard; property: "entryScale"
-                            to: 0.9; duration: 180; easing.type: Easing.InCubic
+                            to: 0.9; duration: QsConfig.Appearance.anim.durations.normal; easing.type: Easing.InCubic
                         }
                         NumberAnimation {
                             target: notifCard; property: "entryOpacity"
-                            to: 0; duration: 180; easing.type: Easing.InQuad
+                            to: 0; duration: QsConfig.Appearance.anim.durations.normal; easing.type: Easing.InQuad
                         }
                         NumberAnimation {
                             target: notifCard; property: "entryY"
-                            to: -20; duration: 180; easing.type: Easing.InCubic
+                            to: -20; duration: QsConfig.Appearance.anim.durations.normal; easing.type: Easing.InCubic
                         }
                     }
                     ScriptAction { script: modelData.close() }
@@ -305,8 +308,8 @@ PanelWindow {
                         Text {
                             anchors.centerIn: parent
                             text: notifCard.dragX > 0 ? "󰅖" : "󰄬"
-                            font.family: "Material Design Icons"
-                            font.pixelSize: 26
+                            font.family: QsConfig.Appearance.typography.iconFamily
+                            font.pixelSize: QsConfig.Appearance.typography.headlineSmall.size
                             color: notifCard.dragX > 0 ? root.m3Error : root.m3Primary
                             opacity: 0.55
                         }
@@ -319,7 +322,7 @@ PanelWindow {
                         id: cardBg
                         width: parent.width
                         height: contentCol.implicitHeight + 34
-                        radius: 18
+                        radius: QsConfig.Appearance.radius.m
                         color: root.m3Surface
 
                         // Hover-responsive border
@@ -333,7 +336,7 @@ PanelWindow {
                         }
 
                         Behavior on border.color {
-                            ColorAnimation { duration: 250; easing.type: Easing.OutCubic }
+                            ColorAnimation { duration: QsConfig.Appearance.anim.durations.medium; easing.type: Easing.OutCubic }
                         }
 
                         // Elevation shadow — lifts on hover
@@ -351,12 +354,12 @@ PanelWindow {
                                 top: parent.top
                                 left: parent.left
                                 right: parent.right
-                                topMargin: 1
-                                leftMargin: 20
-                                rightMargin: 20
+                                topMargin: root.hairline
+                                leftMargin: QsConfig.Appearance.margin.l
+                                rightMargin: QsConfig.Appearance.margin.l
                             }
                             height: 2.5
-                            radius: 1.25
+                            radius: height / 2
                             color: root._urgencyColor(modelData.urgency)
                             opacity: modelData.urgency === NotificationUrgency.Low ? 0.3 : 0.65
 
@@ -365,11 +368,11 @@ PanelWindow {
                                 running: modelData.urgency === NotificationUrgency.Critical
                                 loops: Animation.Infinite
                                 NumberAnimation {
-                                    to: 0.3; duration: 1000
+                                    to: 0.3; duration: root.pulseDuration
                                     easing.type: Easing.InOutSine
                                 }
                                 NumberAnimation {
-                                    to: 0.9; duration: 1000
+                                    to: 0.9; duration: root.pulseDuration
                                     easing.type: Easing.InOutSine
                                 }
                             }
@@ -383,7 +386,7 @@ PanelWindow {
                             opacity: notifCard.isHovered && !notifCard.isDragging ? 0.035 : 0
 
                             Behavior on opacity {
-                                NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
+                                NumberAnimation { duration: QsConfig.Appearance.anim.durations.normal; easing.type: Easing.OutCubic }
                             }
                         }
 
@@ -408,12 +411,12 @@ PanelWindow {
                                 bottom: parent.bottom
                                 left: parent.left
                                 right: parent.right
-                                bottomMargin: 7
-                                leftMargin: 18
-                                rightMargin: 18
+                                bottomMargin: QsConfig.Appearance.margin.xs
+                                leftMargin: QsConfig.Appearance.margin.l
+                                rightMargin: QsConfig.Appearance.margin.l
                             }
                             height: 2
-                            radius: 1
+                            radius: height / 2
                             color: Qt.rgba(root.m3OnSurface.r, root.m3OnSurface.g,
                                            root.m3OnSurface.b, 0.04)
                             visible: notifCard.isVisible && !notifCard.isHovered
@@ -565,21 +568,21 @@ PanelWindow {
                                 left: parent.left
                                 right: parent.right
                                 top: parent.top
-                                margins: 16
-                                topMargin: 18
+                                margins: QsConfig.Appearance.margin.m
+                                topMargin: QsConfig.Appearance.margin.l
                             }
-                            spacing: 6
+                            spacing: QsConfig.Appearance.spacing.s
 
                             // ── Header Row ──
                             RowLayout {
                                 Layout.fillWidth: true
-                                spacing: 10
+                                spacing: QsConfig.Appearance.spacing.m
 
                                 // App icon — rounded square with urgency tint
                                 Rectangle {
                                     Layout.preferredWidth: 34
                                     Layout.preferredHeight: 34
-                                    radius: 10
+                                    radius: QsConfig.Appearance.radius.s
                                     color: Qt.rgba(
                                         root._urgencyColor(modelData.urgency).r,
                                         root._urgencyColor(modelData.urgency).g,
@@ -607,8 +610,8 @@ PanelWindow {
                                         anchors.centerIn: parent
                                         visible: notifCard.headerIcon.length === 0 || notifCard.headerIconFailed
                                         text: "󰂞"
-                                        font.family: "Material Design Icons"
-                                        font.pixelSize: 16
+                                        font.family: QsConfig.Appearance.typography.iconFamily
+                                        font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
                                         color: root._urgencyColor(modelData.urgency)
                                         opacity: 0.8
                                     }
@@ -617,13 +620,13 @@ PanelWindow {
                                 // App name + timestamp
                                 ColumnLayout {
                                     Layout.fillWidth: true
-                                    spacing: 1
+                                    spacing: root.hairline
 
                                     Text {
                                         text: modelData.appName || "Notification"
-                                        font.pixelSize: 11
+                                        font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
                                         font.weight: Font.Medium
-                                        font.family: "Inter"
+                                        font.family: QsConfig.Appearance.typography.family
                                         font.letterSpacing: 0.4
                                         color: root.m3OnSurfaceVariant
                                         Layout.fillWidth: true
@@ -632,8 +635,8 @@ PanelWindow {
 
                                     Text {
                                         text: modelData.timeString || "now"
-                                        font.pixelSize: 9
-                                        font.family: "Inter"
+                                        font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
+                                        font.family: QsConfig.Appearance.typography.family
                                         color: Qt.rgba(root.m3OnSurface.r,
                                                        root.m3OnSurface.g,
                                                        root.m3OnSurface.b, 0.3)
@@ -644,7 +647,7 @@ PanelWindow {
                                 Rectangle {
                                     Layout.preferredWidth: 26
                                     Layout.preferredHeight: 26
-                                    radius: 13
+                                    radius: height / 2
                                     opacity: (notifCard.isHovered || closeMA.containsMouse) ? 1 : 0
                                     scale: (notifCard.isHovered || closeMA.containsMouse) ? 1.0 : 0.6
                                     color: closeMA.pressed
@@ -657,25 +660,25 @@ PanelWindow {
 
                                     Behavior on opacity {
                                         NumberAnimation {
-                                            duration: 200; easing.type: Easing.OutCubic
+                                            duration: QsConfig.Appearance.anim.durations.normal; easing.type: Easing.OutCubic
                                         }
                                     }
                                     Behavior on scale {
                                         NumberAnimation {
-                                            duration: 250
+                                            duration: QsConfig.Appearance.anim.durations.medium
                                             easing.type: Easing.OutBack
                                             easing.overshoot: 1.4
                                         }
                                     }
                                     Behavior on color {
-                                        ColorAnimation { duration: 120 }
+                                        ColorAnimation { duration: QsConfig.Appearance.anim.durations.fast }
                                     }
 
                                     Text {
                                         anchors.centerIn: parent
                                         text: "󰅖"
-                                        font.family: "Material Design Icons"
-                                        font.pixelSize: 13
+                                        font.family: QsConfig.Appearance.typography.iconFamily
+                                        font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
                                         color: closeMA.containsMouse
                                             ? root.m3Error
                                             : Qt.rgba(root.m3OnSurface.r,
@@ -683,7 +686,7 @@ PanelWindow {
                                                       root.m3OnSurface.b, 0.45)
 
                                         Behavior on color {
-                                            ColorAnimation { duration: 120 }
+                                            ColorAnimation { duration: QsConfig.Appearance.anim.durations.fast }
                                         }
                                     }
 
@@ -703,11 +706,11 @@ PanelWindow {
                             // ── Summary (headline) ──
                             Text {
                                 Layout.fillWidth: true
-                                Layout.topMargin: 4
+                                Layout.topMargin: QsConfig.Appearance.spacing.xs
                                 text: modelData.summary || ""
-                                font.pixelSize: 13
+                                font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
                                 font.weight: Font.DemiBold
-                                font.family: "Inter"
+                                font.family: QsConfig.Appearance.typography.family
                                 font.letterSpacing: -0.15
                                 color: root.m3OnSurface
                                 wrapMode: Text.Wrap
@@ -721,8 +724,8 @@ PanelWindow {
                             Text {
                                 Layout.fillWidth: true
                                 text: modelData.body || ""
-                                font.pixelSize: 12
-                                font.family: "Inter"
+                                font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
+                                font.family: QsConfig.Appearance.typography.family
                                 font.letterSpacing: 0.1
                                 color: root.m3OnSurfaceVariant
                                 wrapMode: Text.Wrap
@@ -733,7 +736,7 @@ PanelWindow {
 
                                 Behavior on maximumLineCount {
                                     NumberAnimation {
-                                        duration: 250; easing.type: Easing.OutCubic
+                                        duration: QsConfig.Appearance.anim.durations.medium; easing.type: Easing.OutCubic
                                     }
                                 }
                             }
@@ -746,8 +749,8 @@ PanelWindow {
                                     return body.length > 80 && !notifCard.isExpanded
                                 }
                                 text: "tap to expand"
-                                font.pixelSize: 9
-                                font.family: "Inter"
+                                font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
+                                font.family: QsConfig.Appearance.typography.family
                                 font.letterSpacing: 0.5
                                 color: root.m3OnSurfaceVariant
                                 opacity: 0.4
@@ -758,19 +761,19 @@ PanelWindow {
                             Item {
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: 100
-                                Layout.topMargin: 4
+                                Layout.topMargin: QsConfig.Appearance.spacing.xs
                                 visible: modelData.image && modelData.image.length > 0
                                     && !modelData.image.startsWith("image://icon/")
 
                                 Rectangle {
                                     anchors.fill: parent
-                                    radius: 12
+                                    radius: QsConfig.Appearance.radius.s
                                     clip: true
                                     color: root.m3SurfaceContainer
 
                                     Image {
                                         anchors.fill: parent
-                                        anchors.margins: 1
+                                        anchors.margins: root.hairline
                                         source: {
                                             const im = modelData.image
                                             if (!im || im.startsWith("image://icon/")) return ""
@@ -785,8 +788,8 @@ PanelWindow {
                             // ── Action buttons (M3 tonal pills) ──
                             Flow {
                                 Layout.fillWidth: true
-                                Layout.topMargin: 6
-                                spacing: 6
+                                Layout.topMargin: QsConfig.Appearance.margin.xs
+                                spacing: QsConfig.Appearance.spacing.s
                                 visible: modelData.actions && modelData.actions.length > 0
 
                                 Repeater {
@@ -798,7 +801,7 @@ PanelWindow {
 
                                         width: actLabel.width + 22
                                         height: 28
-                                        radius: 14
+                                        radius: height / 2
                                         color: actMA.pressed
                                             ? Qt.rgba(root.m3Primary.r, root.m3Primary.g,
                                                       root.m3Primary.b, 0.28)
@@ -809,14 +812,14 @@ PanelWindow {
                                                       root.m3Primary.b, 0.10)
 
                                         Behavior on color {
-                                            ColorAnimation { duration: 120 }
+                                            ColorAnimation { duration: QsConfig.Appearance.anim.durations.fast }
                                         }
 
                                         // Tactile press scale
                                         scale: actMA.pressed ? 0.94 : 1.0
                                         Behavior on scale {
                                             NumberAnimation {
-                                                duration: 100; easing.type: Easing.OutCubic
+                                                duration: QsConfig.Appearance.anim.durations.fast; easing.type: Easing.OutCubic
                                             }
                                         }
 
@@ -825,9 +828,9 @@ PanelWindow {
                                             anchors.centerIn: parent
                                             text: parent.modelData.text ||
                                                   parent.modelData.identifier
-                                            font.pixelSize: 11
+                                            font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
                                             font.weight: Font.Medium
-                                            font.family: "Inter"
+                                            font.family: QsConfig.Appearance.typography.family
                                             font.letterSpacing: 0.3
                                             color: root.m3Primary
                                         }
