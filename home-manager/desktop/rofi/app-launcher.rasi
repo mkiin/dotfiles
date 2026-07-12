@@ -46,7 +46,7 @@ mainbox {
 imagebox {
     padding:                     20px;
     background-color:            transparent;
-    /* 壁紙は launch.sh が -theme-str で background-image を注入する */
+    /* 背景画像は launch.sh が注入 */
     orientation:                 vertical;
     children:                    [ "inputbar", "dummy", "mode-switcher" ];
 }

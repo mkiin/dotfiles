@@ -6,6 +6,9 @@ in
 {
   imports = [ inputs.zen-browser.homeModules.beta ];
 
+  xdg.dataFile."icons/hicolor/scalable/apps/zen-beta.svg".source =
+    "${pkgs.papirus-icon-theme}/share/icons/Papirus/64x64/apps/zen-browser.svg";
+
   programs.zen-browser = {
     enable = true;
     profiles.default = {
