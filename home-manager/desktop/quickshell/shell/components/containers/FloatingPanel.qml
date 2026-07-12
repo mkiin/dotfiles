@@ -15,8 +15,11 @@ PanelWindow {
     required property int panelWidth
     default property alias content: slot.data
 
-    // クリックしたモニター（フォーカス中の出力）に追従
-    screen: [...Quickshell.screens].find(s => s.name === Hyprland.focusedMonitor?.name) ?? Quickshell.screens[0]
+    // 開く瞬間のフォーカスモニタに固定（ライブバインディングだと表示中にフォーカス移動で窓が付いてきてしまう）
+    onShouldShowChanged: {
+        if (shouldShow)
+            screen = [...Quickshell.screens].find(s => s.name === Hyprland.focusedMonitor?.name) ?? Quickshell.screens[0]
+    }
 
     // バー下端より下だけを覆う透明オーバーレイ（枠外クリック検出・バーには被らない）
     anchors {
