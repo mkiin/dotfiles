@@ -14,6 +14,17 @@ PanelWindow {
     id: popupWindow
 
     property bool shouldShow: false
+
+    readonly property int popoutWidth: 320
+    readonly property int rowHeight: 52
+    readonly property int cardPadding: 16
+    readonly property int headerIconSize: 36
+    readonly property int buttonHeight: 36
+    readonly property int actionButtonSize: 26
+    readonly property int primaryButtonSize: 28
+    readonly property int listMaxHeight: 260
+    readonly property int spinDuration: 1000
+
     readonly property var adapter: Bluetooth.defaultAdapter
     readonly property var devices: [...Bluetooth.devices.values].sort((a, b) => {
         if (a.connected !== b.connected) return b.connected - a.connected
@@ -70,10 +81,10 @@ PanelWindow {
             id: card
             anchors.top: parent.top
             anchors.left: parent.left
-            anchors.topMargin: 8
+            anchors.topMargin: QsConfig.Appearance.margin.s
             anchors.leftMargin: popupWindow.popupLeftMargin
-            implicitWidth: 320
-            implicitHeight: contentColumn.implicitHeight + 32
+            implicitWidth: popupWindow.popoutWidth
+            implicitHeight: contentColumn.implicitHeight + popupWindow.cardPadding * 2
             width: implicitWidth
             height: implicitHeight
 
@@ -94,15 +105,15 @@ PanelWindow {
                 Transition {
                     to: "visible"
                     ParallelAnimation {
-                        NumberAnimation { property: "opacity"; duration: 180; easing.type: Easing.OutQuad }
-                        NumberAnimation { property: "scale"; duration: 250; easing.type: Easing.OutBack; easing.overshoot: 1.3 }
+                        NumberAnimation { property: "opacity"; duration: QsConfig.Appearance.anim.durations.normal; easing.type: Easing.OutQuad }
+                        NumberAnimation { property: "scale"; duration: QsConfig.Appearance.anim.durations.medium; easing.type: Easing.OutBack; easing.overshoot: 1.3 }
                     }
                 },
                 Transition {
                     from: "visible"
                     ParallelAnimation {
-                        NumberAnimation { property: "opacity"; duration: 120; easing.type: Easing.InQuad }
-                        NumberAnimation { property: "scale"; to: 0.94; duration: 120 }
+                        NumberAnimation { property: "opacity"; duration: QsConfig.Appearance.anim.durations.fast; easing.type: Easing.InQuad }
+                        NumberAnimation { property: "scale"; to: 0.94; duration: QsConfig.Appearance.anim.durations.fast }
                     }
                 }
             ]
@@ -112,7 +123,7 @@ PanelWindow {
                 id: backgroundRect
                 anchors.fill: parent
                 color: QsConfig.Theme.panel
-                radius: 16
+                radius: QsConfig.Appearance.radius.m
                 border.color: QsConfig.Theme.borderFaint
                 border.width: 1
 
@@ -127,37 +138,37 @@ PanelWindow {
                 ColumnLayout {
                     id: contentColumn
                     anchors.fill: parent
-                    anchors.margins: 16
-                    spacing: 12
+                    anchors.margins: popupWindow.cardPadding
+                    spacing: QsConfig.Appearance.spacing.m
 
                     // Header
                     RowLayout {
                         Layout.fillWidth: true
-                        spacing: 12
+                        spacing: QsConfig.Appearance.spacing.m
 
                         Rectangle {
-                            width: 36
-                            height: 36
-                            radius: 12
+                            width: popupWindow.headerIconSize
+                            height: popupWindow.headerIconSize
+                            radius: QsConfig.Appearance.radius.s
                             color: Qt.rgba(QsConfig.Theme.accent.r, QsConfig.Theme.accent.g, QsConfig.Theme.accent.b, 0.15)
 
                             Text {
                                 anchors.centerIn: parent
                                 text: "󰂯"
-                                font.family: "Material Design Icons"
-                                font.pixelSize: 18
+                                font.family: QsConfig.Appearance.typography.iconFamily
+                                font.pixelSize: QsConfig.Appearance.typography.titleMedium.size
                                 color: QsConfig.Theme.accent
                             }
                         }
 
                         ColumnLayout {
                             Layout.fillWidth: true
-                            spacing: 2
+                            spacing: QsConfig.Appearance.spacing.xs
 
                             Text {
                                 text: "Bluetooth"
-                                font.family: "Inter"
-                                font.pixelSize: 15
+                                font.family: QsConfig.Appearance.typography.family
+                                font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
                                 font.weight: Font.Bold
                                 color: QsConfig.Theme.text
                             }
@@ -165,8 +176,8 @@ PanelWindow {
                             Text {
                                 property var connected: devices.filter(d => d.connected)
                                 text: connected.length > 0 ? connected[0].name : "No device connected"
-                                font.family: "Inter"
-                                font.pixelSize: 11
+                                font.family: QsConfig.Appearance.typography.family
+                                font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
                                 color: QsConfig.Theme.textMuted
                             }
                         }
@@ -175,20 +186,20 @@ PanelWindow {
                         Rectangle {
                             width: 44
                             height: 24
-                            radius: 12
+                            radius: height / 2
                             color: adapter?.enabled ? QsConfig.Theme.accent : Qt.rgba(QsConfig.Theme.text.r, QsConfig.Theme.text.g, QsConfig.Theme.text.b, 0.15)
 
-                            Behavior on color { ColorAnimation { duration: 150 } }
+                            Behavior on color { ColorAnimation { duration: QsConfig.Appearance.anim.durations.fast } }
 
                             Rectangle {
                                 width: 18
                                 height: 18
-                                radius: 9
+                                radius: height / 2
                                 anchors.verticalCenter: parent.verticalCenter
                                 x: adapter?.enabled ? parent.width - width - 3 : 3
                                 color: "#ffffff"
 
-                                Behavior on x { NumberAnimation { duration: 150; easing.type: Easing.OutCubic } }
+                                Behavior on x { NumberAnimation { duration: QsConfig.Appearance.anim.durations.fast; easing.type: Easing.OutCubic } }
                             }
 
                             MouseArea {
@@ -202,32 +213,32 @@ PanelWindow {
                     // Scan button
                     Rectangle {
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 36
-                        radius: 10
+                        Layout.preferredHeight: popupWindow.buttonHeight
+                        radius: QsConfig.Appearance.radius.s
                         color: scanArea.containsMouse ? QsConfig.Theme.cardHigh : QsConfig.Theme.card
 
-                        Behavior on color { ColorAnimation { duration: 100 } }
+                        Behavior on color { ColorAnimation { duration: QsConfig.Appearance.anim.durations.fast } }
 
                         RowLayout {
                             anchors.centerIn: parent
-                            spacing: 8
+                            spacing: QsConfig.Appearance.spacing.s
 
                             Text {
                                 text: adapter?.discovering ? "󰑐" : "󰑓"
-                                font.family: "Material Design Icons"
-                                font.pixelSize: 16
+                                font.family: QsConfig.Appearance.typography.iconFamily
+                                font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
                                 color: adapter?.discovering ? QsConfig.Theme.accent : QsConfig.Theme.text
 
                                 RotationAnimation on rotation {
                                     running: adapter?.discovering ?? false
-                                    from: 0; to: 360; duration: 1000; loops: Animation.Infinite
+                                    from: 0; to: 360; duration: popupWindow.spinDuration; loops: Animation.Infinite
                                 }
                             }
 
                             Text {
                                 text: adapter?.discovering ? "Scanning..." : "Scan for devices"
-                                font.family: "Inter"
-                                font.pixelSize: 12
+                                font.family: QsConfig.Appearance.typography.family
+                                font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
                                 font.weight: Font.Medium
                                 color: QsConfig.Theme.text
                             }
@@ -245,24 +256,24 @@ PanelWindow {
                     // Device List
                     Rectangle {
                         Layout.fillWidth: true
-                        Layout.preferredHeight: Math.min(deviceList.contentHeight + 8, 260)
-                        radius: 12
+                        Layout.preferredHeight: Math.min(deviceList.contentHeight + 8, popupWindow.listMaxHeight)
+                        radius: QsConfig.Appearance.radius.s
                         color: QsConfig.Theme.card
                         clip: true
 
                         ListView {
                             id: deviceList
                             anchors.fill: parent
-                            anchors.margins: 4
-                            spacing: 2
+                            anchors.margins: QsConfig.Appearance.spacing.xs
+                            spacing: QsConfig.Appearance.spacing.xs
                             model: devices
                             clip: true
 
                             delegate: Rectangle {
                                 id: deviceItem
                                 width: deviceList.width
-                                height: 52
-                                radius: 10
+                                height: popupWindow.rowHeight
+                                radius: QsConfig.Appearance.radius.s
                                 color: itemArea.containsMouse ? QsConfig.Theme.hover : "transparent"
 
                                 required property var modelData
@@ -287,13 +298,13 @@ PanelWindow {
                                     onTriggered: if (deviceItem.modelData.pairing) deviceItem.modelData.cancelPair()
                                 }
 
-                                Behavior on color { ColorAnimation { duration: 80 } }
+                                Behavior on color { ColorAnimation { duration: QsConfig.Appearance.anim.durations.fast } }
 
                                 RowLayout {
                                     anchors.fill: parent
-                                    anchors.leftMargin: 12
-                                    anchors.rightMargin: 12
-                                    spacing: 10
+                                    anchors.leftMargin: QsConfig.Appearance.margin.m
+                                    anchors.rightMargin: QsConfig.Appearance.margin.m
+                                    spacing: QsConfig.Appearance.spacing.m
 
                                     // Icon
                                     Text {
@@ -306,19 +317,19 @@ PanelWindow {
                                             if (icon.includes("keyboard")) return "󰌌"
                                             return "󰂯"
                                         }
-                                        font.family: "Material Design Icons"
-                                        font.pixelSize: 18
+                                        font.family: QsConfig.Appearance.typography.iconFamily
+                                        font.pixelSize: QsConfig.Appearance.typography.titleMedium.size
                                         color: isConnected ? QsConfig.Theme.accent : QsConfig.Theme.text
                                     }
 
                                     ColumnLayout {
                                         Layout.fillWidth: true
-                                        spacing: 2
+                                        spacing: QsConfig.Appearance.spacing.xs
 
                                         Text {
                                             text: deviceItem.modelData.name
-                                            font.family: "Inter"
-                                            font.pixelSize: 12
+                                            font.family: QsConfig.Appearance.typography.family
+                                            font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
                                             font.weight: Font.Medium
                                             color: QsConfig.Theme.text
                                             elide: Text.ElideRight
@@ -334,22 +345,22 @@ PanelWindow {
                                                 if (deviceItem.modelData.bonded) return "Paired"
                                                 return "Available"
                                             }
-                                            font.family: "Inter"
-                                            font.pixelSize: 10
+                                            font.family: QsConfig.Appearance.typography.family
+                                            font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
                                             color: isConnected ? QsConfig.Theme.accent : QsConfig.Theme.textMuted
                                         }
                                     }
 
                                     // Actions: trust / forget（ペア済みのみ）＋ プライマリ pair/connect/disconnect
                                     RowLayout {
-                                        spacing: 6
+                                        spacing: QsConfig.Appearance.spacing.s
 
                                         // Trust トグル
                                         Rectangle {
                                             visible: deviceItem.modelData.bonded
-                                            Layout.preferredWidth: 26
-                                            Layout.preferredHeight: 26
-                                            radius: 13
+                                            Layout.preferredWidth: popupWindow.actionButtonSize
+                                            Layout.preferredHeight: popupWindow.actionButtonSize
+                                            radius: height / 2
                                             color: trustArea.containsMouse ? QsConfig.Theme.hover : "transparent"
                                             border.width: 1
                                             border.color: deviceItem.modelData.trusted ? QsConfig.Theme.accent : Qt.rgba(QsConfig.Theme.text.r, QsConfig.Theme.text.g, QsConfig.Theme.text.b, 0.15)
@@ -357,8 +368,8 @@ PanelWindow {
                                             Text {
                                                 anchors.centerIn: parent
                                                 text: deviceItem.modelData.trusted ? "󰕥" : "󰒙"
-                                                font.family: "Material Design Icons"
-                                                font.pixelSize: 13
+                                                font.family: QsConfig.Appearance.typography.iconFamily
+                                                font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
                                                 color: deviceItem.modelData.trusted ? QsConfig.Theme.accent : QsConfig.Theme.textMuted
                                             }
 
@@ -374,9 +385,9 @@ PanelWindow {
                                         // Forget
                                         Rectangle {
                                             visible: deviceItem.modelData.bonded
-                                            Layout.preferredWidth: 26
-                                            Layout.preferredHeight: 26
-                                            radius: 13
+                                            Layout.preferredWidth: popupWindow.actionButtonSize
+                                            Layout.preferredHeight: popupWindow.actionButtonSize
+                                            radius: height / 2
                                             color: forgetArea.containsMouse ? QsConfig.Theme.hover : "transparent"
                                             border.width: 1
                                             border.color: Qt.rgba(QsConfig.Theme.text.r, QsConfig.Theme.text.g, QsConfig.Theme.text.b, 0.15)
@@ -384,8 +395,8 @@ PanelWindow {
                                             Text {
                                                 anchors.centerIn: parent
                                                 text: "󰆴"
-                                                font.family: "Material Design Icons"
-                                                font.pixelSize: 13
+                                                font.family: QsConfig.Appearance.typography.iconFamily
+                                                font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
                                                 color: QsConfig.Theme.textMuted
                                             }
 
@@ -400,9 +411,9 @@ PanelWindow {
 
                                         // プライマリ: pair / connect / disconnect /（busy中タップで cancelPair）
                                         Rectangle {
-                                            Layout.preferredWidth: 28
-                                            Layout.preferredHeight: 28
-                                            radius: 14
+                                            Layout.preferredWidth: popupWindow.primaryButtonSize
+                                            Layout.preferredHeight: popupWindow.primaryButtonSize
+                                            radius: height / 2
                                             color: actionArea.containsMouse ? Qt.rgba(QsConfig.Theme.accent.r, QsConfig.Theme.accent.g, QsConfig.Theme.accent.b, 0.15) : "transparent"
                                             border.width: 1
                                             border.color: isConnected ? QsConfig.Theme.accent : Qt.rgba(QsConfig.Theme.text.r, QsConfig.Theme.text.g, QsConfig.Theme.text.b, 0.15)
@@ -410,13 +421,13 @@ PanelWindow {
                                             Text {
                                                 anchors.centerIn: parent
                                                 text: deviceItem.busy ? "󰑓" : isConnected ? "󰌊" : "󰌘"
-                                                font.family: "Material Design Icons"
-                                                font.pixelSize: 14
+                                                font.family: QsConfig.Appearance.typography.iconFamily
+                                                font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
                                                 color: isConnected ? QsConfig.Theme.accent : QsConfig.Theme.textMuted
 
                                                 RotationAnimation on rotation {
                                                     running: deviceItem.busy
-                                                    from: 0; to: 360; duration: 900; loops: Animation.Infinite
+                                                    from: 0; to: 360; duration: popupWindow.spinDuration; loops: Animation.Infinite
                                                 }
                                             }
 
@@ -450,21 +461,21 @@ PanelWindow {
                         ColumnLayout {
                             anchors.centerIn: parent
                             visible: devices.length === 0
-                            spacing: 6
+                            spacing: QsConfig.Appearance.spacing.s
 
                             Text {
                                 Layout.alignment: Qt.AlignHCenter
                                 text: "󰂲"
-                                font.family: "Material Design Icons"
-                                font.pixelSize: 32
+                                font.family: QsConfig.Appearance.typography.iconFamily
+                                font.pixelSize: QsConfig.Appearance.typography.headlineLarge.size
                                 color: Qt.rgba(QsConfig.Theme.text.r, QsConfig.Theme.text.g, QsConfig.Theme.text.b, 0.2)
                             }
 
                             Text {
                                 Layout.alignment: Qt.AlignHCenter
                                 text: adapter?.enabled ? "No devices found" : "Bluetooth disabled"
-                                font.family: "Inter"
-                                font.pixelSize: 12
+                                font.family: QsConfig.Appearance.typography.family
+                                font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
                                 color: QsConfig.Theme.textMuted
                             }
                         }
@@ -473,25 +484,25 @@ PanelWindow {
                     // Settings button
                     Rectangle {
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 36
-                        radius: 10
+                        Layout.preferredHeight: popupWindow.buttonHeight
+                        radius: QsConfig.Appearance.radius.s
                         color: settingsArea.containsMouse ? QsConfig.Theme.hover : "transparent"
 
                         RowLayout {
                             anchors.centerIn: parent
-                            spacing: 6
+                            spacing: QsConfig.Appearance.spacing.s
 
                             Text {
                                 text: "󰒓"
-                                font.family: "Material Design Icons"
-                                font.pixelSize: 14
+                                font.family: QsConfig.Appearance.typography.iconFamily
+                                font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
                                 color: QsConfig.Theme.textMuted
                             }
 
                             Text {
                                 text: "Bluetooth Settings"
-                                font.family: "Inter"
-                                font.pixelSize: 12
+                                font.family: QsConfig.Appearance.typography.family
+                                font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
                                 color: QsConfig.Theme.textMuted
                             }
                         }
