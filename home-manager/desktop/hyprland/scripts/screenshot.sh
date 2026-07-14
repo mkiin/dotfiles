@@ -15,6 +15,19 @@ region)
   geom=$(slurp) || exit 0
   [ -z "$geom" ] && exit 0
   ;;
+edit)
+  # region と同じ範囲選択 → satty で注釈/トリミングして保存・コピー。
+  # satty がクリップボードと保存を担うので共通の grim/wl-copy 経路は通さず即終了。
+  class=$(hyprctl activewindow -j | jq -r '.class // "unknown"')
+  class="${class//[\/\\ ]/_}"
+  out_dir="${base_dir}/${class}"
+  geom=$(slurp) || exit 0
+  [ -z "$geom" ] && exit 0
+  mkdir -p "$out_dir"
+  file="${out_dir}/$(date +%Y%m%d_%H%M%S).png"
+  grim -g "$geom" - | satty --filename - --output-filename "$file" --early-exit --copy-command wl-copy
+  exit 0
+  ;;
 window)
   class=$(hyprctl activewindow -j | jq -r '.class // "unknown"')
   class="${class//[\/\\ ]/_}"

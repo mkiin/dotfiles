@@ -33,6 +33,10 @@ in
     slurp
     jq
     libnotify
+    # スクショ注釈/トリミング。撮影後 grim からパイプ、既存画像は --filename で開ける
+    satty
+    # アスペクト比固定クロップ(9:16 等)。satty はフリーフォームのみで比率ロック不可
+    gthumb
     # NIKKE ランナー。umu-launcher(-bwrap 版)を PATH に置き nikke.sh に掴ませる。
     # dwproton は nix store から NIKKE_PROTON でラッパーに渡す(AGL 非依存)。
     umu-launcher
