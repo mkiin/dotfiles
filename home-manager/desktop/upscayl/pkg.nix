@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   fetchurl,
   autoPatchelfHook,
@@ -62,6 +63,13 @@ let
       '') models
     )
   );
+
+  defaultModel = "digital-art-4x";
+
+  # wrapper.sh の @modelLines@ に埋める、モデル一覧を出す echo 行（1 行 1 モデル）
+  modelLines = builtins.concatStringsSep "\n" (
+    map (n: "echo '  - ${n}'") (builtins.attrNames models)
+  );
 in
 stdenv.mkDerivation {
   pname = "upscayl-cli";
@@ -87,10 +95,18 @@ stdenv.mkDerivation {
     ${installModels}
 
     # GPU ICD(NVIDIA/mesa)は実行時ホストパスから、モデルと既定モデル名は焼き込み
-    makeWrapper $out/libexec/upscayl-bin $out/bin/upscayl-cli \
+    makeWrapper $out/libexec/upscayl-bin $out/libexec/upscayl-run \
       --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib \
       --add-flags "-m $out/share/upscayl/models" \
-      --add-flags "-n digital-art-4x"
+      --add-flags "-n ${defaultModel}"
+
+    # help/models のときだけ同梱モデル(-n の候補)を出す薄いラッパを被せる
+    mkdir -p $out/bin
+    substitute ${./wrapper.sh} $out/bin/upscayl-cli \
+      --subst-var-by run "$out/libexec/upscayl-run" \
+      --subst-var-by defaultModel "${defaultModel}" \
+      --subst-var-by modelLines ${lib.escapeShellArg modelLines}
+    chmod +x $out/bin/upscayl-cli
 
     runHook postInstall
   '';
