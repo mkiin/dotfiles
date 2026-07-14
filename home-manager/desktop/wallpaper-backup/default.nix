@@ -13,6 +13,9 @@ in
 
   systemd.user.services.wallpaper-backup = {
     Unit.Description = "Back up wallpapers to R2 (rclone sync, mirror)";
+    # 同一ディレクトリを watch する wallpaper-namer と同時に起床したとき、
+    # 命名（リネーム）を済ませてから sync する。リネームで再発火しても mirror なので冪等。
+    Unit.After = [ "wallpaper-namer.service" ];
     Service = {
       Type = "oneshot";
       ExecStart = backup;

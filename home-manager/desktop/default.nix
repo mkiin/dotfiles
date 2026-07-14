@@ -17,6 +17,7 @@
     ./matugen
     ./wallust
     ./wallpaper-backup
+    ./wallpaper-namer
     ./terminal/ghostty
     ./terminal/wezterm
     ./zen

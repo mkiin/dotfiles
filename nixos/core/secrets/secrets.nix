@@ -3,5 +3,6 @@ let
 in
 {
   "rclone-r2.conf.age".publicKeys = [ mkiin ];
+  "gemini-api-key.env.age".publicKeys = [ mkiin ];
   "password.age".publicKeys = [ mkiin ];
 }

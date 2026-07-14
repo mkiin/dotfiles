@@ -982,6 +982,7 @@
         "nixpkgs-stable": "nixpkgs-stable",
         "superpowers-skill": "superpowers-skill",
         "treefmt-nix": "treefmt-nix_2",
+        "wallpaper-namer": "wallpaper-namer",
         "xremap": "xremap",
         "zen-browser": "zen-browser"
       }
@@ -1127,6 +1128,27 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "wallpaper-namer": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1784052212,
+        "narHash": "sha256-tkCPMqrMA08ci9iMjaSlb9yn/w+x/owjoxm725Gh98E=",
+        "owner": "mkiin",
+        "repo": "wallpaper-namer",
+        "rev": "52920116681639464307a2488780d3177c467862",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mkiin",
+        "ref": "v0.1.0",
+        "repo": "wallpaper-namer",
         "type": "github"
       }
     },
