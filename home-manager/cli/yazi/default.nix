@@ -10,6 +10,20 @@
         show_hidden = false;
         linemode = "size";
       };
+      # enter/l で画像を imv に渡す。orphan=true で yazi を閉じても残す
+      opener.image = [
+        {
+          run = ''imv "$@"'';
+          orphan = true;
+          desc = "View image";
+        }
+      ];
+      open.prepend_rules = [
+        {
+          mime = "image/*";
+          use = "image";
+        }
+      ];
       plugin.prepend_fetchers = [
         {
           url = "*";
