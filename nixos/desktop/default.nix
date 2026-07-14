@@ -2,7 +2,7 @@
 {
   imports = [
     ./hyprland
-    ./greetd
+    ./sddm
     ./fcitx5
     ./sound
     ./polkit
