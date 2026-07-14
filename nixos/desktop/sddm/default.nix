@@ -43,6 +43,13 @@ in
     package = pkgs.kdePackages.sddm;
     theme = "star-rail";
     wayland.compositorCommand = "${lib.getExe pkgs.weston} --shell=kiosk -c ${westonIni}";
+    # 既定 CursorTheme は breeze_cursors だが、その実体がシステムに無くカーソルが
+    # 描画されない。greeter(sddm ユーザー)から見えるよう下の systemPackages に
+    # bibata-cursors を入れ、テーマ名をそれに合わせる。
+    settings.Theme = {
+      CursorTheme = "Bibata-Modern-Classic";
+      CursorSize = 24;
+    };
     # extraPackages は greeter の QML import 用（テーマ Main.qml が読む Qt モジュール）。
     # テーマ本体はここには入らない（下の systemPackages 経由でないと ThemeDir に出ない）。
     extraPackages = with pkgs.kdePackages; [
@@ -52,7 +59,11 @@ in
     ];
   };
 
-  # sddm モジュールは environment.pathsToLink = "/share/sddm" で systemPackages 内の
-  # share/sddm/themes/* だけを ThemeDir に張る。テーマの配送経路はこれのみ。
-  environment.systemPackages = [ star-rail-theme ];
+  # star-rail-theme: sddm モジュールは environment.pathsToLink = "/share/sddm" で
+  # systemPackages 内の share/sddm/themes/* だけを ThemeDir に張る。配送経路はこれのみ。
+  # bibata-cursors: greeter がカーソル画像を読むための Xcursor テーマ本体（システム側）。
+  environment.systemPackages = [
+    star-rail-theme
+    pkgs.bibata-cursors
+  ];
 }
