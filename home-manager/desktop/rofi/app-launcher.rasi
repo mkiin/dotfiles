@@ -19,26 +19,47 @@ configuration {
 }
 
 /*****----- Main Window -----*****/
+/* fullscreen の透明レイヤーにして枠外(背景)クリックで click-to-exit を効かせる。
+   実パネルは panel、その周囲を伸縮 dummy で挟んで中央寄せする */
 window {
     transparency:                "real";
-    location:                    center;
-    anchor:                      center;
-    fullscreen:                  false;
-    width:                       1000px;
-    x-offset:                    0px;
-    y-offset:                    0px;
-
+    fullscreen:                  true;
     enabled:                     true;
-    border-radius:               15px;
     cursor:                      "default";
-    background-color:            @on-primary-fixed;
+    background-color:            transparent;
+    children:                    [ "mainbox" ];
 }
 
 /*****----- Main Box -----*****/
+/* 縦方向の中央寄せ: 上下の伸縮 dummy で centerbox を挟む */
 mainbox {
     enabled:                     true;
     spacing:                     0px;
+    padding:                     0px;
     background-color:            transparent;
+    orientation:                 vertical;
+    children:                    [ "dummy-top", "centerbox", "dummy-bottom" ];
+}
+dummy-top, dummy-bottom {
+    background-color:            transparent;
+}
+/* 横方向の中央寄せ: 左右の伸縮 dummy で panel を挟む */
+centerbox {
+    expand:                      false;
+    spacing:                     0px;
+    background-color:            transparent;
+    orientation:                 horizontal;
+    children:                    [ "dummy-left", "panel", "dummy-right" ];
+}
+dummy-left, dummy-right {
+    background-color:            transparent;
+}
+/* 旧 window が持っていたパネルの見た目(幅/角丸/背景)はここが担う */
+panel {
+    expand:                      false;
+    width:                       1000px;
+    border-radius:               15px;
+    background-color:            @on-primary-fixed;
     orientation:                 horizontal;
     children:                    [ "imagebox", "listbox" ];
 }
