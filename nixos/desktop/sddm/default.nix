@@ -42,14 +42,11 @@ in
     wayland.enable = true;
     package = pkgs.kdePackages.sddm;
     theme = "star-rail";
-    wayland.compositorCommand = "${lib.getExe pkgs.weston} --shell=kiosk -c ${westonIni}";
-    # 既定 CursorTheme は breeze_cursors だが、その実体がシステムに無くカーソルが
-    # 描画されない。greeter(sddm ユーザー)から見えるよう下の systemPackages に
-    # bibata-cursors を入れ、テーマ名をそれに合わせる。
-    settings.Theme = {
-      CursorTheme = "Bibata-Modern-Classic";
-      CursorSize = 24;
-    };
+    # WESTON_DISABLE_ATOMIC: 単一出力(DP-2)にすると DP-2 の CRTC のハードウェア
+    # カーソルプレーンが使われるが、NVIDIA ではこれが透明化する既知バグがある。
+    # atomic を無効化して legacy KMS に落とすと weston がその経路を避けカーソルが出る
+    # （KWin/GNOME が NVIDIA を atomic 時にデナイリスト化するのと同じ回避）。
+    wayland.compositorCommand = "${pkgs.coreutils}/bin/env WESTON_DISABLE_ATOMIC=1 ${lib.getExe pkgs.weston} --shell=kiosk -c ${westonIni}";
     # extraPackages は greeter の QML import 用（テーマ Main.qml が読む Qt モジュール）。
     # テーマ本体はここには入らない（下の systemPackages 経由でないと ThemeDir に出ない）。
     extraPackages = with pkgs.kdePackages; [
@@ -59,11 +56,7 @@ in
     ];
   };
 
-  # star-rail-theme: sddm モジュールは environment.pathsToLink = "/share/sddm" で
-  # systemPackages 内の share/sddm/themes/* だけを ThemeDir に張る。配送経路はこれのみ。
-  # bibata-cursors: greeter がカーソル画像を読むための Xcursor テーマ本体（システム側）。
-  environment.systemPackages = [
-    star-rail-theme
-    pkgs.bibata-cursors
-  ];
+  # sddm モジュールは environment.pathsToLink = "/share/sddm" で systemPackages 内の
+  # share/sddm/themes/* だけを ThemeDir に張る。テーマの配送経路はこれのみ。
+  environment.systemPackages = [ star-rail-theme ];
 }
