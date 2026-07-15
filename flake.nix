@@ -80,7 +80,7 @@
     herdr.url = "github:ogulcancelik/herdr";
     herdr.inputs.nixpkgs.follows = "nixpkgs";
 
-    wallpaper-namer.url = "github:mkiin/wallpaper-namer/v0.1.0";
+    wallpaper-namer.url = "github:mkiin/wallpaper-namer/v0.2.0";
     wallpaper-namer.inputs.nixpkgs.follows = "nixpkgs";
   };
 

@@ -1112,16 +1112,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1784052212,
-        "narHash": "sha256-tkCPMqrMA08ci9iMjaSlb9yn/w+x/owjoxm725Gh98E=",
+        "lastModified": 1784117522,
+        "narHash": "sha256-CpIiBh4LTEaTamAoeYgvYsVs2XrqM2ldPumhflh0cHI=",
         "owner": "mkiin",
         "repo": "wallpaper-namer",
-        "rev": "52920116681639464307a2488780d3177c467862",
+        "rev": "c6193616cf0b0c05f35d66d0129925fbb2273870",
         "type": "github"
       },
       "original": {
         "owner": "mkiin",
-        "ref": "v0.1.0",
+        "ref": "v0.2.0",
         "repo": "wallpaper-namer",
         "type": "github"
       }
