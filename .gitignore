@@ -9,3 +9,4 @@ result
 
 /images/wallpaper/*
 !/images/wallpaper/.gitkeep
+!/images/wallpaper/selection.json

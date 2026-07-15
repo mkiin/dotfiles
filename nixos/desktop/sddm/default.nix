@@ -5,6 +5,8 @@
   ...
 }:
 let
+  # images/wallpaper(git管理外ストア)は CI に存在しないため、login 壁紙は
+  # 選んだ1枚を tracked な images/login/login.png へコピーして焼き込む運用
   wallpaper = "${inputs.self}/images/login/login.png";
   confTemplate = "${inputs.self}/home-manager/desktop/matugen/templates/sddm-theme.conf";
 

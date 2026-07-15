@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# images/lock/lock.jpg から hyprlock 用カラーパレット (lock-colors.conf) を再生成する。
+# selection.json の lock 壁紙から hyprlock 用カラーパレット (lock-colors.conf) を再生成する。
 set -euo pipefail
 
 ROOT="$(git rev-parse --show-toplevel)"
-IMG="$ROOT/images/lock/lock.jpg"
+IMG="$ROOT/images/wallpaper/$(jq -r .lock "$ROOT/images/wallpaper/selection.json")"
 TEMPLATE="$ROOT/home-manager/desktop/hyprland/lock-colors.template.conf"
 OUT="$ROOT/home-manager/desktop/hyprland/lock-colors.conf"
 
