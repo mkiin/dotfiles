@@ -6,8 +6,6 @@
 }:
 let
   selection = builtins.fromJSON (builtins.readFile "${inputs.self}/images/wallpaper/selection.json");
-  # ストアは gitignore だが、選択中の壁紙だけは git add -f で追跡しておくこと
-  # (壁紙変更時も同様)。未追跡だと inputs.self に入らずビルドできない
   wallpaper = "${inputs.self}/images/wallpaper/${selection.login}";
   confTemplate = "${inputs.self}/home-manager/desktop/matugen/templates/sddm-theme.conf";
 
@@ -16,9 +14,6 @@ let
       pkgs.matugen
       pkgs.imagemagick
     ];
-    # 壁紙焼き込みと matugen による custom.conf 生成。light/dark は壁紙の平均輝度で
-    # 自動判定(明るい壁紙=濃色文字)。スクリム(DimBackgroundColor=surface)も同じ
-    # モードに追従するため、暗部の持ち上げ/明部の減光が壁紙側に合わせて反転する
     postInstall = (old.postInstall or "") + ''
       themeDir=$out/share/sddm/themes/sddm-astronaut-theme
       chmod -R u+w "$themeDir"
