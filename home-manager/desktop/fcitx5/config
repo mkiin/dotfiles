@@ -61,8 +61,6 @@ OverrideXkbOption=False
 CustomXkbOption=
 # Force Enabled Addons
 EnabledAddons=
-# Force Disabled Addons
-DisabledAddons=
 # Preload input method to be used by default
 PreloadInputMethod=True
 # パスワード欄に入力メソッドを許可する
@@ -71,4 +69,11 @@ AllowInputMethodForPassword=False
 ShowPreeditForPassword=False
 # ユーザーデータを保存する間隔（分）
 AutoSavePeriod=30
+
+# Hyprland 環境で不要なもの (fcitx4/ibus 互換・KDE パネル・仮想キーボード)
+[Behavior/DisabledAddons]
+0=fcitx4frontend
+1=ibusfrontend
+2=kimpanel
+3=virtualkeyboard
 
