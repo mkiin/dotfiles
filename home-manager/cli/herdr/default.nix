@@ -6,23 +6,11 @@ let
     onboarding = false;
 
     keys = {
-      # ペイン移動は prefix と ctrl+alt 直接 chord の二刀流（herdr 公式の prefix-free 推奨に準拠）
-      focus_pane_left = [
-        "prefix+h"
-        "ctrl+alt+h"
-      ];
-      focus_pane_down = [
-        "prefix+j"
-        "ctrl+alt+j"
-      ];
-      focus_pane_up = [
-        "prefix+k"
-        "ctrl+alt+k"
-      ];
-      focus_pane_right = [
-        "prefix+l"
-        "ctrl+alt+l"
-      ];
+      # prefix→単一文字を wezterm(LEADER+文字) に一致させる。chord は全廃。
+      focus_pane_left = "prefix+h";
+      focus_pane_down = "prefix+j";
+      focus_pane_up = "prefix+k";
+      focus_pane_right = "prefix+l";
 
       # navigate モードは素の hjkl（prefix+ 不可のフィールド）
       navigate_pane_left = "h";
@@ -30,30 +18,20 @@ let
       navigate_pane_up = "k";
       navigate_pane_right = "l";
 
-      new_tab = [
-        "prefix+c"
-        "ctrl+alt+c"
-      ];
-      previous_tab = [
-        "prefix+p"
-        "ctrl+alt+["
-      ];
-      next_tab = [
-        "prefix+n"
-        "ctrl+alt+]"
-      ];
-      split_vertical = [
-        "prefix+v"
-        "ctrl+alt+d"
-      ];
-      split_horizontal = [
-        "prefix+minus"
-        "ctrl+alt+shift+d"
-      ];
-      zoom = [
-        "prefix+z"
-        "ctrl+alt+z"
-      ];
+      new_tab = "prefix+n";
+      # q は wezterm=タブを閉じる。detach は tmux 定番の prefix+d へ退避し衝突回避。
+      close_tab = "prefix+q";
+      detach = "prefix+d";
+      previous_tab = "prefix+shift+h";
+      next_tab = "prefix+shift+l";
+
+      # wezterm 基準: s=左右, v=上下。実機で向きが逆なら s/v を入替。
+      split_horizontal = "prefix+s";
+      split_vertical = "prefix+v";
+
+      close_pane = "prefix+m";
+      zoom = "prefix+z";
+      resize_mode = "prefix+r";
     };
   };
 in
