@@ -11,14 +11,21 @@ let
   confTemplate = "${inputs.self}/home-manager/desktop/matugen/templates/sddm-theme.conf";
 
   theme = pkgs.sddm-astronaut.overrideAttrs (old: {
-    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.matugen ];
-    # 壁紙焼き込みと matugen による custom.conf 生成。デスクトップは dark だが
-    # ログイン壁紙は白基調のため light(濃色文字)を使う。視認性はテンプレートの
-    # 白スクリム(DimBackgroundColor=surface)とセット
+    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
+      pkgs.matugen
+      pkgs.imagemagick
+    ];
+    # 壁紙焼き込みと matugen による custom.conf 生成。light/dark は壁紙の平均輝度で
+    # 自動判定(明るい壁紙=濃色文字)。スクリム(DimBackgroundColor=surface)も同じ
+    # モードに追従するため、暗部の持ち上げ/明部の減光が壁紙側に合わせて反転する
     postInstall = (old.postInstall or "") + ''
       themeDir=$out/share/sddm/themes/sddm-astronaut-theme
       chmod -R u+w "$themeDir"
       cp ${wallpaper} "$themeDir/Backgrounds/login.png"
+
+      luma=$(magick ${wallpaper} -resize 1x1! -colorspace gray -format '%[fx:luma]' info:)
+      mode=$(awk -v l="$luma" 'BEGIN { print (l > 0.5) ? "light" : "dark" }')
+      echo "wallpaper luma=$luma -> mode=$mode"
 
       printf '%s\n' \
         '[config]' \
@@ -27,7 +34,7 @@ let
         "output_path = '$themeDir/Themes/custom.conf'" \
         > matugen-build.toml
       HOME=$TMPDIR matugen image ${wallpaper} \
-        --config matugen-build.toml --mode light --source-color-index 0
+        --config matugen-build.toml --mode "$mode" --source-color-index 0
 
       sed -i 's|^ConfigFile=.*|ConfigFile=Themes/custom.conf|' "$themeDir/metadata.desktop"
     '';
