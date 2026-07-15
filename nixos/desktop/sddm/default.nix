@@ -5,9 +5,10 @@
   ...
 }:
 let
-  # images/wallpaper(git管理外ストア)は CI に存在しないため、login 壁紙は
-  # 選んだ1枚を tracked な images/login/login.png へコピーして焼き込む運用
-  wallpaper = "${inputs.self}/images/login/login.png";
+  selection = builtins.fromJSON (builtins.readFile "${inputs.self}/images/wallpaper/selection.json");
+  # ストアは gitignore だが、選択中の壁紙だけは git add -f で追跡しておくこと
+  # (壁紙変更時も同様)。未追跡だと inputs.self に入らずビルドできない
+  wallpaper = "${inputs.self}/images/wallpaper/${selection.login}";
   confTemplate = "${inputs.self}/home-manager/desktop/matugen/templates/sddm-theme.conf";
 
   theme = pkgs.sddm-astronaut.overrideAttrs (old: {
