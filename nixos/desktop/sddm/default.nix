@@ -1,6 +1,34 @@
-{ lib, pkgs, ... }:
+{
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
 let
-  theme = pkgs.sddm-astronaut.override { embeddedTheme = "black_hole"; };
+  wallpaper = "${inputs.self}/images/login/login.png";
+  confTemplate = "${inputs.self}/home-manager/desktop/matugen/templates/sddm-theme.conf";
+
+  theme = pkgs.sddm-astronaut.overrideAttrs (old: {
+    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.matugen ];
+    # 壁紙焼き込みと matugen による custom.conf 生成。モード/スキームは
+    # デスクトップ側 matugen (dark, デフォルトスキーム, index 0) と揃える
+    postInstall = (old.postInstall or "") + ''
+      themeDir=$out/share/sddm/themes/sddm-astronaut-theme
+      chmod -R u+w "$themeDir"
+      cp ${wallpaper} "$themeDir/Backgrounds/login.png"
+
+      printf '%s\n' \
+        '[config]' \
+        '[templates.sddm]' \
+        "input_path = '${confTemplate}'" \
+        "output_path = '$themeDir/Themes/custom.conf'" \
+        > matugen-build.toml
+      HOME=$TMPDIR matugen image ${wallpaper} \
+        --config matugen-build.toml --mode dark --source-color-index 0
+
+      sed -i 's|^ConfigFile=.*|ConfigFile=Themes/custom.conf|' "$themeDir/metadata.desktop"
+    '';
+  });
 
   westonIni = pkgs.writeText "weston.ini" ''
     [keyboard]
