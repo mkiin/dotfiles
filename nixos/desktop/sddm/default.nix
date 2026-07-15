@@ -12,8 +12,9 @@ let
 
   theme = pkgs.sddm-astronaut.overrideAttrs (old: {
     nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.matugen ];
-    # 壁紙焼き込みと matugen による custom.conf 生成。モード/スキームは
-    # デスクトップ側 matugen (dark, デフォルトスキーム, index 0) と揃える
+    # 壁紙焼き込みと matugen による custom.conf 生成。デスクトップは dark だが
+    # ログイン壁紙は白基調のため light(濃色文字)を使う。視認性はテンプレートの
+    # 白スクリム(DimBackgroundColor=surface)とセット
     postInstall = (old.postInstall or "") + ''
       themeDir=$out/share/sddm/themes/sddm-astronaut-theme
       chmod -R u+w "$themeDir"
@@ -26,7 +27,7 @@ let
         "output_path = '$themeDir/Themes/custom.conf'" \
         > matugen-build.toml
       HOME=$TMPDIR matugen image ${wallpaper} \
-        --config matugen-build.toml --mode dark --source-color-index 0
+        --config matugen-build.toml --mode light --source-color-index 0
 
       sed -i 's|^ConfigFile=.*|ConfigFile=Themes/custom.conf|' "$themeDir/metadata.desktop"
     '';
