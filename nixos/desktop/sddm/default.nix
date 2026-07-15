@@ -1,23 +1,47 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 let
-  star-rail-theme = pkgs.callPackage ./theme.nix { };
+  theme = pkgs.sddm-astronaut.override { embeddedTheme = "black_hole"; };
+
+  westonIni = pkgs.writeText "weston.ini" ''
+    [keyboard]
+    keymap_layout=us
+
+    [output]
+    name=DP-1
+    mode=off
+
+    [output]
+    name=DP-3
+    mode=off
+
+    [output]
+    name=HDMI-A-1
+    mode=off
+  '';
 in
 {
   services.displayManager.sddm = {
     enable = true;
     wayland.enable = true;
+    wayland.compositorCommand = "${lib.getExe pkgs.weston} --shell=kiosk -c ${westonIni}";
     package = pkgs.kdePackages.sddm;
-    theme = "star-rail";
-    # extraPackages は greeter の QML import 用（テーマ Main.qml が読む Qt モジュール）。
-    # テーマ本体はここには入らない（下の systemPackages 経由でないと ThemeDir に出ない）。
-    extraPackages = with pkgs.kdePackages; [
-      qt5compat
-      qtmultimedia
-      qtsvg
-    ];
+    theme = "sddm-astronaut-theme";
+    extraPackages = [ theme ];
+
+    settings = {
+      Theme = {
+        CursorTheme = "Bibata-Modern-Classic";
+        CursorSize = 24;
+      };
+      # greeter の env は sddm が空から組み立てるため PAM の XCURSOR_PATH が届かない
+      General.GreeterEnvironment = "XCURSOR_PATH=/run/current-system/sw/share/icons";
+    };
   };
 
-  # sddm モジュールは environment.pathsToLink = "/share/sddm" で systemPackages 内の
-  # share/sddm/themes/* だけを ThemeDir に張る。テーマの配送経路はこれのみ。
-  environment.systemPackages = [ star-rail-theme ];
+  environment.systemPackages = [
+    theme
+    pkgs.bibata-cursors
+  ];
+
+  fonts.packages = [ theme ];
 }
