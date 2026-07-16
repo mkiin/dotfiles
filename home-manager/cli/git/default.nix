@@ -1,5 +1,11 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 
+let
+  # delta 本体は themes.gitconfig を install しないため src から抜き出す(src 4.4MiB を closure に残さない)
+  deltaThemes = pkgs.runCommand "delta-themes.gitconfig" { } ''
+    cp ${pkgs.delta.src}/themes.gitconfig $out
+  '';
+in
 {
   imports = [ ./git-hooks.nix ];
 
@@ -7,15 +13,15 @@
     enable = true;
     enableGitIntegration = true;
     options = {
-      dark = true;
-      features = "side-by-side";
-      line-numbers = true;
-      syntax-theme = "Catppuccin Mocha";
+      # features は後勝ち。side-by-side が行番号スタイルを既定に戻すのでテーマを後ろに置く
+      features = "side-by-side gruvmax-fang";
     };
   };
 
   programs.git = {
     enable = true;
+    # dark/syntax-theme/line-numbers/diff 配色は gruvmax-fang フィーチャが持つ
+    includes = [ { path = "${deltaThemes}"; } ];
     settings = {
       user = {
         name = "mkiin";

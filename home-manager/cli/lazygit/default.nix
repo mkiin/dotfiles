@@ -8,7 +8,8 @@ _:
       git.pagers = [
         {
           colorArg = "always";
-          pager = "delta --features=none --paging=never --width={{columnWidth}}";
+          # features を明示指定して side-by-side だけ落とす(狭いパネルで潰れるため)。テーマは残す
+          pager = "delta --features=gruvmax-fang --paging=never --width={{columnWidth}}";
         }
       ];
     };
