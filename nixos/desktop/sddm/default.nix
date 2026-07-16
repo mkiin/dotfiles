@@ -26,11 +26,6 @@ let
         --config matugen-build.toml --mode dark --source-color-index 0
 
       sed -i 's|^ConfigFile=.*|ConfigFile=Themes/custom.conf|' "$themeDir/metadata.desktop"
-
-      # 入力欄の背景は upstream が opacity 0.2 を直書きしており conf から不透明にできない
-      sed -i -e '/config.LoginFieldBackgroundColor/{n;s/opacity: 0.2/opacity: 1.0/}' \
-             -e '/config.PasswordFieldBackgroundColor/{n;s/opacity: 0.2/opacity: 1.0/}' \
-             "$themeDir/Components/Input.qml"
     '';
   });
 
