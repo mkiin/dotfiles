@@ -10,18 +10,11 @@ let
   confTemplate = "${inputs.self}/home-manager/desktop/matugen/templates/sddm-theme.conf";
 
   theme = pkgs.sddm-astronaut.overrideAttrs (old: {
-    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
-      pkgs.matugen
-      pkgs.imagemagick
-    ];
+    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.matugen ];
     postInstall = (old.postInstall or "") + ''
       themeDir=$out/share/sddm/themes/sddm-astronaut-theme
       chmod -R u+w "$themeDir"
       cp ${wallpaper} "$themeDir/Backgrounds/login.png"
-
-      luma=$(magick ${wallpaper} -resize 1x1! -colorspace gray -format '%[fx:luma]' info:)
-      mode=$(awk -v l="$luma" 'BEGIN { print (l > 0.5) ? "light" : "dark" }')
-      echo "wallpaper luma=$luma -> mode=$mode"
 
       printf '%s\n' \
         '[config]' \
@@ -30,9 +23,14 @@ let
         "output_path = '$themeDir/Themes/custom.conf'" \
         > matugen-build.toml
       HOME=$TMPDIR matugen image ${wallpaper} \
-        --config matugen-build.toml --mode "$mode" --source-color-index 0
+        --config matugen-build.toml --mode dark --source-color-index 0
 
       sed -i 's|^ConfigFile=.*|ConfigFile=Themes/custom.conf|' "$themeDir/metadata.desktop"
+
+      # 入力欄の背景は upstream が opacity 0.2 を直書きしており conf から不透明にできない
+      sed -i -e '/config.LoginFieldBackgroundColor/{n;s/opacity: 0.2/opacity: 1.0/}' \
+             -e '/config.PasswordFieldBackgroundColor/{n;s/opacity: 0.2/opacity: 1.0/}' \
+             "$themeDir/Components/Input.qml"
     '';
   });
 
