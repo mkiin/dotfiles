@@ -9,6 +9,7 @@ in
     wallust
     awww
     rclone
+    imagemagick
     # desktop utilities (waybar=programs.waybar, cliphist/hypridle=services)
     wlogout
     rofi
