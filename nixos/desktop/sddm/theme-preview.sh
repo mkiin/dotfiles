@@ -5,6 +5,10 @@
 set -euo pipefail
 
 ROOT="$(git rev-parse --show-toplevel)"
-theme="$(nix eval --raw "$ROOT#nixosConfigurations.nixos.config.services.displayManager.sddm.theme")"
-sys="$(nix build "$ROOT#nixosConfigurations.nixos.config.system.build.toplevel" --no-link --print-out-paths)"
-exec sddm-greeter-qt6 --test-mode --theme "$sys/sw/share/sddm/themes/$theme"
+sddm="(builtins.getFlake \"path:$ROOT\").nixosConfigurations.nixos.config.services.displayManager.sddm"
+
+# toplevel を建てると 28s かかる。テンプレート編集の反復で効くのはテーマの derivation だけ(約 4s)。
+# head なのは extraPackages にテーマ 1 つしか入れていないため。
+theme="$(nix eval --impure --raw --expr "$sddm.theme")"
+pkg="$(nix build --impure --no-link --print-out-paths --expr "builtins.head $sddm.extraPackages")"
+exec sddm-greeter-qt6 --test-mode --theme "$pkg/share/sddm/themes/$theme"

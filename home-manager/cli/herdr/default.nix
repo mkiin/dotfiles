@@ -32,6 +32,17 @@ let
       close_pane = "prefix+m";
       zoom = "prefix+z";
       resize_mode = "prefix+r";
+
+      # command は action id を取る。プラグイン間で id が衝突すると
+      # ambiguous_plugin_action になるため <plugin_id>.<action_id> で修飾する。
+      command = [
+        {
+          key = "prefix+f";
+          type = "plugin_action";
+          command = "herdr-file-viewer.open-file-viewer";
+          description = "open file viewer";
+        }
+      ];
     };
   };
 in
