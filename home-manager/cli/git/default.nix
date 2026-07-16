@@ -8,9 +8,9 @@
     enableGitIntegration = true;
     options = {
       dark = true;
-      side-by-side = true;
+      features = "side-by-side";
       line-numbers = true;
-      syntax-theme = "GitHub";
+      syntax-theme = "Catppuccin Mocha";
     };
   };
 
