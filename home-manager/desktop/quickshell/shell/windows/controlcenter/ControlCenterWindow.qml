@@ -18,11 +18,15 @@ import "../../config" as QsConfig
 import "../../ui"
 import "." as QsCC
 
-// 通知センター — 殻(配置/アニメ/クローズ)は FloatingPanel、ここは中身だけ
-FloatingPanel {
+// 通知センター — 殻(配置/アニメ/クローズ/面)は PopupCard、ここは中身だけ
+PopupCard {
     id: root
 
-    panelWidth: 420
+    cardWidth: 420
+    padding: QsTheme.Appearance.margin.l
+    shadowOpacity: 0.18
+    shadowBlur: 0.4
+    shadowOffsetY: 4
 
     // Services
     readonly property var logger: QsUtils.Logger
@@ -48,31 +52,9 @@ FloatingPanel {
         onStarted: root.shouldShow = false
     }
 
-    // Main Panel Background
-    PopupCard {
-        id: panel
+    ColumnLayout {
+        id: innerCol
         anchors.fill: parent
-        implicitHeight: Math.min(innerCol.implicitHeight + 40, root.screen.height - 56)
-        radius: QsTheme.Appearance.radius.l
-        shadowOpacity: 0.18
-        shadowBlur: 0.4
-        shadowOffsetY: 4
-        clip: true
-
-
-        // Block clicks from passing through
-        MouseArea {
-            anchors.fill: parent
-            onClicked: mouse => {
-                mouse.accepted = true;
-            }
-        }
-
-        // Content Layout
-        ColumnLayout {
-            id: innerCol
-            anchors.fill: parent
-            anchors.margins: QsTheme.Appearance.margin.l
             spacing: QsTheme.Appearance.spacing.l
 
             // Header Section
@@ -259,7 +241,6 @@ FloatingPanel {
                 notifs: root.notifs
             }
         }
-    }
 
     // CC ヘッダーの丸ボタン。見た目はここで決め、状態と入力は ui/Button に任せる。
     component HeaderButton: Button {

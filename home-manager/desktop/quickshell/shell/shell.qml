@@ -48,11 +48,6 @@ ShellRoot {
         }
     }
 
-    // トースト（右上）
-    Loader {
-        source: "windows/NotificationToasts.qml"
-    }
-
     // 通知センター本体（クイックトグル/スライダ/MPRIS/通知リスト/電源）
     QsCC.ControlCenterWindow {
         id: cc

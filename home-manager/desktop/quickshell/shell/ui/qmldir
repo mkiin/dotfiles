@@ -1,4 +1,3 @@
 module qs.ui
 Button 1.0 Button.qml
 PopupCard 1.0 PopupCard.qml
-FloatingPanel 1.0 FloatingPanel.qml

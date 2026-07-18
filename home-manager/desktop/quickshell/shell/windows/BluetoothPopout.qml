@@ -5,14 +5,14 @@ import Quickshell.Io
 import "../theme" as QsTheme
 import "../ui"
 
-// Bluetooth device selector — 殻(配置/アニメ/クローズ)は FloatingPanel、ここは中身だけ
-FloatingPanel {
+// Bluetooth device selector — 殻(配置/アニメ/クローズ/面)は PopupCard、ここは中身だけ
+PopupCard {
     id: popupWindow
 
-    panelWidth: 320
+    cardWidth: 320
 
     readonly property int rowHeight: 52
-    readonly property int cardPadding: 16
+    padding: 16
     readonly property int headerIconSize: 36
     readonly property int buttonHeight: 36
     readonly property int actionButtonSize: 26
@@ -37,15 +37,9 @@ FloatingPanel {
     }
 
     // Background with shadow
-    PopupCard {
-        id: backgroundRect
+    ColumnLayout {
+        id: contentColumn
         anchors.fill: parent
-        implicitHeight: contentColumn.implicitHeight + popupWindow.cardPadding * 2
-
-        ColumnLayout {
-            id: contentColumn
-            anchors.fill: parent
-            anchors.margins: popupWindow.cardPadding
             spacing: QsTheme.Appearance.spacing.m
 
             // Header
@@ -453,5 +447,4 @@ FloatingPanel {
                 }
             }
         }
-    }
 }
