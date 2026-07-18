@@ -1,2 +1,0 @@
-module qs.features.screenshot
-singleton Screenshot Screenshot.qml

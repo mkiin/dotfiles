@@ -1,4 +1,0 @@
-module qs.features.audio.components
-VolumeRow 1.0 VolumeRow.qml
-VolumeTrack 1.0 VolumeTrack.qml
-AppVolumeMixer 1.0 AppVolumeMixer.qml

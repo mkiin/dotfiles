@@ -1,2 +1,2 @@
-module qs.config
+module qs
 singleton Config Config.qml
