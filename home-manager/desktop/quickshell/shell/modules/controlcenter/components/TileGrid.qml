@@ -22,7 +22,7 @@ GridLayout {
             readonly property string label: "Wi-Fi"
             readonly property string subLabel: QsServices.Network.connected ? QsServices.Network.ssid : "Disconnected"
             readonly property bool on: QsServices.Network.wifiEnabled
-            readonly property color accent: QsTheme.Theme.accent
+            readonly property color accent: QsTheme.Theme.primary
             readonly property bool available: true
             function activate() {
                 QsServices.Network.toggleWifi();
@@ -33,7 +33,7 @@ GridLayout {
             readonly property string label: "Bluetooth"
             readonly property string subLabel: QsServices.Bluetooth.powered ? "On" : "Off"
             readonly property bool on: QsServices.Bluetooth.powered
-            readonly property color accent: QsTheme.Theme.accent
+            readonly property color accent: QsTheme.Theme.primary
             readonly property bool available: true
             function activate() {
                 QsServices.Bluetooth.togglePower();
@@ -44,7 +44,7 @@ GridLayout {
             readonly property string label: "Do Not Disturb"
             readonly property string subLabel: QsServices.Notifs.dnd ? "On" : "Off"
             readonly property bool on: QsServices.Notifs.dnd
-            readonly property color accent: QsTheme.Theme.accent
+            readonly property color accent: QsTheme.Theme.primary
             readonly property bool available: true
             function activate() {
                 QsServices.Notifs.toggleDnd();

@@ -23,8 +23,6 @@ FloatingPanel {
     readonly property var audio: QsServices.Audio
     readonly property var mpris: QsServices.Players
     readonly property var notifs: QsServices.Notifs
-    readonly property var systemUsage: QsServices.SystemUsage
-    readonly property var powerProfiles: QsServices.PowerProfiles
     readonly property var screenshot: QsServices.Screenshot
     readonly property var idleInhibitor: QsServices.IdleInhibitor
 
@@ -50,8 +48,6 @@ FloatingPanel {
         radius: QsTheme.Appearance.radius.l
         strokeColor: QsTheme.Theme.border
         clip: true
-        accentColor: QsTheme.Theme.accent
-        highlighted: false
 
         Behavior on color {
             ColorAnimation {
@@ -99,7 +95,7 @@ FloatingPanel {
                         font.family: QsTheme.Appearance.typography.family
                         font.pixelSize: QsTheme.Appearance.typography.bodyMedium.size
                         font.weight: Font.Medium
-                        color: QsTheme.Theme.textMuted
+                        color: QsTheme.Theme.textVariant
                     }
 
                     Timer {
@@ -176,7 +172,7 @@ FloatingPanel {
                                     text: "󰕾"
                                     font.family: QsTheme.Appearance.typography.iconFamily
                                     font.pixelSize: QsTheme.Appearance.typography.bodyMedium.size
-                                    color: QsTheme.Theme.textMuted
+                                    color: QsTheme.Theme.textVariant
                                 }
 
                                 Text {
@@ -185,14 +181,14 @@ FloatingPanel {
                                     font.family: QsTheme.Appearance.typography.family
                                     font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
                                     font.weight: Font.DemiBold
-                                    color: QsTheme.Theme.textMuted
+                                    color: QsTheme.Theme.textVariant
                                 }
 
                                 Text {
                                     text: mixerSection.expanded ? "󰅀" : "󰅂"
                                     font.family: QsTheme.Appearance.typography.iconFamily
                                     font.pixelSize: QsTheme.Appearance.typography.bodyLarge.size
-                                    color: QsTheme.Theme.textMuted
+                                    color: QsTheme.Theme.textVariant
                                 }
                             }
 

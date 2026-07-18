@@ -57,8 +57,8 @@ Rectangle {
     // Color tokens
     readonly property color surfaceColor: QsTheme.Theme.card
     readonly property color textColor: QsTheme.Theme.text
-    readonly property color textDim: QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.7)
-    readonly property color accentColor: QsTheme.Theme.accent
+    readonly property color textDim: QsTheme.Theme.textVariant
+    readonly property color primaryColor: QsTheme.Theme.primary
     
     Layout.fillWidth: true
     Layout.preferredHeight: hasPlayer ? 100 : 0
@@ -108,7 +108,7 @@ Rectangle {
     // Dark overlay for readability
     Rectangle {
         anchors.fill: parent
-        color: QsTheme.Theme.withAlpha(QsTheme.Theme.background, 0.4)
+        color: QsTheme.Theme.scrim
         visible: bgImage.status === Image.Ready
     }
     
@@ -160,14 +160,15 @@ Rectangle {
             Layout.preferredWidth: 72
             Layout.preferredHeight: 72
             radius: QsTheme.Appearance.radius.s
-            color: Qt.rgba(1, 1, 1, 0.1)
+            color: QsTheme.Theme.cardHigh
             clip: true
             
             // Shadow
             layer.enabled: true
             layer.effect: MultiEffect {
                 shadowEnabled: true
-                shadowColor: Qt.rgba(0, 0, 0, 0.4)
+                shadowColor: QsTheme.Theme.shadow
+            shadowOpacity: 0.4
                 shadowBlur: 0.3
                 shadowVerticalOffset: 2
             }
@@ -195,7 +196,7 @@ Rectangle {
                 text: "󰝚"
                 font.family: QsTheme.Appearance.typography.iconFamily
                 font.pixelSize: QsTheme.Appearance.typography.headlineLarge.size
-                color: QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.3)
+                color: QsTheme.Theme.textVariant
                 visible: albumArt.status !== Image.Ready
             }
         }
@@ -222,7 +223,8 @@ Rectangle {
                 layer.enabled: true
                 layer.effect: MultiEffect {
                     shadowEnabled: true
-                    shadowColor: Qt.rgba(0, 0, 0, 0.5)
+                    shadowColor: QsTheme.Theme.shadow
+            shadowOpacity: 0.5
                     shadowBlur: 0.2
                 }
             }
@@ -240,7 +242,8 @@ Rectangle {
                 layer.enabled: true
                 layer.effect: MultiEffect {
                     shadowEnabled: true
-                    shadowColor: Qt.rgba(0, 0, 0, 0.5)
+                    shadowColor: QsTheme.Theme.shadow
+            shadowOpacity: 0.5
                     shadowBlur: 0.2
                 }
             }
@@ -266,7 +269,7 @@ Rectangle {
                 width: 48
                 height: 48
                 radius: height / 2
-                color: root.accentColor
+                color: root.primaryColor
                 
                 scale: playMouse.pressed ? 0.92 : (playMouse.containsMouse ? 1.05 : 1.0)
                 
@@ -281,7 +284,7 @@ Rectangle {
                 layer.enabled: true
                 layer.effect: MultiEffect {
                     shadowEnabled: true
-                    shadowColor: root.accentColor
+                    shadowColor: root.primaryColor
                     shadowBlur: 0.4
                     shadowOpacity: 0.5
                 }
@@ -323,8 +326,8 @@ Rectangle {
         height: 40
         radius: height / 2
         color: btnMouse.containsMouse 
-            ? Qt.rgba(1, 1, 1, 0.15) 
-            : Qt.rgba(1, 1, 1, 0.05)
+            ? QsTheme.Theme.cardHigh 
+            : QsTheme.Theme.card
         
         scale: btnMouse.pressed ? 0.9 : 1.0
         

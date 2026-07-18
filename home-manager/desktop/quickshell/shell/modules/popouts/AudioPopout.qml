@@ -54,7 +54,7 @@ FloatingPanel {
         Layout.fillWidth: true
         Layout.preferredHeight: popupWindow.rowHeight
         radius: QsTheme.Appearance.radius.s
-        color: rowArea.containsMouse ? QsTheme.Theme.hover : "transparent"
+        color: rowArea.containsMouse ? QsTheme.Theme.cardHigh : "transparent"
         Behavior on color {
             ColorAnimation {
                 duration: QsTheme.Appearance.anim.durations.fast
@@ -71,7 +71,7 @@ FloatingPanel {
                 text: row.isOutput ? popupWindow.audioIcon(row.node) : "󰍬"
                 font.family: QsTheme.Appearance.typography.iconFamily
                 font.pixelSize: QsTheme.Appearance.typography.bodyLarge.size
-                color: row.isDefault ? QsTheme.Theme.accent : QsTheme.Theme.text
+                color: row.isDefault ? QsTheme.Theme.primary : QsTheme.Theme.text
             }
 
             Text {
@@ -81,7 +81,7 @@ FloatingPanel {
                 font.family: QsTheme.Appearance.typography.family
                 font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
                 font.weight: row.isDefault ? Font.Medium : Font.Normal
-                color: row.isDefault ? QsTheme.Theme.accent : QsTheme.Theme.text
+                color: row.isDefault ? QsTheme.Theme.primary : QsTheme.Theme.text
             }
 
             Text {
@@ -89,7 +89,7 @@ FloatingPanel {
                 text: "󰄬"
                 font.family: QsTheme.Appearance.typography.iconFamily
                 font.pixelSize: QsTheme.Appearance.typography.bodyMedium.size
-                color: QsTheme.Theme.accent
+                color: QsTheme.Theme.primary
             }
         }
 
@@ -113,13 +113,14 @@ FloatingPanel {
         implicitHeight: contentColumn.implicitHeight + popupWindow.cardPadding * 2
         color: QsTheme.Theme.panel
         radius: QsTheme.Appearance.radius.m
-        border.color: QsTheme.Theme.borderFaint
+        border.color: QsTheme.Theme.border
         border.width: 1
 
         layer.enabled: true
         layer.effect: MultiEffect {
             shadowEnabled: true
-            shadowColor: Qt.rgba(0, 0, 0, 0.35)
+            shadowColor: QsTheme.Theme.shadow
+            shadowOpacity: 0.35
             shadowBlur: 1.0
             shadowVerticalOffset: 6
         }
@@ -139,14 +140,14 @@ FloatingPanel {
                     width: popupWindow.headerIconSize
                     height: popupWindow.headerIconSize
                     radius: QsTheme.Appearance.radius.s
-                    color: Qt.rgba(QsTheme.Theme.accent.r, QsTheme.Theme.accent.g, QsTheme.Theme.accent.b, 0.15)
+                    color: QsTheme.Theme.primaryContainer
 
                     Text {
                         anchors.centerIn: parent
                         text: "󰓃"
                         font.family: QsTheme.Appearance.typography.iconFamily
                         font.pixelSize: QsTheme.Appearance.typography.titleMedium.size
-                        color: QsTheme.Theme.accent
+                        color: QsTheme.Theme.primary
                     }
                 }
 
@@ -171,7 +172,7 @@ FloatingPanel {
                         elide: Text.ElideRight
                         font.family: QsTheme.Appearance.typography.family
                         font.pixelSize: QsTheme.Appearance.typography.labelSmall.size
-                        color: QsTheme.Theme.textMuted
+                        color: QsTheme.Theme.textVariant
                     }
                 }
             }
@@ -182,7 +183,7 @@ FloatingPanel {
                 font.family: QsTheme.Appearance.typography.family
                 font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
                 font.weight: Font.Medium
-                color: QsTheme.Theme.textMuted
+                color: QsTheme.Theme.textVariant
             }
 
             Rectangle {
@@ -214,7 +215,7 @@ FloatingPanel {
                         text: "No output devices"
                         font.family: QsTheme.Appearance.typography.family
                         font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
-                        color: QsTheme.Theme.textMuted
+                        color: QsTheme.Theme.textVariant
                     }
                 }
             }
@@ -226,7 +227,7 @@ FloatingPanel {
                 font.family: QsTheme.Appearance.typography.family
                 font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
                 font.weight: Font.Medium
-                color: QsTheme.Theme.textMuted
+                color: QsTheme.Theme.textVariant
             }
 
             Rectangle {
@@ -258,7 +259,7 @@ FloatingPanel {
                 Layout.fillWidth: true
                 Layout.preferredHeight: popupWindow.buttonHeight
                 radius: QsTheme.Appearance.radius.s
-                color: settingsArea.containsMouse ? QsTheme.Theme.hover : "transparent"
+                color: settingsArea.containsMouse ? QsTheme.Theme.cardHigh : "transparent"
 
                 RowLayout {
                     anchors.centerIn: parent
@@ -268,14 +269,14 @@ FloatingPanel {
                         text: "󰒓"
                         font.family: QsTheme.Appearance.typography.iconFamily
                         font.pixelSize: QsTheme.Appearance.typography.bodyMedium.size
-                        color: QsTheme.Theme.textMuted
+                        color: QsTheme.Theme.textVariant
                     }
 
                     Text {
                         text: "Sound Settings"
                         font.family: QsTheme.Appearance.typography.family
                         font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
-                        color: QsTheme.Theme.textMuted
+                        color: QsTheme.Theme.textVariant
                     }
                 }
 

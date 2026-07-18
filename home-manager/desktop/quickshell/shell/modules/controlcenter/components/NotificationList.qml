@@ -14,9 +14,9 @@ Rectangle {
     readonly property color surfaceColor: QsTheme.Theme.inset
     readonly property color surfaceVariant: QsTheme.Theme.card
     readonly property color textColor: QsTheme.Theme.text
-    readonly property color textVariant: QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.72)
-    readonly property color accentColor: QsTheme.Theme.accent
-    readonly property color borderColor: QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.08)
+    readonly property color textVariant: QsTheme.Theme.textVariant
+    readonly property color primaryColor: QsTheme.Theme.primary
+    readonly property color borderColor: QsTheme.Theme.card
     
     Layout.fillWidth: true
     implicitHeight: Math.max(contentCol.implicitHeight + 32, 160)
@@ -61,7 +61,7 @@ Rectangle {
                 height: 28
                 radius: height / 2
                 color: clearAllMouse.containsMouse 
-                    ? Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.12)
+                    ? QsTheme.Theme.cardHigh
                     : root.surfaceVariant
                 
                 Behavior on color {
@@ -144,7 +144,7 @@ Rectangle {
                 height: notifContent.implicitHeight + 20
                 radius: QsTheme.Appearance.radius.m
                 color: notifMouse.containsMouse 
-                    ? Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.08)
+                    ? QsTheme.Theme.card
                     : root.surfaceVariant
                 
                 Behavior on color {
@@ -182,12 +182,18 @@ Rectangle {
                     spacing: QsTheme.Appearance.spacing.m
                     
                     // Icon
-                    Rectangle {
+                    Item {
                         Layout.preferredWidth: 42
                         Layout.preferredHeight: 42
                         Layout.alignment: Qt.AlignTop
-                        radius: QsTheme.Appearance.radius.s
-                        color: Qt.rgba(root.accentColor.r, root.accentColor.g, root.accentColor.b, 0.15)
+
+                        // 地の色だけを薄くするため背景を子に分ける
+                        Rectangle {
+                            anchors.fill: parent
+                            radius: QsTheme.Appearance.radius.s
+                            color: root.primaryColor
+                            opacity: 0.15
+                        }
                         
                         Image {
                             anchors.centerIn: parent
@@ -206,7 +212,7 @@ Rectangle {
                             text: "󰂚"
                             font.family: QsTheme.Appearance.typography.iconFamily
                             font.pixelSize: QsTheme.Appearance.typography.titleLarge.size
-                            color: root.accentColor
+                            color: root.primaryColor
                             visible: !parent.children[0].visible
                         }
                     }
@@ -242,7 +248,7 @@ Rectangle {
                             text: notifDelegate.modelData.appName ?? ""
                             font.family: QsTheme.Appearance.typography.family
                             font.pixelSize: QsTheme.Appearance.typography.labelSmall.size
-                            color: Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.5)
+                            color: QsTheme.Theme.textVariant
                             Layout.fillWidth: true
                             visible: text !== ""
                         }
@@ -256,7 +262,7 @@ Rectangle {
                         Layout.alignment: Qt.AlignTop
                         radius: height / 2
                         color: closeMouse.containsMouse 
-                            ? Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.15)
+                            ? QsTheme.Theme.border
                             : "transparent"
                         
                         Behavior on color {
@@ -313,7 +319,7 @@ Rectangle {
                     text: "󰂚"
                     font.family: QsTheme.Appearance.typography.iconFamily
                     font.pixelSize: root.emptyIconSize
-                    color: Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.2)
+                    color: QsTheme.Theme.border
                 }
                 
                 Text {
@@ -322,7 +328,7 @@ Rectangle {
                     font.family: QsTheme.Appearance.typography.family
                     font.pixelSize: QsTheme.Appearance.typography.bodyMedium.size
                     font.weight: Font.Medium
-                    color: Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.4)
+                    color: QsTheme.Theme.textVariant
                 }
             }
         }

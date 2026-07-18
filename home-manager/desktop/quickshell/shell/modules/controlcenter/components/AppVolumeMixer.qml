@@ -24,7 +24,7 @@ ColumnLayout {
         text: "再生中のアプリはありません"
         font.family: QsTheme.Appearance.typography.family
         font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
-        color: QsTheme.Theme.textMuted
+        color: QsTheme.Theme.textVariant
         horizontalAlignment: Text.AlignHCenter
     }
 
@@ -74,7 +74,7 @@ ColumnLayout {
                         Layout.preferredHeight: 30
                         radius: height / 2
                         color: muteMouse.containsMouse
-                            ? QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.1)
+                            ? QsTheme.Theme.cardHigh
                             : "transparent"
 
                         Behavior on color {
@@ -90,8 +90,8 @@ ColumnLayout {
                             font.family: QsTheme.Appearance.typography.iconFamily
                             font.pixelSize: QsTheme.Appearance.typography.bodyLarge.size
                             color: row.isMuted
-                                ? QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.5)
-                                : QsTheme.Theme.accent
+                                ? QsTheme.Theme.textVariant
+                                : QsTheme.Theme.primary
                         }
 
                         MouseArea {

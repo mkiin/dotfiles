@@ -2,11 +2,8 @@ module qs.services
 singleton Audio Audio.qml
 singleton AudioStreams AudioStreams.qml
 singleton Bluetooth Bluetooth.qml
-singleton Brightness Brightness.qml
 singleton IdleInhibitor IdleInhibitor.qml
 singleton Network Network.qml
 singleton Notifs Notifs.qml
 singleton Players Players.qml
-singleton PowerProfiles PowerProfiles.qml
 singleton Screenshot Screenshot.qml
-singleton SystemUsage SystemUsage.qml

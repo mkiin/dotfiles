@@ -3,7 +3,5 @@ TileGrid 1.0 TileGrid.qml
 VolumeTrack 1.0 VolumeTrack.qml
 VolumeSlider 1.0 VolumeSlider.qml
 AppVolumeMixer 1.0 AppVolumeMixer.qml
-BrightnessSlider 1.0 BrightnessSlider.qml
-SystemStats 1.0 SystemStats.qml
 MediaCard 1.0 MediaCard.qml
 NotificationList 1.0 NotificationList.qml

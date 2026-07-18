@@ -24,13 +24,13 @@ PanelWindow {
     readonly property color m3Surface: QsTheme.Theme.card
     readonly property color m3SurfaceContainer: QsTheme.Theme.panel
     readonly property color m3SurfaceContainerHigh: QsTheme.Theme.cardHigh
-    readonly property color m3Primary: QsTheme.Theme.accent
+    readonly property color m3Primary: QsTheme.Theme.primary
     readonly property color m3OnSurface: QsTheme.Theme.text
-    readonly property color m3OnSurfaceVariant: QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.55)
+    readonly property color m3OnSurfaceVariant: QsTheme.Theme.textVariant
     readonly property color m3Error: QsTheme.Theme.error
     readonly property color m3Warning: QsTheme.Theme.warning
     readonly property color m3Success: QsTheme.Theme.success
-    readonly property color m3Border: QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.06)
+    readonly property color m3Border: QsTheme.Theme.card
 
     // Swipe dismiss threshold (fraction of popup width)
     readonly property real swipeThreshold: 0.30
@@ -303,8 +303,8 @@ PanelWindow {
                             (config.notifications.popupWidth * root.swipeThreshold * 1.5))
 
                         color: notifCard.dragX > 0
-                            ? Qt.rgba(root.m3Error.r, root.m3Error.g, root.m3Error.b, 0.06)
-                            : Qt.rgba(root.m3Primary.r, root.m3Primary.g, root.m3Primary.b, 0.06)
+                            ? QsTheme.Theme.card
+                            : QsTheme.Theme.card
 
                         Text {
                             anchors.centerIn: parent
@@ -330,9 +330,9 @@ PanelWindow {
                         border.width: 1
                         border.color: {
                             if (notifCard.isHovered)
-                                return Qt.rgba(root.m3Primary.r, root.m3Primary.g, root.m3Primary.b, 0.2)
+                                return QsTheme.Theme.primaryContainer
                             if (modelData.urgency === NotificationUrgency.Critical)
-                                return Qt.rgba(root.m3Error.r, root.m3Error.g, root.m3Error.b, 0.2)
+                                return QsTheme.Theme.errorContainer
                             return root.m3Border
                         }
 
@@ -344,7 +344,8 @@ PanelWindow {
                         layer.enabled: true
                         layer.effect: MultiEffect {
                             shadowEnabled: true
-                            shadowColor: Qt.rgba(0, 0, 0, 0.18)
+                            shadowColor: QsTheme.Theme.shadow
+            shadowOpacity: 0.18
                             shadowBlur: 0.4
                             shadowVerticalOffset: 4
                         }
@@ -397,12 +398,8 @@ PanelWindow {
                             radius: parent.radius
                             z: -1
                             visible: modelData.urgency !== NotificationUrgency.Normal
-                            color: {
-                                const c = root._urgencyColor(modelData.urgency)
-                                if (modelData.urgency === NotificationUrgency.Critical)
-                                    return Qt.rgba(c.r, c.g, c.b, 0.08)
-                                return Qt.rgba(c.r, c.g, c.b, 0.04)
-                            }
+                            color: root._urgencyColor(modelData.urgency)
+                            opacity: modelData.urgency === NotificationUrgency.Critical ? 0.08 : 0.04
                         }
 
                         // ── Progress bar (bottom sweep) ──
@@ -418,8 +415,7 @@ PanelWindow {
                             }
                             height: 2
                             radius: height / 2
-                            color: Qt.rgba(root.m3OnSurface.r, root.m3OnSurface.g,
-                                           root.m3OnSurface.b, 0.04)
+                            color: QsTheme.Theme.card
                             visible: notifCard.isVisible && !notifCard.isHovered
                             clip: true
 
@@ -431,10 +427,8 @@ PanelWindow {
                                 }
                                 width: progressTrack.width * notifCard.timeoutProgress
                                 radius: parent.radius
-                                color: {
-                                    const c = root._urgencyColor(modelData.urgency)
-                                    return Qt.rgba(c.r, c.g, c.b, 0.45)
-                                }
+                                color: root._urgencyColor(modelData.urgency)
+                                opacity: 0.45
 
                                 NumberAnimation {
                                     id: progressAnim
@@ -580,14 +574,17 @@ PanelWindow {
                                 spacing: QsTheme.Appearance.spacing.m
 
                                 // App icon — rounded square with urgency tint
-                                Rectangle {
+                                // 地の色だけを薄くしたいので、背景を子に分けている（親に opacity をかけると中身も薄くなる）
+                                Item {
                                     Layout.preferredWidth: 34
                                     Layout.preferredHeight: 34
-                                    radius: QsTheme.Appearance.radius.s
-                                    color: Qt.rgba(
-                                        root._urgencyColor(modelData.urgency).r,
-                                        root._urgencyColor(modelData.urgency).g,
-                                        root._urgencyColor(modelData.urgency).b, 0.12)
+
+                                    Rectangle {
+                                        anchors.fill: parent
+                                        radius: QsTheme.Appearance.radius.s
+                                        color: root._urgencyColor(modelData.urgency)
+                                        opacity: 0.12
+                                    }
 
                                     // App icon image
                                     Image {
@@ -638,9 +635,7 @@ PanelWindow {
                                         text: modelData.timeString || "now"
                                         font.pixelSize: QsTheme.Appearance.typography.labelSmall.size
                                         font.family: QsTheme.Appearance.typography.family
-                                        color: Qt.rgba(root.m3OnSurface.r,
-                                                       root.m3OnSurface.g,
-                                                       root.m3OnSurface.b, 0.3)
+                                        color: QsTheme.Theme.textVariant
                                     }
                                 }
 
@@ -651,13 +646,7 @@ PanelWindow {
                                     radius: height / 2
                                     opacity: (notifCard.isHovered || closeMA.containsMouse) ? 1 : 0
                                     scale: (notifCard.isHovered || closeMA.containsMouse) ? 1.0 : 0.6
-                                    color: closeMA.pressed
-                                        ? Qt.rgba(root.m3Error.r, root.m3Error.g,
-                                                  root.m3Error.b, 0.18)
-                                        : closeMA.containsMouse
-                                        ? Qt.rgba(root.m3OnSurface.r, root.m3OnSurface.g,
-                                                  root.m3OnSurface.b, 0.08)
-                                        : "transparent"
+                                    color: closeMA.pressed ? QsTheme.Theme.errorContainer : closeMA.containsMouse ? QsTheme.Theme.cardHigh : "transparent"
 
                                     Behavior on opacity {
                                         NumberAnimation {
@@ -680,11 +669,7 @@ PanelWindow {
                                         text: "󰅖"
                                         font.family: QsTheme.Appearance.typography.iconFamily
                                         font.pixelSize: QsTheme.Appearance.typography.bodyMedium.size
-                                        color: closeMA.containsMouse
-                                            ? root.m3Error
-                                            : Qt.rgba(root.m3OnSurface.r,
-                                                      root.m3OnSurface.g,
-                                                      root.m3OnSurface.b, 0.45)
+                                        color: closeMA.containsMouse ? root.m3Error : QsTheme.Theme.textVariant
 
                                         Behavior on color {
                                             ColorAnimation { duration: QsTheme.Appearance.anim.durations.fast }
@@ -803,14 +788,7 @@ PanelWindow {
                                         width: actLabel.width + 22
                                         height: 28
                                         radius: height / 2
-                                        color: actMA.pressed
-                                            ? Qt.rgba(root.m3Primary.r, root.m3Primary.g,
-                                                      root.m3Primary.b, 0.28)
-                                            : actMA.containsMouse
-                                            ? Qt.rgba(root.m3Primary.r, root.m3Primary.g,
-                                                      root.m3Primary.b, 0.18)
-                                            : Qt.rgba(root.m3Primary.r, root.m3Primary.g,
-                                                      root.m3Primary.b, 0.10)
+                                        color: actMA.pressed ? QsTheme.Theme.primary : actMA.containsMouse ? QsTheme.Theme.primaryContainer : QsTheme.Theme.card
 
                                         Behavior on color {
                                             ColorAnimation { duration: QsTheme.Appearance.anim.durations.fast }

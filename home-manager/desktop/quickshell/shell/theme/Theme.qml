@@ -3,52 +3,57 @@ pragma Singleton
 import Quickshell
 import QtQuick
 
-// 意味色トークンの単一定義層。プリミティブ(Colours=matugen)から派生し、全コンポーネントはここだけを参照する。
-// 面(panel/card/inset)やアクセントの割当を変えたいときはこのファイルだけ直せば全UIに伝播する。
+// 意味色トークンの単一定義層。全コンポーネントはここだけを参照する。
+// alpha 合成はしない。透過が要る箇所は要素側の opacity / shadowOpacity で表す。
+// 文字色は text と textVariant の 2 段だけ。3 段目を作らない。
 Singleton {
     id: root
 
     readonly property var p: Colours
 
-    // ── Surfaces (elevation 低→高) ──
+    // ── 面（低→高） ──
     readonly property color background: p.background
-    readonly property color inset: p.surfaceContainerLow       // 凹んだリスト域
-    readonly property color panel: p.surfaceContainer          // パネル背景 (waybar と同色)
-    readonly property color card: p.surfaceContainerHigh       // カード/タイル/トースト/通知アイテム
-    readonly property color cardHigh: p.surfaceContainerHighest // ホバー/最上位
+    readonly property color inset: p.surfaceContainerLow
+    readonly property color panel: p.surfaceContainer
+    readonly property color card: p.surfaceContainerHigh
+    readonly property color cardHigh: p.surfaceContainerHighest
 
-    // ── Text (on surface) ──
-    readonly property color text: p.foreground
-    readonly property color textVariant: p.onSurfaceVariant
-    readonly property color textMuted: p.onSurfaceMuted
-    readonly property color textDim: withAlpha(p.foreground, 0.5)
+    // ── 強調色とその上の文字 ──
+    readonly property color primary: p.primary
+    readonly property color onPrimary: p.onPrimary
+    readonly property color primaryContainer: p.primaryContainer
+    readonly property color onPrimaryContainer: p.onPrimaryContainer
 
-    // ── Accent ──
-    readonly property color accent: p.primary
     readonly property color secondary: p.secondary
-    readonly property color tertiary: p.tertiary
-    readonly property color onAccent: p.background
+    readonly property color onSecondary: p.onSecondary
+    readonly property color secondaryContainer: p.secondaryContainer
+    readonly property color onSecondaryContainer: p.onSecondaryContainer
 
-    // ── State ──
+    readonly property color tertiary: p.tertiary
+    readonly property color onTertiary: p.onTertiary
+    readonly property color tertiaryContainer: p.tertiaryContainer
+    readonly property color onTertiaryContainer: p.onTertiaryContainer
+
     readonly property color error: p.error
+    readonly property color onError: p.onError
+    readonly property color errorContainer: p.errorContainer
+    readonly property color onErrorContainer: p.onErrorContainer
+
     readonly property color warning: p.warning
+    readonly property color onWarning: p.onWarning
     readonly property color success: p.success
+    readonly property color onSuccess: p.onSuccess
     readonly property color info: p.info
 
-    // ── Lines ──
+    // ── 文字（面の上） ──
+    readonly property color text: p.onSurface
+    readonly property color textVariant: p.onSurfaceVariant
+
+    // ── 線 ──
     readonly property color border: p.outlineVariant
     readonly property color outline: p.outline
-    readonly property color borderFaint: withAlpha(p.foreground, 0.08)
 
-    // ── Interaction / Effects ──
-    readonly property color hover: withAlpha(p.foreground, 0.06)
+    // ── 効果（不透明。濃さは利用側の opacity で与える） ──
     readonly property color shadow: p.shadow
-
-    // alpha 付き派生用ヘルパ
-    function withAlpha(c, a) { return Qt.rgba(c.r, c.g, c.b, a) }
-    // 任意のアクセント色上の可読な前景色 (輝度で自動コントラスト)
-    function onColor(c) {
-        return (0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b) > 0.55
-            ? Qt.rgba(0.05, 0.06, 0.08, 1) : Qt.rgba(1, 1, 1, 1)
-    }
+    readonly property color scrim: p.scrim
 }

@@ -38,7 +38,7 @@ QQC.Slider {
             width: control.position * parent.width
             height: parent.height
             radius: height / 2
-            color: QsTheme.Theme.accent
+            color: QsTheme.Theme.primary
 
             Behavior on width {
                 NumberAnimation {
@@ -54,7 +54,7 @@ QQC.Slider {
             radius: height / 2
             x: Math.max(0, Math.min(parent.width - width, control.position * parent.width - width / 2))
             y: (parent.height - height) / 2
-            color: QsTheme.Theme.accent
+            color: QsTheme.Theme.primary
             border.width: 2
             border.color: control.surfaceColor
         }

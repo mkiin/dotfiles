@@ -17,7 +17,7 @@ Rectangle {
     // Solid color tokens
     readonly property color surfaceColor: QsTheme.Theme.cardHigh
     readonly property color textColor: QsTheme.Theme.text
-    readonly property color accentColor: QsTheme.Theme.accent
+    readonly property color primaryColor: QsTheme.Theme.primary
     
     Layout.fillWidth: true
     Layout.preferredHeight: 54
@@ -45,7 +45,7 @@ Rectangle {
             Layout.fillHeight: true
             radius: QsTheme.Appearance.radius.l
             color: muteMouse.containsMouse 
-                ? Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.1) 
+                ? QsTheme.Theme.cardHigh 
                 : "transparent"
             
             Behavior on color {
@@ -60,7 +60,7 @@ Rectangle {
                 text: root.isMuted ? "󰝟" : (root.currentVolume > 66 ? "󰕾" : (root.currentVolume > 33 ? "󰖀" : "󰕿"))
                 font.family: QsTheme.Appearance.typography.iconFamily
                 font.pixelSize: QsTheme.Appearance.typography.titleLarge.size
-                color: root.isMuted ? Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.5) : root.accentColor
+                color: root.isMuted ? QsTheme.Theme.textVariant : root.primaryColor
                 
                 Behavior on color {
                     ColorAnimation {
