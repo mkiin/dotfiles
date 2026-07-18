@@ -132,10 +132,6 @@
       none = "󰂜";
       dnd-notification = "󰂠";
       dnd-none = "󰪓";
-      inhibited-notification = "󰂛";
-      inhibited-none = "󰪑";
-      dnd-inhibited-notification = "󰂛";
-      dnd-inhibited-none = "󰪑";
     };
     return-type = "json";
     interval = 2;

@@ -6,12 +6,7 @@
   "paths": {
     "colours": "~/.cache/quickshell/matugen-colors.json"
   },
-  "notifications": {
-    "registerServer": true,
-    "popupWidth": 340,
-    "maxVisible": 5,
-    "timeoutMs": 5000,
-    "spacing": 10,
-    "margin": 10
+  "bar": {
+    "height": 40
   }
 }

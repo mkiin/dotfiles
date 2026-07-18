@@ -185,9 +185,7 @@ in
   }
 
   #custom-notify.dnd-none,
-  #custom-notify.dnd-notification,
-  #custom-notify.dnd-inhibited-none,
-  #custom-notify.dnd-inhibited-notification {
+  #custom-notify.dnd-notification {
     color: @primary;
   }
 
