@@ -128,8 +128,9 @@ FloatingPanel {
                 Layout.fillWidth: true
                 spacing: QsTheme.Appearance.spacing.l
 
-                // Quick Toggles
-                TileGrid {
+                // Quick Actions
+                QuickActions {
+                    Layout.fillWidth: true
                     onRequestClose: root.shouldShow = false
                 }
 
@@ -228,22 +229,20 @@ FloatingPanel {
                     }
                 }
 
-                // Divider
-                Rectangle {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 1
-                    color: QsTheme.Theme.border
-                }
-
-                // System Stats
-                SystemStats {
-                    Layout.fillWidth: true
-                    systemUsage: root.systemUsage
-                }
 
                 // Media Card
                 MediaCard {
+                    id: mediaCard
                     Layout.fillWidth: true
+                    Layout.preferredHeight: mediaCard.hasPlayer ? 100 : 0
+
+                    Behavior on Layout.preferredHeight {
+                        NumberAnimation {
+                            duration: QsTheme.Appearance.anim.durations.medium2
+                            easing.bezierCurve: QsTheme.Appearance.anim.curves.emphasizedDecel
+                        }
+                    }
+
                     mpris: root.mpris
                 }
             }

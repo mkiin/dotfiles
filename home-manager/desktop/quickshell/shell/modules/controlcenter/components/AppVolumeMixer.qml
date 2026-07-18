@@ -107,7 +107,7 @@ ColumnLayout {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         value: row.currentVolume
-                        surfaceColor: row.color
+                        knobOutlineColor: row.color
                         onMoved: QsServices.AudioStreams.setGroupVolume(row.nodes, value / 100)
                         onVolumeStepped: newValue => QsServices.AudioStreams.setGroupVolume(row.nodes, newValue / 100)
                     }

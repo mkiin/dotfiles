@@ -20,17 +20,6 @@ PanelWindow {
     readonly property var logger: QsUtils.Logger
     readonly property var config: QsConfig.Config
 
-    // ── Color Tokens (semantic, from Theme) ──
-    readonly property color m3Surface: QsTheme.Theme.card
-    readonly property color m3SurfaceContainer: QsTheme.Theme.panel
-    readonly property color m3SurfaceContainerHigh: QsTheme.Theme.cardHigh
-    readonly property color m3Primary: QsTheme.Theme.primary
-    readonly property color m3OnSurface: QsTheme.Theme.text
-    readonly property color m3OnSurfaceVariant: QsTheme.Theme.textVariant
-    readonly property color m3Error: QsTheme.Theme.error
-    readonly property color m3Warning: QsTheme.Theme.warning
-    readonly property color m3Success: QsTheme.Theme.success
-    readonly property color m3Border: QsTheme.Theme.card
 
     // Swipe dismiss threshold (fraction of popup width)
     readonly property real swipeThreshold: 0.30
@@ -39,9 +28,9 @@ PanelWindow {
     readonly property int pulseDuration: 1000
 
     function _urgencyColor(u) {
-        if (u === NotificationUrgency.Critical) return m3Error
-        if (u === NotificationUrgency.Low) return m3OnSurfaceVariant
-        return m3Primary
+        if (u === NotificationUrgency.Critical) return QsTheme.Theme.error
+        if (u === NotificationUrgency.Low) return QsTheme.Theme.textVariant
+        return QsTheme.Theme.primary
     }
 
     // Active popups — newest first, capped to maxVisible
@@ -311,7 +300,7 @@ PanelWindow {
                             text: notifCard.dragX > 0 ? "󰅖" : "󰄬"
                             font.family: QsTheme.Appearance.typography.iconFamily
                             font.pixelSize: QsTheme.Appearance.typography.headlineSmall.size
-                            color: notifCard.dragX > 0 ? root.m3Error : root.m3Primary
+                            color: notifCard.dragX > 0 ? QsTheme.Theme.error : QsTheme.Theme.primary
                             opacity: 0.55
                         }
                     }
@@ -324,7 +313,7 @@ PanelWindow {
                         width: parent.width
                         height: contentCol.implicitHeight + 34
                         radius: QsTheme.Appearance.radius.m
-                        color: root.m3Surface
+                        color: QsTheme.Theme.card
 
                         // Hover-responsive border
                         border.width: 1
@@ -333,7 +322,7 @@ PanelWindow {
                                 return QsTheme.Theme.primaryContainer
                             if (modelData.urgency === NotificationUrgency.Critical)
                                 return QsTheme.Theme.errorContainer
-                            return root.m3Border
+                            return QsTheme.Theme.card
                         }
 
                         Behavior on border.color {
@@ -384,7 +373,7 @@ PanelWindow {
                         Rectangle {
                             anchors.fill: parent
                             radius: parent.radius
-                            color: root.m3OnSurface
+                            color: QsTheme.Theme.text
                             opacity: notifCard.isHovered && !notifCard.isDragging ? 0.035 : 0
 
                             Behavior on opacity {
@@ -626,7 +615,7 @@ PanelWindow {
                                         font.weight: Font.Medium
                                         font.family: QsTheme.Appearance.typography.family
                                         font.letterSpacing: 0.4
-                                        color: root.m3OnSurfaceVariant
+                                        color: QsTheme.Theme.textVariant
                                         Layout.fillWidth: true
                                         elide: Text.ElideRight
                                     }
@@ -669,7 +658,7 @@ PanelWindow {
                                         text: "󰅖"
                                         font.family: QsTheme.Appearance.typography.iconFamily
                                         font.pixelSize: QsTheme.Appearance.typography.bodyMedium.size
-                                        color: closeMA.containsMouse ? root.m3Error : QsTheme.Theme.textVariant
+                                        color: closeMA.containsMouse ? QsTheme.Theme.error : QsTheme.Theme.textVariant
 
                                         Behavior on color {
                                             ColorAnimation { duration: QsTheme.Appearance.anim.durations.fast }
@@ -698,7 +687,7 @@ PanelWindow {
                                 font.weight: Font.DemiBold
                                 font.family: QsTheme.Appearance.typography.family
                                 font.letterSpacing: -0.15
-                                color: root.m3OnSurface
+                                color: QsTheme.Theme.text
                                 wrapMode: Text.Wrap
                                 maximumLineCount: 2
                                 elide: Text.ElideRight
@@ -713,7 +702,7 @@ PanelWindow {
                                 font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
                                 font.family: QsTheme.Appearance.typography.family
                                 font.letterSpacing: 0.1
-                                color: root.m3OnSurfaceVariant
+                                color: QsTheme.Theme.textVariant
                                 wrapMode: Text.Wrap
                                 maximumLineCount: notifCard.isExpanded ? 12 : 3
                                 elide: Text.ElideRight
@@ -738,7 +727,7 @@ PanelWindow {
                                 font.pixelSize: QsTheme.Appearance.typography.labelSmall.size
                                 font.family: QsTheme.Appearance.typography.family
                                 font.letterSpacing: 0.5
-                                color: root.m3OnSurfaceVariant
+                                color: QsTheme.Theme.textVariant
                                 opacity: 0.4
                                 horizontalAlignment: Text.AlignLeft
                             }
@@ -755,7 +744,7 @@ PanelWindow {
                                     anchors.fill: parent
                                     radius: QsTheme.Appearance.radius.s
                                     clip: true
-                                    color: root.m3SurfaceContainer
+                                    color: QsTheme.Theme.panel
 
                                     Image {
                                         anchors.fill: parent
@@ -811,7 +800,7 @@ PanelWindow {
                                             font.weight: Font.Medium
                                             font.family: QsTheme.Appearance.typography.family
                                             font.letterSpacing: 0.3
-                                            color: root.m3Primary
+                                            color: QsTheme.Theme.primary
                                         }
 
                                         MouseArea {

@@ -15,15 +15,10 @@ Rectangle {
     readonly property bool isMuted: audio.muted
     
     // Solid color tokens
-    readonly property color surfaceColor: QsTheme.Theme.cardHigh
-    readonly property color textColor: QsTheme.Theme.text
-    readonly property color primaryColor: QsTheme.Theme.primary
     
-    Layout.fillWidth: true
-    Layout.preferredHeight: 54
     
     radius: QsTheme.Appearance.radius.l
-    color: surfaceColor
+    color: QsTheme.Theme.cardHigh
     border.width: 1
     border.color: QsTheme.Theme.border
     
@@ -60,7 +55,7 @@ Rectangle {
                 text: root.isMuted ? "󰝟" : (root.currentVolume > 66 ? "󰕾" : (root.currentVolume > 33 ? "󰖀" : "󰕿"))
                 font.family: QsTheme.Appearance.typography.iconFamily
                 font.pixelSize: QsTheme.Appearance.typography.titleLarge.size
-                color: root.isMuted ? QsTheme.Theme.textVariant : root.primaryColor
+                color: root.isMuted ? QsTheme.Theme.textVariant : QsTheme.Theme.primary
                 
                 Behavior on color {
                     ColorAnimation {
@@ -87,7 +82,7 @@ Rectangle {
             Layout.rightMargin: QsTheme.Appearance.margin.m
 
             value: root.currentVolume
-            surfaceColor: root.surfaceColor
+            knobOutlineColor: QsTheme.Theme.cardHigh
 
             onMoved: root.audio.setVolume(value / 100)
             onVolumeStepped: newValue => root.audio.setVolume(newValue / 100)
@@ -101,7 +96,7 @@ Rectangle {
             font.family: QsTheme.Appearance.typography.family
             font.pixelSize: QsTheme.Appearance.typography.bodyMedium.size
             font.weight: Font.DemiBold
-            color: root.textColor
+            color: QsTheme.Theme.text
             horizontalAlignment: Text.AlignRight
         }
     }

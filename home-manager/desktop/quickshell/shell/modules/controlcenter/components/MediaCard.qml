@@ -54,26 +54,11 @@ Rectangle {
         }
     }
     
-    // Color tokens
-    readonly property color surfaceColor: QsTheme.Theme.card
-    readonly property color textColor: QsTheme.Theme.text
-    readonly property color textDim: QsTheme.Theme.textVariant
-    readonly property color primaryColor: QsTheme.Theme.primary
-    
-    Layout.fillWidth: true
-    Layout.preferredHeight: hasPlayer ? 100 : 0
-    
     radius: QsTheme.Appearance.radius.m
-    color: surfaceColor
+    color: QsTheme.Theme.card
     clip: true
     visible: hasPlayer
     
-    Behavior on Layout.preferredHeight {
-        NumberAnimation {
-            duration: QsTheme.Appearance.anim.durations.medium2
-            easing.bezierCurve: QsTheme.Appearance.anim.curves.emphasizedDecel
-        }
-    }
     
     // Blurred album art background
     Image {
@@ -215,7 +200,7 @@ Rectangle {
                 font.family: QsTheme.Appearance.typography.family
                 font.pixelSize: QsTheme.Appearance.typography.bodyLarge.size
                 font.weight: Font.Bold
-                color: root.textColor
+                color: QsTheme.Theme.text
                 elide: Text.ElideRight
                 maximumLineCount: 1
                 
@@ -234,7 +219,7 @@ Rectangle {
                 text: root.trackArtist
                 font.family: QsTheme.Appearance.typography.family
                 font.pixelSize: QsTheme.Appearance.typography.bodyMedium.size
-                color: root.textDim
+                color: QsTheme.Theme.textVariant
                 elide: Text.ElideRight
                 maximumLineCount: 1
                 visible: text !== ""
@@ -269,7 +254,7 @@ Rectangle {
                 width: 48
                 height: 48
                 radius: height / 2
-                color: root.primaryColor
+                color: QsTheme.Theme.primary
                 
                 scale: playMouse.pressed ? 0.92 : (playMouse.containsMouse ? 1.05 : 1.0)
                 
@@ -284,7 +269,7 @@ Rectangle {
                 layer.enabled: true
                 layer.effect: MultiEffect {
                     shadowEnabled: true
-                    shadowColor: root.primaryColor
+                    shadowColor: QsTheme.Theme.primary
                     shadowBlur: 0.4
                     shadowOpacity: 0.5
                 }
@@ -350,7 +335,7 @@ Rectangle {
             text: parent.icon
             font.family: QsTheme.Appearance.typography.iconFamily
             font.pixelSize: QsTheme.Appearance.typography.titleLarge.size
-            color: root.textColor
+            color: QsTheme.Theme.text
         }
         
         MouseArea {

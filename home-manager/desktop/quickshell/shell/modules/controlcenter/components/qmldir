@@ -1,5 +1,5 @@
 module ControlCenter.Components
-TileGrid 1.0 TileGrid.qml
+QuickActions 1.0 QuickActions.qml
 VolumeTrack 1.0 VolumeTrack.qml
 VolumeSlider 1.0 VolumeSlider.qml
 AppVolumeMixer 1.0 AppVolumeMixer.qml

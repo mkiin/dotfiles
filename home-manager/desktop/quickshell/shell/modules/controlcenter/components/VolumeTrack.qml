@@ -5,7 +5,8 @@ import "../../../theme" as QsTheme
 QQC.Slider {
     id: control
 
-    property color surfaceColor
+    // ハンドルの縁取り色。背後の面と同色にして輪郭を抜く
+    property color knobOutlineColor
     property real wheelStep: 1
 
     // ホイールでの増減（0〜100 にクランプ済みの新しい値を渡す）
@@ -56,7 +57,7 @@ QQC.Slider {
             y: (parent.height - height) / 2
             color: QsTheme.Theme.primary
             border.width: 2
-            border.color: control.surfaceColor
+            border.color: control.knobOutlineColor
         }
     }
 

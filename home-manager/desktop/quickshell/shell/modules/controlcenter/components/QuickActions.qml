@@ -4,7 +4,7 @@ import "../../../ui"
 import "../../../theme" as QsTheme
 import "../../../services" as QsServices
 
-// Control Center 上部の 6 タイル。データ(tiles)と見た目(delegate)を分けて 1 箇所に閉じる。
+// Control Center 上部のクイック操作。データ(tiles)と見た目(delegate)を分けて 1 箇所に閉じる。
 // tiles を JS 配列ではなく QtObject の配列にしているのは、配列自体を定数に保つため。
 // JS 配列だと依存が変わるたび配列全体が再評価されて delegate が作り直され、
 // 色遷移アニメとホバー状態が毎回リセットされる。
@@ -23,6 +23,7 @@ GridLayout {
             readonly property string subLabel: QsServices.Network.connected ? QsServices.Network.ssid : "Disconnected"
             readonly property bool on: QsServices.Network.wifiEnabled
             readonly property color accent: QsTheme.Theme.primary
+            readonly property color onAccent: QsTheme.Theme.onPrimary
             readonly property bool available: true
             function activate() {
                 QsServices.Network.toggleWifi();
@@ -34,6 +35,7 @@ GridLayout {
             readonly property string subLabel: QsServices.Bluetooth.powered ? "On" : "Off"
             readonly property bool on: QsServices.Bluetooth.powered
             readonly property color accent: QsTheme.Theme.primary
+            readonly property color onAccent: QsTheme.Theme.onPrimary
             readonly property bool available: true
             function activate() {
                 QsServices.Bluetooth.togglePower();
@@ -45,6 +47,7 @@ GridLayout {
             readonly property string subLabel: QsServices.Notifs.dnd ? "On" : "Off"
             readonly property bool on: QsServices.Notifs.dnd
             readonly property color accent: QsTheme.Theme.primary
+            readonly property color onAccent: QsTheme.Theme.onPrimary
             readonly property bool available: true
             function activate() {
                 QsServices.Notifs.toggleDnd();
@@ -56,6 +59,7 @@ GridLayout {
             readonly property string subLabel: QsServices.IdleInhibitor.inhibited ? "Active" : "Off"
             readonly property bool on: QsServices.IdleInhibitor.inhibited
             readonly property color accent: QsTheme.Theme.info
+            readonly property color onAccent: QsTheme.Theme.onPrimary
             readonly property bool available: true
             function activate() {
                 QsServices.IdleInhibitor.inhibited = !QsServices.IdleInhibitor.inhibited;
@@ -67,6 +71,7 @@ GridLayout {
             readonly property string subLabel: "Region / Window / Output"
             readonly property bool on: false
             readonly property color accent: QsTheme.Theme.secondary
+            readonly property color onAccent: QsTheme.Theme.onSecondary
             readonly property bool available: true
             function activate() {
                 root.requestClose();
@@ -79,6 +84,7 @@ GridLayout {
             readonly property string subLabel: !root.screenshot.recorderAvailable ? "Install gpu-screen-recorder" : (root.screenshot.isRecording ? "Recording in progress" : "Start recording")
             readonly property bool on: root.screenshot.isRecording
             readonly property color accent: QsTheme.Theme.error
+            readonly property color onAccent: QsTheme.Theme.onError
             readonly property bool available: root.screenshot.recorderAvailable
             function activate() {
                 if (root.screenshot.isRecording)
@@ -89,7 +95,6 @@ GridLayout {
         }
     ]
 
-    Layout.fillWidth: true
     columns: 2
     columnSpacing: QsTheme.Appearance.spacing.m
     rowSpacing: QsTheme.Appearance.spacing.m
@@ -102,7 +107,7 @@ GridLayout {
 
             required property QtObject modelData
 
-            readonly property color onAccent: QsTheme.Theme.onColor(tile.modelData.accent)
+            readonly property color onAccent: tile.modelData.onAccent
             readonly property color fg: tile.modelData.on ? tile.onAccent : QsTheme.Theme.text
 
             Layout.fillWidth: true

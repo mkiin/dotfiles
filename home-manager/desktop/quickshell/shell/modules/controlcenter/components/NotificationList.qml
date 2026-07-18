@@ -11,19 +11,12 @@ Rectangle {
     readonly property int emptyIconSize: 48
 
     // Solid color tokens (Theme)
-    readonly property color surfaceColor: QsTheme.Theme.inset
-    readonly property color surfaceVariant: QsTheme.Theme.card
-    readonly property color textColor: QsTheme.Theme.text
-    readonly property color textVariant: QsTheme.Theme.textVariant
-    readonly property color primaryColor: QsTheme.Theme.primary
-    readonly property color borderColor: QsTheme.Theme.card
     
-    Layout.fillWidth: true
     implicitHeight: Math.max(contentCol.implicitHeight + 32, 160)
 
     radius: QsTheme.Appearance.radius.l
-    color: surfaceColor
-    border.color: borderColor
+    color: QsTheme.Theme.inset
+    border.color: QsTheme.Theme.card
     border.width: 1
     
     Behavior on color {
@@ -48,7 +41,7 @@ Rectangle {
                 font.family: QsTheme.Appearance.typography.family
                 font.pixelSize: QsTheme.Appearance.typography.bodyLarge.size
                 font.weight: Font.Bold
-                color: root.textColor
+                color: QsTheme.Theme.text
             }
             
             Item { Layout.fillWidth: true }
@@ -62,7 +55,7 @@ Rectangle {
                 radius: height / 2
                 color: clearAllMouse.containsMouse 
                     ? QsTheme.Theme.cardHigh
-                    : root.surfaceVariant
+                    : QsTheme.Theme.card
                 
                 Behavior on color {
                     ColorAnimation {
@@ -78,7 +71,7 @@ Rectangle {
                     font.family: QsTheme.Appearance.typography.family
                     font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
                     font.weight: Font.Medium
-                    color: root.textVariant
+                    color: QsTheme.Theme.textVariant
                 }
                 
                 MouseArea {
@@ -145,7 +138,7 @@ Rectangle {
                 radius: QsTheme.Appearance.radius.m
                 color: notifMouse.containsMouse 
                     ? QsTheme.Theme.card
-                    : root.surfaceVariant
+                    : QsTheme.Theme.card
                 
                 Behavior on color {
                     ColorAnimation {
@@ -191,7 +184,7 @@ Rectangle {
                         Rectangle {
                             anchors.fill: parent
                             radius: QsTheme.Appearance.radius.s
-                            color: root.primaryColor
+                            color: QsTheme.Theme.primary
                             opacity: 0.15
                         }
                         
@@ -212,7 +205,7 @@ Rectangle {
                             text: "󰂚"
                             font.family: QsTheme.Appearance.typography.iconFamily
                             font.pixelSize: QsTheme.Appearance.typography.titleLarge.size
-                            color: root.primaryColor
+                            color: QsTheme.Theme.primary
                             visible: !parent.children[0].visible
                         }
                     }
@@ -227,7 +220,7 @@ Rectangle {
                             font.family: QsTheme.Appearance.typography.family
                             font.pixelSize: QsTheme.Appearance.typography.bodyMedium.size
                             font.weight: Font.DemiBold
-                            color: root.textColor
+                            color: QsTheme.Theme.text
                             elide: Text.ElideRight
                             Layout.fillWidth: true
                         }
@@ -236,7 +229,7 @@ Rectangle {
                             text: notifDelegate.modelData.body ?? ""
                             font.family: QsTheme.Appearance.typography.family
                             font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
-                            color: root.textVariant
+                            color: QsTheme.Theme.textVariant
                             elide: Text.ElideRight
                             maximumLineCount: 2
                             wrapMode: Text.WordWrap
@@ -278,8 +271,8 @@ Rectangle {
                             font.family: QsTheme.Appearance.typography.iconFamily
                             font.pixelSize: QsTheme.Appearance.typography.bodyLarge.size
                             color: closeMouse.containsMouse
-                                ? root.textColor 
-                                : root.textVariant
+                                ? QsTheme.Theme.text 
+                                : QsTheme.Theme.textVariant
                             
                             Behavior on color {
                                 ColorAnimation {
