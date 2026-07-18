@@ -6,7 +6,7 @@ import "../../theme" as QsTheme
 import "../../services" as QsServices
 import "../../utils" as QsUtils
 import "../../config" as QsConfig
-import "../../components/containers"
+import "../../ui"
 import "components"
 
 // 通知センター — 殻(配置/アニメ/クローズ)は FloatingPanel、ここは中身だけ
@@ -30,18 +30,6 @@ FloatingPanel {
 
     // Process launchers for header buttons
     Process {
-        id: settingsProcess
-        command: ["nm-connection-editor"]
-        onStarted: root.shouldShow = false
-    }
-
-    Process {
-        id: lockProcess
-        command: ["hyprlock"]
-        onStarted: root.shouldShow = false
-    }
-
-    Process {
         id: powerProcess
         command: ["wlogout"]
         onStarted: root.shouldShow = false
@@ -54,7 +42,7 @@ FloatingPanel {
     }
 
     // Main Panel Background
-    AuroraSurface {
+    Surface {
         id: panel
         anchors.fill: parent
         implicitHeight: Math.min(innerCol.implicitHeight + 40, root.screen.height - 56)
@@ -131,18 +119,8 @@ FloatingPanel {
                     spacing: QsTheme.Appearance.spacing.s
 
                     HeaderButton {
-                        icon: "󰒓"
-                        tooltip: "Settings"
-                        onClicked: settingsProcess.running = true
-                    }
-                    HeaderButton {
-                        icon: "󰍜"
-                        tooltip: "Lock Screen"
-                        onClicked: lockProcess.running = true
-                    }
-                    HeaderButton {
-                        icon: "󰐥"
-                        tooltip: "Power Menu"
+                        glyph: "󰐥"
+                        text: "Power Menu"
                         onClicked: powerProcess.running = true
                     }
                 }
@@ -155,106 +133,8 @@ FloatingPanel {
                 spacing: QsTheme.Appearance.spacing.l
 
                 // Quick Toggles
-                GridLayout {
-                    Layout.fillWidth: true
-                    columns: 2
-                    columnSpacing: QsTheme.Appearance.spacing.m
-                    rowSpacing: QsTheme.Appearance.spacing.m
-
-                    QuickToggle {
-                        Layout.fillWidth: true
-                        icon: "󰖩"
-                        label: "Wi-Fi"
-                        subLabel: root.network.connected ? root.network.ssid : "Disconnected"
-                        active: root.network.wifiEnabled
-                        activeColor: QsTheme.Theme.accent
-                        surfaceColor: QsTheme.Theme.card
-                        textColor: QsTheme.Theme.text
-                        onClicked: root.network.toggleWifi()
-                    }
-
-                    QuickToggle {
-                        Layout.fillWidth: true
-                        icon: "󰂯"
-                        label: "Bluetooth"
-                        subLabel: root.bluetooth.powered ? "On" : "Off"
-                        active: root.bluetooth.powered
-                        activeColor: QsTheme.Theme.accent
-                        surfaceColor: QsTheme.Theme.card
-                        textColor: QsTheme.Theme.text
-                        onClicked: root.bluetooth.togglePower()
-                    }
-
-                    QuickToggle {
-                        Layout.fillWidth: true
-                        icon: "󰔎"
-                        label: "Do Not Disturb"
-                        subLabel: root.notifs.dnd ? "On" : "Off"
-                        active: root.notifs.dnd
-                        activeColor: QsTheme.Theme.accent
-                        surfaceColor: QsTheme.Theme.card
-                        textColor: QsTheme.Theme.text
-                        onClicked: root.notifs.toggleDnd()
-                    }
-
-                    QuickToggle {
-                        Layout.fillWidth: true
-                        icon: root.idleInhibitor.inhibited ? "󰈈" : "󰈉"
-                        label: "Caffeine"
-                        subLabel: root.idleInhibitor.inhibited ? "Active" : "Off"
-                        active: root.idleInhibitor.inhibited
-                        activeColor: QsTheme.Theme.info
-                        surfaceColor: QsTheme.Theme.card
-                        textColor: QsTheme.Theme.text
-                        onClicked: root.idleInhibitor.inhibited = !root.idleInhibitor.inhibited
-                    }
-
-                    QuickToggle {
-                        Layout.fillWidth: true
-                        Layout.columnSpan: 2
-                        icon: "󰹑"
-                        label: "Screenshot"
-                        subLabel: "Region / Window / Output"
-                        active: false
-                        activeColor: QsTheme.Theme.secondary
-                        surfaceColor: QsTheme.Theme.card
-                        textColor: QsTheme.Theme.text
-                        onClicked: {
-                            root.shouldShow = false;
-                            root.screenshot.openMenu();
-                        }
-                    }
-
-                    QuickToggle {
-                        Layout.fillWidth: true
-                        enabled: root.screenshot.recorderAvailable
-                        opacity: enabled ? 1.0 : 0.5
-                        icon: root.screenshot.isRecording ? "󰛿" : "󰻃"
-                        label: root.screenshot.isRecording ? "Stop Recording" : "Record Screen"
-                        subLabel: !root.screenshot.recorderAvailable ? "Install gpu-screen-recorder" : (root.screenshot.isRecording ? "Recording in progress" : "Start recording")
-                        active: root.screenshot.isRecording
-                        activeColor: QsTheme.Theme.error
-                        surfaceColor: QsTheme.Theme.card
-                        textColor: QsTheme.Theme.text
-                        onClicked: {
-                            if (root.screenshot.isRecording)
-                                root.screenshot.stopRecording();
-                            else
-                                root.screenshot.startRecording();
-                        }
-                    }
-
-                    QuickToggle {
-                        Layout.fillWidth: true
-                        icon: "󰉋"
-                        label: "Open Captures"
-                        subLabel: "Screenshots & recordings"
-                        active: false
-                        activeColor: QsTheme.Theme.secondary
-                        surfaceColor: QsTheme.Theme.card
-                        textColor: QsTheme.Theme.text
-                        onClicked: screenshotsProcess.running = true
-                    }
+                TileGrid {
+                    onRequestClose: root.shouldShow = false
                 }
 
                 // Divider
@@ -382,61 +262,51 @@ FloatingPanel {
         }
     }
 
-    // Header Button Component
-    component HeaderButton: Rectangle {
+    // CC ヘッダーの丸ボタン。見た目はここで決め、状態と入力は ui/Button に任せる。
+    component HeaderButton: Button {
         id: headerBtn
-        property string icon
-        property string tooltip: ""
-        signal clicked
 
-        width: 40
-        height: 40
-        radius: height / 2
-        color: headerBtnMouse.containsMouse ? Qt.rgba(QsTheme.Theme.text.r, QsTheme.Theme.text.g, QsTheme.Theme.text.b, 0.1) : QsTheme.Theme.card
+        property string glyph
 
-        Behavior on color {
-            ColorAnimation {
-                duration: QsTheme.Appearance.anim.durations.short3
-                easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
+        implicitWidth: 40
+        implicitHeight: 40
+
+        background: Rectangle {
+            radius: height / 2
+            color: headerBtn.hovered ? QsTheme.Theme.cardHigh : QsTheme.Theme.card
+            scale: headerBtn.pressed ? 0.92 : 1.0
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: QsTheme.Appearance.anim.durations.short3
+                    easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
+                }
+            }
+
+            Behavior on scale {
+                NumberAnimation {
+                    duration: QsTheme.Appearance.anim.durations.short2
+                    easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
+                }
             }
         }
 
-        scale: headerBtnMouse.pressed ? 0.92 : 1.0
-
-        Behavior on scale {
-            NumberAnimation {
-                duration: QsTheme.Appearance.anim.durations.short2
-                easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
-            }
-        }
-
-        Text {
-            anchors.centerIn: parent
-            text: headerBtn.icon
-            font.family: QsTheme.Appearance.typography.iconFamily
-            font.pixelSize: QsTheme.Appearance.typography.titleMedium.size
+        contentItem: Text {
+            text: headerBtn.glyph
+            font: QsTheme.Appearance.font.icon
             color: QsTheme.Theme.text
-        }
-
-        MouseArea {
-            id: headerBtnMouse
-            anchors.fill: parent
-            cursorShape: Qt.PointingHandCursor
-            hoverEnabled: true
-            onClicked: headerBtn.clicked()
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
         }
 
         ToolTip {
-            id: headerBtnTip
-            visible: headerBtnMouse.containsMouse && headerBtn.tooltip !== ""
-            text: headerBtn.tooltip
+            visible: headerBtn.hovered && headerBtn.text !== ""
+            text: headerBtn.text
             delay: 500
 
             contentItem: Text {
-                text: headerBtnTip.text
-                font.family: QsTheme.Appearance.typography.family
-                font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
-                font.weight: Font.Medium
+                text: headerBtn.text
+                font: QsTheme.Appearance.font.label
                 color: QsTheme.Theme.text
             }
 

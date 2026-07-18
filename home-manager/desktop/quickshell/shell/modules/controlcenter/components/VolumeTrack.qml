@@ -1,8 +1,8 @@
 import QtQuick 6.10
-import QtQuick.Controls 6.10
+import QtQuick.Controls 6.10 as QQC
 import "../../../theme" as QsTheme
 
-Slider {
+QQC.Slider {
     id: control
 
     property color surfaceColor
@@ -32,7 +32,7 @@ Slider {
         width: control.availableWidth
         height: implicitHeight
         radius: height / 2
-        color: QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.08)
+        color: QsTheme.Theme.cardHigh
 
         Rectangle {
             width: control.position * parent.width

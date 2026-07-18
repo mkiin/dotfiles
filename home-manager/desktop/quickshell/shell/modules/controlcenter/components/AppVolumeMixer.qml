@@ -2,6 +2,7 @@ import QtQuick 6.10
 import QtQuick.Layouts 6.10
 import Quickshell
 import Quickshell.Services.Pipewire
+import "../../../ui"
 import "../../../theme" as QsTheme
 import "../../../services" as QsServices
 

@@ -4,7 +4,7 @@ import QtQuick.Effects
 import Quickshell.Bluetooth
 import Quickshell.Io
 import "../../theme" as QsTheme
-import "../../components/containers"
+import "../../ui"
 
 // Bluetooth device selector — 殻(配置/アニメ/クローズ)は FloatingPanel、ここは中身だけ
 FloatingPanel {

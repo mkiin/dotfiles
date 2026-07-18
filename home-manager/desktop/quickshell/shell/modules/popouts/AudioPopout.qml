@@ -4,7 +4,7 @@ import QtQuick.Effects
 import Quickshell.Io
 import Quickshell.Services.Pipewire
 import "../../theme" as QsTheme
-import "../../components/containers"
+import "../../ui"
 
 // Audio device selector — 殻(配置/アニメ/クローズ)は FloatingPanel、ここは中身だけ
 FloatingPanel {

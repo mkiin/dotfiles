@@ -1,6 +1,6 @@
 import QtQuick 6.10
 import QtQuick.Effects
-import "../../theme" as QsTheme
+import "../theme" as QsTheme
 
 Item {
     id: root

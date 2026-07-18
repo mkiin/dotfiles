@@ -1,0 +1,4 @@
+module qs.ui
+Button 1.0 Button.qml
+Surface 1.0 Surface.qml
+FloatingPanel 1.0 FloatingPanel.qml

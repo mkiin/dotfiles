@@ -2,10 +2,13 @@ pragma Singleton
 
 import Quickshell
 import QtQuick
+import "../config" as QsConfig
 
 // 寸法・タイポ・アニメの単一情報源。サイズ語彙は xs/s/m/l/xl/full。
 // 色は Theme、環境依存値は Config が持つ（このファイルには置かない）。
 Singleton {
+    id: root
+
     readonly property var radius: QtObject {
         property int xs: 6
         property int s: 10
@@ -40,8 +43,8 @@ Singleton {
     }
 
     readonly property var typography: QtObject {
-        property string family: Config.appearance.fontFamily
-        property string iconFamily: Config.appearance.materialIconFont
+        property string family: QsConfig.Config.appearance.fontFamily
+        property string iconFamily: QsConfig.Config.appearance.materialIconFont
 
         readonly property var displaySmall: QtObject { property int size: 36; property int weight: Font.Normal }
         readonly property var headlineLarge: QtObject { property int size: 32; property int weight: Font.Normal }
@@ -53,6 +56,22 @@ Singleton {
         readonly property var labelSmall: QtObject { property int size: 11; property int weight: Font.Medium }
         readonly property var bodyLarge: QtObject { property int size: 16; property int weight: Font.Normal }
         readonly property var bodyMedium: QtObject { property int size: 14; property int weight: Font.Normal }
+    }
+
+    // 呼び出し側は `font: Appearance.font.body` の 1 行で family/size/weight を受け取る。
+    // ラッパーコンポーネントを作らずに済ませるため font 値型のまま公開する。
+    readonly property var font: QtObject {
+        readonly property font headline: Qt.font({ family: root.typography.family, pixelSize: root.typography.headlineSmall.size, weight: root.typography.headlineSmall.weight })
+        readonly property font headlineLarge: Qt.font({ family: root.typography.family, pixelSize: root.typography.headlineLarge.size, weight: Font.Bold })
+        readonly property font title: Qt.font({ family: root.typography.family, pixelSize: root.typography.titleMedium.size, weight: root.typography.titleMedium.weight })
+        readonly property font body: Qt.font({ family: root.typography.family, pixelSize: root.typography.bodyMedium.size, weight: root.typography.bodyMedium.weight })
+        readonly property font bodyStrong: Qt.font({ family: root.typography.family, pixelSize: root.typography.bodyMedium.size, weight: Font.DemiBold })
+        readonly property font bodyLarge: Qt.font({ family: root.typography.family, pixelSize: root.typography.bodyLarge.size, weight: Font.Bold })
+        readonly property font label: Qt.font({ family: root.typography.family, pixelSize: root.typography.labelMedium.size, weight: root.typography.labelMedium.weight })
+        readonly property font caption: Qt.font({ family: root.typography.family, pixelSize: root.typography.labelSmall.size, weight: root.typography.labelSmall.weight })
+
+        readonly property font icon: Qt.font({ family: root.typography.iconFamily, pixelSize: root.typography.bodyMedium.size })
+        readonly property font iconLarge: Qt.font({ family: root.typography.iconFamily, pixelSize: root.typography.titleLarge.size })
     }
 
     // M3 の duration トークンと、本設定で先に使っていた 4 種が併存する。

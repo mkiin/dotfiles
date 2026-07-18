@@ -2,7 +2,7 @@ import QtQuick 6.10
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
-import "../../theme" as QsTheme
+import "../theme" as QsTheme
 
 PanelWindow {
     id: root

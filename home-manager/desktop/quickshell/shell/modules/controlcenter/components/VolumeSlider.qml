@@ -1,6 +1,7 @@
 import QtQuick 6.10
 import QtQuick.Layouts 6.10
 import Quickshell
+import "../../../ui"
 import "../../../theme" as QsTheme
 
 Rectangle {
