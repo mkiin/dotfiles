@@ -19,12 +19,6 @@ Rectangle {
     border.color: QsTheme.Theme.card
     border.width: 1
     
-    Behavior on color {
-        ColorAnimation {
-            duration: QsTheme.Appearance.anim.durations.medium2
-            easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
-        }
-    }
     
     ColumnLayout {
         id: contentCol
@@ -57,12 +51,6 @@ Rectangle {
                     ? QsTheme.Theme.cardHigh
                     : QsTheme.Theme.card
                 
-                Behavior on color {
-                    ColorAnimation {
-                        duration: QsTheme.Appearance.anim.durations.short3
-                        easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
-                    }
-                }
                 
                 Text {
                     id: clearAllText
@@ -140,12 +128,6 @@ Rectangle {
                     ? QsTheme.Theme.card
                     : QsTheme.Theme.card
                 
-                Behavior on color {
-                    ColorAnimation {
-                        duration: QsTheme.Appearance.anim.durations.short3
-                        easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
-                    }
-                }
                 
                 // Press scale
                 scale: notifMouse.pressed ? 0.98 : 1.0
@@ -258,12 +240,6 @@ Rectangle {
                             ? QsTheme.Theme.border
                             : "transparent"
                         
-                        Behavior on color {
-                            ColorAnimation {
-                                duration: QsTheme.Appearance.anim.durations.short2
-                                easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
-                            }
-                        }
                         
                         Text {
                             anchors.centerIn: parent
@@ -274,12 +250,6 @@ Rectangle {
                                 ? QsTheme.Theme.text 
                                 : QsTheme.Theme.textVariant
                             
-                            Behavior on color {
-                                ColorAnimation {
-                                    duration: QsTheme.Appearance.anim.durations.short2
-                                    easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
-                                }
-                            }
                         }
                         
                         MouseArea {

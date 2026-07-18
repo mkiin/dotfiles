@@ -325,9 +325,6 @@ PanelWindow {
                             return QsTheme.Theme.card
                         }
 
-                        Behavior on border.color {
-                            ColorAnimation { duration: QsTheme.Appearance.anim.durations.medium; easing.type: Easing.OutCubic }
-                        }
 
                         // Elevation shadow — lifts on hover
                         layer.enabled: true
@@ -649,9 +646,6 @@ PanelWindow {
                                             easing.overshoot: 1.4
                                         }
                                     }
-                                    Behavior on color {
-                                        ColorAnimation { duration: QsTheme.Appearance.anim.durations.fast }
-                                    }
 
                                     Text {
                                         anchors.centerIn: parent
@@ -660,9 +654,6 @@ PanelWindow {
                                         font.pixelSize: QsTheme.Appearance.typography.bodyMedium.size
                                         color: closeMA.containsMouse ? QsTheme.Theme.error : QsTheme.Theme.textVariant
 
-                                        Behavior on color {
-                                            ColorAnimation { duration: QsTheme.Appearance.anim.durations.fast }
-                                        }
                                     }
 
                                     MouseArea {
@@ -779,9 +770,6 @@ PanelWindow {
                                         radius: height / 2
                                         color: actMA.pressed ? QsTheme.Theme.primary : actMA.containsMouse ? QsTheme.Theme.primaryContainer : QsTheme.Theme.card
 
-                                        Behavior on color {
-                                            ColorAnimation { duration: QsTheme.Appearance.anim.durations.fast }
-                                        }
 
                                         // Tactile press scale
                                         scale: actMA.pressed ? 0.94 : 1.0

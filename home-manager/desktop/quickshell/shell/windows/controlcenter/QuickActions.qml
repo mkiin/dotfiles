@@ -138,19 +138,7 @@ GridLayout {
                 border.color: tile.modelData.on ? "transparent" : QsTheme.Theme.border
                 clip: true
 
-                Behavior on color {
-                    ColorAnimation {
-                        duration: QsTheme.Appearance.anim.durations.medium2
-                        easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
-                    }
-                }
 
-                Behavior on border.color {
-                    ColorAnimation {
-                        duration: QsTheme.Appearance.anim.durations.short4
-                        easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
-                    }
-                }
 
                 // ホバーの明度差。色に alpha を混ぜず、面を重ねて opacity で出す
                 Rectangle {
@@ -188,12 +176,6 @@ GridLayout {
                         font: QsTheme.Appearance.font.iconLarge
                         color: tile.fg
 
-                        Behavior on color {
-                            ColorAnimation {
-                                duration: QsTheme.Appearance.anim.durations.short4
-                                easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
-                            }
-                        }
                     }
                 }
 
@@ -208,12 +190,6 @@ GridLayout {
                         color: tile.fg
                         elide: Text.ElideRight
 
-                        Behavior on color {
-                            ColorAnimation {
-                                duration: QsTheme.Appearance.anim.durations.short4
-                                easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
-                            }
-                        }
                     }
 
                     Text {

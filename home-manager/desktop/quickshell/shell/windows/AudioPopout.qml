@@ -1,6 +1,5 @@
 import QtQuick 6.10
 import QtQuick.Layouts 6.10
-import QtQuick.Effects
 import Quickshell.Io
 import Quickshell.Services.Pipewire
 import "../theme" as QsTheme
@@ -55,11 +54,6 @@ FloatingPanel {
         Layout.preferredHeight: popupWindow.rowHeight
         radius: QsTheme.Appearance.radius.s
         color: rowArea.containsMouse ? QsTheme.Theme.cardHigh : "transparent"
-        Behavior on color {
-            ColorAnimation {
-                duration: QsTheme.Appearance.anim.durations.fast
-            }
-        }
 
         RowLayout {
             anchors.fill: parent
@@ -107,23 +101,10 @@ FloatingPanel {
         }
     }
 
-    Rectangle {
+    PopupCard {
         id: backgroundRect
         anchors.fill: parent
         implicitHeight: contentColumn.implicitHeight + popupWindow.cardPadding * 2
-        color: QsTheme.Theme.panel
-        radius: QsTheme.Appearance.radius.m
-        border.color: QsTheme.Theme.border
-        border.width: 1
-
-        layer.enabled: true
-        layer.effect: MultiEffect {
-            shadowEnabled: true
-            shadowColor: QsTheme.Theme.shadow
-            shadowOpacity: 0.35
-            shadowBlur: 1.0
-            shadowVerticalOffset: 6
-        }
 
         ColumnLayout {
             id: contentColumn

@@ -77,12 +77,6 @@ ColumnLayout {
                             ? QsTheme.Theme.cardHigh
                             : "transparent"
 
-                        Behavior on color {
-                            ColorAnimation {
-                                duration: QsTheme.Appearance.anim.durations.short3
-                                easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
-                            }
-                        }
 
                         Text {
                             anchors.centerIn: parent

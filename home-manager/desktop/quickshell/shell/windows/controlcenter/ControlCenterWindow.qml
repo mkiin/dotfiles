@@ -49,21 +49,16 @@ FloatingPanel {
     }
 
     // Main Panel Background
-    Surface {
+    PopupCard {
         id: panel
         anchors.fill: parent
         implicitHeight: Math.min(innerCol.implicitHeight + 40, root.screen.height - 56)
-        color: QsTheme.Theme.panel
         radius: QsTheme.Appearance.radius.l
-        strokeColor: QsTheme.Theme.border
+        shadowOpacity: 0.18
+        shadowBlur: 0.4
+        shadowOffsetY: 4
         clip: true
 
-        Behavior on color {
-            ColorAnimation {
-                duration: QsTheme.Appearance.anim.durations.medium2
-                easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
-            }
-        }
 
         // Block clicks from passing through
         MouseArea {
@@ -280,12 +275,6 @@ FloatingPanel {
             color: headerBtn.hovered ? QsTheme.Theme.cardHigh : QsTheme.Theme.card
             scale: headerBtn.pressed ? 0.92 : 1.0
 
-            Behavior on color {
-                ColorAnimation {
-                    duration: QsTheme.Appearance.anim.durations.short3
-                    easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
-                }
-            }
 
             Behavior on scale {
                 NumberAnimation {

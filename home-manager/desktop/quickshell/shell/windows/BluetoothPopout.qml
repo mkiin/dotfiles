@@ -1,6 +1,5 @@
 import QtQuick 6.10
 import QtQuick.Layouts 6.10
-import QtQuick.Effects
 import Quickshell.Bluetooth
 import Quickshell.Io
 import "../theme" as QsTheme
@@ -38,23 +37,10 @@ FloatingPanel {
     }
 
     // Background with shadow
-    Rectangle {
+    PopupCard {
         id: backgroundRect
         anchors.fill: parent
         implicitHeight: contentColumn.implicitHeight + popupWindow.cardPadding * 2
-        color: QsTheme.Theme.panel
-        radius: QsTheme.Appearance.radius.m
-        border.color: QsTheme.Theme.border
-        border.width: 1
-
-        layer.enabled: true
-        layer.effect: MultiEffect {
-            shadowEnabled: true
-            shadowColor: QsTheme.Theme.shadow
-            shadowOpacity: 0.35
-            shadowBlur: 1.0
-            shadowVerticalOffset: 6
-        }
 
         ColumnLayout {
             id: contentColumn
@@ -110,11 +96,6 @@ FloatingPanel {
                     radius: height / 2
                     color: adapter?.enabled ? QsTheme.Theme.primary : QsTheme.Theme.border
 
-                    Behavior on color {
-                        ColorAnimation {
-                            duration: QsTheme.Appearance.anim.durations.fast
-                        }
-                    }
 
                     Rectangle {
                         width: 18
@@ -148,11 +129,6 @@ FloatingPanel {
                 radius: QsTheme.Appearance.radius.s
                 color: scanArea.containsMouse ? QsTheme.Theme.cardHigh : QsTheme.Theme.card
 
-                Behavior on color {
-                    ColorAnimation {
-                        duration: QsTheme.Appearance.anim.durations.fast
-                    }
-                }
 
                 RowLayout {
                     anchors.centerIn: parent
@@ -237,11 +213,6 @@ FloatingPanel {
                                 deviceItem.modelData.cancelPair()
                         }
 
-                        Behavior on color {
-                            ColorAnimation {
-                                duration: QsTheme.Appearance.anim.durations.fast
-                            }
-                        }
 
                         RowLayout {
                             anchors.fill: parent

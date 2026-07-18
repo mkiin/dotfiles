@@ -316,12 +316,6 @@ Rectangle {
         
         scale: btnMouse.pressed ? 0.9 : 1.0
         
-        Behavior on color {
-            ColorAnimation {
-                duration: QsTheme.Appearance.anim.durations.short3
-                easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
-            }
-        }
         
         Behavior on scale {
             NumberAnimation {

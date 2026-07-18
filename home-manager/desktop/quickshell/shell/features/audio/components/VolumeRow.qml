@@ -22,12 +22,6 @@ Rectangle {
     border.width: 1
     border.color: QsTheme.Theme.border
     
-    Behavior on color {
-        ColorAnimation {
-            duration: QsTheme.Appearance.anim.durations.medium2
-            easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
-        }
-    }
 
     RowLayout {
         anchors.fill: parent
@@ -43,12 +37,6 @@ Rectangle {
                 ? QsTheme.Theme.cardHigh 
                 : "transparent"
             
-            Behavior on color {
-                ColorAnimation {
-                    duration: QsTheme.Appearance.anim.durations.short3
-                    easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
-                }
-            }
             
             Text {
                 anchors.centerIn: parent
@@ -57,12 +45,6 @@ Rectangle {
                 font.pixelSize: QsTheme.Appearance.typography.titleLarge.size
                 color: root.isMuted ? QsTheme.Theme.textVariant : QsTheme.Theme.primary
                 
-                Behavior on color {
-                    ColorAnimation {
-                        duration: QsTheme.Appearance.anim.durations.short3
-                        easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
-                    }
-                }
             }
             
             MouseArea {
