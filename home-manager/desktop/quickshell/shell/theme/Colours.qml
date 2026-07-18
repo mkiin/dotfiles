@@ -7,85 +7,121 @@ import "../config" as QsConfig
 import "../utils" as QsUtils
 
 // matugen が書き出す M3 トークンをそのまま保持する層。ここでは色を加工しない。
-// 意味づけは Theme が行う。フォールバック値は matugen 未生成時の初回起動用。
+// 意味づけは Theme が行う。
+//
+// 読み込んだ JSON は data にまとめて持ち、各トークンは readonly で公開する。
+// on* を書込可プロパティにすると QML がシグナルハンドラと解釈するため、この形にしている。
+// data の既定値は matugen 未生成時の初回起動用フォールバック。
 Singleton {
     id: root
 
-    property color background: "#101418"
+    property var data: ({
+            background: "#101418",
 
-    property color primary: "#99ccfa"
-    property color _onPrimary: "#003353"
-    readonly property color onPrimary: root._onPrimary
-    property color primaryContainer: "#084b72"
-    property color _onPrimaryContainer: "#cde5ff"
-    readonly property color onPrimaryContainer: root._onPrimaryContainer
+            primary: "#99ccfa",
+            onPrimary: "#003353",
+            primaryContainer: "#084b72",
+            onPrimaryContainer: "#cde5ff",
 
-    property color secondary: "#b8c8da"
-    property color _onSecondary: "#233240"
-    readonly property color onSecondary: root._onSecondary
-    property color secondaryContainer: "#394857"
-    property color _onSecondaryContainer: "#d4e4f6"
-    readonly property color onSecondaryContainer: root._onSecondaryContainer
+            secondary: "#b8c8da",
+            onSecondary: "#233240",
+            secondaryContainer: "#394857",
+            onSecondaryContainer: "#d4e4f6",
 
-    property color tertiary: "#d2bfe7"
-    property color _onTertiary: "#372b4a"
-    readonly property color onTertiary: root._onTertiary
-    property color tertiaryContainer: "#4e4161"
-    property color _onTertiaryContainer: "#eddcff"
-    readonly property color onTertiaryContainer: root._onTertiaryContainer
+            tertiary: "#d2bfe7",
+            onTertiary: "#372b4a",
+            tertiaryContainer: "#4e4161",
+            onTertiaryContainer: "#eddcff",
 
-    property color surface: "#101418"
-    property color surfaceDim: "#101418"
-    property color surfaceBright: "#36393e"
-    property color surfaceContainerLowest: "#0b0f12"
-    property color surfaceContainerLow: "#181c20"
-    property color surfaceContainer: "#1c2024"
-    property color surfaceContainerHigh: "#272a2e"
-    property color surfaceContainerHighest: "#313539"
-    property color surfaceVariant: "#42474e"
+            surface: "#101418",
+            surfaceDim: "#101418",
+            surfaceBright: "#36393e",
+            surfaceContainerLowest: "#0b0f12",
+            surfaceContainerLow: "#181c20",
+            surfaceContainer: "#1c2024",
+            surfaceContainerHigh: "#272a2e",
+            surfaceContainerHighest: "#313539",
+            surfaceVariant: "#42474e",
 
-    property color _onSurface: "#e0e2e8"
-    readonly property color onSurface: root._onSurface
-    property color _onSurfaceVariant: "#c2c7ce"
-    readonly property color onSurfaceVariant: root._onSurfaceVariant
+            onSurface: "#e0e2e8",
+            onSurfaceVariant: "#c2c7ce",
 
-    property color outline: "#8c9198"
-    property color outlineVariant: "#42474e"
+            outline: "#8c9198",
+            outlineVariant: "#42474e",
 
-    property color error: "#ffb4ab"
-    property color _onError: "#690005"
-    readonly property color onError: root._onError
-    property color errorContainer: "#93000a"
-    property color _onErrorContainer: "#ffdad6"
-    readonly property color onErrorContainer: root._onErrorContainer
+            error: "#ffb4ab",
+            onError: "#690005",
+            errorContainer: "#93000a",
+            onErrorContainer: "#ffdad6",
 
-    property color success: "#a6e3a1"
-    property color _onSuccess: "#101418"
-    readonly property color onSuccess: root._onSuccess
-    property color warning: "#f9e2af"
-    property color _onWarning: "#101418"
-    readonly property color onWarning: root._onWarning
-    property color info: "#99ccfa"
+            success: "#a6e3a1",
+            onSuccess: "#0d1b0c",
+            warning: "#f9e2af",
+            onWarning: "#241d04",
+            info: "#99ccfa",
 
-    property color inverseSurface: "#e0e2e8"
-    property color inverseOnSurface: "#2d3135"
-    property color inversePrimary: "#2c638b"
+            inverseSurface: "#e0e2e8",
+            inverseOnSurface: "#2d3135",
+            inversePrimary: "#2c638b",
 
-    property color scrim: "#000000"
-    property color shadow: "#000000"
+            scrim: "#000000",
+            shadow: "#000000"
+        })
 
-    readonly property var keys: ["background", "primary", "onPrimary", "primaryContainer", "onPrimaryContainer", "secondary", "onSecondary", "secondaryContainer", "onSecondaryContainer", "tertiary", "onTertiary", "tertiaryContainer", "onTertiaryContainer", "surface", "surfaceDim", "surfaceBright", "surfaceContainerLowest", "surfaceContainerLow", "surfaceContainer", "surfaceContainerHigh", "surfaceContainerHighest", "surfaceVariant", "onSurface", "onSurfaceVariant", "outline", "outlineVariant", "error", "onError", "errorContainer", "onErrorContainer", "success", "onSuccess", "warning", "onWarning", "info", "inverseSurface", "inverseOnSurface", "inversePrimary", "scrim", "shadow"]
+    readonly property color background: root.data.background
+
+    readonly property color primary: root.data.primary
+    readonly property color onPrimary: root.data.onPrimary
+    readonly property color primaryContainer: root.data.primaryContainer
+    readonly property color onPrimaryContainer: root.data.onPrimaryContainer
+
+    readonly property color secondary: root.data.secondary
+    readonly property color onSecondary: root.data.onSecondary
+    readonly property color secondaryContainer: root.data.secondaryContainer
+    readonly property color onSecondaryContainer: root.data.onSecondaryContainer
+
+    readonly property color tertiary: root.data.tertiary
+    readonly property color onTertiary: root.data.onTertiary
+    readonly property color tertiaryContainer: root.data.tertiaryContainer
+    readonly property color onTertiaryContainer: root.data.onTertiaryContainer
+
+    readonly property color surface: root.data.surface
+    readonly property color surfaceDim: root.data.surfaceDim
+    readonly property color surfaceBright: root.data.surfaceBright
+    readonly property color surfaceContainerLowest: root.data.surfaceContainerLowest
+    readonly property color surfaceContainerLow: root.data.surfaceContainerLow
+    readonly property color surfaceContainer: root.data.surfaceContainer
+    readonly property color surfaceContainerHigh: root.data.surfaceContainerHigh
+    readonly property color surfaceContainerHighest: root.data.surfaceContainerHighest
+    readonly property color surfaceVariant: root.data.surfaceVariant
+
+    readonly property color onSurface: root.data.onSurface
+    readonly property color onSurfaceVariant: root.data.onSurfaceVariant
+
+    readonly property color outline: root.data.outline
+    readonly property color outlineVariant: root.data.outlineVariant
+
+    readonly property color error: root.data.error
+    readonly property color onError: root.data.onError
+    readonly property color errorContainer: root.data.errorContainer
+    readonly property color onErrorContainer: root.data.onErrorContainer
+
+    readonly property color success: root.data.success
+    readonly property color onSuccess: root.data.onSuccess
+    readonly property color warning: root.data.warning
+    readonly property color onWarning: root.data.onWarning
+    readonly property color info: root.data.info
+
+    readonly property color inverseSurface: root.data.inverseSurface
+    readonly property color inverseOnSurface: root.data.inverseOnSurface
+    readonly property color inversePrimary: root.data.inversePrimary
+
+    readonly property color scrim: root.data.scrim
+    readonly property color shadow: root.data.shadow
 
     function loadColors(text: string): void {
         try {
-            const d = JSON.parse(text);
-            // on* は書込可プロパティにすると QML のシグナルハンドラ文法と衝突するため、
-            // 内部名 _on* に入れて readonly で公開している。
-            for (const k of root.keys) {
-                if (d[k] === undefined || d[k] === null)
-                    continue;
-                root[k.startsWith("on") ? "_" + k : k] = d[k];
-            }
+            root.data = Object.assign({}, root.data, JSON.parse(text));
             QsUtils.Logger.debug("Colours", "matugen-colors.json loaded");
         } catch (e) {
             QsUtils.Logger.error("Colours", "Failed to parse matugen-colors.json", e?.message ?? e);

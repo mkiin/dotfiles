@@ -3,57 +3,50 @@ pragma Singleton
 import Quickshell
 import QtQuick
 
-// 意味色トークンの単一定義層。全コンポーネントはここだけを参照する。
-// alpha 合成はしない。透過が要る箇所は要素側の opacity / shadowOpacity で表す。
-// 文字色は text と textVariant の 2 段だけ。3 段目を作らない。
 Singleton {
-    id: root
-
-    readonly property var p: Colours
-
     // ── 面（低→高） ──
-    readonly property color background: p.background
-    readonly property color inset: p.surfaceContainerLow
-    readonly property color panel: p.surfaceContainer
-    readonly property color card: p.surfaceContainerHigh
-    readonly property color cardHigh: p.surfaceContainerHighest
+    readonly property color background: Colours.background
+    readonly property color inset: Colours.surfaceContainerLow
+    readonly property color panel: Colours.surfaceContainer
+    readonly property color card: Colours.surfaceContainerHigh
+    readonly property color cardHigh: Colours.surfaceContainerHighest
 
     // ── 強調色とその上の文字 ──
-    readonly property color primary: p.primary
-    readonly property color onPrimary: p.onPrimary
-    readonly property color primaryContainer: p.primaryContainer
-    readonly property color onPrimaryContainer: p.onPrimaryContainer
+    readonly property color primary: Colours.primary
+    readonly property color onPrimary: Colours.onPrimary
+    readonly property color primaryContainer: Colours.primaryContainer
+    readonly property color onPrimaryContainer: Colours.onPrimaryContainer
 
-    readonly property color secondary: p.secondary
-    readonly property color onSecondary: p.onSecondary
-    readonly property color secondaryContainer: p.secondaryContainer
-    readonly property color onSecondaryContainer: p.onSecondaryContainer
+    readonly property color secondary: Colours.secondary
+    readonly property color onSecondary: Colours.onSecondary
+    readonly property color secondaryContainer: Colours.secondaryContainer
+    readonly property color onSecondaryContainer: Colours.onSecondaryContainer
 
-    readonly property color tertiary: p.tertiary
-    readonly property color onTertiary: p.onTertiary
-    readonly property color tertiaryContainer: p.tertiaryContainer
-    readonly property color onTertiaryContainer: p.onTertiaryContainer
+    readonly property color tertiary: Colours.tertiary
+    readonly property color onTertiary: Colours.onTertiary
+    readonly property color tertiaryContainer: Colours.tertiaryContainer
+    readonly property color onTertiaryContainer: Colours.onTertiaryContainer
 
-    readonly property color error: p.error
-    readonly property color onError: p.onError
-    readonly property color errorContainer: p.errorContainer
-    readonly property color onErrorContainer: p.onErrorContainer
+    readonly property color error: Colours.error
+    readonly property color onError: Colours.onError
+    readonly property color errorContainer: Colours.errorContainer
+    readonly property color onErrorContainer: Colours.onErrorContainer
 
-    readonly property color warning: p.warning
-    readonly property color onWarning: p.onWarning
-    readonly property color success: p.success
-    readonly property color onSuccess: p.onSuccess
-    readonly property color info: p.info
+    readonly property color warning: Colours.warning
+    readonly property color onWarning: Colours.onWarning
+    readonly property color success: Colours.success
+    readonly property color onSuccess: Colours.onSuccess
+    readonly property color info: Colours.info
 
     // ── 文字（面の上） ──
-    readonly property color text: p.onSurface
-    readonly property color textVariant: p.onSurfaceVariant
+    readonly property color text: Colours.onSurface
+    readonly property color textVariant: Colours.onSurfaceVariant
 
     // ── 線 ──
-    readonly property color border: p.outlineVariant
-    readonly property color outline: p.outline
+    readonly property color border: Colours.outlineVariant
+    readonly property color outline: Colours.outline
 
     // ── 効果（不透明。濃さは利用側の opacity で与える） ──
-    readonly property color shadow: p.shadow
-    readonly property color scrim: p.scrim
+    readonly property color shadow: Colours.shadow
+    readonly property color scrim: Colours.scrim
 }
