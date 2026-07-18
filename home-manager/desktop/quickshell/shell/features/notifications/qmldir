@@ -1,0 +1,2 @@
+module qs.features.notifications
+singleton Notifs Notifs.qml

@@ -4,13 +4,13 @@ import Quickshell
 import Quickshell.Services.Pipewire
 import "../../../ui"
 import "../../../theme" as QsTheme
-import "../../../services" as QsServices
+import "../" as QsAudio
 
 ColumnLayout {
     id: root
 
-    readonly property var streams: QsServices.AudioStreams.streams
-    readonly property var groups: QsServices.AudioStreams.groups
+    readonly property var streams: QsAudio.AudioStreams.streams
+    readonly property var groups: QsAudio.AudioStreams.groups
 
     spacing: QsTheme.Appearance.spacing.s
 
@@ -99,7 +99,7 @@ ColumnLayout {
                             anchors.fill: parent
                             cursorShape: Qt.PointingHandCursor
                             hoverEnabled: true
-                            onClicked: QsServices.AudioStreams.setGroupMuted(row.nodes, !row.isMuted)
+                            onClicked: QsAudio.AudioStreams.setGroupMuted(row.nodes, !row.isMuted)
                         }
                     }
 
@@ -108,8 +108,8 @@ ColumnLayout {
                         Layout.fillHeight: true
                         value: row.currentVolume
                         knobOutlineColor: row.color
-                        onMoved: QsServices.AudioStreams.setGroupVolume(row.nodes, value / 100)
-                        onVolumeStepped: newValue => QsServices.AudioStreams.setGroupVolume(row.nodes, newValue / 100)
+                        onMoved: QsAudio.AudioStreams.setGroupVolume(row.nodes, value / 100)
+                        onVolumeStepped: newValue => QsAudio.AudioStreams.setGroupVolume(row.nodes, newValue / 100)
                     }
 
                     Text {

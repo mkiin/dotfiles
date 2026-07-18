@@ -3,11 +3,20 @@ import QtQuick.Layouts 6.10
 import QtQuick.Controls 6.10
 import Quickshell.Io
 import "../../theme" as QsTheme
-import "../../services" as QsServices
+import "../../features/audio" as QsAudio
+import "../../features/audio/components" as QsAudioUi
+import "../../features/bluetooth" as QsBluetooth
+import "../../features/media" as QsMedia
+import "../../features/media/components" as QsMediaUi
+import "../../features/network" as QsNetwork
+import "../../features/notifications" as QsNotifications
+import "../../features/notifications/components" as QsNotificationsUi
+import "../../features/power" as QsPower
+import "../../features/screenshot" as QsScreenshot
 import "../../utils" as QsUtils
 import "../../config" as QsConfig
 import "../../ui"
-import "components"
+import "." as QsCC
 
 // 通知センター — 殻(配置/アニメ/クローズ)は FloatingPanel、ここは中身だけ
 FloatingPanel {
@@ -18,13 +27,13 @@ FloatingPanel {
     // Services
     readonly property var logger: QsUtils.Logger
     readonly property var config: QsConfig.Config
-    readonly property var network: QsServices.Network
-    readonly property var bluetooth: QsServices.Bluetooth
-    readonly property var audio: QsServices.Audio
-    readonly property var mpris: QsServices.Players
-    readonly property var notifs: QsServices.Notifs
-    readonly property var screenshot: QsServices.Screenshot
-    readonly property var idleInhibitor: QsServices.IdleInhibitor
+    readonly property var network: QsNetwork.Network
+    readonly property var bluetooth: QsBluetooth.Bluetooth
+    readonly property var audio: QsAudio.Audio
+    readonly property var mpris: QsMedia.Players
+    readonly property var notifs: QsNotifications.Notifs
+    readonly property var screenshot: QsScreenshot.Screenshot
+    readonly property var idleInhibitor: QsPower.IdleInhibitor
 
     // Process launchers for header buttons
     Process {
@@ -129,7 +138,7 @@ FloatingPanel {
                 spacing: QsTheme.Appearance.spacing.l
 
                 // Quick Actions
-                QuickActions {
+                QsCC.QuickActions {
                     Layout.fillWidth: true
                     onRequestClose: root.shouldShow = false
                 }
@@ -146,7 +155,7 @@ FloatingPanel {
                     Layout.fillWidth: true
                     spacing: QsTheme.Appearance.spacing.m
 
-                    VolumeSlider {
+                    QsAudioUi.VolumeRow {
                         Layout.fillWidth: true
                         audio: root.audio
                     }
@@ -213,7 +222,7 @@ FloatingPanel {
                                 }
                             }
 
-                            AppVolumeMixer {
+                            QsAudioUi.AppVolumeMixer {
                                 id: mixer
                                 width: parent.width
                                 opacity: mixerSection.expanded ? 1 : 0
@@ -231,7 +240,7 @@ FloatingPanel {
 
 
                 // Media Card
-                MediaCard {
+                QsMediaUi.MediaCard {
                     id: mediaCard
                     Layout.fillWidth: true
                     Layout.preferredHeight: mediaCard.hasPlayer ? 100 : 0
@@ -248,7 +257,7 @@ FloatingPanel {
             }
 
             // Notifications: パネル内の余りを埋め、超過分は内部スクロール
-            NotificationList {
+            QsNotificationsUi.NotificationList {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.minimumHeight: 160

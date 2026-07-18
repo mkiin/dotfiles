@@ -1,7 +1,0 @@
-module ControlCenter.Components
-QuickActions 1.0 QuickActions.qml
-VolumeTrack 1.0 VolumeTrack.qml
-VolumeSlider 1.0 VolumeSlider.qml
-AppVolumeMixer 1.0 AppVolumeMixer.qml
-MediaCard 1.0 MediaCard.qml
-NotificationList 1.0 NotificationList.qml

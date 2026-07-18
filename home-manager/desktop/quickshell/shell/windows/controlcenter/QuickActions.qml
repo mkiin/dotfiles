@@ -1,8 +1,12 @@
 import QtQuick 6.10
 import QtQuick.Layouts 6.10
-import "../../../ui"
-import "../../../theme" as QsTheme
-import "../../../services" as QsServices
+import "../../ui"
+import "../../theme" as QsTheme
+import "../../features/bluetooth" as QsBluetooth
+import "../../features/network" as QsNetwork
+import "../../features/notifications" as QsNotifications
+import "../../features/power" as QsPower
+import "../../features/screenshot" as QsScreenshot
 
 // Control Center 上部のクイック操作。データ(tiles)と見た目(delegate)を分けて 1 箇所に閉じる。
 // tiles を JS 配列ではなく QtObject の配列にしているのは、配列自体を定数に保つため。
@@ -14,55 +18,55 @@ GridLayout {
     // タイルを押したときにパネルを閉じる必要があるものがあるため、窓側から受け取る
     signal requestClose
 
-    readonly property var screenshot: QsServices.Screenshot
+    readonly property var screenshot: QsScreenshot.Screenshot
 
     readonly property list<QtObject> tiles: [
         QtObject {
             readonly property string glyph: "󰖩"
             readonly property string label: "Wi-Fi"
-            readonly property string subLabel: QsServices.Network.connected ? QsServices.Network.ssid : "Disconnected"
-            readonly property bool on: QsServices.Network.wifiEnabled
+            readonly property string subLabel: QsNetwork.Network.connected ? QsNetwork.Network.ssid : "Disconnected"
+            readonly property bool on: QsNetwork.Network.wifiEnabled
             readonly property color accent: QsTheme.Theme.primary
             readonly property color onAccent: QsTheme.Theme.onPrimary
             readonly property bool available: true
             function activate() {
-                QsServices.Network.toggleWifi();
+                QsNetwork.Network.toggleWifi();
             }
         },
         QtObject {
             readonly property string glyph: "󰂯"
             readonly property string label: "Bluetooth"
-            readonly property string subLabel: QsServices.Bluetooth.powered ? "On" : "Off"
-            readonly property bool on: QsServices.Bluetooth.powered
+            readonly property string subLabel: QsBluetooth.Bluetooth.powered ? "On" : "Off"
+            readonly property bool on: QsBluetooth.Bluetooth.powered
             readonly property color accent: QsTheme.Theme.primary
             readonly property color onAccent: QsTheme.Theme.onPrimary
             readonly property bool available: true
             function activate() {
-                QsServices.Bluetooth.togglePower();
+                QsBluetooth.Bluetooth.togglePower();
             }
         },
         QtObject {
             readonly property string glyph: "󰔎"
             readonly property string label: "Do Not Disturb"
-            readonly property string subLabel: QsServices.Notifs.dnd ? "On" : "Off"
-            readonly property bool on: QsServices.Notifs.dnd
+            readonly property string subLabel: QsNotifications.Notifs.dnd ? "On" : "Off"
+            readonly property bool on: QsNotifications.Notifs.dnd
             readonly property color accent: QsTheme.Theme.primary
             readonly property color onAccent: QsTheme.Theme.onPrimary
             readonly property bool available: true
             function activate() {
-                QsServices.Notifs.toggleDnd();
+                QsNotifications.Notifs.toggleDnd();
             }
         },
         QtObject {
-            readonly property string glyph: QsServices.IdleInhibitor.inhibited ? "󰈈" : "󰈉"
+            readonly property string glyph: QsPower.IdleInhibitor.inhibited ? "󰈈" : "󰈉"
             readonly property string label: "Caffeine"
-            readonly property string subLabel: QsServices.IdleInhibitor.inhibited ? "Active" : "Off"
-            readonly property bool on: QsServices.IdleInhibitor.inhibited
+            readonly property string subLabel: QsPower.IdleInhibitor.inhibited ? "Active" : "Off"
+            readonly property bool on: QsPower.IdleInhibitor.inhibited
             readonly property color accent: QsTheme.Theme.info
             readonly property color onAccent: QsTheme.Theme.onPrimary
             readonly property bool available: true
             function activate() {
-                QsServices.IdleInhibitor.inhibited = !QsServices.IdleInhibitor.inhibited;
+                QsPower.IdleInhibitor.inhibited = !QsPower.IdleInhibitor.inhibited;
             }
         },
         QtObject {

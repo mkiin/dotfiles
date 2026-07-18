@@ -7,16 +7,17 @@ import Quickshell.Services.Notifications
 import Quickshell.Io
 import QtQuick
 import "theme" as QsTheme
-import "services" as QsServices
+import "features/notifications" as QsNotifications
+import "features/power" as QsPower
 import "config" as QsConfig
-import "modules/controlcenter"
-import "modules/popouts"
+import "windows/controlcenter" as QsCC
+import "windows"
 
 // 常駐デーモン: 通知サーバ ＋ トースト ＋ 通知センター(ControlCenter) ＋ audio/bluetooth ポップアウト。
 ShellRoot {
     id: root
 
-    readonly property var notifs: QsServices.Notifs
+    readonly property var notifs: QsNotifications.Notifs
 
     // パネルは同時に 1 つだけ開く（別プロセス時代は重なりが起きていた）
     function openPanel(name: string): void {
@@ -49,11 +50,11 @@ ShellRoot {
 
     // トースト（右上）
     Loader {
-        source: "modules/notifications/NotificationPopups.qml"
+        source: "windows/NotificationToasts.qml"
     }
 
     // 通知センター本体（クイックトグル/スライダ/MPRIS/通知リスト/電源）
-    ControlCenterWindow {
+    QsCC.ControlCenterWindow {
         id: cc
         shouldShow: false
     }
@@ -104,9 +105,9 @@ ShellRoot {
     // アイドルインヒビター(Caffeine)を waybar と共有。状態の真実はこの IdleInhibitor サービス。
     IpcHandler {
         target: "idle"
-        function toggle(): void { QsServices.IdleInhibitor.inhibited = !QsServices.IdleInhibitor.inhibited }
+        function toggle(): void { QsPower.IdleInhibitor.inhibited = !QsPower.IdleInhibitor.inhibited }
         function status(): string {
-            const on = QsServices.IdleInhibitor.inhibited
+            const on = QsPower.IdleInhibitor.inhibited
             return JSON.stringify({
                 text: on ? "󰈈" : "󰈉",
                 class: on ? "activated" : "deactivated",

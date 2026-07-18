@@ -5,10 +5,10 @@ import Quickshell
 import Quickshell.Services.Notifications
 import Quickshell.Wayland
 import Quickshell.Hyprland
-import "../../theme" as QsTheme
-import "../../services" as QsServices
-import "../../utils" as QsUtils
-import "../../config" as QsConfig
+import "../theme" as QsTheme
+import "../features/notifications" as QsNotifications
+import "../utils" as QsUtils
+import "../config" as QsConfig
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Material 3 Expressive Notification Popups — Revamped
@@ -16,7 +16,7 @@ import "../../config" as QsConfig
 PanelWindow {
     id: root
 
-    readonly property var notifs: QsServices.Notifs
+    readonly property var notifs: QsNotifications.Notifs
     readonly property var logger: QsUtils.Logger
     readonly property var config: QsConfig.Config
 

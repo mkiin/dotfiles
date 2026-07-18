@@ -1,0 +1,2 @@
+module qs.features.notifications.components
+NotificationList 1.0 NotificationList.qml

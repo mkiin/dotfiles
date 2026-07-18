@@ -1,9 +1,0 @@
-module qs.services
-singleton Audio Audio.qml
-singleton AudioStreams AudioStreams.qml
-singleton Bluetooth Bluetooth.qml
-singleton IdleInhibitor IdleInhibitor.qml
-singleton Network Network.qml
-singleton Notifs Notifs.qml
-singleton Players Players.qml
-singleton Screenshot Screenshot.qml

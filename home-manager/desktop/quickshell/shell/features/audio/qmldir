@@ -1,0 +1,3 @@
+module qs.features.audio
+singleton Audio Audio.qml
+singleton AudioStreams AudioStreams.qml
