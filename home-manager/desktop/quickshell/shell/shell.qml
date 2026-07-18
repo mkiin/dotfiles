@@ -21,11 +21,11 @@ ShellRoot {
 
     // パネルは同時に 1 つだけ開く（別プロセス時代は重なりが起きていた）
     function openPanel(name: string): void {
-        const next = { cc: cc.shouldShow, audio: audioPopout.shouldShow, bluetooth: bluetoothPopout.shouldShow }[name]
-        cc.shouldShow = false
+        const next = { cc: ccPopout.shouldShow, audio: audioPopout.shouldShow, bluetooth: bluetoothPopout.shouldShow }[name]
+        ccPopout.shouldShow = false
         audioPopout.shouldShow = false
         bluetoothPopout.shouldShow = false
-        if (name === "cc") cc.shouldShow = !next
+        if (name === "cc") ccPopout.shouldShow = !next
         else if (name === "audio") audioPopout.shouldShow = !next
         else if (name === "bluetooth") bluetoothPopout.shouldShow = !next
     }
@@ -50,7 +50,7 @@ ShellRoot {
 
     // 通知センター本体（クイックトグル/スライダ/MPRIS/通知リスト/電源）
     QsCC.ControlCenterWindow {
-        id: cc
+        id: ccPopout
         shouldShow: false
     }
 
@@ -79,15 +79,12 @@ ShellRoot {
     IpcHandler {
         target: "cc"
         function toggle(): void { root.openPanel("cc") }
-        function open(): void { cc.shouldShow = false; root.openPanel("cc") }
-        function close(): void { cc.shouldShow = false }
-        function dnd(): void { root.notifs.toggleDnd() }
         // waybar custom モジュール互換 JSON（alt で format-icons を選択）
         function status(): string {
             const unread = root.notifs.unreadCount
             const dnd = root.notifs.dnd
             const alt = (dnd ? "dnd-" : "") + (unread > 0 ? "notification" : "none")
-            return JSON.stringify({ text: "", alt: alt, tooltip: (dnd ? "DND · " : "") + unread + " unread" })
+            return JSON.stringify({ text: "", alt: alt, class: alt, tooltip: (dnd ? "DND · " : "") + unread + " unread" })
         }
     }
 
@@ -97,10 +94,9 @@ ShellRoot {
         function reload(): void { QsTheme.Colours.reload() }
     }
 
-    // アイドルインヒビター(Caffeine)を waybar と共有。状態の真実はこの IdleInhibitor サービス。
+    // waybar のアイドルインヒビター表示。切り替えは Control Center から行う。
     IpcHandler {
         target: "idle"
-        function toggle(): void { QsPower.IdleInhibitor.inhibited = !QsPower.IdleInhibitor.inhibited }
         function status(): string {
             const inhibited = QsPower.IdleInhibitor.inhibited
             return JSON.stringify({

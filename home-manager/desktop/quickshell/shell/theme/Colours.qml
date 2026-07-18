@@ -3,7 +3,7 @@ pragma Singleton
 import Quickshell
 import Quickshell.Io
 import QtQuick 6.10
-import "../config" as QsConfig
+import ".." as QsRoot
 import "../utils" as QsUtils
 
 // matugen が書き出す M3 トークンをそのまま保持する層。ここでは色を加工しない。
@@ -128,14 +128,17 @@ Singleton {
         }
     }
 
-    // matugen の atomic 書込で FileView 監視が外れるため、post_hook から明示リロードする。
+    // FileView は参照されるまで読み込みを始めないため、起動時に明示的に読む。
+    Component.onCompleted: matugenFile.reload()
+
+    // matugen の atomic 書込で FileView 監視が外れるため、post_hook からも明示リロードする。
     function reload(): void {
         matugenFile.reload();
     }
 
     FileView {
         id: matugenFile
-        path: QsConfig.Config.paths.colours
+        path: QsRoot.Config.coloursPath
         watchChanges: true
         onLoaded: root.loadColors(text())
         onFileChanged: root.loadColors(text())
