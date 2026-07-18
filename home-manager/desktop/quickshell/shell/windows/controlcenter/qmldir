@@ -1,3 +1,0 @@
-module qs.windows.controlcenter
-ControlCenterWindow 1.0 ControlCenterWindow.qml
-QuickActions 1.0 QuickActions.qml
