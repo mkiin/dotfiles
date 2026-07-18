@@ -105,13 +105,4 @@ Singleton {
         property int barOffset: 40 // waybar 下端（モニタ上端から px）
         property int edgeGap: 8 // 画面端との隙間。waybar の外周ギャップと揃える
     }
-
-    readonly property var alpha: QtObject {
-        property real hover: 0.06
-        property real border: 0.08
-        property real low: 0.14
-        property real medium: 0.42
-        property real high: 0.68
-        property real full: 1.0
-    }
 }
