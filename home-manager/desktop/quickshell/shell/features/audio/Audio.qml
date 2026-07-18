@@ -1,120 +1,75 @@
 pragma Singleton
 
 import Quickshell
-import Quickshell.Io
+import Quickshell.Services.Pipewire
 import QtQuick
 
+// 既定の出力/入力デバイスの音量。
+// Pipewire のノードに直接バインドする（wpctl を 250ms ごとに叩く実装から置き換えた）。
 Singleton {
     id: root
 
-    property bool ready: false
-    property bool muted: false
-    property real volume: 0
-    readonly property int percentage: Math.round(volume * 100)
+    readonly property var sink: Pipewire.defaultAudioSink
+    readonly property var source: Pipewire.defaultAudioSource
 
-    property bool sourceReady: false
-    property bool sourceMuted: false
-    property real sourceVolume: 0
-    readonly property int sourcePercentage: Math.round(sourceVolume * 100)
+    readonly property bool ready: root.sink?.ready ?? false
+    readonly property bool muted: root.sink?.audio?.muted ?? false
+    readonly property real volume: root.sink?.audio?.volume ?? 0
+    readonly property int percentage: Math.round(root.volume * 100)
 
-    Timer {
-        interval: 250
-        running: true
-        repeat: true
-        onTriggered: {
-            if (!getSink.running)
-                getSink.running = true
-            if (!getSource.running)
-                getSource.running = true
-        }
+    readonly property bool sourceReady: root.source?.ready ?? false
+    readonly property bool sourceMuted: root.source?.audio?.muted ?? false
+    readonly property real sourceVolume: root.source?.audio?.volume ?? 0
+    readonly property int sourcePercentage: Math.round(root.sourceVolume * 100)
+
+    // tracker で保持しないと audio プロパティの変更通知が来ない
+    PwObjectTracker {
+        objects: [root.sink, root.source].filter(node => node)
     }
 
-    Process {
-        id: getSink
-        command: ["wpctl", "get-volume", "@DEFAULT_AUDIO_SINK@"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                const s = text.trim()
-                // Examples:
-                // "Volume: 0.39"
-                // "Volume: 0.39 [MUTED]"
-                const m = s.match(/Volume:\s*([0-9.]+)/)
-                if (m) {
-                    const v = parseFloat(m[1])
-                    if (!isNaN(v)) {
-                        root.ready = true
-                        root.volume = Math.max(0, Math.min(1.5, v))
-                    }
-                }
-                root.muted = /\[MUTED\]/.test(s)
-            }
-        }
+    function clamp(value) {
+        return Math.max(0, Math.min(1.5, value));
     }
 
-    Process {
-        id: getSource
-        command: ["wpctl", "get-volume", "@DEFAULT_AUDIO_SOURCE@"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                const s = text.trim()
-                const m = s.match(/Volume:\s*([0-9.]+)/)
-                if (m) {
-                    const v = parseFloat(m[1])
-                    if (!isNaN(v)) {
-                        root.sourceReady = true
-                        root.sourceVolume = Math.max(0, Math.min(1.5, v))
-                    }
-                }
-                root.sourceMuted = /\[MUTED\]/.test(s)
-            }
-        }
-    }
-
-    function setVolume(newVolume) {
-        const v = Math.max(0, Math.min(1.5, newVolume))
-        // wpctl のポーリング反映(250ms)を待たず即座にUIへ反映
-        root.volume = v
-        setMute(false)
-        setVolProc.command = ["wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", v.toFixed(3)]
-        setVolProc.running = true
+    function setVolume(value) {
+        if (!root.sink?.audio)
+            return;
+        root.sink.audio.muted = false;
+        root.sink.audio.volume = root.clamp(value);
     }
 
     function increaseVolume() {
-        setVolume(volume + 0.05)
+        root.setVolume(root.volume + 0.05);
     }
 
     function decreaseVolume() {
-        setVolume(volume - 0.05)
+        root.setVolume(root.volume - 0.05);
     }
 
-    function setMute(m) {
-        setMuteProc.command = ["wpctl", "set-mute", "@DEFAULT_AUDIO_SINK@", m ? "1" : "0"]
-        setMuteProc.running = true
+    function setMute(muted) {
+        if (root.sink?.audio)
+            root.sink.audio.muted = muted;
     }
 
     function toggleMute() {
-        setMuteProc.command = ["wpctl", "set-mute", "@DEFAULT_AUDIO_SINK@", "toggle"]
-        setMuteProc.running = true
+        if (root.sink?.audio)
+            root.sink.audio.muted = !root.sink.audio.muted;
     }
 
-    function setSourceVolume(newVolume) {
-        setSourceMute(false)
-        setSourceVolProc.command = ["wpctl", "set-volume", "@DEFAULT_AUDIO_SOURCE@", Math.max(0, Math.min(1.5, newVolume)).toFixed(3)]
-        setSourceVolProc.running = true
+    function setSourceVolume(value) {
+        if (!root.source?.audio)
+            return;
+        root.source.audio.muted = false;
+        root.source.audio.volume = root.clamp(value);
     }
 
-    function setSourceMute(m) {
-        setSourceMuteProc.command = ["wpctl", "set-mute", "@DEFAULT_AUDIO_SOURCE@", m ? "1" : "0"]
-        setSourceMuteProc.running = true
+    function setSourceMute(muted) {
+        if (root.source?.audio)
+            root.source.audio.muted = muted;
     }
 
     function toggleSourceMute() {
-        setSourceMuteProc.command = ["wpctl", "set-mute", "@DEFAULT_AUDIO_SOURCE@", "toggle"]
-        setSourceMuteProc.running = true
+        if (root.source?.audio)
+            root.source.audio.muted = !root.source.audio.muted;
     }
-
-    Process { id: setVolProc }
-    Process { id: setMuteProc }
-    Process { id: setSourceVolProc }
-    Process { id: setSourceMuteProc }
 }

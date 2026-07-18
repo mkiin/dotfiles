@@ -20,13 +20,13 @@ PopupCard {
     readonly property var sinks: Pipewire.nodes.values.filter(n => n.audio && n.isSink && !n.isStream)
     readonly property var sources: Pipewire.nodes.values.filter(n => n.audio && !n.isSink && !n.isStream)
 
-    function audioIcon(n) {
-        const s = ((n?.description ?? "") + " " + (n?.name ?? "")).toLowerCase();
-        if (s.includes("headphone") || s.includes("headset"))
+    function audioIcon(node) {
+        const label = ((node?.description ?? "") + " " + (node?.name ?? "")).toLowerCase();
+        if (label.includes("headphone") || label.includes("headset"))
             return "󰋋";
-        if (s.includes("hdmi") || s.includes("displayport") || s.includes("display"))
+        if (label.includes("hdmi") || label.includes("displayport") || label.includes("display"))
             return "󰍹";
-        if (s.includes("bluetooth") || s.includes("bluez"))
+        if (label.includes("bluetooth") || label.includes("bluez"))
             return "󰂰";
         return "󰓃";
     }

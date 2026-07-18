@@ -18,8 +18,8 @@ Singleton {
 
     function takeScreenshot(mode: string): void {
         // CC の "screen" はスクリプトの "output"（フォーカス中モニタ全体）
-        const m = mode === "screen" ? "output" : mode
-        Quickshell.execDetached([`${root.scriptsDir}/screenshot.sh`, m])
+        const target = mode === "screen" ? "output" : mode
+        Quickshell.execDetached([`${root.scriptsDir}/screenshot.sh`, target])
     }
 
     // rofi の region/window/output 選択メニュー（Super+P と同じ入口）

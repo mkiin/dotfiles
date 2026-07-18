@@ -84,10 +84,10 @@ ShellRoot {
         function dnd(): void { root.notifs.toggleDnd() }
         // waybar custom モジュール互換 JSON（alt で format-icons を選択）
         function status(): string {
-            const u = root.notifs.unreadCount
-            const d = root.notifs.dnd
-            const alt = (d ? "dnd-" : "") + (u > 0 ? "notification" : "none")
-            return JSON.stringify({ text: "", alt: alt, tooltip: (d ? "DND · " : "") + u + " unread" })
+            const unread = root.notifs.unreadCount
+            const dnd = root.notifs.dnd
+            const alt = (dnd ? "dnd-" : "") + (unread > 0 ? "notification" : "none")
+            return JSON.stringify({ text: "", alt: alt, tooltip: (dnd ? "DND · " : "") + unread + " unread" })
         }
     }
 
@@ -102,11 +102,11 @@ ShellRoot {
         target: "idle"
         function toggle(): void { QsPower.IdleInhibitor.inhibited = !QsPower.IdleInhibitor.inhibited }
         function status(): string {
-            const on = QsPower.IdleInhibitor.inhibited
+            const inhibited = QsPower.IdleInhibitor.inhibited
             return JSON.stringify({
-                text: on ? "󰈈" : "󰈉",
-                class: on ? "activated" : "deactivated",
-                tooltip: on ? "Idle inhibited (caffeine on)" : "Idle inhibitor off"
+                text: inhibited ? "󰈈" : "󰈉",
+                class: inhibited ? "activated" : "deactivated",
+                tooltip: inhibited ? "Idle inhibited (caffeine on)" : "Idle inhibitor off"
             })
         }
     }

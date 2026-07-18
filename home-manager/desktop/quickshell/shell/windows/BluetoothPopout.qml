@@ -75,7 +75,7 @@ PopupCard {
                     }
 
                     Text {
-                        property var connected: devices.filter(d => d.connected)
+                        property var connected: devices.filter(device => device.connected)
                         text: connected.length > 0 ? connected[0].name : "No device connected"
                         font.family: QsTheme.Appearance.typography.family
                         font.pixelSize: QsTheme.Appearance.typography.labelSmall.size
@@ -358,19 +358,19 @@ PopupCard {
                                         hoverEnabled: true
                                         cursorShape: Qt.PointingHandCursor
                                         onClicked: {
-                                            const d = deviceItem.modelData;
+                                            const device = deviceItem.modelData;
                                             if (deviceItem.busy) {
-                                                if (d.pairing)
-                                                    d.cancelPair();
+                                                if (device.pairing)
+                                                    device.cancelPair();
                                                 return;
                                             }
-                                            if (d.connected)
-                                                d.connected = false;
-                                            else if (d.bonded) {
-                                                d.trusted = true;
-                                                d.connected = true;
+                                            if (device.connected)
+                                                device.connected = false;
+                                            else if (device.bonded) {
+                                                device.trusted = true;
+                                                device.connected = true;
                                             } else {
-                                                d.pair();
+                                                device.pair();
                                                 pairTimer.restart();
                                             }
                                         }

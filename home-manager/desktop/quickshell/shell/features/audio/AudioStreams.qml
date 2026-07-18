@@ -30,8 +30,8 @@ Singleton {
     function appName(node) {
         if (!node)
             return ""
-        const p = node.properties || ({})
-        return p["application.name"] || p["media.name"] || node.name || ""
+        const props = node.properties || ({})
+        return props["application.name"] || props["media.name"] || node.name || ""
     }
 
     function setGroupVolume(nodes, vol) {

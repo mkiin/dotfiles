@@ -16,10 +16,10 @@ Singleton {
     readonly property int maxNotifications: 100
     
     // Show all notifications from past 24 hours (including closed ones) - for notification center
-    readonly property var recentNotifications: notifications.filter(n => {
-        if (!n || !n.timestamp)
+    readonly property var recentNotifications: notifications.filter(notif => {
+        if (!notif || !notif.timestamp)
             return false
-        const hoursSinceNotif = (new Date().getTime() - n.timestamp.getTime()) / (1000 * 60 * 60)
+        const hoursSinceNotif = (new Date().getTime() - notif.timestamp.getTime()) / (1000 * 60 * 60)
         return hoursSinceNotif < 24
     }).sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
     readonly property var unreadNotifications: recentNotifications.filter(n => !n.read)
@@ -30,12 +30,12 @@ Singleton {
         const groups = {}
         const active = activeNotifications
         for (let i = 0; i < active.length; i++) {
-            const n = active[i]
-            const key = n.appName || "Unknown"
+            const notif = active[i]
+            const key = notif.appName || "Unknown"
             if (!groups[key]) {
                 groups[key] = []
             }
-            groups[key].push(n)
+            groups[key].push(notif)
         }
         return groups
     }
@@ -119,13 +119,13 @@ Singleton {
 
         const len = actionList.length ?? 0
         for (let i = 0; i < len; i++) {
-            const a = actionList[i]
-            if (!a)
+            const action = actionList[i]
+            if (!action)
                 continue
             out.push({
-                identifier: a.identifier,
-                text: a.text,
-                invoke: () => a.invoke()
+                identifier: action.identifier,
+                text: action.text,
+                invoke: () => action.invoke()
             })
         }
         return out
@@ -141,11 +141,11 @@ Singleton {
     function clearAll() {
         const all = root.notifications.slice();
         root.notifications = [];
-        all.forEach(n => {
-            if (!n) return;
-            if (n.notification)
-                n.notification.dismiss();
-            n.destroy();
+        all.forEach(notif => {
+            if (!notif) return;
+            if (notif.notification)
+                notif.notification.dismiss();
+            notif.destroy();
         });
         QsUtils.Logger.info("Notifs", "All notifications cleared")
     }
