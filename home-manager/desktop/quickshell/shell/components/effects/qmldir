@@ -1,3 +1,0 @@
-module qs.components.effects
-singleton Material3Anim 1.0 Material3Anim.qml
-Elevation 1.0 Elevation.qml

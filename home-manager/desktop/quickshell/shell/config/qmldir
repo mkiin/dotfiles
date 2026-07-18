@@ -1,4 +1,2 @@
 module qs.config
 singleton Config Config.qml
-singleton Appearance Appearance.qml
-singleton Theme Theme.qml

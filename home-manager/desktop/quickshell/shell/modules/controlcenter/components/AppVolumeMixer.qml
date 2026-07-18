@@ -2,9 +2,8 @@ import QtQuick 6.10
 import QtQuick.Layouts 6.10
 import Quickshell
 import Quickshell.Services.Pipewire
-import "../../../components/effects"
+import "../../../theme" as QsTheme
 import "../../../services" as QsServices
-import "../../../config" as QsConfig
 
 ColumnLayout {
     id: root
@@ -12,19 +11,19 @@ ColumnLayout {
     readonly property var streams: QsServices.AudioStreams.streams
     readonly property var groups: QsServices.AudioStreams.groups
 
-    spacing: QsConfig.Appearance.spacing.s
+    spacing: QsTheme.Appearance.spacing.s
 
     PwObjectTracker { objects: root.streams }
 
     Text {
         Layout.fillWidth: true
-        Layout.topMargin: QsConfig.Appearance.spacing.xs
-        Layout.bottomMargin: QsConfig.Appearance.spacing.xs
+        Layout.topMargin: QsTheme.Appearance.spacing.xs
+        Layout.bottomMargin: QsTheme.Appearance.spacing.xs
         visible: root.groups.length === 0
         text: "再生中のアプリはありません"
-        font.family: QsConfig.Appearance.typography.family
-        font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
-        color: QsConfig.Theme.textMuted
+        font.family: QsTheme.Appearance.typography.family
+        font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
+        color: QsTheme.Theme.textMuted
         horizontalAlignment: Text.AlignHCenter
     }
 
@@ -42,56 +41,56 @@ ColumnLayout {
 
             Layout.fillWidth: true
             Layout.preferredHeight: 70
-            radius: QsConfig.Appearance.radius.m
-            color: QsConfig.Theme.cardHigh
+            radius: QsTheme.Appearance.radius.m
+            color: QsTheme.Theme.cardHigh
             border.width: 1
-            border.color: QsConfig.Theme.border
+            border.color: QsTheme.Theme.border
 
             ColumnLayout {
                 anchors.fill: parent
-                anchors.leftMargin: QsConfig.Appearance.margin.m
-                anchors.rightMargin: QsConfig.Appearance.margin.m
-                anchors.topMargin: QsConfig.Appearance.margin.s
-                anchors.bottomMargin: QsConfig.Appearance.margin.s
-                spacing: QsConfig.Appearance.spacing.xs
+                anchors.leftMargin: QsTheme.Appearance.margin.m
+                anchors.rightMargin: QsTheme.Appearance.margin.m
+                anchors.topMargin: QsTheme.Appearance.margin.s
+                anchors.bottomMargin: QsTheme.Appearance.margin.s
+                spacing: QsTheme.Appearance.spacing.xs
 
                 Text {
                     Layout.fillWidth: true
                     text: row.modelData.name
                     elide: Text.ElideRight
-                    font.family: QsConfig.Appearance.typography.family
-                    font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
+                    font.family: QsTheme.Appearance.typography.family
+                    font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
                     font.weight: Font.DemiBold
-                    color: QsConfig.Theme.text
+                    color: QsTheme.Theme.text
                 }
 
                 RowLayout {
                     Layout.fillWidth: true
-                    spacing: QsConfig.Appearance.spacing.s
+                    spacing: QsTheme.Appearance.spacing.s
 
                     Rectangle {
                         Layout.preferredWidth: 30
                         Layout.preferredHeight: 30
                         radius: height / 2
                         color: muteMouse.containsMouse
-                            ? QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.1)
+                            ? QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.1)
                             : "transparent"
 
                         Behavior on color {
                             ColorAnimation {
-                                duration: Material3Anim.short3
-                                easing.bezierCurve: Material3Anim.standard
+                                duration: QsTheme.Appearance.anim.durations.short3
+                                easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
                             }
                         }
 
                         Text {
                             anchors.centerIn: parent
                             text: row.isMuted ? "󰝟" : (row.currentVolume > 66 ? "󰕾" : (row.currentVolume > 33 ? "󰖀" : "󰕿"))
-                            font.family: QsConfig.Appearance.typography.iconFamily
-                            font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
+                            font.family: QsTheme.Appearance.typography.iconFamily
+                            font.pixelSize: QsTheme.Appearance.typography.bodyLarge.size
                             color: row.isMuted
-                                ? QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.5)
-                                : QsConfig.Theme.accent
+                                ? QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.5)
+                                : QsTheme.Theme.accent
                         }
 
                         MouseArea {
@@ -115,10 +114,10 @@ ColumnLayout {
                     Text {
                         Layout.preferredWidth: 44
                         text: row.currentVolume + "%"
-                        font.family: QsConfig.Appearance.typography.family
-                        font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
+                        font.family: QsTheme.Appearance.typography.family
+                        font.pixelSize: QsTheme.Appearance.typography.bodyMedium.size
                         font.weight: Font.DemiBold
-                        color: QsConfig.Theme.text
+                        color: QsTheme.Theme.text
                         horizontalAlignment: Text.AlignRight
                     }
                 }

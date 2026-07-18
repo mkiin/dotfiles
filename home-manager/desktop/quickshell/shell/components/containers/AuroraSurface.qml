@@ -1,17 +1,16 @@
 import QtQuick 6.10
-import "../../config" as QsConfig
-import "../effects"
+import QtQuick.Effects
+import "../../theme" as QsTheme
 
 Item {
     id: root
 
-    property color color: QsConfig.Theme.panel
-    property color strokeColor: QsConfig.Theme.border
-    property color accentColor: QsConfig.Theme.accent
-    property color shadowColor: QsConfig.Theme.shadow
-    property real radius: QsConfig.Appearance.radius.l
+    property color color: QsTheme.Theme.panel
+    property color strokeColor: QsTheme.Theme.border
+    property color accentColor: QsTheme.Theme.accent
+    property color shadowColor: QsTheme.Theme.shadow
+    property real radius: QsTheme.Appearance.radius.l
     property real borderWidth: 1
-    property int elevation: 2
     property real accentOpacity: 0.10
     property real highlightOpacity: 0.08
     property bool hovered: false
@@ -25,27 +24,20 @@ Item {
     implicitHeight: contentItem.implicitHeight
 
     readonly property color resolvedSurfaceColor: root.highlighted
-        ? QsConfig.Theme.cardHigh
+        ? QsTheme.Theme.cardHigh
         : root.hovered
-            ? QsConfig.Theme.card
+            ? QsTheme.Theme.card
             : root.color
     readonly property color resolvedBorderColor: root.highlighted
         ? Qt.rgba(root.accentColor.r, root.accentColor.g, root.accentColor.b, 0.28)
         : root.hovered
-            ? QsConfig.Theme.withAlpha(QsConfig.Theme.outline, 0.7)
+            ? QsTheme.Theme.withAlpha(QsTheme.Theme.outline, 0.7)
             : root.strokeColor
     readonly property real stateLayerOpacity: root.highlighted
         ? root.accentOpacity
         : root.hovered
             ? root.highlightOpacity
             : 0
-
-    Elevation {
-        level: root.highlighted ? root.elevation + 2 : root.hovered ? root.elevation + 1 : root.elevation
-        target: surface
-        radius: surface.radius
-        shadowColor: Qt.rgba(root.shadowColor.r, root.shadowColor.g, root.shadowColor.b, root.highlighted ? 0.24 : 0.18)
-    }
 
     Rectangle {
         id: surface
@@ -56,16 +48,25 @@ Item {
         border.color: root.resolvedBorderColor
         clip: root.clipContent
 
+        layer.enabled: true
+        layer.effect: MultiEffect {
+            shadowEnabled: true
+            shadowColor: root.shadowColor
+            shadowOpacity: root.highlighted ? 0.24 : 0.18
+            shadowBlur: 0.4
+            shadowVerticalOffset: 4
+        }
+
         Behavior on color {
             ColorAnimation {
-                duration: QsConfig.Appearance.anim.durations.normal
+                duration: QsTheme.Appearance.anim.durations.normal
                 easing.type: Easing.OutCubic
             }
         }
 
         Behavior on border.color {
             ColorAnimation {
-                duration: QsConfig.Appearance.anim.durations.normal
+                duration: QsTheme.Appearance.anim.durations.normal
                 easing.type: Easing.OutCubic
             }
         }
@@ -79,7 +80,7 @@ Item {
 
             Behavior on color {
                 ColorAnimation {
-                    duration: QsConfig.Appearance.anim.durations.normal
+                    duration: QsTheme.Appearance.anim.durations.normal
                     easing.type: Easing.OutCubic
                 }
             }

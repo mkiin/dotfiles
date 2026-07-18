@@ -3,8 +3,8 @@ import QtQuick.Layouts 6.10
 import QtQuick.Effects
 import Quickshell.Bluetooth
 import Quickshell.Io
+import "../../theme" as QsTheme
 import "../../components/containers"
-import "../../config" as QsConfig
 
 // Bluetooth device selector — 殻(配置/アニメ/クローズ)は FloatingPanel、ここは中身だけ
 FloatingPanel {
@@ -42,9 +42,9 @@ FloatingPanel {
         id: backgroundRect
         anchors.fill: parent
         implicitHeight: contentColumn.implicitHeight + popupWindow.cardPadding * 2
-        color: QsConfig.Theme.panel
-        radius: QsConfig.Appearance.radius.m
-        border.color: QsConfig.Theme.borderFaint
+        color: QsTheme.Theme.panel
+        radius: QsTheme.Appearance.radius.m
+        border.color: QsTheme.Theme.borderFaint
         border.width: 1
 
         layer.enabled: true
@@ -59,46 +59,46 @@ FloatingPanel {
             id: contentColumn
             anchors.fill: parent
             anchors.margins: popupWindow.cardPadding
-            spacing: QsConfig.Appearance.spacing.m
+            spacing: QsTheme.Appearance.spacing.m
 
             // Header
             RowLayout {
                 Layout.fillWidth: true
-                spacing: QsConfig.Appearance.spacing.m
+                spacing: QsTheme.Appearance.spacing.m
 
                 Rectangle {
                     width: popupWindow.headerIconSize
                     height: popupWindow.headerIconSize
-                    radius: QsConfig.Appearance.radius.s
-                    color: Qt.rgba(QsConfig.Theme.accent.r, QsConfig.Theme.accent.g, QsConfig.Theme.accent.b, 0.15)
+                    radius: QsTheme.Appearance.radius.s
+                    color: Qt.rgba(QsTheme.Theme.accent.r, QsTheme.Theme.accent.g, QsTheme.Theme.accent.b, 0.15)
 
                     Text {
                         anchors.centerIn: parent
                         text: "󰂯"
-                        font.family: QsConfig.Appearance.typography.iconFamily
-                        font.pixelSize: QsConfig.Appearance.typography.titleMedium.size
-                        color: QsConfig.Theme.accent
+                        font.family: QsTheme.Appearance.typography.iconFamily
+                        font.pixelSize: QsTheme.Appearance.typography.titleMedium.size
+                        color: QsTheme.Theme.accent
                     }
                 }
 
                 ColumnLayout {
                     Layout.fillWidth: true
-                    spacing: QsConfig.Appearance.spacing.xs
+                    spacing: QsTheme.Appearance.spacing.xs
 
                     Text {
                         text: "Bluetooth"
-                        font.family: QsConfig.Appearance.typography.family
-                        font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
+                        font.family: QsTheme.Appearance.typography.family
+                        font.pixelSize: QsTheme.Appearance.typography.bodyLarge.size
                         font.weight: Font.Bold
-                        color: QsConfig.Theme.text
+                        color: QsTheme.Theme.text
                     }
 
                     Text {
                         property var connected: devices.filter(d => d.connected)
                         text: connected.length > 0 ? connected[0].name : "No device connected"
-                        font.family: QsConfig.Appearance.typography.family
-                        font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
-                        color: QsConfig.Theme.textMuted
+                        font.family: QsTheme.Appearance.typography.family
+                        font.pixelSize: QsTheme.Appearance.typography.labelSmall.size
+                        color: QsTheme.Theme.textMuted
                     }
                 }
 
@@ -107,11 +107,11 @@ FloatingPanel {
                     width: 44
                     height: 24
                     radius: height / 2
-                    color: adapter?.enabled ? QsConfig.Theme.accent : Qt.rgba(QsConfig.Theme.text.r, QsConfig.Theme.text.g, QsConfig.Theme.text.b, 0.15)
+                    color: adapter?.enabled ? QsTheme.Theme.accent : Qt.rgba(QsTheme.Theme.text.r, QsTheme.Theme.text.g, QsTheme.Theme.text.b, 0.15)
 
                     Behavior on color {
                         ColorAnimation {
-                            duration: QsConfig.Appearance.anim.durations.fast
+                            duration: QsTheme.Appearance.anim.durations.fast
                         }
                     }
 
@@ -125,7 +125,7 @@ FloatingPanel {
 
                         Behavior on x {
                             NumberAnimation {
-                                duration: QsConfig.Appearance.anim.durations.fast
+                                duration: QsTheme.Appearance.anim.durations.fast
                                 easing.type: Easing.OutCubic
                             }
                         }
@@ -144,24 +144,24 @@ FloatingPanel {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: popupWindow.buttonHeight
-                radius: QsConfig.Appearance.radius.s
-                color: scanArea.containsMouse ? QsConfig.Theme.cardHigh : QsConfig.Theme.card
+                radius: QsTheme.Appearance.radius.s
+                color: scanArea.containsMouse ? QsTheme.Theme.cardHigh : QsTheme.Theme.card
 
                 Behavior on color {
                     ColorAnimation {
-                        duration: QsConfig.Appearance.anim.durations.fast
+                        duration: QsTheme.Appearance.anim.durations.fast
                     }
                 }
 
                 RowLayout {
                     anchors.centerIn: parent
-                    spacing: QsConfig.Appearance.spacing.s
+                    spacing: QsTheme.Appearance.spacing.s
 
                     Text {
                         text: adapter?.discovering ? "󰑐" : "󰑓"
-                        font.family: QsConfig.Appearance.typography.iconFamily
-                        font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
-                        color: adapter?.discovering ? QsConfig.Theme.accent : QsConfig.Theme.text
+                        font.family: QsTheme.Appearance.typography.iconFamily
+                        font.pixelSize: QsTheme.Appearance.typography.bodyLarge.size
+                        color: adapter?.discovering ? QsTheme.Theme.accent : QsTheme.Theme.text
 
                         RotationAnimation on rotation {
                             running: adapter?.discovering ?? false
@@ -174,10 +174,10 @@ FloatingPanel {
 
                     Text {
                         text: adapter?.discovering ? "Scanning..." : "Scan for devices"
-                        font.family: QsConfig.Appearance.typography.family
-                        font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
+                        font.family: QsTheme.Appearance.typography.family
+                        font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
                         font.weight: Font.Medium
-                        color: QsConfig.Theme.text
+                        color: QsTheme.Theme.text
                     }
                 }
 
@@ -196,15 +196,15 @@ FloatingPanel {
                 Layout.fillWidth: true
                 // 0 件時は contentHeight が 0 になり empty-state が clip されるため最小高さを確保
                 Layout.preferredHeight: popupWindow.devices.length === 0 ? popupWindow.rowHeight * 2 : Math.min(deviceList.contentHeight + 8, popupWindow.listMaxHeight)
-                radius: QsConfig.Appearance.radius.s
-                color: QsConfig.Theme.card
+                radius: QsTheme.Appearance.radius.s
+                color: QsTheme.Theme.card
                 clip: true
 
                 ListView {
                     id: deviceList
                     anchors.fill: parent
-                    anchors.margins: QsConfig.Appearance.spacing.xs
-                    spacing: QsConfig.Appearance.spacing.xs
+                    anchors.margins: QsTheme.Appearance.spacing.xs
+                    spacing: QsTheme.Appearance.spacing.xs
                     model: devices
                     clip: true
 
@@ -212,8 +212,8 @@ FloatingPanel {
                         id: deviceItem
                         width: deviceList.width
                         height: popupWindow.rowHeight
-                        radius: QsConfig.Appearance.radius.s
-                        color: itemArea.containsMouse ? QsConfig.Theme.hover : "transparent"
+                        radius: QsTheme.Appearance.radius.s
+                        color: itemArea.containsMouse ? QsTheme.Theme.hover : "transparent"
 
                         required property var modelData
                         property bool isConnected: modelData.connected
@@ -238,15 +238,15 @@ FloatingPanel {
 
                         Behavior on color {
                             ColorAnimation {
-                                duration: QsConfig.Appearance.anim.durations.fast
+                                duration: QsTheme.Appearance.anim.durations.fast
                             }
                         }
 
                         RowLayout {
                             anchors.fill: parent
-                            anchors.leftMargin: QsConfig.Appearance.margin.m
-                            anchors.rightMargin: QsConfig.Appearance.margin.m
-                            spacing: QsConfig.Appearance.spacing.m
+                            anchors.leftMargin: QsTheme.Appearance.margin.m
+                            anchors.rightMargin: QsTheme.Appearance.margin.m
+                            spacing: QsTheme.Appearance.spacing.m
 
                             // Icon
                             Text {
@@ -264,21 +264,21 @@ FloatingPanel {
                                         return "󰌌";
                                     return "󰂯";
                                 }
-                                font.family: QsConfig.Appearance.typography.iconFamily
-                                font.pixelSize: QsConfig.Appearance.typography.titleMedium.size
-                                color: isConnected ? QsConfig.Theme.accent : QsConfig.Theme.text
+                                font.family: QsTheme.Appearance.typography.iconFamily
+                                font.pixelSize: QsTheme.Appearance.typography.titleMedium.size
+                                color: isConnected ? QsTheme.Theme.accent : QsTheme.Theme.text
                             }
 
                             ColumnLayout {
                                 Layout.fillWidth: true
-                                spacing: QsConfig.Appearance.spacing.xs
+                                spacing: QsTheme.Appearance.spacing.xs
 
                                 Text {
                                     text: deviceItem.modelData.name
-                                    font.family: QsConfig.Appearance.typography.family
-                                    font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
+                                    font.family: QsTheme.Appearance.typography.family
+                                    font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
                                     font.weight: Font.Medium
-                                    color: QsConfig.Theme.text
+                                    color: QsTheme.Theme.text
                                     elide: Text.ElideRight
                                     Layout.fillWidth: true
                                 }
@@ -297,15 +297,15 @@ FloatingPanel {
                                             return "Paired";
                                         return "Available";
                                     }
-                                    font.family: QsConfig.Appearance.typography.family
-                                    font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
-                                    color: isConnected ? QsConfig.Theme.accent : QsConfig.Theme.textMuted
+                                    font.family: QsTheme.Appearance.typography.family
+                                    font.pixelSize: QsTheme.Appearance.typography.labelSmall.size
+                                    color: isConnected ? QsTheme.Theme.accent : QsTheme.Theme.textMuted
                                 }
                             }
 
                             // Actions: trust / forget（ペア済みのみ）＋ プライマリ pair/connect/disconnect
                             RowLayout {
-                                spacing: QsConfig.Appearance.spacing.s
+                                spacing: QsTheme.Appearance.spacing.s
 
                                 // Trust トグル
                                 Rectangle {
@@ -313,16 +313,16 @@ FloatingPanel {
                                     Layout.preferredWidth: popupWindow.actionButtonSize
                                     Layout.preferredHeight: popupWindow.actionButtonSize
                                     radius: height / 2
-                                    color: trustArea.containsMouse ? QsConfig.Theme.hover : "transparent"
+                                    color: trustArea.containsMouse ? QsTheme.Theme.hover : "transparent"
                                     border.width: 1
-                                    border.color: deviceItem.modelData.trusted ? QsConfig.Theme.accent : Qt.rgba(QsConfig.Theme.text.r, QsConfig.Theme.text.g, QsConfig.Theme.text.b, 0.15)
+                                    border.color: deviceItem.modelData.trusted ? QsTheme.Theme.accent : Qt.rgba(QsTheme.Theme.text.r, QsTheme.Theme.text.g, QsTheme.Theme.text.b, 0.15)
 
                                     Text {
                                         anchors.centerIn: parent
                                         text: deviceItem.modelData.trusted ? "󰕥" : "󰒙"
-                                        font.family: QsConfig.Appearance.typography.iconFamily
-                                        font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
-                                        color: deviceItem.modelData.trusted ? QsConfig.Theme.accent : QsConfig.Theme.textMuted
+                                        font.family: QsTheme.Appearance.typography.iconFamily
+                                        font.pixelSize: QsTheme.Appearance.typography.bodyMedium.size
+                                        color: deviceItem.modelData.trusted ? QsTheme.Theme.accent : QsTheme.Theme.textMuted
                                     }
 
                                     MouseArea {
@@ -340,16 +340,16 @@ FloatingPanel {
                                     Layout.preferredWidth: popupWindow.actionButtonSize
                                     Layout.preferredHeight: popupWindow.actionButtonSize
                                     radius: height / 2
-                                    color: forgetArea.containsMouse ? QsConfig.Theme.hover : "transparent"
+                                    color: forgetArea.containsMouse ? QsTheme.Theme.hover : "transparent"
                                     border.width: 1
-                                    border.color: Qt.rgba(QsConfig.Theme.text.r, QsConfig.Theme.text.g, QsConfig.Theme.text.b, 0.15)
+                                    border.color: Qt.rgba(QsTheme.Theme.text.r, QsTheme.Theme.text.g, QsTheme.Theme.text.b, 0.15)
 
                                     Text {
                                         anchors.centerIn: parent
                                         text: "󰆴"
-                                        font.family: QsConfig.Appearance.typography.iconFamily
-                                        font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
-                                        color: QsConfig.Theme.textMuted
+                                        font.family: QsTheme.Appearance.typography.iconFamily
+                                        font.pixelSize: QsTheme.Appearance.typography.bodyMedium.size
+                                        color: QsTheme.Theme.textMuted
                                     }
 
                                     MouseArea {
@@ -366,16 +366,16 @@ FloatingPanel {
                                     Layout.preferredWidth: popupWindow.primaryButtonSize
                                     Layout.preferredHeight: popupWindow.primaryButtonSize
                                     radius: height / 2
-                                    color: actionArea.containsMouse ? Qt.rgba(QsConfig.Theme.accent.r, QsConfig.Theme.accent.g, QsConfig.Theme.accent.b, 0.15) : "transparent"
+                                    color: actionArea.containsMouse ? Qt.rgba(QsTheme.Theme.accent.r, QsTheme.Theme.accent.g, QsTheme.Theme.accent.b, 0.15) : "transparent"
                                     border.width: 1
-                                    border.color: isConnected ? QsConfig.Theme.accent : Qt.rgba(QsConfig.Theme.text.r, QsConfig.Theme.text.g, QsConfig.Theme.text.b, 0.15)
+                                    border.color: isConnected ? QsTheme.Theme.accent : Qt.rgba(QsTheme.Theme.text.r, QsTheme.Theme.text.g, QsTheme.Theme.text.b, 0.15)
 
                                     Text {
                                         anchors.centerIn: parent
                                         text: deviceItem.busy ? "󰑓" : isConnected ? "󰌊" : "󰌘"
-                                        font.family: QsConfig.Appearance.typography.iconFamily
-                                        font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
-                                        color: isConnected ? QsConfig.Theme.accent : QsConfig.Theme.textMuted
+                                        font.family: QsTheme.Appearance.typography.iconFamily
+                                        font.pixelSize: QsTheme.Appearance.typography.bodyMedium.size
+                                        color: isConnected ? QsTheme.Theme.accent : QsTheme.Theme.textMuted
 
                                         RotationAnimation on rotation {
                                             running: deviceItem.busy
@@ -426,22 +426,22 @@ FloatingPanel {
                 ColumnLayout {
                     anchors.centerIn: parent
                     visible: devices.length === 0
-                    spacing: QsConfig.Appearance.spacing.s
+                    spacing: QsTheme.Appearance.spacing.s
 
                     Text {
                         Layout.alignment: Qt.AlignHCenter
                         text: "󰂲"
-                        font.family: QsConfig.Appearance.typography.iconFamily
-                        font.pixelSize: QsConfig.Appearance.typography.headlineLarge.size
-                        color: Qt.rgba(QsConfig.Theme.text.r, QsConfig.Theme.text.g, QsConfig.Theme.text.b, 0.2)
+                        font.family: QsTheme.Appearance.typography.iconFamily
+                        font.pixelSize: QsTheme.Appearance.typography.headlineLarge.size
+                        color: Qt.rgba(QsTheme.Theme.text.r, QsTheme.Theme.text.g, QsTheme.Theme.text.b, 0.2)
                     }
 
                     Text {
                         Layout.alignment: Qt.AlignHCenter
                         text: !adapter?.enabled ? "Bluetooth disabled" : (adapter?.discovering ? "Scanning..." : "No devices found")
-                        font.family: QsConfig.Appearance.typography.family
-                        font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
-                        color: QsConfig.Theme.textMuted
+                        font.family: QsTheme.Appearance.typography.family
+                        font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
+                        color: QsTheme.Theme.textMuted
                     }
                 }
             }
@@ -450,25 +450,25 @@ FloatingPanel {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: popupWindow.buttonHeight
-                radius: QsConfig.Appearance.radius.s
-                color: settingsArea.containsMouse ? QsConfig.Theme.hover : "transparent"
+                radius: QsTheme.Appearance.radius.s
+                color: settingsArea.containsMouse ? QsTheme.Theme.hover : "transparent"
 
                 RowLayout {
                     anchors.centerIn: parent
-                    spacing: QsConfig.Appearance.spacing.s
+                    spacing: QsTheme.Appearance.spacing.s
 
                     Text {
                         text: "󰒓"
-                        font.family: QsConfig.Appearance.typography.iconFamily
-                        font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
-                        color: QsConfig.Theme.textMuted
+                        font.family: QsTheme.Appearance.typography.iconFamily
+                        font.pixelSize: QsTheme.Appearance.typography.bodyMedium.size
+                        color: QsTheme.Theme.textMuted
                     }
 
                     Text {
                         text: "Bluetooth Settings"
-                        font.family: QsConfig.Appearance.typography.family
-                        font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
-                        color: QsConfig.Theme.textMuted
+                        font.family: QsTheme.Appearance.typography.family
+                        font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
+                        color: QsTheme.Theme.textMuted
                     }
                 }
 

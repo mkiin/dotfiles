@@ -3,8 +3,7 @@ import QtQuick.Layouts 6.10
 import QtQuick.Controls 6.10
 import QtQuick.Effects
 import Quickshell
-import "../../../components/effects"
-import "../../../config" as QsConfig
+import "../../../theme" as QsTheme
 
 Rectangle {
     id: root
@@ -56,23 +55,23 @@ Rectangle {
     }
     
     // Color tokens
-    readonly property color surfaceColor: QsConfig.Theme.card
-    readonly property color textColor: QsConfig.Theme.text
-    readonly property color textDim: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.7)
-    readonly property color accentColor: QsConfig.Theme.accent
+    readonly property color surfaceColor: QsTheme.Theme.card
+    readonly property color textColor: QsTheme.Theme.text
+    readonly property color textDim: QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.7)
+    readonly property color accentColor: QsTheme.Theme.accent
     
     Layout.fillWidth: true
     Layout.preferredHeight: hasPlayer ? 100 : 0
     
-    radius: QsConfig.Appearance.radius.m
+    radius: QsTheme.Appearance.radius.m
     color: surfaceColor
     clip: true
     visible: hasPlayer
     
     Behavior on Layout.preferredHeight {
         NumberAnimation {
-            duration: Material3Anim.medium2
-            easing.bezierCurve: Material3Anim.emphasizedDecelerate
+            duration: QsTheme.Appearance.anim.durations.medium2
+            easing.bezierCurve: QsTheme.Appearance.anim.curves.emphasizedDecel
         }
     }
     
@@ -100,8 +99,8 @@ Rectangle {
         
         Behavior on opacity {
             NumberAnimation {
-                duration: Material3Anim.medium4
-                easing.bezierCurve: Material3Anim.standard
+                duration: QsTheme.Appearance.anim.durations.medium4
+                easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
             }
         }
     }
@@ -109,7 +108,7 @@ Rectangle {
     // Dark overlay for readability
     Rectangle {
         anchors.fill: parent
-        color: QsConfig.Theme.withAlpha(QsConfig.Theme.background, 0.4)
+        color: QsTheme.Theme.withAlpha(QsTheme.Theme.background, 0.4)
         visible: bgImage.status === Image.Ready
     }
     
@@ -153,14 +152,14 @@ Rectangle {
     // Content
     RowLayout {
         anchors.fill: parent
-        anchors.margins: QsConfig.Appearance.margin.m
-        spacing: QsConfig.Appearance.spacing.l
+        anchors.margins: QsTheme.Appearance.margin.m
+        spacing: QsTheme.Appearance.spacing.l
         
         // Album Art
         Rectangle {
             Layout.preferredWidth: 72
             Layout.preferredHeight: 72
-            radius: QsConfig.Appearance.radius.s
+            radius: QsTheme.Appearance.radius.s
             color: Qt.rgba(1, 1, 1, 0.1)
             clip: true
             
@@ -184,8 +183,8 @@ Rectangle {
                 
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: Material3Anim.short4
-                        easing.bezierCurve: Material3Anim.standard
+                        duration: QsTheme.Appearance.anim.durations.short4
+                        easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
                     }
                 }
             }
@@ -194,9 +193,9 @@ Rectangle {
             Text {
                 anchors.centerIn: parent
                 text: "󰝚"
-                font.family: QsConfig.Appearance.typography.iconFamily
-                font.pixelSize: QsConfig.Appearance.typography.headlineLarge.size
-                color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.3)
+                font.family: QsTheme.Appearance.typography.iconFamily
+                font.pixelSize: QsTheme.Appearance.typography.headlineLarge.size
+                color: QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.3)
                 visible: albumArt.status !== Image.Ready
             }
         }
@@ -205,15 +204,15 @@ Rectangle {
         ColumnLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: QsConfig.Appearance.spacing.xs
+            spacing: QsTheme.Appearance.spacing.xs
             
             Item { Layout.fillHeight: true }
             
             Text {
                 Layout.fillWidth: true
                 text: root.trackTitle || "No Media"
-                font.family: QsConfig.Appearance.typography.family
-                font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
+                font.family: QsTheme.Appearance.typography.family
+                font.pixelSize: QsTheme.Appearance.typography.bodyLarge.size
                 font.weight: Font.Bold
                 color: root.textColor
                 elide: Text.ElideRight
@@ -231,8 +230,8 @@ Rectangle {
             Text {
                 Layout.fillWidth: true
                 text: root.trackArtist
-                font.family: QsConfig.Appearance.typography.family
-                font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
+                font.family: QsTheme.Appearance.typography.family
+                font.pixelSize: QsTheme.Appearance.typography.bodyMedium.size
                 color: root.textDim
                 elide: Text.ElideRight
                 maximumLineCount: 1
@@ -251,7 +250,7 @@ Rectangle {
         
         // Controls
         RowLayout {
-            spacing: QsConfig.Appearance.spacing.xs
+            spacing: QsTheme.Appearance.spacing.xs
             
             // Previous
             ControlButton {
@@ -273,8 +272,8 @@ Rectangle {
                 
                 Behavior on scale {
                     NumberAnimation {
-                        duration: Material3Anim.short2
-                        easing.bezierCurve: Material3Anim.standard
+                        duration: QsTheme.Appearance.anim.durations.short2
+                        easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
                     }
                 }
                 
@@ -290,9 +289,9 @@ Rectangle {
                 Text {
                     anchors.centerIn: parent
                     text: root.isPlaying ? "󰏤" : "󰐊"
-                    font.family: QsConfig.Appearance.typography.iconFamily
-                    font.pixelSize: QsConfig.Appearance.typography.headlineSmall.size
-                    color: QsConfig.Theme.background
+                    font.family: QsTheme.Appearance.typography.iconFamily
+                    font.pixelSize: QsTheme.Appearance.typography.headlineSmall.size
+                    color: QsTheme.Theme.background
                 }
                 
                 MouseArea {
@@ -331,23 +330,23 @@ Rectangle {
         
         Behavior on color {
             ColorAnimation {
-                duration: Material3Anim.short3
-                easing.bezierCurve: Material3Anim.standard
+                duration: QsTheme.Appearance.anim.durations.short3
+                easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
             }
         }
         
         Behavior on scale {
             NumberAnimation {
-                duration: Material3Anim.short2
-                easing.bezierCurve: Material3Anim.standard
+                duration: QsTheme.Appearance.anim.durations.short2
+                easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
             }
         }
         
         Text {
             anchors.centerIn: parent
             text: parent.icon
-            font.family: QsConfig.Appearance.typography.iconFamily
-            font.pixelSize: QsConfig.Appearance.typography.titleLarge.size
+            font.family: QsTheme.Appearance.typography.iconFamily
+            font.pixelSize: QsTheme.Appearance.typography.titleLarge.size
             color: root.textColor
         }
         

@@ -1,9 +1,7 @@
 import QtQuick 6.10
 import QtQuick.Layouts 6.10
 import Quickshell
-import "../../../components/effects"
-import "../../../services" as QsServices
-import "../../../config" as QsConfig
+import "../../../theme" as QsTheme
 
 Rectangle {
     id: root
@@ -16,22 +14,22 @@ Rectangle {
     readonly property bool isMuted: audio.muted
     
     // Solid color tokens
-    readonly property color surfaceColor: QsConfig.Theme.cardHigh
-    readonly property color textColor: QsConfig.Theme.text
-    readonly property color accentColor: QsConfig.Theme.accent
+    readonly property color surfaceColor: QsTheme.Theme.cardHigh
+    readonly property color textColor: QsTheme.Theme.text
+    readonly property color accentColor: QsTheme.Theme.accent
     
     Layout.fillWidth: true
     Layout.preferredHeight: 54
     
-    radius: QsConfig.Appearance.radius.l
+    radius: QsTheme.Appearance.radius.l
     color: surfaceColor
     border.width: 1
-    border.color: QsConfig.Theme.border
+    border.color: QsTheme.Theme.border
     
     Behavior on color {
         ColorAnimation {
-            duration: Material3Anim.medium2
-            easing.bezierCurve: Material3Anim.standard
+            duration: QsTheme.Appearance.anim.durations.medium2
+            easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
         }
     }
 
@@ -44,29 +42,29 @@ Rectangle {
             id: muteBtn
             Layout.preferredWidth: 52
             Layout.fillHeight: true
-            radius: QsConfig.Appearance.radius.l
+            radius: QsTheme.Appearance.radius.l
             color: muteMouse.containsMouse 
                 ? Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.1) 
                 : "transparent"
             
             Behavior on color {
                 ColorAnimation {
-                    duration: Material3Anim.short3
-                    easing.bezierCurve: Material3Anim.standard
+                    duration: QsTheme.Appearance.anim.durations.short3
+                    easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
                 }
             }
             
             Text {
                 anchors.centerIn: parent
                 text: root.isMuted ? "󰝟" : (root.currentVolume > 66 ? "󰕾" : (root.currentVolume > 33 ? "󰖀" : "󰕿"))
-                font.family: QsConfig.Appearance.typography.iconFamily
-                font.pixelSize: QsConfig.Appearance.typography.titleLarge.size
+                font.family: QsTheme.Appearance.typography.iconFamily
+                font.pixelSize: QsTheme.Appearance.typography.titleLarge.size
                 color: root.isMuted ? Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.5) : root.accentColor
                 
                 Behavior on color {
                     ColorAnimation {
-                        duration: Material3Anim.short3
-                        easing.bezierCurve: Material3Anim.standard
+                        duration: QsTheme.Appearance.anim.durations.short3
+                        easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
                     }
                 }
             }
@@ -85,7 +83,7 @@ Rectangle {
             id: slider
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.rightMargin: QsConfig.Appearance.margin.m
+            Layout.rightMargin: QsTheme.Appearance.margin.m
 
             value: root.currentVolume
             surfaceColor: root.surfaceColor
@@ -96,11 +94,11 @@ Rectangle {
 
         // Percentage Text
         Text {
-            Layout.rightMargin: QsConfig.Appearance.margin.m
+            Layout.rightMargin: QsTheme.Appearance.margin.m
             Layout.preferredWidth: 44
             text: Math.round(slider.value) + "%"
-            font.family: QsConfig.Appearance.typography.family
-            font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
+            font.family: QsTheme.Appearance.typography.family
+            font.pixelSize: QsTheme.Appearance.typography.bodyMedium.size
             font.weight: Font.DemiBold
             color: root.textColor
             horizontalAlignment: Text.AlignRight

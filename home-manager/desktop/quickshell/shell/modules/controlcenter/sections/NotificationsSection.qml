@@ -1,33 +1,33 @@
 import QtQuick 6.10
 import QtQuick.Layouts 6.10
 import QtQuick.Controls 6.10
+import "../../../theme" as QsTheme
 import "../../../services" as QsServices
 import "../../../utils" as QsUtils
-import "../../../config" as QsConfig
 
 Item {
     id: root
 
     readonly property var notifs: QsServices.Notifs
 
-    readonly property color textColor: QsConfig.Theme.text
-    readonly property color accentColor: QsConfig.Theme.accent
-    readonly property color urgentColor: QsConfig.Theme.error
-    readonly property color surfaceColor: QsConfig.Theme.background
+    readonly property color textColor: QsTheme.Theme.text
+    readonly property color accentColor: QsTheme.Theme.accent
+    readonly property color urgentColor: QsTheme.Theme.error
+    readonly property color surfaceColor: QsTheme.Theme.background
     
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: QsConfig.Appearance.margin.l
-        spacing: QsConfig.Appearance.spacing.l
+        anchors.margins: QsTheme.Appearance.margin.l
+        spacing: QsTheme.Appearance.spacing.l
         
         // Header with title and actions
         RowLayout {
             Layout.fillWidth: true
-            spacing: QsConfig.Appearance.spacing.m
+            spacing: QsTheme.Appearance.spacing.m
             
             Text {
                 text: "Notifications"
-                font.pixelSize: QsConfig.Appearance.typography.titleLarge.size
+                font.pixelSize: QsTheme.Appearance.typography.titleLarge.size
                 font.weight: Font.Bold
                 color: root.textColor
                 Layout.fillWidth: true
@@ -43,8 +43,8 @@ Item {
                 Text {
                     anchors.centerIn: parent
                     text: notifs.dnd ? "󰂛" : "󰂚"
-                    font.family: QsConfig.Appearance.typography.iconFamily
-                    font.pixelSize: QsConfig.Appearance.typography.titleMedium.size
+                    font.family: QsTheme.Appearance.typography.iconFamily
+                    font.pixelSize: QsTheme.Appearance.typography.titleMedium.size
                     color: notifs.dnd ? "#000000" : root.textColor
                 }
                 
@@ -55,7 +55,7 @@ Item {
                 }
                 
                 Behavior on color {
-                    ColorAnimation { duration: QsConfig.Appearance.anim.durations.normal }
+                    ColorAnimation { duration: QsTheme.Appearance.anim.durations.normal }
                 }
             }
             
@@ -70,8 +70,8 @@ Item {
                 Text {
                     anchors.centerIn: parent
                     text: "󰎟"
-                    font.family: QsConfig.Appearance.typography.iconFamily
-                    font.pixelSize: QsConfig.Appearance.typography.titleMedium.size
+                    font.family: QsTheme.Appearance.typography.iconFamily
+                    font.pixelSize: QsTheme.Appearance.typography.titleMedium.size
                     color: root.textColor
                 }
                 
@@ -91,14 +91,14 @@ Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
             color: Qt.rgba(0, 0, 0, 0.2)
-            radius: QsConfig.Appearance.radius.s
+            radius: QsTheme.Appearance.radius.s
             
             ListView {
                 id: notificationsList
                 
                 anchors.fill: parent
-                anchors.margins: QsConfig.Appearance.margin.s
-                spacing: QsConfig.Appearance.spacing.s
+                anchors.margins: QsTheme.Appearance.margin.s
+                spacing: QsTheme.Appearance.spacing.s
                 clip: true
                 
                 model: notifs.recentNotifications ?? []
@@ -108,7 +108,7 @@ Item {
                     anchors.centerIn: parent
                     visible: notificationsList.count === 0
                     text: notifs.dnd ? "Do Not Disturb is enabled\n󰂛" : "No notifications\n󰂚"
-                    font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
+                    font.pixelSize: QsTheme.Appearance.typography.bodyLarge.size
                     color: Qt.rgba(root.textColor.r,
                                    root.textColor.g, 
                                    root.textColor.b, 0.5)
@@ -123,7 +123,7 @@ Item {
                     
                     width: notificationsList.width
                     height: contentColumn.height + 16
-                    radius: QsConfig.Appearance.radius.s
+                    radius: QsTheme.Appearance.radius.s
                     color: modelData.urgency === 2 ? 
                            Qt.rgba(root.urgentColor.r,
                                   root.urgentColor.g,
@@ -147,7 +147,7 @@ Item {
                         opacity: notifMouseArea.containsMouse ? 1 : 0
                         
                         Behavior on opacity {
-                            NumberAnimation { duration: QsConfig.Appearance.anim.durations.fast }
+                            NumberAnimation { duration: QsTheme.Appearance.anim.durations.fast }
                         }
                     }
                     
@@ -163,19 +163,19 @@ Item {
                         anchors.left: parent.left
                         anchors.right: parent.right
                         anchors.top: parent.top
-                        anchors.margins: QsConfig.Appearance.margin.m
-                        spacing: QsConfig.Appearance.spacing.s
+                        anchors.margins: QsTheme.Appearance.margin.m
+                        spacing: QsTheme.Appearance.spacing.s
                         
                         // Header: App icon, name, time, close button
                         RowLayout {
                             Layout.fillWidth: true
-                            spacing: QsConfig.Appearance.spacing.s
+                            spacing: QsTheme.Appearance.spacing.s
                             
                             // App Icon
                             Rectangle {
                                 width: 24
                                 height: 24
-                                radius: QsConfig.Appearance.radius.xs
+                                radius: QsTheme.Appearance.radius.xs
                                 color: Qt.rgba(1, 1, 1, 0.1)
                                 visible: modelData.appIcon.length > 0
                                 
@@ -191,7 +191,7 @@ Item {
                             // App Name
                             Text {
                                 text: modelData.appName || "Application"
-                                font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
+                                font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
                                 font.weight: Font.Medium
                                 color: root.textColor
                                 opacity: 0.7
@@ -202,7 +202,7 @@ Item {
                             // Timestamp
                             Text {
                                 text: modelData.timeString
-                                font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
+                                font.pixelSize: QsTheme.Appearance.typography.labelSmall.size
                                 color: root.textColor
                                 opacity: 0.5
                             }
@@ -218,8 +218,8 @@ Item {
                                 Text {
                                     anchors.centerIn: parent
                                     text: "󰅖"
-                                    font.family: QsConfig.Appearance.typography.iconFamily
-                                    font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
+                                    font.family: QsTheme.Appearance.typography.iconFamily
+                                    font.pixelSize: QsTheme.Appearance.typography.bodyMedium.size
                                     color: root.textColor
                                 }
                                 
@@ -235,7 +235,7 @@ Item {
                                 }
                                 
                                 Behavior on color {
-                                    ColorAnimation { duration: QsConfig.Appearance.anim.durations.fast }
+                                    ColorAnimation { duration: QsTheme.Appearance.anim.durations.fast }
                                 }
                             }
                         }
@@ -244,7 +244,7 @@ Item {
                         Text {
                             Layout.fillWidth: true
                             text: modelData.summary
-                            font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
+                            font.pixelSize: QsTheme.Appearance.typography.bodyMedium.size
                             font.weight: Font.DemiBold
                             color: root.textColor
                             wrapMode: Text.Wrap
@@ -256,7 +256,7 @@ Item {
                         Text {
                             Layout.fillWidth: true
                             text: modelData.body
-                            font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
+                            font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
                             color: root.textColor
                             opacity: 0.8
                             wrapMode: Text.Wrap
@@ -269,7 +269,7 @@ Item {
                         Rectangle {
                             Layout.fillWidth: true
                             Layout.preferredHeight: 120
-                            radius: QsConfig.Appearance.radius.s
+                            radius: QsTheme.Appearance.radius.s
                             clip: true
                             visible: modelData.image.length > 0
                             color: "transparent"
@@ -284,7 +284,7 @@ Item {
                         // Actions
                         Flow {
                             Layout.fillWidth: true
-                            spacing: QsConfig.Appearance.spacing.s
+                            spacing: QsTheme.Appearance.spacing.s
                             visible: modelData.actions && modelData.actions.length > 0
                             
                             Repeater {
@@ -293,7 +293,7 @@ Item {
                                 Rectangle {
                                     width: actionText.width + 16
                                     height: 28
-                                    radius: QsConfig.Appearance.radius.xs
+                                    radius: QsTheme.Appearance.radius.xs
                                     color: actionMouseArea.containsMouse ?
                                            root.accentColor :
                                            Qt.rgba(1, 1, 1, 0.1)
@@ -302,7 +302,7 @@ Item {
                                         id: actionText
                                         anchors.centerIn: parent
                                         text: modelData.text || modelData.identifier
-                                        font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
+                                        font.pixelSize: QsTheme.Appearance.typography.labelSmall.size
                                         font.weight: Font.Medium
                                         color: actionMouseArea.containsMouse ?
                                                "#000000" : root.textColor
@@ -320,7 +320,7 @@ Item {
                                     }
                                     
                                     Behavior on color {
-                                        ColorAnimation { duration: QsConfig.Appearance.anim.durations.fast }
+                                        ColorAnimation { duration: QsTheme.Appearance.anim.durations.fast }
                                     }
                                 }
                             }
@@ -334,7 +334,7 @@ Item {
         Text {
             Layout.fillWidth: true
             text: notifs.dnd ? "󰂛 Do Not Disturb enabled - notifications are silenced" : ""
-            font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
+            font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
             color: root.accentColor
             horizontalAlignment: Text.AlignHCenter
             visible: notifs.dnd

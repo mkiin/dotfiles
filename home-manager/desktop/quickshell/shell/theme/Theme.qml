@@ -2,14 +2,13 @@ pragma Singleton
 
 import Quickshell
 import QtQuick
-import "../services" as QsServices
 
 // 意味色トークンの単一定義層。プリミティブ(Colours=matugen)から派生し、全コンポーネントはここだけを参照する。
 // 面(panel/card/inset)やアクセントの割当を変えたいときはこのファイルだけ直せば全UIに伝播する。
 Singleton {
     id: root
 
-    readonly property var p: QsServices.Colours
+    readonly property var p: Colours
 
     // ── Surfaces (elevation 低→高) ──
     readonly property color background: p.background

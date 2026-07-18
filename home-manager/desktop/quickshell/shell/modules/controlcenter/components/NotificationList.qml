@@ -2,8 +2,7 @@ import QtQuick 6.10
 import QtQuick.Layouts 6.10
 import QtQuick.Controls 6.10
 import Quickshell
-import "../../../components/effects"
-import "../../../config" as QsConfig
+import "../../../theme" as QsTheme
 
 Rectangle {
     id: root
@@ -12,33 +11,33 @@ Rectangle {
     readonly property int emptyIconSize: 48
 
     // Solid color tokens (Theme)
-    readonly property color surfaceColor: QsConfig.Theme.inset
-    readonly property color surfaceVariant: QsConfig.Theme.card
-    readonly property color textColor: QsConfig.Theme.text
-    readonly property color textVariant: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.72)
-    readonly property color accentColor: QsConfig.Theme.accent
-    readonly property color borderColor: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.08)
+    readonly property color surfaceColor: QsTheme.Theme.inset
+    readonly property color surfaceVariant: QsTheme.Theme.card
+    readonly property color textColor: QsTheme.Theme.text
+    readonly property color textVariant: QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.72)
+    readonly property color accentColor: QsTheme.Theme.accent
+    readonly property color borderColor: QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.08)
     
     Layout.fillWidth: true
     implicitHeight: Math.max(contentCol.implicitHeight + 32, 160)
 
-    radius: QsConfig.Appearance.radius.l
+    radius: QsTheme.Appearance.radius.l
     color: surfaceColor
     border.color: borderColor
     border.width: 1
     
     Behavior on color {
         ColorAnimation {
-            duration: Material3Anim.medium2
-            easing.bezierCurve: Material3Anim.standard
+            duration: QsTheme.Appearance.anim.durations.medium2
+            easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
         }
     }
     
     ColumnLayout {
         id: contentCol
         anchors.fill: parent
-        anchors.margins: QsConfig.Appearance.margin.m
-        spacing: QsConfig.Appearance.spacing.m
+        anchors.margins: QsTheme.Appearance.margin.m
+        spacing: QsTheme.Appearance.spacing.m
         
         // Header
         RowLayout {
@@ -46,8 +45,8 @@ Rectangle {
             
             Text {
                 text: "Notifications"
-                font.family: QsConfig.Appearance.typography.family
-                font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
+                font.family: QsTheme.Appearance.typography.family
+                font.pixelSize: QsTheme.Appearance.typography.bodyLarge.size
                 font.weight: Font.Bold
                 color: root.textColor
             }
@@ -67,8 +66,8 @@ Rectangle {
                 
                 Behavior on color {
                     ColorAnimation {
-                        duration: Material3Anim.short3
-                        easing.bezierCurve: Material3Anim.standard
+                        duration: QsTheme.Appearance.anim.durations.short3
+                        easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
                     }
                 }
                 
@@ -76,8 +75,8 @@ Rectangle {
                     id: clearAllText
                     anchors.centerIn: parent
                     text: "Clear All"
-                    font.family: QsConfig.Appearance.typography.family
-                    font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
+                    font.family: QsTheme.Appearance.typography.family
+                    font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
                     font.weight: Font.Medium
                     color: root.textVariant
                 }
@@ -100,7 +99,7 @@ Rectangle {
             Layout.preferredHeight: (notifs.recentNotifications?.length ?? 0) > 0 ? notifListView.contentHeight : 120
             Layout.minimumHeight: 0
             clip: true
-            spacing: QsConfig.Appearance.spacing.s
+            spacing: QsTheme.Appearance.spacing.s
 
             ScrollBar.vertical: ScrollBar {
                 policy: ScrollBar.AsNeeded
@@ -115,15 +114,15 @@ Rectangle {
                     property: "opacity"
                     from: 0
                     to: 1
-                    duration: Material3Anim.medium2
-                    easing.bezierCurve: Material3Anim.emphasizedDecelerate
+                    duration: QsTheme.Appearance.anim.durations.medium2
+                    easing.bezierCurve: QsTheme.Appearance.anim.curves.emphasizedDecel
                 }
                 NumberAnimation {
                     property: "scale"
                     from: 0.95
                     to: 1.0
-                    duration: Material3Anim.medium2
-                    easing.bezierCurve: Material3Anim.emphasizedDecelerate
+                    duration: QsTheme.Appearance.anim.durations.medium2
+                    easing.bezierCurve: QsTheme.Appearance.anim.curves.emphasizedDecel
                 }
             }
             
@@ -131,8 +130,8 @@ Rectangle {
                 NumberAnimation {
                     property: "opacity"
                     to: 0
-                    duration: Material3Anim.short4
-                    easing.bezierCurve: Material3Anim.emphasizedAccelerate
+                    duration: QsTheme.Appearance.anim.durations.short4
+                    easing.bezierCurve: QsTheme.Appearance.anim.curves.emphasizedAccel
                 }
             }
             
@@ -143,15 +142,15 @@ Rectangle {
                 
                 width: notifListView.width
                 height: notifContent.implicitHeight + 20
-                radius: QsConfig.Appearance.radius.m
+                radius: QsTheme.Appearance.radius.m
                 color: notifMouse.containsMouse 
                     ? Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.08)
                     : root.surfaceVariant
                 
                 Behavior on color {
                     ColorAnimation {
-                        duration: Material3Anim.short3
-                        easing.bezierCurve: Material3Anim.standard
+                        duration: QsTheme.Appearance.anim.durations.short3
+                        easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
                     }
                 }
                 
@@ -159,8 +158,8 @@ Rectangle {
                 scale: notifMouse.pressed ? 0.98 : 1.0
                 Behavior on scale {
                     NumberAnimation {
-                        duration: Material3Anim.short2
-                        easing.bezierCurve: Material3Anim.standard
+                        duration: QsTheme.Appearance.anim.durations.short2
+                        easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
                     }
                 }
                 
@@ -179,15 +178,15 @@ Rectangle {
                 RowLayout {
                     id: notifContent
                     anchors.fill: parent
-                    anchors.margins: QsConfig.Appearance.margin.s
-                    spacing: QsConfig.Appearance.spacing.m
+                    anchors.margins: QsTheme.Appearance.margin.s
+                    spacing: QsTheme.Appearance.spacing.m
                     
                     // Icon
                     Rectangle {
                         Layout.preferredWidth: 42
                         Layout.preferredHeight: 42
                         Layout.alignment: Qt.AlignTop
-                        radius: QsConfig.Appearance.radius.s
+                        radius: QsTheme.Appearance.radius.s
                         color: Qt.rgba(root.accentColor.r, root.accentColor.g, root.accentColor.b, 0.15)
                         
                         Image {
@@ -205,8 +204,8 @@ Rectangle {
                         Text {
                             anchors.centerIn: parent
                             text: "󰂚"
-                            font.family: QsConfig.Appearance.typography.iconFamily
-                            font.pixelSize: QsConfig.Appearance.typography.titleLarge.size
+                            font.family: QsTheme.Appearance.typography.iconFamily
+                            font.pixelSize: QsTheme.Appearance.typography.titleLarge.size
                             color: root.accentColor
                             visible: !parent.children[0].visible
                         }
@@ -215,12 +214,12 @@ Rectangle {
                     // Text Content
                     ColumnLayout {
                         Layout.fillWidth: true
-                        spacing: QsConfig.Appearance.spacing.xs
+                        spacing: QsTheme.Appearance.spacing.xs
                         
                         Text {
                             text: notifDelegate.modelData.summary ?? "Notification"
-                            font.family: QsConfig.Appearance.typography.family
-                            font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
+                            font.family: QsTheme.Appearance.typography.family
+                            font.pixelSize: QsTheme.Appearance.typography.bodyMedium.size
                             font.weight: Font.DemiBold
                             color: root.textColor
                             elide: Text.ElideRight
@@ -229,8 +228,8 @@ Rectangle {
                         
                         Text {
                             text: notifDelegate.modelData.body ?? ""
-                            font.family: QsConfig.Appearance.typography.family
-                            font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
+                            font.family: QsTheme.Appearance.typography.family
+                            font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
                             color: root.textVariant
                             elide: Text.ElideRight
                             maximumLineCount: 2
@@ -241,8 +240,8 @@ Rectangle {
                         
                         Text {
                             text: notifDelegate.modelData.appName ?? ""
-                            font.family: QsConfig.Appearance.typography.family
-                            font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
+                            font.family: QsTheme.Appearance.typography.family
+                            font.pixelSize: QsTheme.Appearance.typography.labelSmall.size
                             color: Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.5)
                             Layout.fillWidth: true
                             visible: text !== ""
@@ -262,24 +261,24 @@ Rectangle {
                         
                         Behavior on color {
                             ColorAnimation {
-                                duration: Material3Anim.short2
-                                easing.bezierCurve: Material3Anim.standard
+                                duration: QsTheme.Appearance.anim.durations.short2
+                                easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
                             }
                         }
                         
                         Text {
                             anchors.centerIn: parent
                             text: "󰅖"
-                            font.family: QsConfig.Appearance.typography.iconFamily
-                            font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
+                            font.family: QsTheme.Appearance.typography.iconFamily
+                            font.pixelSize: QsTheme.Appearance.typography.bodyLarge.size
                             color: closeMouse.containsMouse
                                 ? root.textColor 
                                 : root.textVariant
                             
                             Behavior on color {
                                 ColorAnimation {
-                                    duration: Material3Anim.short2
-                                    easing.bezierCurve: Material3Anim.standard
+                                    duration: QsTheme.Appearance.anim.durations.short2
+                                    easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
                                 }
                             }
                         }
@@ -298,21 +297,21 @@ Rectangle {
             // Empty State
             ColumnLayout {
                 anchors.centerIn: parent
-                spacing: QsConfig.Appearance.spacing.s
+                spacing: QsTheme.Appearance.spacing.s
                 visible: (notifs.recentNotifications?.length ?? 0) === 0
                 opacity: visible ? 1 : 0
                 
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: Material3Anim.medium2
-                        easing.bezierCurve: Material3Anim.standard
+                        duration: QsTheme.Appearance.anim.durations.medium2
+                        easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
                     }
                 }
                 
                 Text {
                     Layout.alignment: Qt.AlignHCenter
                     text: "󰂚"
-                    font.family: QsConfig.Appearance.typography.iconFamily
+                    font.family: QsTheme.Appearance.typography.iconFamily
                     font.pixelSize: root.emptyIconSize
                     color: Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.2)
                 }
@@ -320,8 +319,8 @@ Rectangle {
                 Text {
                     Layout.alignment: Qt.AlignHCenter
                     text: "No Notifications"
-                    font.family: QsConfig.Appearance.typography.family
-                    font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
+                    font.family: QsTheme.Appearance.typography.family
+                    font.pixelSize: QsTheme.Appearance.typography.bodyMedium.size
                     font.weight: Font.Medium
                     color: Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.4)
                 }

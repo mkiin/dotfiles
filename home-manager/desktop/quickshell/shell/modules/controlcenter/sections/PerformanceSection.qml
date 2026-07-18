@@ -1,7 +1,7 @@
 import QtQuick 6.10
 import QtQuick.Layouts 6.10
+import "../../../theme" as QsTheme
 import "../../../services" as QsServices
-import "../../../config" as QsConfig
 
 Item {
     readonly property var sysUsage: QsServices.SystemUsage
@@ -10,43 +10,43 @@ Item {
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: QsConfig.Appearance.margin.l
-        spacing: QsConfig.Appearance.spacing.xl
+        anchors.margins: QsTheme.Appearance.margin.l
+        spacing: QsTheme.Appearance.spacing.xl
         
         Text {
             text: "System Performance"
-            font.family: QsConfig.Appearance.typography.family
-            font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
+            font.family: QsTheme.Appearance.typography.family
+            font.pixelSize: QsTheme.Appearance.typography.bodyLarge.size
             font.weight: Font.Bold
-            color: QsConfig.Theme.text
+            color: QsTheme.Theme.text
         }
         
         GridLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
             columns: 3
-            rowSpacing: QsConfig.Appearance.spacing.m
-            columnSpacing: QsConfig.Appearance.spacing.m
+            rowSpacing: QsTheme.Appearance.spacing.m
+            columnSpacing: QsTheme.Appearance.spacing.m
             
             // CPU Usage
             Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.minimumHeight: 100
-                radius: QsConfig.Appearance.radius.s
-                color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
+                radius: QsTheme.Appearance.radius.s
+                color: QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.05)
                 
                 ColumnLayout {
                     anchors.fill: parent
-                    anchors.margins: QsConfig.Appearance.margin.m
-                    spacing: QsConfig.Appearance.spacing.s
+                    anchors.margins: QsTheme.Appearance.margin.m
+                    spacing: QsTheme.Appearance.spacing.s
                     
                     Text {
                         text: "CPU"
-                        font.family: QsConfig.Appearance.typography.family
-                        font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
+                        font.family: QsTheme.Appearance.typography.family
+                        font.pixelSize: QsTheme.Appearance.typography.labelSmall.size
                         font.weight: Font.DemiBold
-                        color: QsConfig.Theme.text
+                        color: QsTheme.Theme.text
                     }
                     
                     Item {
@@ -80,7 +80,7 @@ Item {
                                 // Background circle
                                 ctx.beginPath()
                                 ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI)
-                                ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.1)
+                                ctx.fillStyle = QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.1)
                                 ctx.fill()
                                 
                                 // Usage arc
@@ -92,18 +92,18 @@ Item {
                                 
                                 // Color based on usage
                                 if (animatedPercentage < 50) {
-                                    ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.tertiary, 0.8)
+                                    ctx.fillStyle = QsTheme.Theme.withAlpha(QsTheme.Theme.tertiary, 0.8)
                                 } else if (animatedPercentage < 80) {
-                                    ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.secondary, 0.8)
+                                    ctx.fillStyle = QsTheme.Theme.withAlpha(QsTheme.Theme.secondary, 0.8)
                                 } else {
-                                    ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.error, 0.8)
+                                    ctx.fillStyle = QsTheme.Theme.withAlpha(QsTheme.Theme.error, 0.8)
                                 }
                                 ctx.fill()
                                 
                                 // Inner circle (donut)
                                 ctx.beginPath()
                                 ctx.arc(centerX, centerY, radius * 0.6, 0, 2 * Math.PI)
-                                ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
+                                ctx.fillStyle = QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.05)
                                 ctx.fill()
                             }
                             
@@ -113,10 +113,10 @@ Item {
                         Text {
                             anchors.centerIn: cpuChart
                             text: Math.round(sysUsage.cpuPerc * 100) + "%"
-                            font.family: QsConfig.Appearance.typography.family
-                            font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
+                            font.family: QsTheme.Appearance.typography.family
+                            font.pixelSize: QsTheme.Appearance.typography.bodyLarge.size
                             font.weight: Font.Bold
-                            color: QsConfig.Theme.text
+                            color: QsTheme.Theme.text
                         }
                     }
                 }
@@ -127,20 +127,20 @@ Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.minimumHeight: 100
-                radius: QsConfig.Appearance.radius.s
-                color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
+                radius: QsTheme.Appearance.radius.s
+                color: QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.05)
                 
                 ColumnLayout {
                     anchors.fill: parent
-                    anchors.margins: QsConfig.Appearance.margin.m
-                    spacing: QsConfig.Appearance.spacing.s
+                    anchors.margins: QsTheme.Appearance.margin.m
+                    spacing: QsTheme.Appearance.spacing.s
                     
                     Text {
                         text: "Memory"
-                        font.family: QsConfig.Appearance.typography.family
-                        font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
+                        font.family: QsTheme.Appearance.typography.family
+                        font.pixelSize: QsTheme.Appearance.typography.labelSmall.size
                         font.weight: Font.DemiBold
-                        color: QsConfig.Theme.text
+                        color: QsTheme.Theme.text
                     }
                     
                     Item {
@@ -173,7 +173,7 @@ Item {
                                 
                                 ctx.beginPath()
                                 ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI)
-                                ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.1)
+                                ctx.fillStyle = QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.1)
                                 ctx.fill()
                                 
                                 var angle = (animatedPercentage / 100) * 2 * Math.PI
@@ -183,17 +183,17 @@ Item {
                                 ctx.closePath()
                                 
                                 if (animatedPercentage < 50) {
-                                    ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.tertiary, 0.8)
+                                    ctx.fillStyle = QsTheme.Theme.withAlpha(QsTheme.Theme.tertiary, 0.8)
                                 } else if (animatedPercentage < 80) {
-                                    ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.secondary, 0.8)
+                                    ctx.fillStyle = QsTheme.Theme.withAlpha(QsTheme.Theme.secondary, 0.8)
                                 } else {
-                                    ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.error, 0.8)
+                                    ctx.fillStyle = QsTheme.Theme.withAlpha(QsTheme.Theme.error, 0.8)
                                 }
                                 ctx.fill()
                                 
                                 ctx.beginPath()
                                 ctx.arc(centerX, centerY, radius * 0.6, 0, 2 * Math.PI)
-                                ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
+                                ctx.fillStyle = QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.05)
                                 ctx.fill()
                             }
                             
@@ -203,10 +203,10 @@ Item {
                         Text {
                             anchors.centerIn: memChart
                             text: Math.round(sysUsage.memPerc * 100) + "%"
-                            font.family: QsConfig.Appearance.typography.family
-                            font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
+                            font.family: QsTheme.Appearance.typography.family
+                            font.pixelSize: QsTheme.Appearance.typography.bodyLarge.size
                             font.weight: Font.Bold
-                            color: QsConfig.Theme.text
+                            color: QsTheme.Theme.text
                         }
                     }
                 }
@@ -217,20 +217,20 @@ Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.minimumHeight: 100
-                radius: QsConfig.Appearance.radius.s
-                color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
+                radius: QsTheme.Appearance.radius.s
+                color: QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.05)
                 
                 ColumnLayout {
                     anchors.fill: parent
-                    anchors.margins: QsConfig.Appearance.margin.m
-                    spacing: QsConfig.Appearance.spacing.s
+                    anchors.margins: QsTheme.Appearance.margin.m
+                    spacing: QsTheme.Appearance.spacing.s
                     
                     Text {
                         text: "Disk"
-                        font.family: QsConfig.Appearance.typography.family
-                        font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
+                        font.family: QsTheme.Appearance.typography.family
+                        font.pixelSize: QsTheme.Appearance.typography.labelSmall.size
                         font.weight: Font.DemiBold
-                        color: QsConfig.Theme.text
+                        color: QsTheme.Theme.text
                     }
                     
                     Item {
@@ -263,7 +263,7 @@ Item {
                                 
                                 ctx.beginPath()
                                 ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI)
-                                ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.1)
+                                ctx.fillStyle = QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.1)
                                 ctx.fill()
                                 
                                 var angle = (animatedPercentage / 100) * 2 * Math.PI
@@ -273,17 +273,17 @@ Item {
                                 ctx.closePath()
                                 
                                 if (animatedPercentage < 50) {
-                                    ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.tertiary, 0.8)
+                                    ctx.fillStyle = QsTheme.Theme.withAlpha(QsTheme.Theme.tertiary, 0.8)
                                 } else if (animatedPercentage < 80) {
-                                    ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.secondary, 0.8)
+                                    ctx.fillStyle = QsTheme.Theme.withAlpha(QsTheme.Theme.secondary, 0.8)
                                 } else {
-                                    ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.error, 0.8)
+                                    ctx.fillStyle = QsTheme.Theme.withAlpha(QsTheme.Theme.error, 0.8)
                                 }
                                 ctx.fill()
                                 
                                 ctx.beginPath()
                                 ctx.arc(centerX, centerY, radius * 0.6, 0, 2 * Math.PI)
-                                ctx.fillStyle = QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
+                                ctx.fillStyle = QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.05)
                                 ctx.fill()
                             }
                             
@@ -293,10 +293,10 @@ Item {
                         Text {
                             anchors.centerIn: diskChart
                             text: Math.round(sysUsage.diskPerc * 100) + "%"
-                            font.family: QsConfig.Appearance.typography.family
-                            font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
+                            font.family: QsTheme.Appearance.typography.family
+                            font.pixelSize: QsTheme.Appearance.typography.bodyLarge.size
                             font.weight: Font.Bold
-                            color: QsConfig.Theme.text
+                            color: QsTheme.Theme.text
                         }
                     }
                 }
@@ -307,58 +307,58 @@ Item {
                 Layout.fillWidth: true
                 Layout.columnSpan: 3
                 Layout.preferredHeight: 60
-                radius: QsConfig.Appearance.radius.s
-                color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.05)
+                radius: QsTheme.Appearance.radius.s
+                color: QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.05)
                 
                 RowLayout {
                     anchors.centerIn: parent
-                    spacing: QsConfig.Appearance.spacing.l
+                    spacing: QsTheme.Appearance.spacing.l
                     
                     RowLayout {
-                        spacing: QsConfig.Appearance.spacing.s
+                        spacing: QsTheme.Appearance.spacing.s
                         Rectangle {
                             width: 10
                             height: 10
                             radius: legendSwatchRadius
-                            color: QsConfig.Theme.tertiary
+                            color: QsTheme.Theme.tertiary
                         }
                         Text {
                             text: "Good (< 50%)"
-                            font.family: QsConfig.Appearance.typography.family
-                            font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
-                            color: QsConfig.Theme.text
+                            font.family: QsTheme.Appearance.typography.family
+                            font.pixelSize: QsTheme.Appearance.typography.labelSmall.size
+                            color: QsTheme.Theme.text
                         }
                     }
                     
                     RowLayout {
-                        spacing: QsConfig.Appearance.spacing.s
+                        spacing: QsTheme.Appearance.spacing.s
                         Rectangle {
                             width: 10
                             height: 10
                             radius: legendSwatchRadius
-                            color: QsConfig.Theme.secondary
+                            color: QsTheme.Theme.secondary
                         }
                         Text {
                             text: "Moderate (50-80%)"
-                            font.family: QsConfig.Appearance.typography.family
-                            font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
-                            color: QsConfig.Theme.text
+                            font.family: QsTheme.Appearance.typography.family
+                            font.pixelSize: QsTheme.Appearance.typography.labelSmall.size
+                            color: QsTheme.Theme.text
                         }
                     }
                     
                     RowLayout {
-                        spacing: QsConfig.Appearance.spacing.s
+                        spacing: QsTheme.Appearance.spacing.s
                         Rectangle {
                             width: 10
                             height: 10
                             radius: legendSwatchRadius
-                            color: QsConfig.Theme.error
+                            color: QsTheme.Theme.error
                         }
                         Text {
                             text: "High (> 80%)"
-                            font.family: QsConfig.Appearance.typography.family
-                            font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
-                            color: QsConfig.Theme.text
+                            font.family: QsTheme.Appearance.typography.family
+                            font.pixelSize: QsTheme.Appearance.typography.labelSmall.size
+                            color: QsTheme.Theme.text
                         }
                     }
                 }

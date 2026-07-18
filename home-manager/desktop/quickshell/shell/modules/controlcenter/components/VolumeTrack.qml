@@ -1,7 +1,6 @@
 import QtQuick 6.10
 import QtQuick.Controls 6.10
-import "../../../components/effects"
-import "../../../config" as QsConfig
+import "../../../theme" as QsTheme
 
 Slider {
     id: control
@@ -33,18 +32,18 @@ Slider {
         width: control.availableWidth
         height: implicitHeight
         radius: height / 2
-        color: QsConfig.Theme.withAlpha(QsConfig.Theme.text, 0.08)
+        color: QsTheme.Theme.withAlpha(QsTheme.Theme.text, 0.08)
 
         Rectangle {
             width: control.position * parent.width
             height: parent.height
             radius: height / 2
-            color: QsConfig.Theme.accent
+            color: QsTheme.Theme.accent
 
             Behavior on width {
                 NumberAnimation {
-                    duration: Material3Anim.short2
-                    easing.bezierCurve: Material3Anim.standard
+                    duration: QsTheme.Appearance.anim.durations.short2
+                    easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
                 }
             }
         }
@@ -55,7 +54,7 @@ Slider {
             radius: height / 2
             x: Math.max(0, Math.min(parent.width - width, control.position * parent.width - width / 2))
             y: (parent.height - height) / 2
-            color: QsConfig.Theme.accent
+            color: QsTheme.Theme.accent
             border.width: 2
             border.color: control.surfaceColor
         }

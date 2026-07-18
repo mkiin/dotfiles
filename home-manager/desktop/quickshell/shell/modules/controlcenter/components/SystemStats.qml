@@ -1,8 +1,7 @@
 import QtQuick 6.10
 import QtQuick.Layouts 6.10
 import Quickshell
-import "../../../components/effects"
-import "../../../config" as QsConfig
+import "../../../theme" as QsTheme
 
 Rectangle {
     id: root
@@ -11,29 +10,29 @@ Rectangle {
     readonly property int rowSpacing: 0
 
     // Color tokens
-    readonly property color surfaceColor: QsConfig.Theme.card
-    readonly property color textColor: QsConfig.Theme.text
-    readonly property color textDim: QsConfig.Theme.textDim
+    readonly property color surfaceColor: QsTheme.Theme.card
+    readonly property color textColor: QsTheme.Theme.text
+    readonly property color textDim: QsTheme.Theme.textDim
     
     Layout.fillWidth: true
     Layout.preferredHeight: 86
     
-    radius: QsConfig.Appearance.radius.l
+    radius: QsTheme.Appearance.radius.l
     color: surfaceColor
     
     Behavior on color {
         ColorAnimation {
-            duration: Material3Anim.medium2
-            easing.bezierCurve: Material3Anim.standard
+            duration: QsTheme.Appearance.anim.durations.medium2
+            easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
         }
     }
     
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: QsConfig.Appearance.margin.m
-        anchors.rightMargin: QsConfig.Appearance.margin.m
-        anchors.topMargin: QsConfig.Appearance.margin.s
-        anchors.bottomMargin: QsConfig.Appearance.margin.s
+        anchors.leftMargin: QsTheme.Appearance.margin.m
+        anchors.rightMargin: QsTheme.Appearance.margin.m
+        anchors.topMargin: QsTheme.Appearance.margin.s
+        anchors.bottomMargin: QsTheme.Appearance.margin.s
         spacing: root.rowSpacing
         
         Item { Layout.fillWidth: true }
@@ -42,7 +41,7 @@ Rectangle {
             icon: "󰘚"
             label: "CPU"
             value: (root.systemUsage.cpuPerc ?? 0) * 100
-            accentColor: QsConfig.Theme.accent
+            accentColor: QsTheme.Theme.accent
         }
         
         Item { Layout.fillWidth: true }
@@ -60,7 +59,7 @@ Rectangle {
             icon: "󰍛"
             label: "RAM"
             value: (root.systemUsage.memPerc ?? 0) * 100
-            accentColor: QsConfig.Theme.secondary
+            accentColor: QsTheme.Theme.secondary
         }
         
         Item { Layout.fillWidth: true }
@@ -77,7 +76,7 @@ Rectangle {
             icon: "󰋊"
             label: "Disk"
             value: (root.systemUsage.diskPerc ?? 0) * 100
-            accentColor: QsConfig.Theme.info
+            accentColor: QsTheme.Theme.info
         }
         
         Item { Layout.fillWidth: true }
@@ -100,7 +99,7 @@ Rectangle {
             icon: "󰢮"
             label: "GPU"
             value: root.systemUsage.gpuUsage ?? 0
-            accentColor: QsConfig.Theme.tertiary
+            accentColor: QsTheme.Theme.tertiary
         }
         
         Item { 
@@ -115,24 +114,24 @@ Rectangle {
         property real value
         property color accentColor
 
-        spacing: QsConfig.Appearance.spacing.xs
+        spacing: QsTheme.Appearance.spacing.xs
         
         // Icon + Value row
         RowLayout {
             Layout.alignment: Qt.AlignHCenter
-            spacing: QsConfig.Appearance.spacing.s
+            spacing: QsTheme.Appearance.spacing.s
             
             Text {
                 text: icon
-                font.family: QsConfig.Appearance.typography.iconFamily
-                font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
+                font.family: QsTheme.Appearance.typography.iconFamily
+                font.pixelSize: QsTheme.Appearance.typography.bodyLarge.size
                 color: accentColor
             }
             
             Text {
                 text: Math.round(value) + "%"
-                font.family: QsConfig.Appearance.typography.family
-                font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
+                font.family: QsTheme.Appearance.typography.family
+                font.pixelSize: QsTheme.Appearance.typography.bodyLarge.size
                 font.weight: Font.Bold
                 color: root.textColor
                 
@@ -158,8 +157,8 @@ Rectangle {
                 
                 Behavior on width {
                     NumberAnimation {
-                        duration: Material3Anim.medium2
-                        easing.bezierCurve: Material3Anim.emphasizedDecelerate
+                        duration: QsTheme.Appearance.anim.durations.medium2
+                        easing.bezierCurve: QsTheme.Appearance.anim.curves.emphasizedDecel
                     }
                 }
             }
@@ -169,8 +168,8 @@ Rectangle {
         Text {
             Layout.alignment: Qt.AlignHCenter
             text: label
-            font.family: QsConfig.Appearance.typography.family
-            font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
+            font.family: QsTheme.Appearance.typography.family
+            font.pixelSize: QsTheme.Appearance.typography.labelSmall.size
             font.weight: Font.Medium
             color: root.textDim
         }

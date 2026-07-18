@@ -6,6 +6,7 @@ import Quickshell
 import Quickshell.Services.Notifications
 import Quickshell.Io
 import QtQuick
+import "theme" as QsTheme
 import "services" as QsServices
 import "config" as QsConfig
 import "modules/controlcenter"
@@ -97,7 +98,7 @@ ShellRoot {
     // 壁紙変更後に matugen post_hook から呼ぶカラーリロード
     IpcHandler {
         target: "theme"
-        function reload(): void { QsServices.Colours.reload() }
+        function reload(): void { QsTheme.Colours.reload() }
     }
 
     // アイドルインヒビター(Caffeine)を waybar と共有。状態の真実はこの IdleInhibitor サービス。

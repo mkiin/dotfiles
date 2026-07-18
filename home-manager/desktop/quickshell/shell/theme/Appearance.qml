@@ -43,29 +43,32 @@ Singleton {
         property string family: Config.appearance.fontFamily
         property string iconFamily: Config.appearance.materialIconFont
 
-        readonly property var displayLarge: QtObject { property int size: 57; property int weight: Font.Normal }
-        readonly property var displayMedium: QtObject { property int size: 45; property int weight: Font.Normal }
         readonly property var displaySmall: QtObject { property int size: 36; property int weight: Font.Normal }
         readonly property var headlineLarge: QtObject { property int size: 32; property int weight: Font.Normal }
         readonly property var headlineMedium: QtObject { property int size: 28; property int weight: Font.Normal }
         readonly property var headlineSmall: QtObject { property int size: 24; property int weight: Font.Normal }
         readonly property var titleLarge: QtObject { property int size: 22; property int weight: Font.Normal }
         readonly property var titleMedium: QtObject { property int size: 16; property int weight: Font.Medium }
-        readonly property var titleSmall: QtObject { property int size: 14; property int weight: Font.Medium }
-        readonly property var labelLarge: QtObject { property int size: 14; property int weight: Font.Medium }
         readonly property var labelMedium: QtObject { property int size: 12; property int weight: Font.Medium }
         readonly property var labelSmall: QtObject { property int size: 11; property int weight: Font.Medium }
         readonly property var bodyLarge: QtObject { property int size: 16; property int weight: Font.Normal }
         readonly property var bodyMedium: QtObject { property int size: 14; property int weight: Font.Normal }
-        readonly property var bodySmall: QtObject { property int size: 12; property int weight: Font.Normal }
     }
 
+    // M3 の duration トークンと、本設定で先に使っていた 4 種が併存する。
+    // 新規コードは M3 側（short2/short3/short4/medium2/medium4）を使う。
     readonly property var anim: QtObject {
         readonly property var durations: QtObject {
             property int fast: 120
             property int normal: 180
             property int medium: 260
             property int slow: 340
+
+            property int short2: 100
+            property int short3: 150
+            property int short4: 200
+            property int medium2: 300
+            property int medium4: 400
         }
         readonly property var curves: QtObject {
             property var standard: [0.2, 0.0, 0, 1.0]
@@ -73,7 +76,9 @@ Singleton {
             property var standardAccel: [0.3, 0.0, 1, 1.0]
             property var emphasizedDecel: [0.05, 0.7, 0.1, 1.0]
             property var emphasizedAccel: [0.3, 0.0, 0.8, 0.15]
+            property var springGentle: [0.22, 1.0, 0.36, 1.0]
         }
+        readonly property real hoverScale: 1.02
     }
 
     // バー直下に出るフローティングパネル（CC / popouts）共通の画面配置

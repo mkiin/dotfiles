@@ -3,8 +3,8 @@ import QtQuick.Layouts 6.10
 import QtQuick.Effects
 import Quickshell.Io
 import Quickshell.Services.Pipewire
+import "../../theme" as QsTheme
 import "../../components/containers"
-import "../../config" as QsConfig
 
 // Audio device selector — 殻(配置/アニメ/クローズ)は FloatingPanel、ここは中身だけ
 FloatingPanel {
@@ -53,43 +53,43 @@ FloatingPanel {
 
         Layout.fillWidth: true
         Layout.preferredHeight: popupWindow.rowHeight
-        radius: QsConfig.Appearance.radius.s
-        color: rowArea.containsMouse ? QsConfig.Theme.hover : "transparent"
+        radius: QsTheme.Appearance.radius.s
+        color: rowArea.containsMouse ? QsTheme.Theme.hover : "transparent"
         Behavior on color {
             ColorAnimation {
-                duration: QsConfig.Appearance.anim.durations.fast
+                duration: QsTheme.Appearance.anim.durations.fast
             }
         }
 
         RowLayout {
             anchors.fill: parent
-            anchors.leftMargin: QsConfig.Appearance.margin.m
-            anchors.rightMargin: QsConfig.Appearance.margin.m
-            spacing: QsConfig.Appearance.spacing.m
+            anchors.leftMargin: QsTheme.Appearance.margin.m
+            anchors.rightMargin: QsTheme.Appearance.margin.m
+            spacing: QsTheme.Appearance.spacing.m
 
             Text {
                 text: row.isOutput ? popupWindow.audioIcon(row.node) : "󰍬"
-                font.family: QsConfig.Appearance.typography.iconFamily
-                font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
-                color: row.isDefault ? QsConfig.Theme.accent : QsConfig.Theme.text
+                font.family: QsTheme.Appearance.typography.iconFamily
+                font.pixelSize: QsTheme.Appearance.typography.bodyLarge.size
+                color: row.isDefault ? QsTheme.Theme.accent : QsTheme.Theme.text
             }
 
             Text {
                 Layout.fillWidth: true
                 text: row.node ? (row.node.description || row.node.nickname || row.node.name) : ""
                 elide: Text.ElideRight
-                font.family: QsConfig.Appearance.typography.family
-                font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
+                font.family: QsTheme.Appearance.typography.family
+                font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
                 font.weight: row.isDefault ? Font.Medium : Font.Normal
-                color: row.isDefault ? QsConfig.Theme.accent : QsConfig.Theme.text
+                color: row.isDefault ? QsTheme.Theme.accent : QsTheme.Theme.text
             }
 
             Text {
                 visible: row.isDefault
                 text: "󰄬"
-                font.family: QsConfig.Appearance.typography.iconFamily
-                font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
-                color: QsConfig.Theme.accent
+                font.family: QsTheme.Appearance.typography.iconFamily
+                font.pixelSize: QsTheme.Appearance.typography.bodyMedium.size
+                color: QsTheme.Theme.accent
             }
         }
 
@@ -111,9 +111,9 @@ FloatingPanel {
         id: backgroundRect
         anchors.fill: parent
         implicitHeight: contentColumn.implicitHeight + popupWindow.cardPadding * 2
-        color: QsConfig.Theme.panel
-        radius: QsConfig.Appearance.radius.m
-        border.color: QsConfig.Theme.borderFaint
+        color: QsTheme.Theme.panel
+        radius: QsTheme.Appearance.radius.m
+        border.color: QsTheme.Theme.borderFaint
         border.width: 1
 
         layer.enabled: true
@@ -128,38 +128,38 @@ FloatingPanel {
             id: contentColumn
             anchors.fill: parent
             anchors.margins: popupWindow.cardPadding
-            spacing: QsConfig.Appearance.spacing.m
+            spacing: QsTheme.Appearance.spacing.m
 
             // Header
             RowLayout {
                 Layout.fillWidth: true
-                spacing: QsConfig.Appearance.spacing.m
+                spacing: QsTheme.Appearance.spacing.m
 
                 Rectangle {
                     width: popupWindow.headerIconSize
                     height: popupWindow.headerIconSize
-                    radius: QsConfig.Appearance.radius.s
-                    color: Qt.rgba(QsConfig.Theme.accent.r, QsConfig.Theme.accent.g, QsConfig.Theme.accent.b, 0.15)
+                    radius: QsTheme.Appearance.radius.s
+                    color: Qt.rgba(QsTheme.Theme.accent.r, QsTheme.Theme.accent.g, QsTheme.Theme.accent.b, 0.15)
 
                     Text {
                         anchors.centerIn: parent
                         text: "󰓃"
-                        font.family: QsConfig.Appearance.typography.iconFamily
-                        font.pixelSize: QsConfig.Appearance.typography.titleMedium.size
-                        color: QsConfig.Theme.accent
+                        font.family: QsTheme.Appearance.typography.iconFamily
+                        font.pixelSize: QsTheme.Appearance.typography.titleMedium.size
+                        color: QsTheme.Theme.accent
                     }
                 }
 
                 ColumnLayout {
                     Layout.fillWidth: true
-                    spacing: QsConfig.Appearance.spacing.xs
+                    spacing: QsTheme.Appearance.spacing.xs
 
                     Text {
                         text: "Audio"
-                        font.family: QsConfig.Appearance.typography.family
-                        font.pixelSize: QsConfig.Appearance.typography.bodyLarge.size
+                        font.family: QsTheme.Appearance.typography.family
+                        font.pixelSize: QsTheme.Appearance.typography.bodyLarge.size
                         font.weight: Font.Bold
-                        color: QsConfig.Theme.text
+                        color: QsTheme.Theme.text
                     }
 
                     Text {
@@ -169,9 +169,9 @@ FloatingPanel {
                         maximumLineCount: 1
                         text: Pipewire.defaultAudioSink ? (Pipewire.defaultAudioSink.description || Pipewire.defaultAudioSink.name) : "No output device"
                         elide: Text.ElideRight
-                        font.family: QsConfig.Appearance.typography.family
-                        font.pixelSize: QsConfig.Appearance.typography.labelSmall.size
-                        color: QsConfig.Theme.textMuted
+                        font.family: QsTheme.Appearance.typography.family
+                        font.pixelSize: QsTheme.Appearance.typography.labelSmall.size
+                        color: QsTheme.Theme.textMuted
                     }
                 }
             }
@@ -179,23 +179,23 @@ FloatingPanel {
             // Output section
             Text {
                 text: "Output"
-                font.family: QsConfig.Appearance.typography.family
-                font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
+                font.family: QsTheme.Appearance.typography.family
+                font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
                 font.weight: Font.Medium
-                color: QsConfig.Theme.textMuted
+                color: QsTheme.Theme.textMuted
             }
 
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: outColumn.implicitHeight + 8
-                radius: QsConfig.Appearance.radius.s
-                color: QsConfig.Theme.card
+                radius: QsTheme.Appearance.radius.s
+                color: QsTheme.Theme.card
 
                 ColumnLayout {
                     id: outColumn
                     anchors.fill: parent
-                    anchors.margins: QsConfig.Appearance.spacing.xs
-                    spacing: QsConfig.Appearance.spacing.xs
+                    anchors.margins: QsTheme.Appearance.spacing.xs
+                    spacing: QsTheme.Appearance.spacing.xs
 
                     Repeater {
                         model: popupWindow.sinks
@@ -209,12 +209,12 @@ FloatingPanel {
                     Text {
                         visible: popupWindow.sinks.length === 0
                         Layout.fillWidth: true
-                        Layout.margins: QsConfig.Appearance.margin.s
+                        Layout.margins: QsTheme.Appearance.margin.s
                         horizontalAlignment: Text.AlignHCenter
                         text: "No output devices"
-                        font.family: QsConfig.Appearance.typography.family
-                        font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
-                        color: QsConfig.Theme.textMuted
+                        font.family: QsTheme.Appearance.typography.family
+                        font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
+                        color: QsTheme.Theme.textMuted
                     }
                 }
             }
@@ -223,24 +223,24 @@ FloatingPanel {
             Text {
                 visible: popupWindow.sources.length > 0
                 text: "Input"
-                font.family: QsConfig.Appearance.typography.family
-                font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
+                font.family: QsTheme.Appearance.typography.family
+                font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
                 font.weight: Font.Medium
-                color: QsConfig.Theme.textMuted
+                color: QsTheme.Theme.textMuted
             }
 
             Rectangle {
                 visible: popupWindow.sources.length > 0
                 Layout.fillWidth: true
                 Layout.preferredHeight: inColumn.implicitHeight + 8
-                radius: QsConfig.Appearance.radius.s
-                color: QsConfig.Theme.card
+                radius: QsTheme.Appearance.radius.s
+                color: QsTheme.Theme.card
 
                 ColumnLayout {
                     id: inColumn
                     anchors.fill: parent
-                    anchors.margins: QsConfig.Appearance.spacing.xs
-                    spacing: QsConfig.Appearance.spacing.xs
+                    anchors.margins: QsTheme.Appearance.spacing.xs
+                    spacing: QsTheme.Appearance.spacing.xs
 
                     Repeater {
                         model: popupWindow.sources
@@ -257,25 +257,25 @@ FloatingPanel {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: popupWindow.buttonHeight
-                radius: QsConfig.Appearance.radius.s
-                color: settingsArea.containsMouse ? QsConfig.Theme.hover : "transparent"
+                radius: QsTheme.Appearance.radius.s
+                color: settingsArea.containsMouse ? QsTheme.Theme.hover : "transparent"
 
                 RowLayout {
                     anchors.centerIn: parent
-                    spacing: QsConfig.Appearance.spacing.s
+                    spacing: QsTheme.Appearance.spacing.s
 
                     Text {
                         text: "󰒓"
-                        font.family: QsConfig.Appearance.typography.iconFamily
-                        font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
-                        color: QsConfig.Theme.textMuted
+                        font.family: QsTheme.Appearance.typography.iconFamily
+                        font.pixelSize: QsTheme.Appearance.typography.bodyMedium.size
+                        color: QsTheme.Theme.textMuted
                     }
 
                     Text {
                         text: "Sound Settings"
-                        font.family: QsConfig.Appearance.typography.family
-                        font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
-                        color: QsConfig.Theme.textMuted
+                        font.family: QsTheme.Appearance.typography.family
+                        font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
+                        color: QsTheme.Theme.textMuted
                     }
                 }
 

@@ -1,0 +1,4 @@
+module qs.theme
+singleton Colours Colours.qml
+singleton Theme Theme.qml
+singleton Appearance Appearance.qml

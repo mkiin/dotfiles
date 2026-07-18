@@ -2,12 +2,8 @@ import QtQuick 6.10
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
-import "../../config" as QsConfig
+import "../../theme" as QsTheme
 
-// waybar 直下に右上アンカーで出るフローティングパネルの殻（CC / popouts 共通）。
-// モニタ追従・配置・閉じる操作（Esc/枠外クリック）・出現アニメを一元化し、
-// 利用側はカードの面と中身だけを default property で与える。
-// 中身のルート Item は implicitHeight を必ず定義すること（カード高さの導出元）。
 PanelWindow {
     id: root
 
@@ -29,7 +25,7 @@ PanelWindow {
         bottom: true
     }
     margins {
-        top: QsConfig.Appearance.panel.barOffset
+        top: QsTheme.Appearance.panel.barOffset
     }
     exclusionMode: ExclusionMode.Ignore
     color: "transparent"
@@ -54,8 +50,8 @@ PanelWindow {
             id: card
             anchors.top: parent.top
             anchors.right: parent.right
-            anchors.topMargin: QsConfig.Appearance.margin.s
-            anchors.rightMargin: QsConfig.Appearance.panel.edgeGap
+            anchors.topMargin: QsTheme.Appearance.margin.s
+            anchors.rightMargin: QsTheme.Appearance.panel.edgeGap
             width: root.panelWidth
             height: slot.children.length > 0 ? slot.children[0].implicitHeight : 0
 
@@ -81,15 +77,15 @@ PanelWindow {
                 Transition {
                     to: "visible"
                     ParallelAnimation {
-                        NumberAnimation { property: "opacity"; duration: QsConfig.Appearance.anim.durations.normal; easing.type: Easing.OutQuad }
-                        NumberAnimation { property: "scale"; duration: QsConfig.Appearance.anim.durations.medium; easing.type: Easing.OutBack; easing.overshoot: 1.3 }
+                        NumberAnimation { property: "opacity"; duration: QsTheme.Appearance.anim.durations.normal; easing.type: Easing.OutQuad }
+                        NumberAnimation { property: "scale"; duration: QsTheme.Appearance.anim.durations.medium; easing.type: Easing.OutBack; easing.overshoot: 1.3 }
                     }
                 },
                 Transition {
                     from: "visible"
                     ParallelAnimation {
-                        NumberAnimation { property: "opacity"; duration: QsConfig.Appearance.anim.durations.fast; easing.type: Easing.InQuad }
-                        NumberAnimation { property: "scale"; to: 0.94; duration: QsConfig.Appearance.anim.durations.fast }
+                        NumberAnimation { property: "opacity"; duration: QsTheme.Appearance.anim.durations.fast; easing.type: Easing.InQuad }
+                        NumberAnimation { property: "scale"; to: 0.94; duration: QsTheme.Appearance.anim.durations.fast }
                     }
                 }
             ]

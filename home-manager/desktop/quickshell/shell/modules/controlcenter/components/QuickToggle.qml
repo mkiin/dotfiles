@@ -2,8 +2,7 @@ import QtQuick 6.10
 import QtQuick.Layouts 6.10
 import QtQuick.Controls 6.10
 import Quickshell
-import "../../../components/effects"
-import "../../../config" as QsConfig
+import "../../../theme" as QsTheme
 
 Rectangle {
     id: root
@@ -24,7 +23,7 @@ Rectangle {
     Layout.fillWidth: true
     Layout.preferredHeight: 72
 
-    radius: QsConfig.Appearance.radius.l
+    radius: QsTheme.Appearance.radius.l
     clip: true
 
     color: active ? activeColor : surfaceColor
@@ -36,24 +35,24 @@ Rectangle {
     // Smooth M3 color transition
     Behavior on color {
         ColorAnimation { 
-            duration: Material3Anim.medium2
-            easing.bezierCurve: Material3Anim.standard
+            duration: QsTheme.Appearance.anim.durations.medium2
+            easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
         }
     }
 
     Behavior on border.color {
         ColorAnimation {
-            duration: Material3Anim.short4
-            easing.bezierCurve: Material3Anim.standard
+            duration: QsTheme.Appearance.anim.durations.short4
+            easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
         }
     }
     
     // Press scale animation
-    scale: toggleMouse.pressed ? 0.98 : toggleMouse.containsMouse ? Material3Anim.hoverScale : 1.0
+    scale: toggleMouse.pressed ? 0.98 : toggleMouse.containsMouse ? QsTheme.Appearance.anim.hoverScale : 1.0
     Behavior on scale {
         NumberAnimation {
-            duration: Material3Anim.short2
-            easing.bezierCurve: Material3Anim.springGentle
+            duration: QsTheme.Appearance.anim.durations.short2
+            easing.bezierCurve: QsTheme.Appearance.anim.curves.springGentle
         }
     }
 
@@ -68,8 +67,8 @@ Rectangle {
         
         Behavior on opacity {
             NumberAnimation {
-                duration: Material3Anim.short3
-                easing.bezierCurve: Material3Anim.standard
+                duration: QsTheme.Appearance.anim.durations.short3
+                easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
             }
         }
     }
@@ -84,9 +83,9 @@ Rectangle {
     
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: QsConfig.Appearance.margin.l
-        anchors.rightMargin: QsConfig.Appearance.margin.l
-        spacing: QsConfig.Appearance.spacing.l
+        anchors.leftMargin: QsTheme.Appearance.margin.l
+        anchors.rightMargin: QsTheme.Appearance.margin.l
+        spacing: QsTheme.Appearance.spacing.l
         
         // Icon Circle
         Rectangle {
@@ -99,22 +98,22 @@ Rectangle {
             
             Behavior on color {
                 ColorAnimation {
-                    duration: Material3Anim.short4
-                    easing.bezierCurve: Material3Anim.standard
+                    duration: QsTheme.Appearance.anim.durations.short4
+                    easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
                 }
             }
             
             Text {
                 anchors.centerIn: parent
                 text: root.icon
-                font.family: QsConfig.Appearance.typography.iconFamily
-                font.pixelSize: QsConfig.Appearance.typography.titleLarge.size
+                font.family: QsTheme.Appearance.typography.iconFamily
+                font.pixelSize: QsTheme.Appearance.typography.titleLarge.size
                 color: root.active ? root.onActiveColor : root.textColor
                 
                 Behavior on color {
                     ColorAnimation {
-                        duration: Material3Anim.short4
-                        easing.bezierCurve: Material3Anim.standard
+                        duration: QsTheme.Appearance.anim.durations.short4
+                        easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
                     }
                 }
             }
@@ -122,12 +121,12 @@ Rectangle {
         
         ColumnLayout {
             Layout.fillWidth: true
-            spacing: QsConfig.Appearance.spacing.xs
+            spacing: QsTheme.Appearance.spacing.xs
             
             Text {
                 text: root.label
-                font.family: QsConfig.Appearance.typography.family
-                font.pixelSize: QsConfig.Appearance.typography.bodyMedium.size
+                font.family: QsTheme.Appearance.typography.family
+                font.pixelSize: QsTheme.Appearance.typography.bodyMedium.size
                 font.weight: Font.DemiBold
                 color: root.active ? root.onActiveColor : root.textColor
                 elide: Text.ElideRight
@@ -135,16 +134,16 @@ Rectangle {
                 
                 Behavior on color {
                     ColorAnimation {
-                        duration: Material3Anim.short4
-                        easing.bezierCurve: Material3Anim.standard
+                        duration: QsTheme.Appearance.anim.durations.short4
+                        easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
                     }
                 }
             }
             
             Text {
                 text: root.subLabel
-                font.family: QsConfig.Appearance.typography.family
-                font.pixelSize: QsConfig.Appearance.typography.labelMedium.size
+                font.family: QsTheme.Appearance.typography.family
+                font.pixelSize: QsTheme.Appearance.typography.labelMedium.size
                 color: active
                     ? Qt.rgba(root.onActiveColor.r, root.onActiveColor.g, root.onActiveColor.b, 0.78)
                     : Qt.rgba(root.textColor.r, root.textColor.g, root.textColor.b, 0.6)
@@ -154,8 +153,8 @@ Rectangle {
                 
                 Behavior on color {
                     ColorAnimation {
-                        duration: Material3Anim.short4
-                        easing.bezierCurve: Material3Anim.standard
+                        duration: QsTheme.Appearance.anim.durations.short4
+                        easing.bezierCurve: QsTheme.Appearance.anim.curves.standard
                     }
                 }
             }

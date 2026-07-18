@@ -8,6 +8,5 @@ singleton Network Network.qml
 singleton Notifs Notifs.qml
 singleton Players Players.qml
 singleton PowerProfiles PowerProfiles.qml
-singleton Colours Colours.qml
 singleton Screenshot Screenshot.qml
 singleton SystemUsage SystemUsage.qml
