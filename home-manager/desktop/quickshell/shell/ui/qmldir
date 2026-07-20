@@ -5,5 +5,6 @@ StateLayer 1.0 StateLayer.qml
 Card 1.0 Card.qml
 Empty 1.0 Empty.qml
 Item 1.0 Item.qml
+Slider 1.0 Slider.qml
 PopupCard 1.0 PopupCard.qml
 Switch 1.0 Switch.qml

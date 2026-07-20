@@ -86,6 +86,17 @@ Singleton {
             }
         }
 
+        readonly property var slider: QtObject {
+            readonly property var sm: QtObject {
+                property int track: 4
+                property int thumb: 12
+            }
+            readonly property var normal: QtObject {
+                property int track: 6
+                property int thumb: 16
+            }
+        }
+
         // 空状態のアイコンを載せる角丸
         property int emptyIcon: 40
         // ポップアップのヘッダーに置くアイコンの角丸
