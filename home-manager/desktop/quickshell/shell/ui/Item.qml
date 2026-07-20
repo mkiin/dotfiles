@@ -89,7 +89,8 @@ Rectangle {
                 font.pixelSize: QsTheme.Appearance.fontSize.m
                 font.weight: Font.Medium
                 color: QsTheme.Theme.text
-                elide: Text.ElideRight
+                // 末尾に識別情報が来る名前（"... Input 1 Mic" 等）があるため中間を省く
+                elide: Text.ElideMiddle
                 visible: text !== ""
             }
 

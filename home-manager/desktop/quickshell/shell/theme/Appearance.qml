@@ -66,6 +66,50 @@ Singleton {
         property var standard: [0.2, 0.0, 0.0, 1.0]
     }
 
+    // 部品の寸法。内容量で変わらず、設計で決める値だけを置く。
+    // 中身から決まる高さ（Item / Card / MediaCard 等）はここに持たない。
+    readonly property var size: QtObject {
+        readonly property var button: QtObject {
+            property int sm: 28
+            property int normal: 36
+            property int lg: 44
+        }
+
+        readonly property var switchTrack: QtObject {
+            readonly property var sm: QtObject {
+                property int width: 24
+                property int height: 14
+            }
+            readonly property var normal: QtObject {
+                property int width: 32
+                property int height: 18
+            }
+        }
+
+        // 空状態のアイコンを載せる角丸
+        property int emptyIcon: 40
+        // ポップアップのヘッダーに置くアイコンの角丸
+        property int headerIcon: 36
+    }
+
+    // 浮いた面の影。
+    readonly property var shadow: QtObject {
+        property real opacity: 0.35
+        property real blur: 1.0
+        property real offsetY: 6
+    }
+
+    // 画面ごとの寸法。
+    readonly property var popup: QtObject {
+        property int audioWidth: 320
+        property int bluetoothWidth: 320
+        property int controlCenterWidth: 420
+        // クイック操作タイルの高さ
+        property int tileHeight: 72
+        // 通知リストが最低限確保する高さ
+        property int notificationMinHeight: 160
+    }
+
     // 画面端との隙間。waybar の島と縦のラインを揃える（style.nix の gapIsland と同値）。
     readonly property int edgeGap: 6
 }

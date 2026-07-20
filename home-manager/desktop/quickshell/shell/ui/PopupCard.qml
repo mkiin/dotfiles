@@ -16,11 +16,12 @@ PanelWindow {
     property bool shouldShow: false
     required property int cardWidth
     property int padding: QsTheme.Appearance.padding.l
-    property real maxHeight: root.screen ? root.screen.height - QsRoot.Config.barHeight * 2 : 0
+    // バー下端から画面下端まで。上下の隙間を差し引く。
+    property real maxHeight: root.screen ? root.screen.height - QsRoot.Config.barHeight - QsTheme.Appearance.edgeGap * 2 : 0
 
-    property real shadowOpacity: 0.35
-    property real shadowBlur: 1.0
-    property real shadowOffsetY: 6
+    property real shadowOpacity: QsTheme.Appearance.shadow.opacity
+    property real shadowBlur: QsTheme.Appearance.shadow.blur
+    property real shadowOffsetY: QsTheme.Appearance.shadow.offsetY
 
     default property alias content: contentItem.data
 

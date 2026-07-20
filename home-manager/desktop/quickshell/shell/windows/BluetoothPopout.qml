@@ -12,7 +12,7 @@ QsUi.PopupCard {
     readonly property var bluetooth: QsBluetooth.Bluetooth
     readonly property int connectedCount: popup.bluetooth.connectedDevices.length
 
-    cardWidth: 320
+    cardWidth: QsTheme.Appearance.popup.bluetoothWidth
 
     Process {
         id: settingsProcess
@@ -26,8 +26,8 @@ QsUi.PopupCard {
             spacing: QsTheme.Appearance.spacing.m
 
             Rectangle {
-                Layout.preferredWidth: 36
-                Layout.preferredHeight: 36
+                Layout.preferredWidth: QsTheme.Appearance.size.headerIcon
+                Layout.preferredHeight: QsTheme.Appearance.size.headerIcon
                 radius: QsTheme.Appearance.radius.s
                 color: QsTheme.Theme.primaryContainer
 

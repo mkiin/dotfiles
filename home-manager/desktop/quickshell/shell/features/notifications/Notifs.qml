@@ -5,280 +5,125 @@ import Quickshell
 import Quickshell.Services.Notifications
 import "../../utils" as QsUtils
 
+// 通知の履歴と既読状態。値は元の Notification が持つので、ここでは包んで束ねるだけ。
 Singleton {
     id: root
 
-    // Use a JS array so Array helpers (filter/slice/etc) work reliably.
-    property var notifications: []
-    readonly property var activeNotifications: notifications.filter(n => !!n && !n.closed)
-    
-    // Maximum notifications to keep in memory (lowercase to comply with QML naming rules)
+    // 保持上限。超えた分は古いものから捨てる。
     readonly property int maxNotifications: 100
-    
-    // Show all notifications from past 24 hours (including closed ones) - for notification center
-    readonly property var recentNotifications: notifications.filter(notif => {
-        if (!notif || !notif.timestamp)
-            return false
-        const hoursSinceNotif = (new Date().getTime() - notif.timestamp.getTime()) / (1000 * 60 * 60)
-        return hoursSinceNotif < 24
-    }).sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
-    readonly property var unreadNotifications: recentNotifications.filter(n => !n.read)
-    readonly property int unreadCount: unreadNotifications.length
-    
-    // Group notifications by app for better UX
-    readonly property var groupedNotifications: {
-        const groups = {}
-        const active = activeNotifications
-        for (let i = 0; i < active.length; i++) {
-            const notif = active[i]
-            const key = notif.appName || "Unknown"
-            if (!groups[key]) {
-                groups[key] = []
-            }
-            groups[key].push(notif)
-        }
-        return groups
-    }
-    
-    // Get notification counts per app
-    readonly property var notificationCounts: {
-        const counts = {}
-        const grouped = groupedNotifications
-        for (let app in grouped) {
-            counts[app] = grouped[app].length
-        }
-        return counts
-    }
-    
+    // 履歴に残す期間
+    readonly property int retentionHours: 24
+
+    property var notifications: []
+
+    // 経過時間の表示を更新するための時計。各通知はこれを参照して再計算する。
+    property date now: new Date()
+
     property bool dnd: false
     property double lastReadAt: 0
 
+    readonly property var recentNotifications: root.notifications.filter(notif => notif && notif.withinRetention).sort((left, right) => right.timestamp.getTime() - left.timestamp.getTime())
+
+    readonly property int unreadCount: root.recentNotifications.filter(notif => !notif.read).length
+
     PersistentProperties {
         id: persist
+
         property alias dnd: root.dnd
         property alias lastReadAt: root.lastReadAt
+
         reloadableId: "notifications-state"
     }
-    
-    // Cleanup timer to prevent memory leaks
+
     Timer {
-        interval: 3600000  // Clean up every hour
+        interval: 60000
         repeat: true
         running: true
-        triggeredOnStart: false
-        
-        onTriggered: {
-            const oneDayAgo = new Date().getTime() - (24 * 60 * 60 * 1000)
-            const oldCount = root.notifications.length
-            root.notifications = root.notifications.filter(n => n && n.timestamp && n.timestamp.getTime() > oneDayAgo)
-            const cleaned = oldCount - root.notifications.length
-            if (cleaned > 0) {
-                QsUtils.Logger.debug("Notifs", `Cleaned up ${cleaned} old notifications`)
-            }
-        }
+        onTriggered: root.now = new Date()
     }
-    
-    // Add notification from external NotificationServer
-    function addNotification(notif) {
-        // Check DND mode
-        if (dnd && notif.urgency !== NotificationUrgency.Critical) {
-            QsUtils.Logger.debug("Notifs", `DND active - suppressing: ${notif.summary}`)
+
+    // NotificationServer から渡された通知を履歴に加える。
+    function addNotification(notification): void {
+        if (root.dnd && notification.urgency !== NotificationUrgency.Critical)
+            return;
+
+        const wrapper = notifComponent.createObject(root, {
+            notification: notification
+        });
+        if (!wrapper) {
+            QsUtils.Logger.error("Notifs", "Failed to create notification wrapper");
             return;
         }
 
-        QsUtils.Logger.debug("Notifs", `Adding notification: ${notif.summary}`)
-
-        const notifWrapper = notifComponent.createObject(root, {
-            notification: notif
-        })
-
-        if (!notifWrapper) {
-            QsUtils.Logger.error("Notifs", "Failed to create notification wrapper")
-            return
-        }
-        
-        // Cap maximum notifications to prevent memory leaks
-        root.notifications = [notifWrapper, ...root.notifications].slice(0, root.maxNotifications)
-        QsUtils.Logger.debug("Notifs", `Total notifications: ${root.notifications.length}`)
-        QsUtils.Logger.debug("Notifs", `Queued: ${notifWrapper.appName ?? ""} ${notifWrapper.summary ?? ""}`)
+        root.notifications = [wrapper, ...root.notifications].slice(0, root.maxNotifications);
     }
 
-    function markAllRead() {
-        const stamp = Date.now()
-        lastReadAt = stamp
-        notifications.forEach(notification => {
-            if (notification)
-                notification.read = true
-        })
+    // 既読の境界を進める。個々の read はこの値から導出される。
+    function markAllRead(): void {
+        root.lastReadAt = Date.now();
     }
 
-    function _actionsToArray(actionList) {
-        const out = []
-        if (!actionList)
-            return out
+    function toggleDnd(): void {
+        root.dnd = !root.dnd;
+    }
 
-        const len = actionList.length ?? 0
-        for (let i = 0; i < len; i++) {
-            const action = actionList[i]
-            if (!action)
-                continue
-            out.push({
-                identifier: action.identifier,
-                text: action.text,
-                invoke: () => action.invoke()
-            })
-        }
-        return out
-    }
-    
-    // Toggle DND mode
-    function toggleDnd() {
-        dnd = !dnd;
-        QsUtils.Logger.info("Notifs", `DND mode: ${dnd ? "enabled" : "disabled"}`)
-    }
-    
-    // Clear all notifications
-    function clearAll() {
-        const all = root.notifications.slice();
+    function clearAll(): void {
+        const all = root.notifications;
         root.notifications = [];
-        all.forEach(notif => {
-            if (!notif) return;
-            if (notif.notification)
-                notif.notification.dismiss();
-            notif.destroy();
-        });
-        QsUtils.Logger.info("Notifs", "All notifications cleared")
-    }
-    
-    // Clear notifications from specific app
-    function clearApp(appName) {
-        notifications.filter(n => n.appName === appName).forEach(n => n.close());
-        QsUtils.Logger.info("Notifs", `Cleared notifications from: ${appName}`)
+        all.forEach(notif => notif?.destroy());
     }
 
-    // Notification wrapper component
+    function remove(notif): void {
+        if (!root.notifications.includes(notif))
+            return;
+        root.notifications = root.notifications.filter(other => other !== notif);
+        notif.destroy();
+    }
+
+    // 通知 1 件。元の Notification を包み、表示に必要な導出だけを足す。
     component Notif: QtObject {
-        id: notifWrapper
-        
-        property var notification
-        property date timestamp: new Date()
-        property bool closed: false
-        property bool hasAnimated: false  // Track if popup animation has played
-        property bool read: false
-        
-        // Notification properties
-        property string notifId: ""
-        property string summary: ""
-        property string body: ""
-        property string appName: ""
-        property string appIcon: ""
-        property string image: ""
-        property int urgency: NotificationUrgency.Normal
-        // Use a JS array so `.length`/indexing and helpers work reliably.
-        property var actions: []
-        
-        // Time formatting
-        readonly property string timeString: {
-            const diff = new Date().getTime() - timestamp.getTime();
-            const minutes = Math.floor(diff / 60000);
-            const hours = Math.floor(minutes / 60);
-            const days = Math.floor(hours / 24);
-            
-            if (days > 0) return days + "d ago";
-            if (hours > 0) return hours + "h ago";
-            if (minutes > 0) return minutes + "m ago";
-            return "Just now";
-        }
-        
-        // Connections to notification object
-        readonly property Connections conn: Connections {
-            target: notifWrapper.notification
-            
-            function onClosed() {
-                notifWrapper.close();
-            }
-            
-            function onSummaryChanged() {
-                notifWrapper.summary = notifWrapper.notification.summary;
-            }
-            
-            function onBodyChanged() {
-                notifWrapper.body = notifWrapper.notification.body;
-            }
-            
-            function onAppNameChanged() {
-                notifWrapper.appName = notifWrapper.notification.appName;
-            }
-            
-            function onAppIconChanged() {
-                notifWrapper.appIcon = notifWrapper.notification.appIcon;
-            }
-            
-            function onImageChanged() {
-                notifWrapper.image = notifWrapper.notification.image;
-            }
-            
-            function onUrgencyChanged() {
-                notifWrapper.urgency = notifWrapper.notification.urgency;
-            }
-            
-            function onActionsChanged() {
-                notifWrapper.actions = root._actionsToArray(notifWrapper.notification.actions)
-            }
-        }
-        
-        function close() {
-            if (closed) return;
-            
-            // Mark as closed but keep in history for notification center
-            closed = true;
-            
-            // Only dismiss from the notification daemon, don't remove from list
-            if (notification) {
-                notification.dismiss();
-            }
+        id: notif
 
-            QsUtils.Logger.debug("Notifs", `Notification closed (kept in history): ${summary}`)
+        required property var notification
+
+        readonly property date timestamp: new Date()
+
+        readonly property string summary: notif.notification?.summary ?? ""
+        readonly property string body: notif.notification?.body ?? ""
+        readonly property string appName: notif.notification?.appName ?? ""
+        readonly property string appIcon: notif.notification?.appIcon ?? ""
+        readonly property string image: notif.notification?.image ?? ""
+        readonly property int urgency: notif.notification?.urgency ?? NotificationUrgency.Normal
+        readonly property var actions: notif.notification?.actions ?? []
+
+        // 既読かどうかは境界時刻との比較で決まる。個別のフラグは持たない。
+        readonly property bool read: notif.timestamp.getTime() <= root.lastReadAt
+
+        readonly property bool withinRetention: (root.now.getTime() - notif.timestamp.getTime()) < root.retentionHours * 3600000
+
+        // トーストの出現アニメを 1 度だけ再生するための記録。表示側が立てる。
+        property bool hasAnimated: false
+
+        readonly property string timeString: {
+            const minutes = Math.floor((root.now.getTime() - notif.timestamp.getTime()) / 60000);
+            if (minutes < 1)
+                return "Just now";
+            if (minutes < 60)
+                return `${minutes}m ago`;
+            const hours = Math.floor(minutes / 60);
+            if (hours < 24)
+                return `${hours}h ago`;
+            return `${Math.floor(hours / 24)}d ago`;
         }
-        
-        function invokeAction(actionId) {
-            const action = actions.find(a => a.identifier === actionId);
-            if (action && action.invoke) {
-                action.invoke();
-            }
-        }
-        
-        Component.onCompleted: {
-            if (!notification)
-                return;
-            
-            notifId = `${notification.id}`
-            summary = notification.summary
-            body = notification.body
-            appName = notification.appName
-            appIcon = notification.appIcon
-            image = notification.image
-            urgency = notification.urgency
-            actions = root._actionsToArray(notification.actions)
-            read = timestamp.getTime() <= root.lastReadAt
+
+        function dismiss(): void {
+            notif.notification?.dismiss();
         }
     }
-    
+
     Component {
         id: notifComponent
-        
+
         Notif {}
-    }
-    
-    // Delete a specific notification (permanently remove from history)
-    function deleteNotification(notif) {
-        if (root.notifications.includes(notif)) {
-            root.notifications = root.notifications.filter(n => n !== notif);
-            if (notif.notification) {
-                notif.notification.dismiss();
-            }
-            notif.destroy();
-            QsUtils.Logger.debug("Notifs", "Notification permanently deleted")
-        }
     }
 }

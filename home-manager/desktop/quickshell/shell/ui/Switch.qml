@@ -13,8 +13,10 @@ Rectangle {
 
     signal clicked
 
-    readonly property int trackWidth: root.size === "sm" ? 24 : 32
-    readonly property int trackHeight: root.size === "sm" ? 14 : 18
+    readonly property var track: QsTheme.Appearance.size.switchTrack[root.size === "sm" ? "sm" : "normal"]
+
+    readonly property int trackWidth: root.track.width
+    readonly property int trackHeight: root.track.height
     readonly property int thumbSize: root.trackHeight - 2
 
     // 面と、その上に乗る on-color の組。

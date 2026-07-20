@@ -43,9 +43,9 @@ Rectangle {
 
     // 高さ。iconOnly なら 1 辺の長さも兼ねる。
     readonly property int extent: ({
-            sm: 28,
-            default: 36,
-            lg: 44
+            sm: QsTheme.Appearance.size.button.sm,
+            default: QsTheme.Appearance.size.button.normal,
+            lg: QsTheme.Appearance.size.button.lg
         })[root.size]
 
     implicitWidth: root.iconOnly ? root.extent : label.implicitWidth + QsTheme.Appearance.padding.m * 2

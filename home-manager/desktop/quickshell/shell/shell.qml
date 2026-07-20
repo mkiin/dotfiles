@@ -4,6 +4,7 @@
 
 import Quickshell
 import Quickshell.Io
+import Quickshell.Services.Notifications
 import QtQuick
 import "theme" as QsTheme
 import "windows"
@@ -32,24 +33,20 @@ ShellRoot {
     //     else if (name === "bluetooth") bluetoothPopout.shouldShow = !next
     // }
 
-    // TODO: org.freedesktop.Notifications を所有してアプリ通知を受ける。
-    // 受け皿となる通知状態の層が無いので止めている。
-    // Loader {
-    //     active: Config.registerNotificationServer
-    //     sourceComponent: NotificationServer {
-    //         keepOnReload: false
-    //         actionsSupported: true
-    //         bodyHyperlinksSupported: true
-    //         bodyMarkupSupported: true
-    //         imageSupported: true
-    //         persistenceSupported: true
-    //
-    //         onNotification: notif => {
-    //             notif.tracked = true
-    //             root.notifs.addNotification(notif)
-    //         }
-    //     }
-    // }
+    // org.freedesktop.Notifications を所有してアプリ通知を受ける
+    NotificationServer {
+        keepOnReload: false
+        actionsSupported: true
+        bodyHyperlinksSupported: true
+        bodyMarkupSupported: true
+        imageSupported: true
+        persistenceSupported: true
+
+        onNotification: notif => {
+            notif.tracked = true;
+            QsNotifications.Notifs.addNotification(notif);
+        }
+    }
 
     // TODO: windows/ の実装後に戻す
     // QsCC.ControlCenterWindow {
@@ -97,10 +94,22 @@ ShellRoot {
         shouldShow: false
     }
 
+    AudioPopout {
+        id: audioPopout
+        shouldShow: false
+    }
+
     IpcHandler {
         target: "bluetooth"
         function toggle(): void {
             bluetoothPopout.shouldShow = !bluetoothPopout.shouldShow;
+        }
+    }
+
+    IpcHandler {
+        target: "audio"
+        function toggle(): void {
+            audioPopout.shouldShow = !audioPopout.shouldShow;
         }
     }
 

@@ -29,8 +29,8 @@ Item {
         Rectangle {
             Layout.alignment: Qt.AlignHCenter
             Layout.bottomMargin: QsTheme.Appearance.spacing.xs
-            implicitWidth: 40
-            implicitHeight: 40
+            implicitWidth: QsTheme.Appearance.size.emptyIcon
+            implicitHeight: QsTheme.Appearance.size.emptyIcon
             radius: QsTheme.Appearance.radius.s
             color: root.variant === "icon" ? QsTheme.Theme.cardHigh : "transparent"
             visible: root.icon !== ""
