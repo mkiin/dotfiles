@@ -54,6 +54,18 @@ Singleton {
         property int xl: 32
     }
 
+    // 動きの時間と曲線。ui/Anim が参照する。
+    readonly property var animDuration: QtObject {
+        property int fast: 100
+        property int normal: 200
+        property int slow: 300
+    }
+
+    readonly property var animCurve: QtObject {
+        // M3 の standard。減速して止まる。
+        property var standard: [0.2, 0.0, 0.0, 1.0]
+    }
+
     // 画面端との隙間。waybar の島と縦のラインを揃える（style.nix の gapIsland と同値）。
     readonly property int edgeGap: 6
 }

@@ -1,11 +1,10 @@
 import QtQuick 6.10
 import QtQuick.Layouts 6.10
-import QtQuick.Templates 6.10 as T
 import "../theme" as QsTheme
 
 // 一覧の 1 行。左(media) / 中央(title + description) / 右(actions) の 3 スロット。
-// クリック可能な行として使えるよう ItemDelegate を土台にする。
-T.ItemDelegate {
+// hover / pressed の表現と行のクリックは StateLayer が担う。
+Rectangle {
     id: root
 
     // default | outline | muted
@@ -16,9 +15,14 @@ T.ItemDelegate {
     property string title
     property string description
 
+    // 選択中かどうか。ホバーとは別で、こちらだけが面の色を変える。
+    property bool highlighted: false
+
     // 左右のスロット。Item を渡すと配置される。
     property alias media: mediaSlot.data
     property alias actions: actionsSlot.data
+
+    signal clicked
 
     readonly property int gap: ({
             xs: QsTheme.Appearance.spacing.xs,
@@ -38,27 +42,36 @@ T.ItemDelegate {
             default: QsTheme.Appearance.padding.m
         })[root.size]
 
-    hoverEnabled: true
-    leftPadding: root.padX
-    rightPadding: root.padX
-    topPadding: root.padY
-    bottomPadding: root.padY
-    implicitWidth: implicitContentWidth + leftPadding + rightPadding
-    implicitHeight: implicitContentHeight + topPadding + bottomPadding
+    implicitWidth: layout.implicitWidth + root.padX * 2
+    implicitHeight: layout.implicitHeight + root.padY * 2
+
+    color: root.highlighted ? QsTheme.Theme.cardHigh : (root.variant === "muted" ? QsTheme.Theme.card : "transparent")
+    radius: QsTheme.Appearance.radius.s
+    border.width: root.variant === "outline" ? 1 : 0
+    border.color: QsTheme.Theme.border
     opacity: root.enabled ? 1 : 0.5
 
-    background: Rectangle {
-        radius: QsTheme.Appearance.radius.s
-        color: root.hovered ? QsTheme.Theme.cardHigh : (root.variant === "muted" ? QsTheme.Theme.card : "transparent")
-        border.width: root.variant === "outline" ? 1 : 0
-        border.color: QsTheme.Theme.border
+    // 行のクリックと状態表現。中身より下に敷き、actions のボタンの入力を奪わない。
+    StateLayer {
+        z: -1
+        color: QsTheme.Theme.text
+        enabled: root.enabled
+        onClicked: root.clicked()
     }
 
-    contentItem: RowLayout {
+    RowLayout {
+        id: layout
+
+        anchors.fill: parent
+        anchors.leftMargin: root.padX
+        anchors.rightMargin: root.padX
+        anchors.topMargin: root.padY
+        anchors.bottomMargin: root.padY
         spacing: root.gap
 
         Item {
             id: mediaSlot
+
             Layout.alignment: Qt.AlignVCenter
             Layout.preferredWidth: childrenRect.width
             Layout.preferredHeight: childrenRect.height
@@ -93,14 +106,11 @@ T.ItemDelegate {
 
         Item {
             id: actionsSlot
+
             Layout.alignment: Qt.AlignVCenter
             Layout.preferredWidth: childrenRect.width
             Layout.preferredHeight: childrenRect.height
             visible: children.length > 0
         }
-    }
-
-    HoverHandler {
-        cursorShape: root.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
     }
 }

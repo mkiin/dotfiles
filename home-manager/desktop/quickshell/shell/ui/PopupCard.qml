@@ -1,4 +1,5 @@
 import QtQuick 6.10
+import QtQuick.Layouts 6.10
 import QtQuick.Effects
 import Quickshell
 import Quickshell.Wayland
@@ -88,10 +89,14 @@ PanelWindow {
                 anchors.fill: parent
             }
 
-            Item {
+            // 幅は親から、高さは子から決まる。中身は Layout の子として並ぶ。
+            ColumnLayout {
                 id: contentItem
-                anchors.fill: parent
-                anchors.margins: root.padding
+
+                x: root.padding
+                y: root.padding
+                width: card.width - root.padding * 2
+                spacing: QsTheme.Appearance.spacing.m
             }
         }
     }

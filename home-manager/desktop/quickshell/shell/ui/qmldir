@@ -1,5 +1,7 @@
 module qs.ui
 Button 1.0 Button.qml
+Anim 1.0 Anim.qml
+StateLayer 1.0 StateLayer.qml
 Card 1.0 Card.qml
 Empty 1.0 Empty.qml
 Item 1.0 Item.qml

@@ -1,10 +1,9 @@
 import QtQuick 6.10
-import QtQuick.Templates 6.10 as T
 import "../theme" as QsTheme
 
 // 見た目は variant、寸法は size、形は iconOnly で切り替える。3 つは直交する。
-// 状態(hovered/pressed/checked)と入力は Templates が持つ。
-T.Button {
+// hover / pressed の表現と入力は StateLayer が担う。
+Rectangle {
     id: root
 
     // default | outline | secondary | ghost | destructive
@@ -14,31 +13,31 @@ T.Button {
     // true なら正方形の円形ボタンになり、text をアイコン書体で描く
     property bool iconOnly: false
 
+    property string text
+
+    signal clicked
+
+    // 面と、その上に乗る on-color の組。
     readonly property var palette: ({
             default: {
                 surface: QsTheme.Theme.primary,
-                hover: QsTheme.Theme.primaryContainer,
-                foreground: QsTheme.Theme.onPrimary
+                onSurface: QsTheme.Theme._onPrimary
             },
             outline: {
                 surface: "transparent",
-                hover: QsTheme.Theme.cardHigh,
-                foreground: QsTheme.Theme.text
+                onSurface: QsTheme.Theme.text
             },
             secondary: {
                 surface: QsTheme.Theme.secondaryContainer,
-                hover: QsTheme.Theme.secondary,
-                foreground: QsTheme.Theme.onSecondaryContainer
+                onSurface: QsTheme.Theme._onSecondaryContainer
             },
             ghost: {
                 surface: "transparent",
-                hover: QsTheme.Theme.cardHigh,
-                foreground: QsTheme.Theme.text
+                onSurface: QsTheme.Theme.text
             },
             destructive: {
                 surface: QsTheme.Theme.errorContainer,
-                hover: QsTheme.Theme.error,
-                foreground: QsTheme.Theme.onErrorContainer
+                onSurface: QsTheme.Theme._onErrorContainer
             }
         })[root.variant]
 
@@ -49,31 +48,33 @@ T.Button {
             lg: 44
         })[root.size]
 
-    hoverEnabled: true
-    implicitWidth: root.iconOnly ? root.extent : implicitContentWidth + leftPadding + rightPadding
+    implicitWidth: root.iconOnly ? root.extent : label.implicitWidth + QsTheme.Appearance.padding.m * 2
     implicitHeight: root.extent
-    padding: root.iconOnly ? 0 : QsTheme.Appearance.padding.m
+
+    color: root.palette.surface
+    radius: root.iconOnly ? height / 2 : QsTheme.Appearance.radius.s
+    border.width: root.variant === "outline" ? 1 : 0
+    border.color: QsTheme.Theme.border
     opacity: root.enabled ? 1 : 0.5
 
-    background: Rectangle {
-        radius: root.iconOnly ? height / 2 : QsTheme.Appearance.radius.s
-        color: root.hovered ? root.palette.hover : root.palette.surface
-        border.width: root.variant === "outline" ? 1 : 0
-        border.color: QsTheme.Theme.border
-    }
+    Text {
+        id: label
 
-    contentItem: Text {
+        anchors.centerIn: parent
+        width: root.iconOnly ? parent.width : parent.width - QsTheme.Appearance.padding.m * 2
         text: root.text
         font.family: root.iconOnly ? QsTheme.Appearance.iconFamily : QsTheme.Appearance.fontFamily
         font.pixelSize: QsTheme.Appearance.fontSize.m
         font.weight: Font.Medium
-        color: root.palette.foreground
+        color: root.palette.onSurface
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
     }
 
-    HoverHandler {
-        cursorShape: root.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
+    StateLayer {
+        color: root.palette.onSurface
+        enabled: root.enabled
+        onClicked: root.clicked()
     }
 }

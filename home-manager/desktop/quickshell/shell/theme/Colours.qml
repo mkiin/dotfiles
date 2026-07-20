@@ -71,19 +71,19 @@ Singleton {
     readonly property color background: root.data.background
 
     readonly property color primary: root.data.primary
-    readonly property color onPrimary: root.data.onPrimary
+    readonly property color _onPrimary: root.data.onPrimary
     readonly property color primaryContainer: root.data.primaryContainer
-    readonly property color onPrimaryContainer: root.data.onPrimaryContainer
+    readonly property color _onPrimaryContainer: root.data.onPrimaryContainer
 
     readonly property color secondary: root.data.secondary
-    readonly property color onSecondary: root.data.onSecondary
+    readonly property color _onSecondary: root.data.onSecondary
     readonly property color secondaryContainer: root.data.secondaryContainer
-    readonly property color onSecondaryContainer: root.data.onSecondaryContainer
+    readonly property color _onSecondaryContainer: root.data.onSecondaryContainer
 
     readonly property color tertiary: root.data.tertiary
-    readonly property color onTertiary: root.data.onTertiary
+    readonly property color _onTertiary: root.data.onTertiary
     readonly property color tertiaryContainer: root.data.tertiaryContainer
-    readonly property color onTertiaryContainer: root.data.onTertiaryContainer
+    readonly property color _onTertiaryContainer: root.data.onTertiaryContainer
 
     readonly property color surface: root.data.surface
     readonly property color surfaceDim: root.data.surfaceDim
@@ -95,21 +95,21 @@ Singleton {
     readonly property color surfaceContainerHighest: root.data.surfaceContainerHighest
     readonly property color surfaceVariant: root.data.surfaceVariant
 
-    readonly property color onSurface: root.data.onSurface
-    readonly property color onSurfaceVariant: root.data.onSurfaceVariant
+    readonly property color _onSurface: root.data.onSurface
+    readonly property color _onSurfaceVariant: root.data.onSurfaceVariant
 
     readonly property color outline: root.data.outline
     readonly property color outlineVariant: root.data.outlineVariant
 
     readonly property color error: root.data.error
-    readonly property color onError: root.data.onError
+    readonly property color _onError: root.data.onError
     readonly property color errorContainer: root.data.errorContainer
-    readonly property color onErrorContainer: root.data.onErrorContainer
+    readonly property color _onErrorContainer: root.data.onErrorContainer
 
     readonly property color success: root.data.success
-    readonly property color onSuccess: root.data.onSuccess
+    readonly property color _onSuccess: root.data.onSuccess
     readonly property color warning: root.data.warning
-    readonly property color onWarning: root.data.onWarning
+    readonly property color _onWarning: root.data.onWarning
     readonly property color info: root.data.info
 
     readonly property color inverseSurface: root.data.inverseSurface

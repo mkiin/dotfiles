@@ -2,51 +2,57 @@ pragma Singleton
 
 import Quickshell
 import QtQuick
+import "." as QsTheme
 
 Singleton {
     // ── 面（低→高） ──
-    readonly property color background: Colours.background
-    readonly property color inset: Colours.surfaceContainerLow
-    readonly property color panel: Colours.surfaceContainer
-    readonly property color card: Colours.surfaceContainerHigh
-    readonly property color cardHigh: Colours.surfaceContainerHighest
+    readonly property color background: QsTheme.Colours.background
+    readonly property color inset: QsTheme.Colours.surfaceContainerLow
+    readonly property color panel: QsTheme.Colours.surfaceContainer
+    readonly property color card: QsTheme.Colours.surfaceContainerHigh
+    readonly property color cardHigh: QsTheme.Colours.surfaceContainerHighest
 
     // ── 強調色とその上の文字 ──
-    readonly property color primary: Colours.primary
-    readonly property color onPrimary: Colours.onPrimary
-    readonly property color primaryContainer: Colours.primaryContainer
-    readonly property color onPrimaryContainer: Colours.onPrimaryContainer
+    readonly property color primary: QsTheme.Colours.primary
+    readonly property color _onPrimary: QsTheme.Colours._onPrimary
+    readonly property color primaryContainer: QsTheme.Colours.primaryContainer
+    readonly property color _onPrimaryContainer: QsTheme.Colours._onPrimaryContainer
 
-    readonly property color secondary: Colours.secondary
-    readonly property color onSecondary: Colours.onSecondary
-    readonly property color secondaryContainer: Colours.secondaryContainer
-    readonly property color onSecondaryContainer: Colours.onSecondaryContainer
+    readonly property color secondary: QsTheme.Colours.secondary
+    readonly property color _onSecondary: QsTheme.Colours._onSecondary
+    readonly property color secondaryContainer: QsTheme.Colours.secondaryContainer
+    readonly property color _onSecondaryContainer: QsTheme.Colours._onSecondaryContainer
 
-    readonly property color tertiary: Colours.tertiary
-    readonly property color onTertiary: Colours.onTertiary
-    readonly property color tertiaryContainer: Colours.tertiaryContainer
-    readonly property color onTertiaryContainer: Colours.onTertiaryContainer
+    readonly property color tertiary: QsTheme.Colours.tertiary
+    readonly property color _onTertiary: QsTheme.Colours._onTertiary
+    readonly property color tertiaryContainer: QsTheme.Colours.tertiaryContainer
+    readonly property color _onTertiaryContainer: QsTheme.Colours._onTertiaryContainer
 
-    readonly property color error: Colours.error
-    readonly property color onError: Colours.onError
-    readonly property color errorContainer: Colours.errorContainer
-    readonly property color onErrorContainer: Colours.onErrorContainer
+    readonly property color error: QsTheme.Colours.error
+    readonly property color _onError: QsTheme.Colours._onError
+    readonly property color errorContainer: QsTheme.Colours.errorContainer
+    readonly property color _onErrorContainer: QsTheme.Colours._onErrorContainer
 
-    readonly property color warning: Colours.warning
-    readonly property color onWarning: Colours.onWarning
-    readonly property color success: Colours.success
-    readonly property color onSuccess: Colours.onSuccess
-    readonly property color info: Colours.info
+    readonly property color warning: QsTheme.Colours.warning
+    readonly property color _onWarning: QsTheme.Colours._onWarning
+    readonly property color success: QsTheme.Colours.success
+    readonly property color _onSuccess: QsTheme.Colours._onSuccess
+    readonly property color info: QsTheme.Colours.info
 
     // ── 文字（面の上） ──
-    readonly property color text: Colours.onSurface
-    readonly property color textVariant: Colours.onSurfaceVariant
+    readonly property color text: QsTheme.Colours._onSurface
+    readonly property color textVariant: QsTheme.Colours._onSurfaceVariant
 
     // ── 線 ──
-    readonly property color border: Colours.outlineVariant
-    readonly property color outline: Colours.outline
+    readonly property color border: QsTheme.Colours.outlineVariant
+    readonly property color outline: QsTheme.Colours.outline
 
     // ── 効果（不透明。濃さは利用側の opacity で与える） ──
-    readonly property color shadow: Colours.shadow
-    readonly property color scrim: Colours.scrim
+    readonly property color shadow: QsTheme.Colours.shadow
+    readonly property color scrim: QsTheme.Colours.scrim
+
+    // ── State layer ──
+    // 面の上に重ねる強度。重ねる色は各部品が自分の面に対応する on-color を渡す。
+    readonly property real stateHovered: 0.08
+    readonly property real statePressed: 0.12
 }

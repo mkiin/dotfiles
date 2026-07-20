@@ -1,38 +1,45 @@
 import QtQuick 6.10
-import QtQuick.Templates 6.10 as T
 import "../theme" as QsTheme
 
-// ON/OFF のトグル。checked と入力は Templates が持つ。
-T.Switch {
+// ON/OFF のトグル。checked は外から与えられた値を描くだけで、内部では持たない。
+// 切り替えは clicked を受けた側が行う。
+Rectangle {
     id: root
 
     // sm | default
     property string size: "default"
 
+    property bool checked: false
+
+    signal clicked
+
     readonly property int trackWidth: root.size === "sm" ? 24 : 32
     readonly property int trackHeight: root.size === "sm" ? 14 : 18
     readonly property int thumbSize: root.trackHeight - 2
 
+    // 面と、その上に乗る on-color の組。
+    readonly property color surfaceColor: root.checked ? QsTheme.Theme.primary : QsTheme.Theme.cardHigh
+    readonly property color onSurfaceColor: root.checked ? QsTheme.Theme._onPrimary : QsTheme.Theme.text
+
     implicitWidth: root.trackWidth
     implicitHeight: root.trackHeight
-    padding: 0
+
+    color: root.surfaceColor
+    radius: height / 2
     opacity: root.enabled ? 1 : 0.5
 
-    background: Rectangle {
-        radius: height / 2
-        color: root.checked ? QsTheme.Theme.primary : QsTheme.Theme.cardHigh
-    }
-
-    indicator: Rectangle {
+    Rectangle {
         x: root.checked ? root.trackWidth - width - 1 : 1
         y: (root.trackHeight - height) / 2
         width: root.thumbSize
         height: root.thumbSize
         radius: height / 2
-        color: root.checked ? QsTheme.Theme.onPrimary : QsTheme.Theme.text
+        color: root.onSurfaceColor
     }
 
-    HoverHandler {
-        cursorShape: root.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
+    StateLayer {
+        color: root.onSurfaceColor
+        enabled: root.enabled
+        onClicked: root.clicked()
     }
 }
