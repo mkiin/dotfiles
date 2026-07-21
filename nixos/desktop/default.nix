@@ -9,5 +9,6 @@
     ./vesktop
     ./steam
     ./games/honkers
+    ./games/sleepy
   ];
 }
