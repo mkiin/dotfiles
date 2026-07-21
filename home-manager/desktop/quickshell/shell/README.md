@@ -9,9 +9,7 @@ waybar と併用する常駐デーモン。
 
 ## 現在の状態
 
-**動くもの**：Bluetooth ポップアウト、Audio ポップアウト、waybar 連携（通知件数とアイドル抑制の表示）、matugen によるカラーリロード。
-
-**未実装**：コントロールセンター。`windows/controlcenter/` が存在せず、`shell.qml` の該当箇所はコメントアウトしてある。
+**動くもの**：コントロールセンター、Bluetooth ポップアウト、Audio ポップアウト、waybar 連携（通知件数とアイドル抑制の表示）、matugen によるカラーリロード。
 
 **スタブ**：`features/network/Network.qml`。Wi-Fi を使っていないため、CC のタイルを描くための最小限だけを返す。
 
@@ -120,14 +118,16 @@ matugen のテンプレートは `home-manager/desktop/matugen/templates/quicksh
 
 | コマンド                                | 動作                             |
 | --------------------------------------- | -------------------------------- |
+| `qs -c shell ipc call cc toggle`        | コントロールセンター             |
 | `qs -c shell ipc call audio toggle`     | オーディオポップアウト（waybar） |
 | `qs -c shell ipc call bluetooth toggle` | Bluetooth ポップアウト（waybar） |
 | `qs -c shell ipc call cc status`        | waybar の通知アイコン用 JSON     |
 | `qs -c shell ipc call idle status`      | waybar のアイドル抑制表示用 JSON |
 | `qs -c shell ipc call theme reload`     | matugen 色の再読込               |
 
-`cc toggle` は CC の実装後に戻す。
-Super+N と waybar の 3 モジュールが同じコマンドを呼ぶ。
+`cc toggle` は Super+N と waybar の 3 モジュールが同じコマンドを呼ぶ。
+パネルは `shell.qml` の `openPanel()` が排他制御し、同時に 1 つだけ開く。
+CC を閉じると `Notifs.markAllRead()` で既読になり、waybar のバッジが消える。
 
 waybar 側の `format-icons` と CSS は `none` / `notification` / `dnd-none` / `dnd-notification` の
 4 状態に整理してある。
@@ -153,37 +153,27 @@ nix run .#build
 nix run .#fmt -- --fail-on-change
 ```
 
-## 次にやること
+## コントロールセンター
 
-コントロールセンターを作る。
-構成は削除前と同じにする。
+`windows/controlcenter/` に CC 専用の部品を置く。
 
 ```
-PopupCard (420px)
-├── ヘッダー … 時刻・日付 + 電源ボタン
+ControlCenterWindow (PopupCard 420px)
+├── ヘッダー … 時刻・日付（SystemClock、開いている間だけ動く）+ 電源ボタン(wlogout)
 ├── QuickActions … 6 タイル 2 列 3 行
 ├── Divider
-├── 音量スライダー + アプリ音量の展開トグル
-├── MediaCard
-└── NotificationList
+├── 音量スライダー + アプリ別音量の展開トグル（Audio.streams）
+├── MediaCard … プレイヤーが居るときだけ表示
+└── NotificationList … 内部スクロール、空のときは Empty
 ```
 
-必要な部品は `QuickActions`、`MediaCard`、`NotificationList` の 3 つ。
-いずれも CC 専用なので `windows/controlcenter/` に置く。
-
 6 タイルは Wi-Fi、Bluetooth、Do Not Disturb、Caffeine、Screenshot、Record Screen。
-定義は削除前の実装（コミット `4d6988e`）を参照する。
-状態層の API が変わっているため、次の 2 点は読み替えが要る。
+Wi-Fi は `features/network` がスタブのため常に Off 表示。
 
-- `IdleInhibitor.inhibited = !inhibited` → `IdleInhibitor.toggle()`
-- `Screenshot.startRecording()` と `stopRecording()` → `Screenshot.toggleRecording()`
+音量スライダーはドラッグで宣言時の束縛が切れるため、
+Pipewire 側の変化は `Binding on value`（`when: !pressed`）で書き戻している。
 
-CC が動いたら `shell.qml` の `openPanel()` を戻す。
-パネルを同時に 1 つだけ開く排他制御で、現在はコメントアウトしてある。
+## 次にやること
 
-### 積み残し
-
-- アプリ別音量ミキサー。`Audio.streams` は実装済みだが UI がない。CC の実装時に確認する
 - 通知トースト。`windows/NotificationToasts.qml` を削除したまま。`Notifs` に `hasAnimated` を残してある
 - `features/network` のスタブを実装に置き換える。`nmcli monitor` で変化を検知する方針
-- `Empty` の見た目確認。デバイスが常に存在するため表示されていない

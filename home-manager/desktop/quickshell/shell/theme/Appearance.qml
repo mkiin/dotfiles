@@ -117,8 +117,9 @@ Singleton {
         property int controlCenterWidth: 420
         // クイック操作タイルの高さ
         property int tileHeight: 72
-        // 通知リストが最低限確保する高さ
+        // 通知リストが最低限確保する高さと、内部スクロールに切り替わる高さ
         property int notificationMinHeight: 160
+        property int notificationMaxHeight: 360
     }
 
     // 画面端との隙間。waybar の島と縦のラインを揃える（style.nix の gapIsland と同値）。
