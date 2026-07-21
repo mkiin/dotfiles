@@ -14,6 +14,8 @@
       eza
       jq
       fzf
+      zip
+      unzip
       zoxide
       # shell
       shellcheck
