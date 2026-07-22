@@ -100,6 +100,9 @@ ShellRoot {
     // waybar のアイドルインヒビター表示
     IpcHandler {
         target: "idle"
+        function toggle(): void {
+            QsPower.IdleInhibitor.toggle();
+        }
         function status(): string {
             const inhibited = QsPower.IdleInhibitor.inhibited;
             return JSON.stringify({

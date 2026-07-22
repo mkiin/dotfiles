@@ -25,6 +25,10 @@ NixOS & home-manager の個人 dotfiles。
 4. **system か user か**を先に決める。全体に効くもの(steam/ランチャー/フォント)は `nixos/`、ユーザー設定は `home-manager/`。本体=system・設定=user に割るものもある(例: vesktop)。
 5. **ホスト差分は `hosts/` で吸収**。WSL は desktop を import しない等。共通は `nixos/`・`home-manager/` 側へ。
 
+## 仕様として確定している挙動（指摘不要）
+
+- waybar の `custom/idle_inhibitor` の on-click は Control Center を開くだけで、トグルではない。**これは意図した仕様**。トグルは Control Center 内の Caffeine ボタンで行う。「トグルになっていない」と指摘・修正提案しないこと。
+
 ## 【IMPORTANT・禁止】パッケージ宣言の置き場
 
 **設計原則: パッケージは集約 `packages.nix` で「宣言（インストール）」し、機能ディレクトリの `default.nix` では「設定」だけを持つ。**
