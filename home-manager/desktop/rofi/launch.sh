@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# すでに開いていれば閉じる（Super+A / アイコンクリックの toggle 挙動）
-if pgrep -x rofi >/dev/null; then
-  pkill -x rofi || true
+# 開いていれば閉じる（waybar アイコン再クリック / Super+A の toggle）
+if pkill -x rofi 2>/dev/null; then
   exit 0
 fi
 

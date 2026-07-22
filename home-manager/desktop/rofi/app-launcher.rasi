@@ -19,21 +19,19 @@ configuration {
 }
 
 /*****----- Main Window -----*****/
-/* fullscreen の透明レイヤーにして枠外(背景)クリックで click-to-exit を効かせる。
+/* fullscreen の透明レイヤーで画面全体のクリックを rofi に届け、config.rasi の
+   kb-cancel(MousePrimary) で枠外クリック=閉じるを実現する(waybar アイコンも枠外扱いで閉じる)。
    実パネルは panel、その周囲を伸縮 dummy で挟んで中央寄せする */
 window {
     transparency:                "real";
     fullscreen:                  true;
-    enabled:                     true;
     cursor:                      "default";
     background-color:            transparent;
     children:                    [ "mainbox" ];
 }
 
 /*****----- Main Box -----*****/
-/* 縦方向の中央寄せ: 上下の伸縮 dummy で centerbox を挟む */
 mainbox {
-    enabled:                     true;
     spacing:                     0px;
     padding:                     0px;
     background-color:            transparent;
@@ -43,7 +41,6 @@ mainbox {
 dummy-top, dummy-bottom {
     background-color:            transparent;
 }
-/* 横方向の中央寄せ: 左右の伸縮 dummy で panel を挟む */
 centerbox {
     expand:                      false;
     spacing:                     0px;
@@ -54,7 +51,6 @@ centerbox {
 dummy-left, dummy-right {
     background-color:            transparent;
 }
-/* 旧 window が持っていたパネルの見た目(幅/角丸/背景)はここが担う */
 panel {
     expand:                      false;
     width:                       1000px;
