@@ -28,6 +28,14 @@ let
         cantarell-fonts
         ;
     })
+
+    # noto-fonts-cjk の可変フォント版(VF ttc)は Firefox 系で太字(600 前後)の
+    # 欧文の送り幅が壊れて字が重なる。fonts.enableDefaultPackages も素の
+    # パッケージを引き込むため、overlay で全域を静的版に差し替える。
+    (_final: prev: {
+      noto-fonts-cjk-sans = prev.noto-fonts-cjk-sans.override { static = true; };
+      noto-fonts-cjk-serif = prev.noto-fonts-cjk-serif.override { static = true; };
+    })
   ];
 
   mkPkgs =

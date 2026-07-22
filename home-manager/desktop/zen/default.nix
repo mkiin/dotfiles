@@ -68,6 +68,7 @@ in
 
         "intl.accept_languages" = "ja,en-US,en";
 
+        # Web フォントを使わず常に下記の指定フォントで描画する
         "font.name.serif.ja" = "Noto Serif CJK JP";
         "font.name.sans-serif.ja" = "Noto Sans CJK JP";
         "font.name.monospace.ja" = "UDEV Gothic";
