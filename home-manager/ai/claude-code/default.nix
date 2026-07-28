@@ -54,4 +54,6 @@
     agentsDir = inputs.self + "/home-manager/ai/claude-code/files/agents";
     rulesDir = inputs.self + "/home-manager/ai/claude-code/files/rules";
   };
+
+  xdg.mimeApps.defaultApplications."x-scheme-handler/claude-cli" = "claude-code-url-handler.desktop";
 }
