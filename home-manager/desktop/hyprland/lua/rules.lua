@@ -56,3 +56,12 @@ hl.layer_rule({
 	blur = true,
 	ignore_alpha = 0.2,
 })
+
+-- PopupCard は全面透明オーバーレイの上にカードを描くため、
+-- ignore_alpha でカードの半透明部分だけに blur を乗せる
+hl.layer_rule({
+	name = "quickshell-glass-blur",
+	match = { namespace = "quickshell" },
+	blur = true,
+	ignore_alpha = 0.2,
+})

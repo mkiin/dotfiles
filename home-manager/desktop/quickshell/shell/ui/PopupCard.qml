@@ -70,10 +70,11 @@ PanelWindow {
             width: root.cardWidth
             height: Math.min(contentItem.implicitHeight + root.padding * 2, root.maxHeight)
 
-            color: QsTheme.Theme.panel
+            // hyprland の quickshell-glass-blur layerrule とセットでガラスになる
+            color: QsTheme.Theme.glassTint
             radius: QsTheme.Appearance.radius.m
             border.width: 1
-            border.color: QsTheme.Theme.border
+            border.color: QsTheme.Theme.glassBorder
             clip: true
 
             layer.enabled: true

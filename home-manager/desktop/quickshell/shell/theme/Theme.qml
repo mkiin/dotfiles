@@ -47,6 +47,10 @@ Singleton {
     readonly property color border: QsTheme.Colours.outlineVariant
     readonly property color outline: QsTheme.Colours.outline
 
+    // ── ガラス面（matugen 非依存の固定値。waybar style.nix の glassTint / glassBorder と同値） ──
+    readonly property color glassTint: Qt.rgba(10 / 255, 12 / 255, 18 / 255, 0.58)
+    readonly property color glassBorder: Qt.rgba(1, 1, 1, 0.08)
+
     // ── 効果（不透明。濃さは利用側の opacity で与える） ──
     readonly property color shadow: QsTheme.Colours.shadow
     readonly property color scrim: QsTheme.Colours.scrim
