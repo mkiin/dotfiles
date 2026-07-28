@@ -18,7 +18,7 @@ in
     enable = true;
 
     sources = {
-      # Local: 自作スキル (cm, write-sentence)
+      # Local: 自作スキル (cm, japanese-tech-writing, cognitive-rhythm-writing)
       local = {
         path = local-skills;
         subdir = ".";
