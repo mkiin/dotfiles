@@ -16,11 +16,12 @@
 
 ## Workflow 一覧とトリガー
 
-| Workflow      | ファイル                   | トリガー                             | 役割                                 |
-| ------------- | -------------------------- | ------------------------------------ | ------------------------------------ |
-| CI: Lint      | `workflows/lint.yaml`      | `push` / `pull_request`              | `nix flake check` + フォーマット確認 |
-| CI: Nix build | `workflows/nix-build.yaml` | `push`(main) / `pull_request` / 手動 | nixos と home-manager(wsl) をビルド  |
-| CI: Nix diff  | `workflows/nix-diff.yaml`  | `pull_request`(Nix 関連 paths)       | derivation 差分を PR にコメント      |
+| Workflow      | ファイル                    | トリガー                             | 役割                                                                      |
+| ------------- | --------------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| CI: Lint      | `workflows/lint.yaml`       | `push` / `pull_request`              | `nix flake check` + フォーマット確認                                      |
+| CI: Nix build | `workflows/nix-build.yaml`  | `push`(main) / `pull_request` / 手動 | nixos と home-manager(wsl) をビルド                                       |
+| CI: Nix diff  | `workflows/nix-diff.yaml`   | `pull_request`(Nix 関連 paths)       | derivation 差分を PR にコメント                                           |
+| Cache: Warm   | `workflows/cache-warm.yaml` | 毎日 03:00 UTC / 手動                | Renovate の翌朝の更新を先取りビルドして cachix を温める（非ブロッキング） |
 
 ## Composite Action（再利用部品）
 
@@ -124,7 +125,7 @@ nixpkgs に追従するため、lock が nixpkgs を更新するたびに派生�
 `docs/superpowers/specs/2026-07-06-cachix-ci-build-cache-design.md`。
 
 なお Cachix は「push 済みの成果物を substitute する」仕組みのため、Renovate PR の初回ビルドは依然
-ソースビルドになる。ここは `timeout-minutes: 60`（public ランナーは無料無制限）で完走させる分担。
+ソースビルドになる。ここは `timeout-minutes: 120`（public ランナーは無料無制限）で完走させる分担。
 
 その他のキャッシュ事情:
 
@@ -150,3 +151,24 @@ nixpkgs に追従するため、lock が nixpkgs を更新するたびに派生�
 public リポジトリ + 標準ランナー（`ubuntu-latest`）なので Actions は無料・無制限。
 larger runner を使うか private 化しない限り課金されない（private + Free は月 2000 分の無料枠）。
 build(nixos) が 28 分かかっても、public 標準ランナーである限り分課金は発生しない。
+
+### 7. cache-warm.yaml: 初回コールドビルドを PR の必須チェックから逃がす
+
+`build (nixos)` / `build (wsl-home)` は必須チェックである以上 `timeout-minutes` に上限がある。
+llm-agents.nix の更新で `codex`（Rust 製、multi-crate workspace）のようなビルドの重いパッケージが
+巻き込まれてキャッシュミスすると、120 分でも足りず cancelled になり得る（実例: 2026-07-24, PR #61,
+rustc バージョン変更で codex 一式が未キャッシュになり 60 分タイムアウト）。cancelled は required
+status check 上は非 green 扱いのため、Renovate の automerge が永久に成立しない。
+
+→ `cache-warm.yaml` を新設。毎日 03:00 UTC（Renovate の `lockFileMaintenance` schedule `before 6am`
+より前）に `nix flake update`（コミットしない、その場限り）で翌朝 Renovate が作るのと同じ更新を
+先取りし、`timeout-minutes: 180` の非ブロッキングジョブ（`continue-on-error: true`、必須チェックには
+未登録）でビルドして `mkiin-dotfiles.cachix.org` に温めておく。これにより実際の Renovate PR が来た
+時点では既にキャッシュがヒットし、必須チェック側は短時間で完走する想定。
+
+ビルドは matrix（別ランナー）ではなく単一ランナー上で
+[2026-06-25 に GA した parallel steps](https://github.blog/changelog/2026-06-25-actions-steps-can-now-be-run-in-parallel/)
+（`parallel:` ブロック）を使って nixos / wsl-home を並行実行している。両 configuration は
+`home-manager/{cli,editor,ai}` の大半（codex や claude-code を含む）を共有しているため、matrix で
+ランナーを分けると重い derivation を 2 回コールドビルドすることになる。同一 Nix store を共有する
+単一ランナー上で並行ビルドすれば、共通の重い derivation は 1 回のビルドで両方に効く。

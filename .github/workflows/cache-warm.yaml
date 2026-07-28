@@ -1,0 +1,40 @@
+name: "Cache: Warm (Renovate preview)"
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+jobs:
+  warm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    continue-on-error: true
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup Nix
+        uses: ./.github/actions/setup-nix
+
+      - name: Preview next Renovate lockFileMaintenance update
+        run: nix flake update
+
+      - name: Setup Cachix
+        uses: cachix/cachix-action@v17
+        with:
+          name: mkiin-dotfiles
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+      - parallel:
+          - name: Build nixos
+            run: |
+              nix build '.#nixosConfigurations.nixos.config.system.build.toplevel' \
+                --print-build-logs \
+                --show-trace
+
+          - name: Build wsl-home
+            run: |
+              nix build '.#homeConfigurations."mkiin@wsl".activationPackage' \
+                --print-build-logs \
+                --show-trace
