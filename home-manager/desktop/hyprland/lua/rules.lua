@@ -38,6 +38,18 @@ hl.window_rule({
 	no_focus = true,
 })
 
+-- NIKKE 本体窓(Xwayland)に blur 4pass + shadow + rounding を掛けると
+-- nvidia 595.84(Blackwell)が Xid 69 を吐き Hyprland ごと巻き添えで落ちる。
+hl.window_rule({
+	name = "nikke-no-effects",
+	match = { class = "^steam_proton$", title = "^NIKKE$", xwayland = true },
+	no_blur = true,
+	no_shadow = true,
+	rounding = 0,
+	no_anim = true,
+	opaque = true,
+})
+
 hl.layer_rule({
 	name = "logout-blur",
 	match = { namespace = "logout_dialog" },
