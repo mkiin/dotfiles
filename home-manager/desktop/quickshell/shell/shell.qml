@@ -120,4 +120,34 @@ ShellRoot {
             QsTheme.Colours.reload();
         }
     }
+
+    // waybar の idle/notify モジュールは signal 駆動。ポーリングにすると 2 秒ごとに
+    // qs を起動することになり(1 回あたりピーク 88MB)、こちらの応答が詰まると
+    // waybar の cgroup に積み上がって GB 級に膨らむ。
+    function refreshWaybar(signum: int): void {
+        Quickshell.execDetached(["pkill", `-RTMIN+${signum}`, "waybar"]);
+    }
+
+    // waybar が先に起動していると初回 exec が空振りするので、こちらの準備完了時に一度撃つ。
+    Component.onCompleted: {
+        root.refreshWaybar(1);
+        root.refreshWaybar(2);
+    }
+
+    Connections {
+        target: QsPower.IdleInhibitor
+        function onInhibitedChanged(): void {
+            root.refreshWaybar(1);
+        }
+    }
+
+    Connections {
+        target: QsNotifications.Notifs
+        function onUnreadCountChanged(): void {
+            root.refreshWaybar(2);
+        }
+        function onDndChanged(): void {
+            root.refreshWaybar(2);
+        }
+    }
 }

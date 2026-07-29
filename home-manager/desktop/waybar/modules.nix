@@ -119,7 +119,10 @@
   "custom/idle_inhibitor" = {
     format = "{}";
     return-type = "json";
-    interval = 2;
+    # quickshell 側(shell.qml)が状態変化時に SIGRTMIN+1 を撃つ。ポーリングだと
+    # 2 秒ごとに qs を起動して 1 回 88MB 積むため signal 駆動にしている。
+    interval = "once";
+    signal = 1;
     exec-if = "which qs";
     exec = "qs -c shell ipc call idle status";
     on-click = "qs -c shell ipc call cc toggle";
@@ -134,7 +137,8 @@
       dnd-none = "󰪓";
     };
     return-type = "json";
-    interval = 2;
+    interval = "once";
+    signal = 2;
     exec-if = "which qs";
     exec = "qs -c shell ipc call cc status";
     on-click = "qs -c shell ipc call cc toggle";
