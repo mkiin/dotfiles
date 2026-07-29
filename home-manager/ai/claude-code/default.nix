@@ -18,7 +18,9 @@
       env = {
         ENABLE_BACKGROUND_TASKS = "1";
         FORCE_AUTO_BACKGROUND_TASKS = "1";
-        DISABLE_MICROCOMPACT = "1";
+        # 自動圧縮も /compact も止める。要約で文脈が欠けるより限界で止まる方が扱いやすい
+        # (DISABLE_MICROCOMPACT は 2.1.220 のバンドルに存在せず無効だったので置き換え)
+        DISABLE_COMPACT = "1";
         DISABLE_INTERLEAVED_THINKING = "1";
         DISABLE_ERROR_REPORTING = "1";
         CLAUDE_CODE_NO_FLICKER = "1";
@@ -39,6 +41,8 @@
           ];
         }
       ];
+      # セーフティ分類器に引っかかった際、Opus 4.8 へ黙って移らずダイアログで選ばせる
+      switchModelsOnFlag = false;
       includeCoAuthoredBy = false;
       alwaysThinkingEnabled = true;
       autoMemoryEnabled = false;
