@@ -23,6 +23,7 @@
     ./zen
     ./vesktop
     ./upscayl
+    ./obsidian
   ];
 
   programs.zsh = {

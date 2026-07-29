@@ -40,6 +40,7 @@ in
     gthumb
     # 画像ビューア。yazi の opener から enter で開く(Wayland native, キー操作)
     imv
+    obsidian
     # NIKKE ランナー。umu-launcher(-bwrap 版)を PATH に置き nikke.sh に掴ませる。
     # dwproton は nix store から NIKKE_PROTON でラッパーに渡す(AGL 非依存)。
     umu-launcher
