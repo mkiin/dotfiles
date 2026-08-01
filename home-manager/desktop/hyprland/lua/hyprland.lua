@@ -7,4 +7,7 @@ require("appearance")
 require("input")
 require("keybinds")
 require("rules")
-pcall(require, "monitors.desk")
+-- monitors.lua は mode.sh が書き出す可変ファイル(未生成の環境では desk へ倒す)。
+if not pcall(require, "monitors") then
+	pcall(require, "monitors.desk")
+end
