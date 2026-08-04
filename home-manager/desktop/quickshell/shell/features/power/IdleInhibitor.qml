@@ -19,25 +19,41 @@ Singleton {
     }
 
     // プロトコル上、抑制には可視サーフェスが必要なので 1px の透明ウィンドウを張る。
-    // Hyprland は layer の map 時に inhibitor を再評価しないため、トグル時に
-    // ウィンドウごと出すと未マップのまま登録されて無視されるレースがある。
-    // 常時マップしておき enabled だけを切り替えることでこれを避ける。
-    // Overlay 層はフルスクリーン中もマップされたままになる。入力マスクは空。
-    PanelWindow {
-        id: inhibitWindow
+    // screen を固定すると mode.sh のモニター切替で出力が一瞬ゼロになった時に
+    // サーフェスごと消え、inhibited=true のまま抑制が効かなくなる。Variants で
+    // 全出力に張り、出力の抜き差しに追従して張り直す。
+    Variants {
+        model: Quickshell.screens
 
-        visible: true
-        exclusionMode: ExclusionMode.Ignore
-        anchors.top: true
-        implicitWidth: 1
-        implicitHeight: 1
-        color: "transparent"
-        mask: Region {}
-        QsWl.WlrLayershell.layer: QsWl.WlrLayer.Overlay
+        // Overlay 層はフルスクリーン中もマップされたままになる。入力マスクは空。
+        PanelWindow {
+            id: inhibitWindow
 
-        QsWl.IdleInhibitor {
-            enabled: root.inhibited
-            window: inhibitWindow
+            required property var modelData
+            // Hyprland は layer の map 時に inhibitor を再評価しないため、map と
+            // 同時に張ると無視される。マップ後に enabled を立て直す。
+            property bool armed: false
+
+            screen: modelData
+            visible: true
+            exclusionMode: ExclusionMode.Ignore
+            anchors.top: true
+            implicitWidth: 1
+            implicitHeight: 1
+            color: "transparent"
+            mask: Region {}
+            QsWl.WlrLayershell.layer: QsWl.WlrLayer.Overlay
+
+            Timer {
+                interval: 200
+                running: true
+                onTriggered: inhibitWindow.armed = true
+            }
+
+            QsWl.IdleInhibitor {
+                enabled: root.inhibited && inhibitWindow.armed
+                window: inhibitWindow
+            }
         }
     }
 }
