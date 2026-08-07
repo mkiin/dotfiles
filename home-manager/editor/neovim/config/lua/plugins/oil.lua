@@ -29,7 +29,7 @@ return {
 			skip_confirm_for_simple_edits = true,
 			columns = { "icon" },
 			view_options = {
-				show_hidden = false,
+				show_hidden = true,
 			},
 			keymaps = {
 				-- <C-h>/<C-l> はウィンドウ移動に使うため oil 側では無効化
