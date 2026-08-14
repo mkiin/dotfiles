@@ -56,7 +56,7 @@ in
       "cloudflare"
       "cloudflare-email-service"
       "durable-objects"
-      "sandbox-sdk"
+      "sandbox-stable"
       "web-perf"
       "workers-best-practices"
       "wrangler"
