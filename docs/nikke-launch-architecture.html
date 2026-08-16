@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NIKKE 起動スタック解説書 — 多層構造と wine 同期機構、fsync デッドロックの解剖</title>
+<style>
+  :root {
+    --bg: #faf9f7;
+    --fg: #2b2a28;
+    --muted: #6b675f;
+    --accent: #8a4b2d;
+    --accent-soft: #f3e6dd;
+    --line: #d9d4cc;
+    --code-bg: #f0ede8;
+    --card: #ffffff;
+    --warn-bg: #fdf3e4;
+    --warn-line: #d9a75b;
+    --ok: #4a7a54;
+    --bad: #a84b3f;
+    --mono: "Moralerspace Neon", "JetBrains Mono", ui-monospace, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1d1c1a;
+      --fg: #e8e4dd;
+      --muted: #a29c91;
+      --accent: #d99a6c;
+      --accent-soft: #33281f;
+      --line: #3d3a35;
+      --code-bg: #282622;
+      --card: #242220;
+      --warn-bg: #302816;
+      --warn-line: #a37b3a;
+      --ok: #7fb389;
+      --bad: #d0796b;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "Hiragino Sans", "Noto Sans JP", sans-serif;
+    line-height: 1.9;
+    font-size: 15.5px;
+  }
+  main { max-width: 860px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+  h1 {
+    font-size: 1.7rem; line-height: 1.5; letter-spacing: .02em;
+    border-bottom: 3px solid var(--accent); padding-bottom: .6rem;
+  }
+  h1 small { display: block; font-size: .9rem; color: var(--muted); font-weight: normal; margin-top: .4rem; }
+  h2 {
+    font-size: 1.3rem; margin-top: 3.5rem;
+    padding-left: .7rem; border-left: 5px solid var(--accent);
+  }
+  h3 { font-size: 1.05rem; margin-top: 2.2rem; color: var(--accent); }
+  p { margin: 1rem 0; }
+  strong { color: var(--accent); }
+  code {
+    font-family: var(--mono); font-size: .85em;
+    background: var(--code-bg); padding: .1em .35em; border-radius: 4px;
+  }
+  pre {
+    background: var(--code-bg); border: 1px solid var(--line); border-radius: 8px;
+    padding: 1rem 1.2rem; overflow-x: auto; line-height: 1.6;
+  }
+  pre code { background: none; padding: 0; font-size: .82rem; }
+  table { border-collapse: collapse; width: 100%; margin: 1.2rem 0; font-size: .92rem; }
+  th, td { border: 1px solid var(--line); padding: .5rem .8rem; text-align: left; vertical-align: top; }
+  th { background: var(--accent-soft); }
+  .layer {
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: .8rem 1.2rem; margin: .5rem 0; position: relative;
+  }
+  .layer .who { font-family: var(--mono); font-size: .82rem; color: var(--accent); font-weight: bold; }
+  .layer .why { font-size: .88rem; color: var(--muted); margin-top: .15rem; }
+  .arrow { text-align: center; color: var(--muted); font-size: .8rem; margin: .1rem 0; }
+  .note {
+    background: var(--warn-bg); border-left: 4px solid var(--warn-line);
+    border-radius: 0 8px 8px 0; padding: .8rem 1.2rem; margin: 1.4rem 0; font-size: .92rem;
+  }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 700px) { .cols { grid-template-columns: 1fr; } }
+  figure { margin: 1.6rem 0; }
+  figcaption { font-size: .85rem; color: var(--muted); text-align: center; margin-top: .5rem; }
+  svg text { font-family: var(--mono); fill: var(--fg); }
+  .toc {
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: 1rem 1.6rem; margin: 2rem 0;
+  }
+  .toc ol { margin: .4rem 0; padding-left: 1.4rem; }
+  .toc a { color: var(--accent); text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+  .tag {
+    display: inline-block; font-size: .72rem; font-family: var(--mono);
+    padding: .05em .5em; border-radius: 99px; border: 1px solid var(--line);
+    color: var(--muted); vertical-align: middle; margin-left: .4em;
+  }
+  .good { color: var(--ok); font-weight: bold; }
+  .bad { color: var(--bad); font-weight: bold; }
+  footer { margin-top: 4rem; padding-top: 1rem; border-top: 1px solid var(--line); font-size: .85rem; color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+
+<h1>NIKKE 起動スタック解説書
+<small>多層構造の役割分担、wine 同期機構の系譜、そして fsync デッドロックの解剖（2026-08-16 調査に基づく）</small>
+</h1>
+
+<div class="toc">
+<b>目次</b>
+<ol>
+  <li><a href="#stack">起動スタックの全体像：なぜ 7 層もあるのか</a></li>
+  <li><a href="#sync">wine の同期機構：4 世代の系譜</a></li>
+  <li><a href="#race">fsync の missed-wakeup レース：デッドロックの機構</a></li>
+  <li><a href="#evidence">今回のハングの診断根拠</a></li>
+  <li><a href="#dwproton">dwproton という fork：誰が何を配っているのか</a></li>
+  <li><a href="#nix">nix 管理の実態と更新の流れ</a></li>
+  <li><a href="#fix">解決の選択肢と、それぞれが直すもの</a></li>
+</ol>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="stack">1. 起動スタックの全体像：なぜ 7 層もあるのか</h2>
+
+<p>
+端末で <code>nikke</code> と打ってからゲーム画面が出るまでに、プロセスは 7 つの層を通過する。
+各層は「下の層が保証しないこと」をひとつずつ埋めるために存在しており、どれも飾りではない。
+まず全体を眺めてから、層ごとに「何を保証するか」を見る。
+</p>
+
+<div class="layer">
+  <div class="who">① nikke（nix ラッパー） <span class="tag">packages.nix が生成</span></div>
+  <div class="why">nix store 内の dwproton の絶対パスを <code>NIKKE_PROTON</code> として注入し、nikke.sh を起動する。パスの解決だけを担う薄い層。</div>
+</div>
+<div class="arrow">↓ exec</div>
+<div class="layer">
+  <div class="who">② nikke.sh（監視ラッパー） <span class="tag">scripts/nikke.sh</span></div>
+  <div class="why">ACE（アンチチート）の初期化レースに対する運用対策の層。Steam 常駐の健全化、レジストリ tweak、起動リトライ、ウォッチドッグを担う。<b>下の層のどれも「起動が確率的に失敗する」ことへの対処を持たない</b>ため、この層が生まれた。</div>
+</div>
+<div class="arrow">↓ setsid + 起動</div>
+<div class="layer">
+  <div class="who">③ steam-run（FHS 環境 / bwrap） <span class="tag">nixpkgs</span></div>
+  <div class="why">NixOS には <code>/usr/lib</code> のような FHS 配置が無い。bubblewrap で「普通の Linux に見える」名前空間を作り、FHS を前提とする umu / Steam Runtime を動かせるようにする。<b>NixOS 固有の層</b>。</div>
+</div>
+<div class="arrow">↓</div>
+<div class="layer">
+  <div class="who">④ umu-run（umu-launcher） <span class="tag">nixpkgs</span></div>
+  <div class="why">「Steam の外で Proton を使う」ための標準ランチャー。Steam Runtime のダウンロード・更新、GAMEID（<code>umu-nikke</code>）に基づく protonfix の適用、Proton の起動引数の組み立てを担う。</div>
+</div>
+<div class="arrow">↓</div>
+<div class="layer">
+  <div class="who">⑤ pressure-vessel + steamrt4（Steam Linux Runtime） <span class="tag">Valve</span></div>
+  <div class="why">もう一段のコンテナ。ホストの glibc やライブラリのバージョン差を隠し、Proton が想定する固定のライブラリ環境（sniper/steamrt4）を提供する。ゲームのプロセスはこの中の PID 名前空間で動くため、ホストの <code>pgrep</code> から wine プロセスの一部が見えなくなる。</div>
+</div>
+<div class="arrow">↓</div>
+<div class="layer">
+  <div class="who">⑥ dwproton（Proton fork = wine 本体） <span class="tag">Dawn Winery / nix 管理</span></div>
+  <div class="why">Windows API を Linux 上に実装する層。プロセス起動時に protonfix（<code>umu-nikke.py</code>）を実行し、wineserver・services.exe 等の wine 基盤プロセスを立ち上げる。<b>今回のデッドロックはこの層の同期実装（fsync）で起きた</b>。</div>
+</div>
+<div class="arrow">↓</div>
+<div class="layer">
+  <div class="who">⑦ nikke_launcher.exe → nikke.exe + ACE <span class="tag">Tencent / Level Infinite</span></div>
+  <div class="why">Windows バイナリの世界。ランチャー（TCLS 系）が自己更新とゲーム起動を担い、ACE（AntiCheatExpert）がゲームと並走する。ランチャー本体のロジックは <code>base.dll</code> に置かれ、exe は薄いシェルになっている。</div>
+</div>
+
+<div class="note">
+<b>覚え方</b>：①〜②が「このリポジトリの持ち物」、③が「NixOS の都合」、④〜⑤が「Steam エコシステムの都合」、⑥〜⑦が「Windows 互換の本体」。
+問題調査のときは、症状がどの層の責務かをまず切り分ける。今回の例では「ウィンドウが出ない・CPU 0%」は⑦の症状に見えて、原因は⑥の同期実装だった。
+</div>
+
+<!-- ================================================================ -->
+<h2 id="sync">2. wine の同期機構：4 世代の系譜</h2>
+
+<p>
+Windows のプログラムは、スレッド間・プロセス間の待ち合わせに <b>カーネルオブジェクト</b>（Event、Mutex、Semaphore）を使う。
+<code>SetEvent</code> で旗を立て、<code>WaitForSingleObject</code> / <code>WaitForMultipleObjects</code> で旗が立つまで眠る、という仕組みで、
+Windows カーネルは「signal した瞬間に待機中のスレッドを必ず起こす」ことを保証する。
+</p>
+
+<p>
+wine はこの保証を Linux 上で再現しなければならない。その実装は 4 世代あり、<b>速さと正しさのトレードオフ</b>の歴史になっている。
+</p>
+
+<table>
+<tr><th>世代</th><th>仕組み</th><th>正しさ</th><th>速さ</th><th>備考</th></tr>
+<tr>
+  <td><b>server sync</b><br>（wine 標準・最古）</td>
+  <td>すべての待ち合わせを wineserver プロセスへのソケット RPC で行う</td>
+  <td class="good">正しい</td>
+  <td class="bad">遅い</td>
+  <td>1 回の Wait ごとにプロセス間往復が発生する</td>
+</tr>
+<tr>
+  <td><b>esync</b></td>
+  <td>オブジェクトを Linux の eventfd で表現し、カーネルを介して直接待つ</td>
+  <td>ほぼ正しい（一部レースあり）</td>
+  <td class="good">速い</td>
+  <td>fd を大量消費する</td>
+</tr>
+<tr>
+  <td><b>fsync</b><br>（今回の主役）</td>
+  <td>オブジェクトを<b>共有メモリ上の整数</b>で表現し、futex システムコールで待つ。カーネルはオブジェクトの意味を知らない</td>
+  <td class="bad">近似（レースあり）</td>
+  <td class="good">最速級</td>
+  <td>Proton 系の既定。<code>futex_waitv</code>（カーネル 5.16+）を使う</td>
+</tr>
+<tr>
+  <td><b>ntsync / inproc sync</b><br>（wine 11 で本流入り）</td>
+  <td>カーネルモジュール <code>ntsync</code>（<code>/dev/ntsync</code>）が Windows と同じ意味論のオブジェクトを提供する</td>
+  <td class="good">正しい</td>
+  <td class="good">速い</td>
+  <td>fsync の作者自身による「正しさのための作り直し」</td>
+</tr>
+</table>
+
+<p>
+fsync が「近似」なのは、<b>Windows カーネルが 1 命令でやること（signal と同時に待機者を解放する）を、
+userspace の複数ステップ（値の書き換え → futex_wake）に分解しているから</b>である。
+分解されたステップの隙間には、別スレッドが割り込める。ほとんどのゲームではこの隙間が問題にならないが、
+特定の同期パターンを使うプログラムでは致命傷になる。それが次章の主題である。
+</p>
+
+<div class="note">
+<b>今の構成がどれを使っているかの確認方法</b>：起動ログ（<code>~/.local/share/nikke/umu.log</code>）に
+<code>fsync: up and running.</code> と出ていれば fsync。
+ntsync は <code>/dev/ntsync</code> が存在し、かつ fsync/esync を無効化したときに使われる（本機のカーネルは
+<code>CONFIG_NTSYNC=m</code> でモジュール未ロード、つまり現状は常に fsync）。
+</div>
+
+<!-- ================================================================ -->
+<h2 id="race">3. fsync の missed-wakeup レース：デッドロックの機構</h2>
+
+<p>
+fsync では、イベントは共有メモリ上の <code>signaled</code> という整数（0 = 未 signal、1 = signal 済み）で表現される。
+待つ側（Waiter）は次の 2 段階で眠りに入る。
+</p>
+
+<pre><code>// wine fsync の待機側（概略）
+1. signaled をアトミックに読む      → 0 だった（まだ旗が立っていない）
+2. futex_waitv(&amp;signaled, 期待値=0) → 「値が 0 のままなら眠る」をカーネルに依頼</code></pre>
+
+<p>
+問題はステップ 1 と 2 の<b>間</b>である。ここに他スレッドの <code>SetEvent</code> と <code>ResetEvent</code> が連続して割り込むと、次のタイムラインが成立する。
+</p>
+
+<figure>
+<svg viewBox="0 0 760 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="fsync missed-wakeup レースのタイムライン図">
+  <defs>
+    <marker id="ah" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="currentColor"/>
+    </marker>
+  </defs>
+  <!-- lanes -->
+  <line x1="150" y1="40" x2="150" y2="300" stroke="var(--line)" stroke-width="2"/>
+  <line x1="450" y1="40" x2="450" y2="300" stroke="var(--line)" stroke-width="2"/>
+  <text x="150" y="28" text-anchor="middle" font-size="13" font-weight="bold">Waiter スレッド</text>
+  <text x="450" y="28" text-anchor="middle" font-size="13" font-weight="bold">Signaler スレッド</text>
+  <!-- events -->
+  <rect x="30" y="55" width="240" height="30" rx="6" fill="var(--accent-soft)" stroke="var(--line)"/>
+  <text x="150" y="75" text-anchor="middle" font-size="12">① signaled を読む → 0</text>
+
+  <rect x="330" y="105" width="240" height="30" rx="6" fill="var(--accent-soft)" stroke="var(--line)"/>
+  <text x="450" y="125" text-anchor="middle" font-size="12">② SetEvent: signaled=1, futex_wake</text>
+  <text x="600" y="125" font-size="11" fill="var(--muted)">← 誰も寝ていないので空振り</text>
+
+  <rect x="330" y="155" width="240" height="30" rx="6" fill="var(--accent-soft)" stroke="var(--line)"/>
+  <text x="450" y="175" text-anchor="middle" font-size="12">③ ResetEvent: signaled=0</text>
+
+  <rect x="30" y="205" width="240" height="30" rx="6" fill="var(--warn-bg)" stroke="var(--warn-line)"/>
+  <text x="150" y="225" text-anchor="middle" font-size="12">④ futex_waitv(期待値=0) → 眠る</text>
+
+  <rect x="30" y="255" width="540" height="34" rx="6" fill="none" stroke="var(--bad)" stroke-width="2" stroke-dasharray="6 3"/>
+  <text x="300" y="277" text-anchor="middle" font-size="12.5" fill="var(--bad)" font-weight="bold">イベントが二度と signal されなければ、タイムアウト無しで永久に眠る</text>
+</svg>
+<figcaption>図 1：missed-wakeup の成立条件。②の wake が空振りし、④で「すでに 0 に戻った値」を待ち始める。</figcaption>
+</figure>
+
+<p>
+Windows のカーネルイベントなら、②の時点で待機中スレッドは必ず解放される（Waiter は①の後もカーネルの待機キューに登録されてから眠るため、取りこぼしが構造的に起きない）。
+fsync ではカーネルが「イベント」を知らず、ただの整数比較しかできないため、この保証を作れない。
+</p>
+
+<h3>なぜ「一か月無事」で「突然固まり」「リトライで直る」のか</h3>
+
+<p>
+①と④の間はマイクロ秒オーダーの短い窓であり、そこに②③の 2 操作がちょうど滑り込む必要がある。
+つまり成立はスケジューリング次第の低確率事象で、これが症状の間欠性（一か月無事 → ある日突然 → 再起動 1 回で回復）をそのまま説明する。
+そして NIKKE ランチャーの import テーブルには <code>SetEvent</code> / <code>ResetEvent</code> / <code>WaitForMultipleObjects</code> が並んでおり
+（<code>nikke_launcher.exe</code> と <code>base.dll</code> で確認）、まさにこのパターンを起動シーケンス最初期の内部同期に使っている。
+</p>
+
+<h3>dwproton に入っている緩和ハック</h3>
+
+<p>
+dwproton の <code>ntdll.so</code> を逆アセンブルすると、この種のレースへの緩和が既に実装されている。
+<code>fsync_help_simulated_pulse</code>（Reset の直前に <code>usleep(0)</code> を挟み、Waiter に signal を観測させる猶予を与える）と
+<code>fsync_yield_to_waiters</code> の 2 つで、環境変数
+<code>WINE_FSYNC_HELP_SIMULATED_PULSE=1</code> / <code>WINE_FSYNC_YIELD_TO_WAITERS=1</code> で有効化できる。
+ただしどちらも <b>.bss 配置＝既定値 0（無効）</b>で、自動有効化は特定の Steam AppID（33460、別ゲーム）に限られる。
+NIKKE の protonfix は AppID を意図的に削除するため、この経路にも乗らない。
+つまり<b>作者が用意した緩和が、NIKKE では一度も効いていなかった</b>。
+なお緩和は窓を狭めるだけで、ゼロにはできない（レースの成立条件自体は残るため）。
+</p>
+
+<!-- ================================================================ -->
+<h2 id="evidence">4. 今回のハングの診断根拠</h2>
+
+<p>
+2026-08-16 17:11 のハングしたセッションから採取した証拠と、それぞれが排除・支持する仮説を並べる。
+</p>
+
+<table>
+<tr><th>観測事実</th><th>意味するところ</th></tr>
+<tr>
+  <td>ランチャープロセスが 16 分生存、<b>CPU 時間 0 秒</b></td>
+  <td>ビジーループやネットワーク待ちではない。起動直後から一切実行が進んでいない</td>
+</tr>
+<tr>
+  <td>全 5 スレッドが futex 待ち<br>（<code>futex_wait_multiple</code> ×2、<code>futex_do_wait</code> ×3）</td>
+  <td><code>futex_wait_multiple</code> は fsync のオブジェクト待ち（<code>futex_waitv</code>）の待機点。残りはクリティカルセクション等で、fsync 待ちの 2 本に連鎖してブロックされた形</td>
+</tr>
+  <tr>
+  <td>ウィンドウ 0 枚、<code>intl_service</code> 未起動</td>
+  <td>ウィンドウ生成・子プロセス起動より前、つまり初期化シーケンスの最初期で停止</td>
+</tr>
+<tr>
+  <td>自前ログが 270 バイト（ヘッダのみ）で停止</td>
+  <td>ログ初期化直後の内部同期で止まったことと整合</td>
+</tr>
+<tr>
+  <td>TCP ソケット無し</td>
+  <td>サーバー応答待ち・認証待ち説を排除</td>
+</tr>
+<tr>
+  <td>直前の NixOS 世代切替はパッケージ変更ゼロ、steamrt4 は 8/14 更新後も 2 日間正常動作、Steam は起動 54 分</td>
+  <td>環境変化説（更新・常駐劣化）をすべて排除。残るのは確率的レース</td>
+</tr>
+<tr>
+  <td><code>nikke kill</code> → 再起動 1 回で正常化</td>
+  <td>永続的な破損ではなく、タイミング依存の事象</td>
+</tr>
+</table>
+
+<div class="note">
+<b>nikke.sh のリトライが効かなかった理由</b>：nikke.sh は「セッションが早期終了したら再試行」する設計で、
+ACE 初期化失敗の従来モード（プロセスが死ぬ）には対応していた。
+今回のモードは<b>プロセスが死なずに固まる</b>ため、生存判定が「まだ起動中」と解釈し続け、リトライが一度も発火しなかった。
+同じ根本原因（初期化のレース）が、別の故障モードで現れた形である。
+</div>
+
+<!-- ================================================================ -->
+<h2 id="dwproton">5. dwproton という fork：誰が何を配っているのか</h2>
+
+<p>
+wine 系ソフトの系譜は fork の積み重ねでできている。dwproton の位置づけは次のとおり。
+</p>
+
+<figure>
+<svg viewBox="0 0 760 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="wine から dwproton への fork 系譜図">
+  <defs>
+    <marker id="ah2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="var(--muted)"/>
+    </marker>
+  </defs>
+  <rect x="20" y="30" width="160" height="48" rx="8" fill="var(--card)" stroke="var(--line)"/>
+  <text x="100" y="50" text-anchor="middle" font-size="13" font-weight="bold">wine</text>
+  <text x="100" y="68" text-anchor="middle" font-size="10.5" fill="var(--muted)">WineHQ（本家）</text>
+
+  <rect x="230" y="30" width="160" height="48" rx="8" fill="var(--card)" stroke="var(--line)"/>
+  <text x="310" y="50" text-anchor="middle" font-size="13" font-weight="bold">Proton</text>
+  <text x="310" y="68" text-anchor="middle" font-size="10.5" fill="var(--muted)">Valve（Steam 向け）</text>
+
+  <rect x="440" y="30" width="160" height="48" rx="8" fill="var(--card)" stroke="var(--line)"/>
+  <text x="520" y="50" text-anchor="middle" font-size="13" font-weight="bold">proton-cachyos</text>
+  <text x="520" y="68" text-anchor="middle" font-size="10.5" fill="var(--muted)">CachyOS（最適化＋先行取込）</text>
+
+  <rect x="440" y="140" width="160" height="48" rx="8" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
+  <text x="520" y="160" text-anchor="middle" font-size="13" font-weight="bold">dwproton</text>
+  <text x="520" y="178" text-anchor="middle" font-size="10.5" fill="var(--muted)">Dawn Winery</text>
+
+  <line x1="180" y1="54" x2="224" y2="54" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#ah2)"/>
+  <line x1="390" y1="54" x2="434" y2="54" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#ah2)"/>
+  <line x1="520" y1="78" x2="520" y2="134" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#ah2)"/>
+
+  <text x="640" y="150" font-size="11" fill="var(--muted)">＋ Tencent 系ランチャー修正</text>
+  <text x="640" y="168" font-size="11" fill="var(--muted)">＋ ACE 向けワークアラウンド</text>
+  <text x="640" y="186" font-size="11" fill="var(--muted)">＋ ゲーム別 protonfix</text>
+</svg>
+<figcaption>図 2：fork の系譜。下流ほどニッチな用途に特化し、更新は上流の取り込み＋独自修正の形をとる。</figcaption>
+</figure>
+
+<p>
+<b>Dawn Winery</b> は anime-games-launcher 周辺の開発者コミュニティで、企業ではない。
+配布は自前の Forgejo インスタンス <code>dawn.wine</code> で行われ（GitHub に <code>dawn-winery/dwproton-mirror</code> というミラーがある）、
+リリースは tar.xz のバイナリ配布である。リリース間隔は月に数回程度で、内容は「上流 proton-cachyos の追従」と「特定ゲームの修正」が中心になる。
+</p>
+
+<p>
+protonfix（<code>protonfixes/gamefixes-umu/umu-nikke.py</code>）も dwproton に同梱されており、
+NIKKE 向けには「Steam 検出の無効化」「NVAPI 無効化」「ランチャー自己更新の後始末（<code>update_files/</code> の手動移動）」が実装されている。
+つまり <b>NIKKE を wine で動かすための知見の本体は dwproton 側に集約されており</b>、nikke.sh はその外側の運用（リトライ・監視）だけを担っている。
+</p>
+
+<!-- ================================================================ -->
+<h2 id="nix">6. nix 管理の実態と更新の流れ</h2>
+
+<p>
+dwproton は「nix 管理されていない」ように見えるが、実際は管理の形が他の依存と違うだけである。
+このリポジトリの依存は 3 通りの経路で更新される。
+</p>
+
+<table>
+<tr><th>経路</th><th>対象</th><th>更新の主体</th></tr>
+<tr>
+  <td>flake input（<code>flake.lock</code>）</td>
+  <td>nixpkgs、home-manager、hyprland など</td>
+  <td><b>Renovate</b> が lock 更新 PR を出し、CI 緑で auto-merge</td>
+</tr>
+<tr>
+  <td>nixpkgs 経由のパッケージ</td>
+  <td>umu-launcher、steam-run など</td>
+  <td>nixpkgs の更新に随伴（＝上と同じ Renovate 経路）</td>
+</tr>
+<tr>
+  <td><b>fetchurl 固定 derivation</b></td>
+  <td><b>dwproton</b>（<code>home-manager/desktop/nikke/default.nix</code>）</td>
+  <td class="bad">手動。version と hash を書き換えて build</td>
+</tr>
+</table>
+
+<p>
+3 つ目の経路は「バージョンとハッシュをソースに直書きし、dawn.wine から取得して store に固定する」形で、
+再現性は完全に保たれる一方、<b>新リリースの検知が人力</b>になる。
+Renovate は dawn.wine（Forgejo）を既定では追跡しないため、11.0-5 のまま 6 リリース分置き去りになっていた。
+これが「nix で管理していないのでは」という印象の正体である。
+</p>
+
+<pre><code># home-manager/desktop/nikke/default.nix（更新後）
+version = "11.0-11";
+src = fetchurl {
+  url = "https://dawn.wine/dawn-winery/dwproton/releases/download/dwproton-${version}/...";
+  hash = "sha256-Xh4JgpLWHE7ilMRWta0n6Sc9rSkSl56/n8VvfGhJuxc=";
+};</code></pre>
+
+<p>
+自動化したければ、Renovate の <code>customManagers</code>（regex マネージャ）＋ <code>gitea-releases</code> datasource で
+dawn.wine のリリースタグを追跡させ、version 行を PR で更新させる構成が組める（hash 更新は CI か手元で行う）。
+</p>
+
+<!-- ================================================================ -->
+<h2 id="fix">7. 解決の選択肢と、それぞれが直すもの</h2>
+
+<p>
+最後に、検討した選択肢を「何を直すか」で整理する。重要な区別は、
+<b>レースの確率を下げる策</b>と<b>レースの土台を除去する策</b>は別物だ、という点である。
+</p>
+
+<table>
+<tr><th>選択肢</th><th>直すもの</th><th>評価</th></tr>
+<tr>
+  <td>dwproton を 11.0-11 に更新<br><span class="tag">適用済み・switch 待ち</span></td>
+  <td>NIKKE 関連の既知バグ（protonfix、自己更新まわり）と上流追従</td>
+  <td>やるべき基本整備。ただし<b>fsync レース自体の修正は含まれない</b>（新版バイナリで確認済み）</td>
+</tr>
+<tr>
+  <td>緩和フラグ有効化<br><code>WINE_FSYNC_HELP_SIMULATED_PULSE=1</code></td>
+  <td>レースの<b>確率</b>（Reset 前に猶予を挟み窓を狭める）</td>
+  <td>1 行で済み副作用も小さいが、原理的にゼロにはならない</td>
+</tr>
+<tr>
+  <td><b>ntsync への切り替え</b><br><code>boot.kernelModules = ["ntsync"]</code><br>＋ <code>PROTON_NO_FSYNC=1 PROTON_NO_ESYNC=1</code></td>
+  <td>レースの<b>土台</b>（同期をカーネル調停の正しい実装に交換）</td>
+  <td>本筋。このハングのクラス全体が原理的に消える。ACE との相性が未検証なので、動作確認を挟んでから常用化する</td>
+</tr>
+<tr>
+  <td>nikke.sh にハング検出を追加</td>
+  <td>故障モードの<b>後始末</b>（固まったら畳んで再試行）</td>
+  <td>保険としては機能するが、スクリプトの複雑化を進める方向。ntsync が成立するなら不要になり得る</td>
+</tr>
+</table>
+
+<p>
+方針としては「⑥の層（wine の同期実装）で正しさを回復し、②の層（nikke.sh）の複雑さをこれ以上増やさない」が筋がよい。
+nikke.sh の監視機構は「下の層が確率的に壊れる」ことへの補償として積み上がってきたものなので、
+下の層が正しくなれば、対応する補償は削っていける。
+</p>
+
+<footer>
+2026-08-16 の調査セッションに基づく。逆アセンブル対象は dwproton-11.0-5 / 11.0-11 の
+<code>files/lib/wine/x86_64-unix/ntdll.so</code>、fsync 実装の参照は ValveSoftware/wine（bleeding-edge）の
+<code>dlls/ntdll/unix/fsync.c</code>。
+</footer>
+
+</main>
+</body>
+</html>
