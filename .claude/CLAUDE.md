@@ -72,7 +72,7 @@ NixOS & home-manager の個人 dotfiles。
 
 ### 【IMPORTANT・禁止】waybar CSS の寸法・余白
 
-- **waybar の CSS は `home-manager/desktop/waybar/style.nix` が単一情報源**。寸法（余白・角丸・幅）と質感の値はこのファイル先頭の `t`（セマンティックトークン）だけで定義する（GTK CSS に寸法用の変数機構が無いため Nix をプリプロセッサにしている）。`style` として `programs.waybar.style` に渡り、home-manager がビルド時に評価して `style.css` を生成するので、反映は `nix run .#switch` のみ（手動生成スクリプトは無い）。色の `colors.css` は matugen が実行時に別途書き出す独立ファイル。
+- **waybar の CSS は `home-manager/desktop/waybar/style.nix` が単一情報源**。寸法（余白・角丸・幅）と質感の値はこのファイル先頭の `t`（セマンティックトークン）だけで定義する（GTK CSS に寸法用の変数機構が無いため Nix をプリプロセッサにしている）。`style.nix` の評価結果は home.activation が書き込み可能な実ファイル `style.css` として配布する（reload-css.sh の O_TRUNC 書き直しで reload_style_on_change を発火させるため symlink にしない）。反映は `nix run .#switch` のみ（手動生成スクリプトは無い）。色の `colors.css` は matugen が実行時に別途書き出す独立ファイル。
 - **個別の CSS ルールにその場しのぎで px を足し引きして隙間を調整することを禁止する**。隙間の問題は「どのトークン（gapIsland / gapModule / padIslandX 等）の意味の話か」を特定してトークン側を変える。適切なトークンが無ければトークンを追加してから使う。
 
 ## ローカル用カスタムコマンド（flake apps）
