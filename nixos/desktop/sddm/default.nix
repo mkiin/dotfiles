@@ -65,6 +65,14 @@ in
     };
   };
 
+  # weston は入力デバイスが 0 個だと assert で abort する。coldplug 完了前に SDDM が
+  # 起動すると libinput が未初期化の keyboard/mouse を拾えず greeter ごと落ちる。
+  systemd.additionalUpstreamSystemUnits = [ "systemd-udev-settle.service" ];
+  systemd.services.display-manager = {
+    wants = [ "systemd-udev-settle.service" ];
+    after = [ "systemd-udev-settle.service" ];
+  };
+
   environment.systemPackages = [
     theme
     pkgs.bibata-cursors
