@@ -1,6 +1,7 @@
 import QtQuick 6.10
 import QtQuick.Controls 6.10
 import QtQuick.Layouts 6.10
+import Quickshell
 import "../../ui" as QsUi
 import "../../theme" as QsTheme
 import "../../features/notifications" as QsNotifications
@@ -58,7 +59,11 @@ Rectangle {
             clip: true
             spacing: QsTheme.Appearance.spacing.s
 
-            model: root.notifs.recentNotifications
+            // JS 配列を直接渡すと再代入のたびに全 delegate が作り直され、add 遷移が
+            // 全行で再生されてしまう。ScriptModel は同一性で差分を取り、増えた行にだけ効く。
+            model: ScriptModel {
+                values: root.notifs.recentNotifications
+            }
 
             ScrollBar.vertical: ScrollBar {
                 policy: ScrollBar.AsNeeded
@@ -73,13 +78,8 @@ Rectangle {
                 }
             }
 
-            remove: Transition {
-                QsUi.Anim {
-                    property: "opacity"
-                    to: 0
-                    speed: "fast"
-                }
-            }
+            // remove 遷移は張らない。remove() が wrapper を即 destroy するため、
+            // 遷移中の delegate が破棄済みオブジェクトを参照してしまう。
 
             QsUi.Empty {
                 id: empty
@@ -102,14 +102,10 @@ Rectangle {
                 radius: QsTheme.Appearance.radius.s
                 color: QsTheme.Theme.card
 
-                // 行のクリック。中身より下に敷き、閉じるボタンの入力を奪わない。
+                // 行のクリック。中身より先に宣言して下に敷き、閉じるボタンの入力を奪わない。
                 QsUi.StateLayer {
-                    z: -1
                     color: QsTheme.Theme.text
-                    onClicked: {
-                        if (row.modelData.actions.length > 0)
-                            row.modelData.actions[0].invoke();
-                    }
+                    onClicked: row.modelData.invokeDefaultAction()
                 }
 
                 RowLayout {
