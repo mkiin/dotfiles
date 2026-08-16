@@ -48,6 +48,12 @@ in
     # rofi の desktop entry(nikke/)や端末から叩くため。store へ焼くので反映は switch。
     (pkgs.writeShellScriptBin "nikke" ''
       export NIKKE_PROTON=${dwproton}
+      # fsync/esync を無効化して ntsync(inproc sync)に切り替える。
+      # fsync は missed-wakeup レースでランチャーが確率的にデッドロックする
+      # (2026-08-16 調査、docs/nikke-launch-architecture.html)。
+      # /dev/ntsync は nixos/desktop/games/nikke の boot.kernelModules が提供する。
+      export PROTON_NO_FSYNC=1
+      export PROTON_NO_ESYNC=1
       ${builtins.readFile "${inputs.self}/scripts/nikke.sh"}
     '')
   ];
