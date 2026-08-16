@@ -63,7 +63,10 @@ fi
 
 log "=== invoked img=$img"
 
-displayed() { awww query 2>/dev/null | sed -n 's/.*currently displaying: image: //p' | sort -u; }
+# output ごとの表示状態。画像未適用の output は "color: 000000" 行になるため、
+# image/color を含む状態全体で比較し、黒モニタの存在を不一致として検出する。
+displayed() { awww query 2>/dev/null | sed -n 's/.*currently displaying: //p' | sort -u; }
+want="image: $img"
 
 apply_img() {
   awww img "$img" \
@@ -76,6 +79,9 @@ apply_img() {
 
 # --- 1. output 揃い待ち ---------------------------------------------------
 # ソケット応答だけでは output 0 個でも通る(起動レースの原因)ため monitor 数と照合する。
+# タイムアウト時は force=1 で入口ガードを無効化する。未登録 output は query に
+# 行が出ず照合で検出できないため、無条件適用だけが遅延登録ケースを救える。
+force=0
 expected=$(hyprctl monitors -j 2>/dev/null | jq 'length' || echo 0)
 [[ $expected =~ ^[0-9]+$ ]] || expected=0
 if ((expected > 0)); then
@@ -84,7 +90,10 @@ if ((expected > 0)); then
     sleep 0.1
   done
   actual=$(awww query 2>/dev/null | wc -l)
-  ((actual == expected)) || log "output wait timeout actual=$actual expected=$expected"
+  if ((actual != expected)); then
+    force=1
+    log "output wait timeout actual=$actual expected=$expected"
+  fi
 else
   # hyprctl が使えない環境ではソケット応答待ちまで劣化させる
   for _ in $(seq 1 50); do
@@ -94,19 +103,20 @@ else
 fi
 
 # --- 2-4. 表示 ------------------------------------------------------------
-if [[ "$(displayed)" == "$img" ]]; then
+if ((force == 0)) && [[ "$(displayed)" == "$want" ]]; then
   # 照合: 同一画像の再適用(mode.sh 経由等)は再描画アニメーションごと省く
   log "display up-to-date, skip img"
 else
-  apply_img
+  # daemon 停止等の失敗でもログを残して照合まで進める(set -e の即死を避ける)
+  apply_img || log "awww img failed rc=$?"
   # 検証: awww img の正常終了は IPC 受理しか意味しない。実表示を読み直す
-  if [[ "$(displayed)" != "$img" ]]; then
+  if [[ "$(displayed)" != "$want" ]]; then
     log "verify failed, re-push"
-    apply_img
+    apply_img || log "awww img re-push failed rc=$?"
   fi
 fi
 
-if [[ "$(displayed)" != "$img" ]]; then
+if [[ "$(displayed)" != "$want" ]]; then
   # 古い画像から色を作らない。無限リトライせず次の契機(次の呼び出し)で収束させる
   log "MISMATCH shown=[$(displayed | paste -sd' ' -)]"
   exit 1
@@ -496,7 +506,7 @@ Expected: `display up-to-date, skip img` と `colors up-to-date, skip` が記録
 - [ ] **Step 4: モード切替を検証する**
 
 Run: SUPER+SHIFT+B（bed）→ SUPER+SHIFT+D（desk）で往復する。
-Expected: 各切替後に全モニタが同一壁紙（割れなし）。壁紙と色は切替前から変わらない（log は `display up-to-date` または apply 成功のみ。色生成はスキップされる）。waybar が再起動して表示される。
+Expected: 各切替後に全モニタが同一壁紙（割れなし・黒残りなし）。新規有効化モニタは `--no-cache` により黒（`color:` 状態）で始まるため、入口照合は不一致となり awww img が実行される（log に `display up-to-date` は出ない）。壁紙と色は切替前から変わらず、色生成は `colors up-to-date, skip` でスキップされる。waybar が再起動して表示される。切替が pyprland のローテーションと重なった場合は flock 待ちで数秒遅れることがある（設計どおりの直列化の代償）。
 
 - [ ] **Step 5: rofi のサムネ一致を検証する**
 
