@@ -51,9 +51,8 @@ Rectangle {
     border.color: QsTheme.Theme.border
     opacity: root.enabled ? 1 : 0.5
 
-    // 行のクリックと状態表現。中身より下に敷き、actions のボタンの入力を奪わない。
+    // 行のクリックと状態表現。中身より先に宣言して下に敷き、actions のボタンの入力を奪わない。
     StateLayer {
-        z: -1
         color: QsTheme.Theme.text
         enabled: root.enabled
         onClicked: root.clicked()
