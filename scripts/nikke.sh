@@ -10,6 +10,7 @@ set -euo pipefail
 STEAM_MAX_UPTIME_H="${STEAM_MAX_UPTIME_H:-3}" # Steam 常駐がこの時間を超えたら再起動を促す
 MAX_RETRIES="${MAX_RETRIES:-4}"               # 起動失敗(session 早期終了)時のリトライ回数
 WATCH_INTERVAL_S=5                            # ウォッチドッグのポーリング間隔
+UPDATE_TIMEOUT_S="${UPDATE_TIMEOUT_S:-600}"   # umu ランタイム更新の打ち切り時間
 
 log() { printf '\n\033[1;34m==>\033[0m %s\n' "$*"; }
 warn() { printf '\033[1;33m[warn]\033[0m %s\n' "$*"; }
@@ -129,7 +130,51 @@ restart_steam() {
   start_steam
 }
 
-# --- 2. ACE サービスの Start=4 tweak(冪等) ---
+# --- 2. umu ランタイム更新(起動から切り離す) ---
+# umu は既定でゲーム起動と同じプロセス内でランタイム更新を走らせる。この更新が停滞すると
+# 起動が DL 待ちのまま進まず、しかも umu.lock を掴んだプロセスが残って以降の起動を
+# 永久にブロックする。更新は打ち切り可能な独立ステップへ追い出し、本番起動は
+# UMU_RUNTIME_UPDATE=0 で走らせて「更新の失敗が起動を殺さない」ようにする。
+# UMU_NO_PROTON=1 はランタイムの面倒だけ見て proton を起動しないモード。
+update_runtime() {
+  [ "${NIKKE_SKIP_RUNTIME_UPDATE:-0}" = 1 ] && {
+    log "ランタイム更新をスキップ(NIKKE_SKIP_RUNTIME_UPDATE=1)"
+    return
+  }
+  log "umu ランタイムを更新(最大 ${UPDATE_TIMEOUT_S}s)"
+  # timeout が殺せるのは直接の子(steam-run)だけで、umu.lock を掴んだ umu 本体は孫として残る。
+  # かといって pkill -f umu-run で薙ぐと他の umu 経由ゲームまで巻き込む。setsid で更新専用の
+  # セッションを作り、自分が起こした子孫だけをプロセスグループごと畳む。
+  local pid pgid ok=0 waited=0
+  GAMEID=umu-nikke UMU_NO_PROTON=1 UMU_RUNTIME_UPDATE=1 \
+    setsid ${STEAMRUN:+"$STEAMRUN"} "$UMU" true \
+    </dev/null >"$NIKKE_HOME/umu-update.log" 2>&1 &
+  pid=$!
+  pgid=$(ps -o pgid= -p "$pid" 2>/dev/null | tr -d ' ')
+  while kill -0 "$pid" 2>/dev/null && [ "$waited" -lt "$UPDATE_TIMEOUT_S" ]; do
+    sleep 1
+    waited=$((waited + 1))
+  done
+  if kill -0 "$pid" 2>/dev/null; then
+    warn "ランタイム更新が ${UPDATE_TIMEOUT_S}s で終わらないため打ち切る"
+  elif wait "$pid"; then
+    ok=1
+  else
+    warn "ランタイム更新に失敗"
+  fi
+  # setsid が新セッションを作れていなければ自分のグループを殺すことになるので必ず突き合わせる。
+  if [ -n "$pgid" ] && [ "$pgid" != "$(ps -o pgid= -p $$ | tr -d ' ')" ]; then
+    kill -KILL "-$pgid" 2>/dev/null || true
+  fi
+  wait "$pid" 2>/dev/null || true
+  [ "$ok" = 1 ] && {
+    log "ランタイム更新 OK"
+    return
+  }
+  warn "既存ランタイムで起動する(ログ: $NIKKE_HOME/umu-update.log)"
+}
+
+# --- 3. ACE サービスの Start=4 tweak(冪等) ---
 apply_reg_tweak() {
   [ -f "$REG" ] || {
     warn "system.reg が無い。tweak をスキップ"
@@ -157,7 +202,7 @@ apply_reg_tweak() {
   log "ACE サービスの Start を 4(遅延起動)に設定(バックアップ: system.reg.bak)"
 }
 
-# --- 3. lottery 起動 + ウォッチドッグ ---
+# --- 4. lottery 起動 + ウォッチドッグ ---
 launch_once() {
   log "NIKKE 起動(steam-run + umu-run / AGL 再現)"
   # AGL の実起動を再現: PROTON_USE_WOW64=1 を付け、steam-run で umu-run をくるむ。
@@ -166,7 +211,7 @@ launch_once() {
   # nohup だけだと SIGHUP は防げても Ctrl-C(SIGINT)は同一 pgroup 経由でゲームまで届き
   # セッションごと落ちる。setsid + </dev/null で端末を完全に手放し、watchdog や端末が
   # 死んでもゲームは残す。umu/proton の出力は死因追跡のため umu.log に残す。
-  GAMEID=umu-nikke PROTON_USE_WOW64=1 PROTONPATH="$PROTON" WINEPREFIX="$PREFIX" \
+  GAMEID=umu-nikke PROTON_USE_WOW64=1 UMU_RUNTIME_UPDATE=0 PROTONPATH="$PROTON" WINEPREFIX="$PREFIX" \
     setsid ${STEAMRUN:+"$STEAMRUN"} "$UMU" "$LAUNCHER" </dev/null >"$NIKKE_HOME/umu.log" 2>&1 &
   # session(umu)が生きている限り本体ウィンドウの出現を待つ。ログイン完了までの時間は
   # ユーザー操作次第で読めないため固定タイムアウトは置かない。session が落ちれば起動失敗とみなす。
@@ -204,6 +249,8 @@ cmd_run() {
   log "proton: $(basename "$PROTON")"
   preflight_steam
   apply_reg_tweak
+  # apply_reg_tweak が宙吊りセッションを畳んだ後に更新する(lock 競合を避ける)。
+  update_runtime
   local n
   for n in $(seq 1 "$MAX_RETRIES"); do
     log "起動試行 $n/$MAX_RETRIES"
@@ -216,6 +263,20 @@ cmd_run() {
     sleep 2
   done
   die "$MAX_RETRIES 回試みても ACE の初期化に失敗。時間を置くか、Steam 再起動後に再試行してください。"
+}
+
+# ACE のデッドロックでゲームが固まると窓は残るのに操作を受け付けない。
+# その状態を手で畳むための出口(watchdog は健全なプレイを殺さないよう何もしない方針のため)。
+cmd_kill() {
+  if ! session_running; then
+    log "NIKKE セッションは動いていない"
+    cleanup_stray_windows
+    return 0
+  fi
+  log "NIKKE セッションを畳む"
+  cleanup_session
+  session_running && die "セッションを終了できなかった。手動で確認してください。"
+  log "終了"
 }
 
 # 公式ミニローダ(コミュニティ報告では Linux での DL/更新が最新版より安定)。
@@ -232,8 +293,9 @@ bootstrap_install() {
     curl -fL "$INSTALLER_URL" -o "$installer" || die "インストーラ取得に失敗: $INSTALLER_URL"
   fi
   preflight_steam
+  update_runtime
   log 'インストーラ起動。ウィザードで導入先を C:\NIKKE にしてください(完了まで数十GB DL)。'
-  GAMEID=umu-nikke PROTON_USE_WOW64=1 PROTONPATH="$PROTON" WINEPREFIX="$PREFIX" \
+  GAMEID=umu-nikke PROTON_USE_WOW64=1 UMU_RUNTIME_UPDATE=0 PROTONPATH="$PROTON" WINEPREFIX="$PREFIX" \
     ${STEAMRUN:+"$STEAMRUN"} "$UMU" "$installer"
   [ -e "$LAUNCHER" ] || warn "導入後に $LAUNCHER が見つかりません。導入先が C:\\NIKKE か確認してください。"
 }
@@ -303,16 +365,22 @@ cmd_clean() {
 
 usage() {
   cat <<'EOF'
-usage: nikke [run|install|clean]
-  run     (既定) NIKKE を起動(Lottery + watchdog)
+usage: nikke [run|kill|install|clean]
+  run     (既定) NIKKE を起動(umu ランタイム更新 + Lottery + watchdog)
+  kill    固まった/残ったセッションを畳む(窓の残像も片付ける)
   install 初回セットアップ。既存 AGL prefix があれば移設、無ければ再DL
   clean   AGL の残骸(prefix/config/cache/desktop entry)を撤去
+
+env:
+  NIKKE_SKIP_RUNTIME_UPDATE=1  umu ランタイム更新を飛ばす
+  UPDATE_TIMEOUT_S=600         更新の打ち切り時間(秒)
 EOF
 }
 
 main() {
   case "${1:-run}" in
   run | "") cmd_run ;;
+  kill) cmd_kill ;;
   install) cmd_install ;;
   clean) cmd_clean ;;
   -h | --help | help) usage ;;

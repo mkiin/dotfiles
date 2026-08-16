@@ -55,6 +55,7 @@
       lg = "lazygit";
       pn = "pnpm";
       nvc = "cd ~/.config/nvim";
+      nk = "nikke kill";
     };
 
     initContent = ''
@@ -96,6 +97,7 @@
       abbr ff="fastfetch"
       abbr pn="pnpm"
       abbr nvc="cd ~/.config/nvim"
+      abbr nk="nikke kill"
       abbr ai="claude"
       abbr aid="claude --dangerously-skip-permissions"
       abbr aia="claude --enable-auto-mode"
