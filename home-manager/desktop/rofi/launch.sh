@@ -7,7 +7,7 @@ if pkill -x rofi 2>/dev/null; then
 fi
 
 theme="$HOME/.config/rofi/themes/app-launcher.rasi"
-wp="$(cat "${XDG_STATE_HOME:-$HOME/.local/state}/hypr/last_wallpaper" 2>/dev/null || true)"
+wp="$(awww query 2>/dev/null | sed -n 's/.*currently displaying: image: //p' | head -n1 || true)"
 
 # 現壁紙が読めるときだけ imagebox 背景に注入する（webp 等でデコード不可でも一覧は出す）
 if [[ -n $wp && -f $wp ]]; then
