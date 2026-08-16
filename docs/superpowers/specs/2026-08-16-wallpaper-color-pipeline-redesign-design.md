@@ -88,6 +88,12 @@ mode.sh の責務はモニタ構成切替（monitors.lua 書き換え、hyprctl 
 pyprland のローテーションと衝突した場合は flock で直列化され、後勝ちで収束する。
 このとき mode.sh は相手の適用（トランジション＋色生成で数秒）を待ってから自分の処理を行うため、切替完了がその分遅れる。設計どおりの直列化の代償として許容する。
 
+### モード切替で壁紙が新しい 1 枚に変わる（仕様）
+
+pyprland の wallpapers プラグインは `event_monitoradded` でモニタ追加イベントを受けると、現在の画像の再適用ではなく**新しいランダム画像を選んで** command（= apply.sh）を呼ぶ。この挙動に抑止オプションは無い。実測でも、各モード切替で「mode.sh の同一画像 apply（no-op）→ 約 100ms 後に pyprland のランダム新画像 apply」が対で記録される。
+
+これは**仕様として受け入れる**。ログイン時「ランダムで新しい 1 枚」と同じ思想で、モード切替も新しい 1 枚を正とする。書き込み経路は両方とも apply.sh を通るため、表示・色・rofi・last_wallpaper の整合は保たれる。手順 4 の mode.sh からの委譲は、pyprland のイベントが万一発火しなかった場合に黒モニタを残さないための保険として残す（通常は直後の pyprland 適用に上書きされる）。切替直後に「前の壁紙 → 新しい壁紙」の二段トランジションが見えるのは、この保険の代償として許容する。
+
 ## 周辺の修正
 
 ### rofi の情報源一本化
@@ -126,7 +132,7 @@ pyprland のローテーションと衝突した場合は flock で直列化さ�
 
 1. `nix run .#build` 通過後 switch し再ログイン → `awww query`・`last_wallpaper`・`colors.rasi` の由来画像が三点一致する
 2. `pypr wall next` → 三点が新画像に揃う
-3. モード切替（SUPER+SHIFT+D/B）→ 壁紙が割れず、色が変わらない
+3. モード切替（SUPER+SHIFT+D/B）→ 壁紙が割れず（黒残りなし）、pyprland が選ぶ新しい 1 枚に表示・色が揃う
 4. rofi 起動 → サムネイルが実表示と一致する
 5. 色変更後に waybar へ反映される（log に reload-css failed が出ない）
 6. `wallpaper-apply.log` に MISMATCH が出ていない

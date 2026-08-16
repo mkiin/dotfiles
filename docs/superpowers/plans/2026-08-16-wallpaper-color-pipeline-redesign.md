@@ -506,7 +506,7 @@ Expected: `display up-to-date, skip img` と `colors up-to-date, skip` が記録
 - [ ] **Step 4: モード切替を検証する**
 
 Run: SUPER+SHIFT+B（bed）→ SUPER+SHIFT+D（desk）で往復する。
-Expected: 各切替後に全モニタが同一壁紙（割れなし・黒残りなし）。新規有効化モニタは `--no-cache` により黒（`color:` 状態）で始まるため、入口照合は不一致となり awww img が実行される（log に `display up-to-date` は出ない）。壁紙と色は切替前から変わらず、色生成は `colors up-to-date, skip` でスキップされる。waybar が再起動して表示される。切替が pyprland のローテーションと重なった場合は flock 待ちで数秒遅れることがある（設計どおりの直列化の代償）。
+Expected: 各切替後に全モニタが同一壁紙（割れなし・黒残りなし）。log には「mode.sh からの last_wallpaper apply」と「その直後の pyprland によるランダム新画像 apply」が対で記録され、最終的に壁紙・色とも新画像に揃う（pyprland は `event_monitoradded` で新しい 1 枚を選ぶ。これは spec の仕様。切替直後の二段トランジションは保険の代償として許容）。waybar が再起動して表示される。切替が pyprland のローテーションと重なった場合は flock 待ちで数秒遅れることがある（設計どおりの直列化の代償）。
 
 - [ ] **Step 5: rofi のサムネ一致を検証する**
 
