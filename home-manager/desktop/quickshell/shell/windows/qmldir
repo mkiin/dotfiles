@@ -1,3 +1,4 @@
 module qs.windows
 AudioPopout 1.0 AudioPopout.qml
 BluetoothPopout 1.0 BluetoothPopout.qml
+NotificationToasts 1.0 NotificationToasts.qml

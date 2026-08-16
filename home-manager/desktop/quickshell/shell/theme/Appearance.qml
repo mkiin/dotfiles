@@ -108,6 +108,9 @@ Singleton {
         property real opacity: 0.35
         property real blur: 1.0
         property real offsetY: 6
+        // 影が面の外へ広がる幅。MultiEffect の blurMax(既定 32)と offsetY を包める大きさ。
+        // 面と同じ大きさの窓に影を落とすときは、この分だけ窓を広げないと端で切れる。
+        property int margin: 40
     }
 
     // 画面ごとの寸法。
@@ -115,6 +118,7 @@ Singleton {
         property int audioWidth: 320
         property int bluetoothWidth: 320
         property int controlCenterWidth: 420
+        property int toastWidth: 360
         // クイック操作タイルの高さ
         property int tileHeight: 72
         // 通知リストが最低限確保する高さと、内部スクロールに切り替わる高さ

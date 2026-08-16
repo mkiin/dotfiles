@@ -64,6 +64,9 @@ ShellRoot {
         shouldShow: false
     }
 
+    // パネルではないので openPanel の排他には参加させない。
+    NotificationToasts {}
+
     IpcHandler {
         target: "bluetooth"
         function toggle(): void {
