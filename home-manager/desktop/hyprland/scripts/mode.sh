@@ -27,21 +27,11 @@ while read -r -t 2 -u "$EV_FD" line; do
 done
 exec {EV_FD}<&-
 
-# awww-daemon は wayland output 通知経由で反映するので configreloaded 後でも
-# 数十ms ラグが残る可能性がある。短い poll で確認 (旧 100ms×10 → 50ms×5)。
-expected=$(hyprctl monitors -j 2>/dev/null | jq 'length')
-for _ in {1..5}; do
-  (($(awww query 2>/dev/null | wc -l) == expected)) && break
-  sleep 0.05
-done
-
-# Hyprland はモニター構成変更を layer surface に伝播しないバグがあるため awww と waybar を作り直す。
-# `awww restore` は disable 中だったモニターのキャッシュが残ってモード間で壁紙が割れるので last_wallpaper を明示適用する。
+# 壁紙は apply.sh(唯一の書き込み経路)へ委譲。output 待ち・表示検証・色の整合は
+# apply.sh 内の実状態照合が担う。last_wallpaper 不在時は pyprland の適用に任せる。
 LAST="${XDG_STATE_HOME:-$HOME/.local/state}/hypr/last_wallpaper"
 if [[ -f $LAST ]] && [[ -r "$(<"$LAST")" ]]; then
-  awww img --transition-type none "$(<"$LAST")" >/dev/null 2>&1 || true
-else
-  awww restore >/dev/null 2>&1 || true
+  "$HOME/.config/hypr/scripts/wallpaper/apply.sh" "$(<"$LAST")" >/dev/null 2>&1 || true
 fi
 pkill -f waybar 2>/dev/null
 sleep 0.1
