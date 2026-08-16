@@ -11,6 +11,7 @@
       ripgrep
       fd
       bat
+      glow
       eza
       jq
       fzf
