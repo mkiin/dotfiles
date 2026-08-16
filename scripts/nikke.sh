@@ -244,7 +244,7 @@ watchdog() {
 cmd_run() {
   [ -n "$PROTON" ] || die "NIKKE_PROTON 未設定。端末直叩きでなく nix の nikke ラッパー経由で起動してください"
   [ -d "$PROTON" ] || die "dwproton が無い: $PROTON"
-  [ -e "$LAUNCHER" ] || die "NIKKE 未インストール。先に 'nikke install' を実行してください"
+  [ -e "$LAUNCHER" ] || die "NIKKE が見つからない: $LAUNCHER (Miniloader で C:\\NIKKE へ導入してください)"
   log "prefix: $PREFIX"
   log "proton: $(basename "$PROTON")"
   preflight_steam
@@ -279,97 +279,11 @@ cmd_kill() {
   log "終了"
 }
 
-# 公式ミニローダ(コミュニティ報告では Linux での DL/更新が最新版より安定)。
-# ローカルの exe を使いたい場合は NIKKE_INSTALLER_URL に file:// か別URLを指定。
-INSTALLER_URL="${NIKKE_INSTALLER_URL:-https://nikke-en.com/NikkeMiniloader0.0.6.143.exe}"
-
-# 空 prefix にインストーラを流して C:\NIKKE へ導入する(新PC用)。
-bootstrap_install() {
-  command -v curl >/dev/null 2>&1 || die "curl が無い。手動で prefix を用意するか curl を導入してください"
-  mkdir -p "$NIKKE_HOME"
-  local installer="$NIKKE_HOME/nikke_installer.exe"
-  if [ ! -e "$installer" ]; then
-    log "インストーラ取得: $INSTALLER_URL"
-    curl -fL "$INSTALLER_URL" -o "$installer" || die "インストーラ取得に失敗: $INSTALLER_URL"
-  fi
-  preflight_steam
-  update_runtime
-  log 'インストーラ起動。ウィザードで導入先を C:\NIKKE にしてください(完了まで数十GB DL)。'
-  GAMEID=umu-nikke PROTON_USE_WOW64=1 UMU_RUNTIME_UPDATE=0 PROTONPATH="$PROTON" WINEPREFIX="$PREFIX" \
-    ${STEAMRUN:+"$STEAMRUN"} "$UMU" "$installer"
-  [ -e "$LAUNCHER" ] || warn "導入後に $LAUNCHER が見つかりません。導入先が C:\\NIKKE か確認してください。"
-}
-
-cmd_install() {
-  [ -n "$PROTON" ] && [ -d "$PROTON" ] || die "dwproton が無い。nikke ラッパー経由で実行してください"
-  if [ -e "$LAUNCHER" ]; then
-    log "既にインストール済み: $LAUNCHER"
-    return 0
-  fi
-  # 現行機では AGL が作った 32G prefix を再DLせず安定パスへ移設する。
-  local agl_pfx
-  agl_pfx=$(find "$HOME/.local/share/anime-games-launcher/packages/persistent" \
-    -maxdepth 4 -type d -path '*goddess_of_victory_nikke/pfx' 2>/dev/null | head -1)
-  if [ -n "$agl_pfx" ] && [ -e "$agl_pfx/drive_c/NIKKE/Launcher/nikke_launcher.exe" ]; then
-    log "既存 AGL prefix を検出 → 安定パスへ移設(再DL不要)"
-    mkdir -p "$NIKKE_HOME"
-    mv "$agl_pfx" "$PREFIX"
-    log "移設完了: $PREFIX。AGL 残骸は 'nikke clean' で撤去できます。"
-    return 0
-  fi
-  bootstrap_install
-}
-
-cmd_clean() {
-  local agl="$HOME/.local/share/anime-games-launcher"
-  # 未移設の NIKKE データを巻き込み削除しないよう警告(先に install で移設させる)。
-  if [ ! -e "$LAUNCHER" ] &&
-    find "$agl" -maxdepth 8 -path '*goddess_of_victory_nikke/pfx/drive_c/NIKKE*' -print -quit 2>/dev/null | grep -q .; then
-    warn "AGL 内に未移設の NIKKE データがあります。先に 'nikke install'(自動移設)を実行しないと再DLになります。"
-  fi
-  local targets=(
-    "$agl"
-    "$HOME/.config/anime-games-launcher"
-    "$HOME/.cache/anime-games-launcher"
-    "$HOME/.local/share/applications/anime-games-launcher.desktop"
-  )
-  local found=() t
-  for t in "${targets[@]}"; do
-    [ -e "$t" ] && {
-      printf '  %s (%s)\n' "$t" "$(du -sh "$t" 2>/dev/null | cut -f1)"
-      found+=("$t")
-    }
-  done
-  if [ "${#found[@]}" -eq 0 ]; then
-    log "AGL 残骸なし。何もしません。"
-    return 0
-  fi
-  log "上記を削除します。"
-  if [ -t 0 ]; then
-    read -r -p "本当に削除しますか? [y/N] " ans
-    case "$ans" in
-    [yY]*) ;;
-    *)
-      log "中止"
-      return 0
-      ;;
-    esac
-  else
-    warn "非対話のためスキップ(対話端末で実行してください)"
-    return 0
-  fi
-  for t in "${found[@]}"; do
-    rm -rf "$t" && log "削除: $t"
-  done
-}
-
 usage() {
   cat <<'EOF'
-usage: nikke [run|kill|install|clean]
+usage: nikke [run|kill]
   run     (既定) NIKKE を起動(umu ランタイム更新 + Lottery + watchdog)
   kill    固まった/残ったセッションを畳む(窓の残像も片付ける)
-  install 初回セットアップ。既存 AGL prefix があれば移設、無ければ再DL
-  clean   AGL の残骸(prefix/config/cache/desktop entry)を撤去
 
 env:
   NIKKE_SKIP_RUNTIME_UPDATE=1  umu ランタイム更新を飛ばす
@@ -381,8 +295,6 @@ main() {
   case "${1:-run}" in
   run | "") cmd_run ;;
   kill) cmd_kill ;;
-  install) cmd_install ;;
-  clean) cmd_clean ;;
   -h | --help | help) usage ;;
   *)
     usage
