@@ -57,8 +57,9 @@ hl.bind(mainMod .. " + SHIFT + L", hl.dsp.window.move({ direction = "r" }))
 -- ワークスペース前後移動
 hl.bind(mainMod .. " + I", hl.dsp.exec_cmd("pypr change_workspace -1"))
 hl.bind(mainMod .. " + O", hl.dsp.exec_cmd("pypr change_workspace +1"))
-hl.bind(mainMod .. " + SHIFT + I", hl.dsp.window.move({ workspace = "e-1" }))
-hl.bind(mainMod .. " + SHIFT + O", hl.dsp.window.move({ workspace = "e+1" }))
+-- follow = false で movetoworkspacesilent 相当(送るだけで自分は付いていかない)
+hl.bind(mainMod .. " + SHIFT + I", hl.dsp.window.move({ workspace = "e-1", follow = false }))
+hl.bind(mainMod .. " + SHIFT + O", hl.dsp.window.move({ workspace = "e+1", follow = false }))
 
 -- ワークスペース切替
 for i = 1, 9 do

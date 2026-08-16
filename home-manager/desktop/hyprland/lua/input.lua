@@ -13,7 +13,8 @@ hl.config({
 		touchpad = { natural_scroll = false },
 	},
 	cursor = {
-		no_warps = false,
+		-- movewindow(SHIFT+H/J/K/L)等でカーソルがウィンドウに吸い付くワープを止める
+		no_warps = true,
 		sync_gsettings_theme = false,
 		enable_hyprcursor = true,
 	},
