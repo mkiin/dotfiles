@@ -21,7 +21,6 @@ hl.bind(mainMod .. " + D", hl.dsp.exec_cmd("vesktop"))
 hl.bind(mainMod .. " + A", hl.dsp.exec_cmd("~/.config/rofi/launch.sh"))
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("qs -c shell ipc call cc toggle"))
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd("pkill -x wlogout || wlogout"))
-hl.bind(mainMod .. " + SHIFT + N", hl.dsp.exec_cmd("nikke"))
 
 -- スクリーンショット
 hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("~/.config/rofi/screenshot-menu.sh"))

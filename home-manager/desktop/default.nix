@@ -24,6 +24,7 @@
     ./vesktop
     ./upscayl
     ./obsidian
+    ./nikke
   ];
 
   programs.zsh = {

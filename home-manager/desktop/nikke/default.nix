@@ -1,28 +1,12 @@
-{
-  stdenv,
-  fetchurl,
-}:
-stdenv.mkDerivation rec {
-  pname = "dwproton";
-  version = "11.0-5";
-
-  src = fetchurl {
-    url = "https://dawn.wine/dawn-winery/dwproton/releases/download/dwproton-${version}/dwproton-${version}-x86_64.tar.xz";
-    hash = "sha256-GLXwUswB/uJEFWlij5KN9MUE483QOdvkTbKvEtk8VZI=";
+_: {
+  # rofi(drun)から起動するためのショートカット。実体は packages.nix の nikke ラッパー。
+  # アイコンはランチャー exe から抽出した同梱 PNG(store へ焼き込み)。
+  xdg.desktopEntries.nikke = {
+    name = "NIKKE";
+    genericName = "Goddess of Victory: NIKKE";
+    exec = "nikke";
+    icon = "${./nikke.png}";
+    terminal = false;
+    categories = [ "Game" ];
   };
-
-  # umu-run を steam-run(FHS)でくるんで実行する運用なので proton バイナリは無改変で保持する。
-  # autoPatchelf/strip を掛けると AGL の既知良好構成と挙動が変わるため一切いじらない。
-  dontConfigure = true;
-  dontBuild = true;
-  dontFixup = true;
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out
-    cp -a . $out/
-    runHook postInstall
-  '';
-
-  meta.platforms = [ "x86_64-linux" ];
 }

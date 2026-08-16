@@ -1,6 +1,6 @@
 { inputs, pkgs, ... }:
 let
-  dwproton = pkgs.callPackage ./nikke { };
+  dwproton = pkgs.callPackage ./nikke/dwproton.nix { };
 in
 {
   home.packages = with pkgs; [
@@ -45,7 +45,7 @@ in
     # dwproton は nix store から NIKKE_PROTON でラッパーに渡す(AGL 非依存)。
     umu-launcher
     # NIKKE 起動ラッパー(scripts/nikke.sh)を `nikke` として PATH に載せる。
-    # Hyprland keybind(SHIFT+N)や端末から叩くため。store へ焼くので反映は switch。
+    # rofi の desktop entry(nikke/)や端末から叩くため。store へ焼くので反映は switch。
     (pkgs.writeShellScriptBin "nikke" ''
       export NIKKE_PROTON=${dwproton}
       ${builtins.readFile "${inputs.self}/scripts/nikke.sh"}
