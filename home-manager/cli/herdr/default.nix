@@ -42,10 +42,28 @@ let
           command = "herdr-file-viewer.open-file-viewer";
           description = "open file viewer";
         }
+        {
+          key = "prefix+g";
+          type = "plugin_action";
+          command = "persiyanov.reviewr.toggle";
+          description = "toggle reviewr";
+        }
       ];
     };
+  };
+
+  # reviewr 自身の設定。herdr の config.toml とは別系統で、値が 1 つでも不正だと
+  # ファイル全体が捨てられる。プラグイン本体は herdr plugin install 側の管理。
+  reviewr = {
+    theme = "gruvbox";
+    base_branches = [ "main" ];
+    default_scope = "last-turn";
+    navigator_position = "left";
+    toggle_placement = "zoomed";
   };
 in
 {
   xdg.configFile."herdr/config.toml".source = tomlFormat.generate "herdr-config.toml" settings;
+  xdg.configFile."herdr/plugins/config/persiyanov.reviewr/config.toml".source =
+    tomlFormat.generate "reviewr-config.toml" reviewr;
 }
