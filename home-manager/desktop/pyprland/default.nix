@@ -20,8 +20,7 @@
     path = "${dotfilesDir}/images/wallpaper"
     interval = 30
     extensions = ["jpg", "jpeg", "png", "webp"]
-    command = "${config.home.homeDirectory}/.config/hypr/scripts/wallpaper/set.sh [file]"
-    post_command = "${config.home.homeDirectory}/.config/hypr/scripts/wallpaper/post.sh [file]"
+    command = "${config.home.homeDirectory}/.config/hypr/scripts/wallpaper/apply.sh [file]"
 
     # WS は 1..10 運用なので巡回上限を合わせる。
     [workspaces_follow_focus]
@@ -53,7 +52,9 @@
       After = [ "graphical-session.target" ];
     };
     Service = {
-      ExecStart = "${pkgs.awww}/bin/awww-daemon";
+      # キャッシュ復元は apply.sh を通らない隠れた書き手になるため無効化。
+      # 起動時の壁紙は pyprland のランダム1枚が正(spec 参照)。
+      ExecStart = "${pkgs.awww}/bin/awww-daemon --no-cache";
       Restart = "on-failure";
       RestartSec = 2;
     };
