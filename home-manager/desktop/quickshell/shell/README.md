@@ -9,7 +9,7 @@ waybar と併用する常駐デーモン。
 
 ## 現在の状態
 
-**動くもの**：コントロールセンター、Bluetooth ポップアウト、Audio ポップアウト、waybar 連携（通知件数とアイドル抑制の表示）、matugen によるカラーリロード。
+**動くもの**：コントロールセンター、通知トースト、Bluetooth ポップアウト、Audio ポップアウト、waybar 連携（通知件数とアイドル抑制の表示）、matugen によるカラーリロード。
 
 **スタブ**：`features/network/Network.qml`。Wi-Fi を使っていないため、CC のタイルを描くための最小限だけを返す。
 
@@ -173,7 +173,66 @@ Wi-Fi は `features/network` がスタブのため常に Off 表示。
 音量スライダーはドラッグで宣言時の束縛が切れるため、
 Pipewire 側の変化は `Binding on value`（`when: !pressed`）で書き戻している。
 
+## 通知トースト
+
+`windows/NotificationToasts.qml`。waybar 直下の右上に最大 3 件を積む。
+
+```
+Variants (model: Quickshell.screens)
+└── PanelWindow … 幅 toastWidth + 影の余白、高さは中身から。exclusionMode: Ignore / keyboardFocus: None
+    └── Column … 右上に寄せる
+        └── Repeater (model: ScriptModel { values: Notifs.popups })
+            └── カード … アクセントの棒 + summary + body(2 行まで) + 閉じるボタン
+```
+
+決めたことと理由:
+
+**`PopupCard` を使わない**：あれは画面全面を覆って枠外クリックを拾う器で、常時出るトーストに
+使うと下のウィンドウの操作を奪う。トーストは中身と同じ大きさの窓を持ち、`mask` で入力領域を
+カードの矩形の和に限る。`Column` を丸ごと `mask` に渡すとカード間の隙間と影の余白まで
+入力を吸うので、カード 1 枚ずつを積む。`Region.regions` は静的リストで動的に増やせないため、
+スロットを `Notifs.maxPopups` と同数だけ並べ、delegate が自分を登録する。
+
+**窓は影のぶん広い**：`MultiEffect` の影は面の外側へ描かれるので、面と同じ大きさの窓だと
+レイヤーシェル面の端で切り落とされる（`PopupCard` は画面全面を覆うのでこの問題が出ない）。
+窓を左と下へ `shadow.margin` だけ、右へ `edgeGap` だけ広げてカードを右上に寄せる。
+上はバーに接していて、広げるとバーへ影が滲むため広げない（`offsetY` のぶん元々上側は薄い）。
+
+**全モニタに出す**：`Quickshell.Hyprland` の `focusedMonitor` と `monitors` がこの環境では
+空を返し、どのモニタを見ているかを知る手段がない（`PopupCard` のモニタ選択も同じ理由で
+`Quickshell.screens[0]` に落ちている）。`Variants` で各スクリーンに 1 つずつ窓を作る。
+
+**モデルは `ScriptModel` を通す**：JS 配列を `Repeater` に直接渡すと、再代入のたびに
+全 delegate が作り直される。delegate に状態を置けなくなり、状態がモデル側へ逃げていく
+（実際に出現済みフラグやフェード用 Timer が `Notif` に溜まり、モデルが theme の
+アニメ時間まで知る羽目になった）。`ScriptModel` はオブジェクトの同一性で差分を取り、
+既存の delegate を保つので、状態は本来の持ち主に置ける。CC の通知リストも同じ。
+
+**消えるプロトコルは「モデルが宣告、表示が報告」**：寿命（`popupTimer`、Critical は消さない、
+ホバー中は数えない）はデーモンの方針なので `Notif` が持ち、時が来たら `dismissing` を立てる
+だけで動きの長さは知らない。表示側はそれを見てフェードを再生し、`finished` で
+`removePopup()` を呼んで配列から抜く。全モニタが同時に報告しても `removePopup` は冪等。
+
+**消えるときに高さを動かさない**：カード高を毎フレーム変えると `Column` から `PanelWindow` へ
+伝播して、レイヤーシェルの窓リサイズと入力マスクの更新が毎フレーム走る。各カードは
+`MultiEffect` の影を持つのでその再合成も重なり、目に見えて引っかかる。
+繰り上がりは配列から抜けた 1 フレームで済ませる。
+
+Critical は自動で消さない（`popupTimeout` が 0）。それ以外は通知の `expireTimeout` を尊重し、
+未指定なら 5 秒。quickshell の `expireTimeout` はドキュメント上「秒」だが、実装は D-Bus の
+ms を無変換で保持しているので ms のまま使う（換算すると 3 秒が 50 分になる）。閉じても履歴には残る
+（`removePopup` は `popups` から外すだけで、履歴から消す `remove` とは別物。
+`remove` は D-Bus 側にも `dismiss` で閉じたことを伝える）。
+
+## 通知履歴の保持
+
+quickshell は `closed` の後に元の `Notification` オブジェクトを破棄する。
+`Notif` は生きている間は元オブジェクトに束縛で追従し（置換更新がそのまま映る）、
+`closed` を拾ったら `freeze()` で束縛を代入で切って最後の値を固定する。
+これをしないと、送り手が閉じた通知が 24 時間残るはずの履歴の中で空文字に化ける。
+`actions` と `image` は元オブジェクトと一緒に死ぬ参照なので、固定せず空にする。
+
 ## 次にやること
 
-- 通知トースト。`windows/NotificationToasts.qml` を削除したまま。`Notifs` に `hasAnimated` を残してある
 - `features/network` のスタブを実装に置き換える。`nmcli monitor` で変化を検知する方針
+- `Quickshell.Hyprland` が値を返さない件。直せば CC / Audio / Bluetooth のモニタ選択も正しくなる
