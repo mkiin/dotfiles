@@ -55,7 +55,7 @@ panel {
     expand:                      false;
     width:                       1000px;
     border-radius:               15px;
-    background-color:            @on-primary-fixed;
+    background-color:            @surface-container;
     orientation:                 horizontal;
     children:                    [ "imagebox", "listbox" ];
 }
@@ -86,8 +86,8 @@ inputbar {
     spacing:                     10px;
     padding:                     15px;
     border-radius:               10px;
-    background-color:            @on-primary;
-    text-color:                  @on-surface;
+    background-color:            @secondary-container;
+    text-color:                  @on-secondary-container;
     children:                    [ "textbox-prompt-colon", "entry" ];
 }
 textbox-prompt-colon {
@@ -111,18 +111,18 @@ mode-switcher{
     enabled:                     true;
     spacing:                     20px;
     background-color:            transparent;
-    text-color:                  @primary-fixed;
+    text-color:                  @on-secondary-container;
 }
 button {
     padding:                     15px;
     border-radius:               10px;
-    background-color:            @on-primary;
+    background-color:            @secondary-container;
     text-color:                  inherit;
     cursor:                      pointer;
 }
 button selected {
     background-color:            @primary;
-    text-color:                  @on-secondary;
+    text-color:                  @on-primary;
 }
 
 /*****----- Listview -----*****/
@@ -159,24 +159,25 @@ element normal.normal {
     text-color:                  inherit;
 }
 element normal.urgent {
-    background-color:            @error;
-    text-color:                  @on-surface;
+    background-color:            @error-container;
+    text-color:                  @on-error-container;
 }
+/* inputbar/button が secondary-container を占めるため、起動中マーカーは tertiary 側へ逃がす */
 element normal.active {
-    background-color:            @primary;
-    text-color:                  @on-surface;
+    background-color:            @tertiary-container;
+    text-color:                  @on-tertiary-container;
 }
 element selected.normal {
     background-color:            @primary;
-    text-color:                  @on-secondary;
+    text-color:                  @on-primary;
 }
 element selected.urgent {
     background-color:            @error;
-    text-color:                  @on-secondary;
+    text-color:                  @on-error;
 }
 element selected.active {
-    background-color:            @error;
-    text-color:                  @on-secondary;
+    background-color:            @primary;
+    text-color:                  @on-primary;
 }
 element-icon {
     background-color:            transparent;
@@ -199,14 +200,14 @@ message {
 textbox {
     padding:                     15px;
     border-radius:               10px;
-    background-color:            @on-primary;
-    text-color:                  @on-surface;
+    background-color:            @secondary-container;
+    text-color:                  @on-secondary-container;
     vertical-align:              0.5;
     horizontal-align:            0.0;
 }
 error-message {
     padding:                     15px;
     border-radius:               20px;
-    background-color:            @on-primary;
-    text-color:                  @on-surface;
+    background-color:            @error-container;
+    text-color:                  @on-error-container;
 }
