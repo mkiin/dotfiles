@@ -16,6 +16,10 @@
     after = [ "graphical-session.target" ];
     wantedBy = [ "graphical-session.target" ];
     serviceConfig = {
+      # D-Bus activation をこの unit に集約するため Type=dbus（詳細は
+      # home-manager/desktop/fcitx5 の org.fcitx.Fcitx5.service 上書き）
+      Type = "dbus";
+      BusName = "org.fcitx.Fcitx5";
       ExecStart = "${config.i18n.inputMethod.package}/bin/fcitx5";
       Restart = "on-failure";
       RestartSec = 2;
