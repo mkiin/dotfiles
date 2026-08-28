@@ -10,7 +10,6 @@
     plugins = [
       "scratchpads",
       "wallpapers",
-      "workspaces_follow_focus",
       "toggle_special",
       "lost_windows",
       "fcitx5_switcher",
@@ -22,9 +21,9 @@
     extensions = ["jpg", "jpeg", "png", "webp"]
     command = "${config.home.homeDirectory}/.config/hypr/scripts/wallpaper/apply.sh [file]"
 
-    # 前後移動は workspace.sh が担うので、ここは focusedmon 時に引き寄せる WS の上限。
-    [workspaces_follow_focus]
-    max_workspaces = 10
+    # workspaces_follow_focus は入れない。focusedmon (マウスがモニターを跨ぐ) ごとに
+    # 「他モニターが表示していない WS を全部フォーカス中のモニターへ moveworkspacetomonitor」
+    # するため、WS の所属がカーソルについて回り定まらない。WS は動かさない方針。
 
     # native special:magic と衝突しない退避先。SHIFT+S の退避/復帰(往復)に使う。
     [toggle_special]
