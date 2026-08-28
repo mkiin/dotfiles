@@ -1,11 +1,9 @@
 { lnk, ... }:
 {
-  home.sessionVariables = {
-    XMODIFIERS = "@im=fcitx";
-    INPUT_METHOD = "fcitx";
-    GTK_IM_MODULE = "fcitx";
-    QT_IM_MODULE = "fcitx";
-  };
+  # XMODIFIERS/GTK_IM_MODULE/QT_IM_MODULE は i18n.inputMethod が
+  # environment.variables で入れる。上流は waylandFrontend 時に GTK/QT を
+  # 意図的に外すので、ここで重ねると切り替えたとき黙って効かなくなる。
+  home.sessionVariables.INPUT_METHOD = "fcitx";
 
   # fcitx5 同梱の D-Bus サービスは SystemdService= を持たないため、アプリが
   # org.fcitx.Fcitx5 を呼ぶと dbus-daemon が graphical-session の環境を持たない
