@@ -10,5 +10,6 @@
     ./steam
     ./games/honkers
     ./games/nikke
+    ./games/sleepy
   ];
 }
