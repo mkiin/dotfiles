@@ -15,7 +15,8 @@ let
     wsDotSize = "20px";
     wsDotMarginY = "6px";
     wsDotGap = "3px";
-    wsActiveMinWidth = "50px";
+    wsOnScreenMinWidth = "50px"; # このモニターに映っている WS を幅広にする
+    wsAlphaOther = "0.20"; # 他モニターの WS と未生成の WS
     # tooltip
     padTooltip = "6px 10px";
     padTooltipLabel = "2px 4px";
@@ -117,8 +118,16 @@ in
 
   /* ============================================================
      4 Component: workspaces
-     非アクティブは小ドット (文字色を透明にして丸だけ見せる)、
-     アクティブは @primary の横長ピル。
+     原則「各バーは自分のモニターのことだけを語る」。WS は共有プールで所属が
+     操作のたびに動くため、他モニターの所在を描いても読めるものにならない。
+     .hosting-monitor (このバーのモニターに属す) だけがバーごとに変わるクラスで、
+     .active / .visible は waybar のグローバル判定なので 3 枚とも同じ番号に付く。
+     よって単独の .active / .visible には一切スタイルを当てず、
+     .hosting-monitor との組み合わせだけを描く。判別軸は 2 つ:
+       形 … 幅広 = 今この画面に出ている / 丸 = 出ていない
+       色 … @primary = 操作中 / @secondary_container = そうでない
+     幅広は各バーに必ずちょうど 1 つだけ出る。
+     文字色は .hosting-monitor 以上で初めて出す (他モニターの番号は見せない)。
      ============================================================ */
   #workspaces button {
     min-width: ${t.wsDotSize};
@@ -126,7 +135,7 @@ in
     padding: 0;
     margin: ${t.wsDotMarginY} ${t.wsDotGap};
     color: transparent;
-    background-color: alpha(@on_surface, 0.35);
+    background-color: alpha(@on_surface, ${t.wsAlphaOther});
     border-radius: ${t.radiusIsland};
     transition:
       background 0.25s cubic-bezier(0.4, 0, 0.2, 1),
@@ -134,10 +143,25 @@ in
       min-width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  #workspaces button.active {
+  /* このモニターの控え (属してはいるが画面に出ていない)。
+     色味のある secondary_container と違い無彩色のサーフェス階調にして
+     「色が付く = 画面に出ている」を保つ (matugen のテーマが変わっても崩れない) */
+  #workspaces button.hosting-monitor {
+    color: @on_surface_variant;
+    background-color: @surface_container_highest;
+  }
+
+  /* このモニターに映っている。.active.hosting-monitor に順序で負けるよう先に置く */
+  #workspaces button.visible.hosting-monitor {
+    color: @on_secondary_container;
+    background-color: @secondary_container;
+    min-width: ${t.wsOnScreenMinWidth};
+  }
+
+  #workspaces button.active.hosting-monitor {
     color: @on_primary;
     background-color: @primary;
-    min-width: ${t.wsActiveMinWidth};
+    min-width: ${t.wsOnScreenMinWidth};
   }
 
   #workspaces button:hover {
@@ -150,7 +174,11 @@ in
     color: @on_error;
   }
 
-  #workspaces button.special {
+  /* .visible/.active + .hosting-monitor (詳細度 2) に負けないよう special 側も
+     同じ 2 クラスで書く */
+  #workspaces button.special,
+  #workspaces button.visible.special,
+  #workspaces button.active.special {
     color: @on_tertiary;
     background-color: @tertiary;
   }

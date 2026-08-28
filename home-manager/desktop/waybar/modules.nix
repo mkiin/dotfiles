@@ -13,9 +13,13 @@
 
   "hyprland/workspaces" = {
     format = "{icon}";
+    # waybar は旧構文 `dispatch workspace N` を IPC に直書きするため、hyprland 側が
+    # configType = "lua" の本環境ではクリックでの WS 切替は機能しない(move-to-monitor も同様)。
+    # 切替は SUPER+N / SUPER+I,O に一本化し、waybar は表示専用。
     on-click = "activate";
     show-special = true;
     special-visible-only = true;
+    # 運用する 1..5 全部に必要。持たない番号は空文字になり番号を出せない。
     format-icons = {
       "1" = "1";
       "2" = "2";
@@ -24,15 +28,9 @@
       "5" = "5";
       special = " ";
     };
-    persistent-workspaces = {
-      "*" = [
-        1
-        2
-        3
-        4
-        5
-      ];
-    };
+    # persistent-workspaces は置かない。WS の所属が固定される運用では、各バーは
+    # 自分のモニターに実在する WS だけを出せばよく、他モニターの WS を空ドットで
+    # 並べても「存在しない WS」と区別が付かないノイズにしかならない。
   };
   "custom/time" = {
     format = "󰥔 {}";
