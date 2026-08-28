@@ -54,20 +54,26 @@ hl.bind(mainMod .. " + SHIFT + J", hl.dsp.window.move({ direction = "d" }))
 hl.bind(mainMod .. " + SHIFT + K", hl.dsp.window.move({ direction = "u" }))
 hl.bind(mainMod .. " + SHIFT + L", hl.dsp.window.move({ direction = "r" }))
 
+-- WS 操作は全て workspace.sh 経由。native dispatch や pypr change_workspace は
+-- 「WS が他モニターに在るとそちらへ飛ぶ/その番号を飛ばす」ので、常に現在のモニターへ
+-- 引き寄せる方式に統一する(絶対指定も前後移動も同じ方針)。
+local ws = "~/.config/hypr/scripts/workspace.sh"
+
 -- ワークスペース前後移動
-hl.bind(mainMod .. " + I", hl.dsp.exec_cmd("pypr change_workspace -1"))
-hl.bind(mainMod .. " + O", hl.dsp.exec_cmd("pypr change_workspace +1"))
--- follow = false で movetoworkspacesilent 相当(送るだけで自分は付いていかない)
+hl.bind(mainMod .. " + I", hl.dsp.exec_cmd(ws .. " focus -1"))
+hl.bind(mainMod .. " + O", hl.dsp.exec_cmd(ws .. " focus +1"))
+-- follow = false で movetoworkspacesilent 相当(送るだけで自分は付いていかない)。
+-- 引き寄せると送り先が手元に見えてしまい follow = false の意図が壊れるので native のまま。
 hl.bind(mainMod .. " + SHIFT + I", hl.dsp.window.move({ workspace = "e-1", follow = false }))
 hl.bind(mainMod .. " + SHIFT + O", hl.dsp.window.move({ workspace = "e+1", follow = false }))
 
 -- ワークスペース切替
 for i = 1, 9 do
-	hl.bind(mainMod .. " + " .. i, hl.dsp.focus({ workspace = i }))
-	hl.bind(mainMod .. " + SHIFT + " .. i, hl.dsp.window.move({ workspace = i }))
+	hl.bind(mainMod .. " + " .. i, hl.dsp.exec_cmd(ws .. " focus " .. i))
+	hl.bind(mainMod .. " + SHIFT + " .. i, hl.dsp.exec_cmd(ws .. " move " .. i))
 end
-hl.bind(mainMod .. " + 0", hl.dsp.focus({ workspace = 10 }))
-hl.bind(mainMod .. " + SHIFT + 0", hl.dsp.window.move({ workspace = 10 }))
+hl.bind(mainMod .. " + 0", hl.dsp.exec_cmd(ws .. " focus 10"))
+hl.bind(mainMod .. " + SHIFT + 0", hl.dsp.exec_cmd(ws .. " move 10"))
 
 -- スペシャルワークスペース(stash)。S=表示トグル、SHIFT+S=フォーカス窓の退避/復帰。
 -- 退避/復帰は往復動作が要るため native の片方向 move ではなく pyprland toggle_special を使う。
@@ -77,8 +83,8 @@ hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd("pypr lost_windows"))
 hl.bind(mainMod .. " + SHIFT + F", hl.dsp.exec_cmd("pypr toggle fetch"))
 
 -- マウス
-hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
-hl.bind(mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
+hl.bind(mainMod .. " + mouse_down", hl.dsp.exec_cmd(ws .. " focus +1"))
+hl.bind(mainMod .. " + mouse_up", hl.dsp.exec_cmd(ws .. " focus -1"))
 hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 

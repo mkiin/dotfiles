@@ -22,7 +22,7 @@
     extensions = ["jpg", "jpeg", "png", "webp"]
     command = "${config.home.homeDirectory}/.config/hypr/scripts/wallpaper/apply.sh [file]"
 
-    # WS は 1..10 運用なので巡回上限を合わせる。
+    # 前後移動は workspace.sh が担うので、ここは focusedmon 時に引き寄せる WS の上限。
     [workspaces_follow_focus]
     max_workspaces = 10
 

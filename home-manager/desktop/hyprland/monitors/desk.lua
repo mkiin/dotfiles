@@ -3,8 +3,6 @@ hl.monitor({ output = "DP-2", mode = "2560x1440@180", position = "1920x0", scale
 hl.monitor({ output = "DP-3", mode = "1920x1080@100", position = "4480x0", scale = 1 })
 hl.monitor({ output = "HDMI-A-1", disabled = true })
 
--- 起動時の初期配置: 中央DP-2(メイン)=WS1 / 左DP-1=WS2 / 右DP-3=WS3。
--- persistent は付けない(空WSは消え follow_focus の追従対象に戻す)。
-hl.workspace_rule({ workspace = "1", monitor = "DP-2", default = true })
-hl.workspace_rule({ workspace = "2", monitor = "DP-1", default = true })
-hl.workspace_rule({ workspace = "3", monitor = "DP-3", default = true })
+-- WS はどのモニターにも属さない共有プール。monitor= の workspace_rule は書かない
+-- (番号ごとに表示先が固定され、窓を送るとフォーカスが別画面へ飛ぶため)。
+-- 実際の引き寄せは scripts/workspace.sh と pyprland workspaces_follow_focus が担う。
