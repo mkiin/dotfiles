@@ -17,6 +17,7 @@ in
     resvg
     mpv
     pwvucontrol
+    audacity
     cava
     playerctl
     # shell / panel (qs + quickshell on PATH for keybinds and matugen post_hook)
