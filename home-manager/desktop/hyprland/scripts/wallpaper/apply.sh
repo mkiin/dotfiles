@@ -3,7 +3,7 @@ set -euo pipefail
 
 # 壁紙の唯一の書き込み経路。表示(awww)と色(matugen/wallust)の順序をプロセス内の
 # 逐次実行で保証する。正しさは呼び出しタイミングではなく awww query の実状態照合が担う。
-# 呼び出し元: pyprland wallpapers command / mode.sh / 手動。
+# 呼び出し元: pyprland wallpapers command / 手動。
 
 STATE="$HOME/.config/hypr/scripts/hyprctl-state"
 STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/hypr"
@@ -16,7 +16,7 @@ mkdir -p "$STATE_DIR"
 
 log() { printf '[%s pid=%d apply] %s\n' "$(date +%FT%T.%3N)" "$$" "$*" >>"$LOG"; }
 
-# pyprland ローテーションと mode.sh の同時呼び出しを直列化し後勝ちで収束させる
+# pyprland ローテーションと手動呼び出しの競合を直列化し後勝ちで収束させる
 exec {LOCK_FD}>"$STATE_DIR/apply.lock"
 flock -x "$LOCK_FD"
 
@@ -67,7 +67,7 @@ fi
 
 # --- 2-4. 表示 ------------------------------------------------------------
 if ((force == 0)) && [[ "$(displayed)" == "$want" ]]; then
-  # 照合: 同一画像の再適用(mode.sh 経由等)は再描画アニメーションごと省く
+  # 照合: 同一画像の再適用は再描画アニメーションごと省く
   log "display up-to-date, skip img"
 else
   # daemon 停止等の失敗でもログを残して照合まで進める(set -e の即死を避ける)

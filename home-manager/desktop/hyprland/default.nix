@@ -9,8 +9,6 @@ let
   selection = builtins.fromJSON (builtins.readFile "${inputs.self}/images/wallpaper/selection.json");
 in
 {
-  imports = [ ./monitor.nix ];
-
   wayland.windowManager.hyprland = {
     enable = true;
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
@@ -27,6 +25,7 @@ in
     "hypr/appearance.lua".source = lnk ./lua/appearance.lua;
     "hypr/env.lua".source = lnk ./lua/env.lua;
     "hypr/input.lua".source = lnk ./lua/input.lua;
+    "hypr/monitors.lua".source = lnk ./lua/monitors.lua;
     "hypr/keybinds.lua".source = lnk ./lua/keybinds.lua;
     "hypr/rules.lua".source = lnk ./lua/rules.lua;
     "hypr/scripts".source = lnk ./scripts;
