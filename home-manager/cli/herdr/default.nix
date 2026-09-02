@@ -59,7 +59,8 @@ let
     base_branches = [ "main" ];
     default_scope = "last-turn";
     navigator_position = "left";
-    toggle_placement = "zoomed";
+    toggle_placement = "split";
+    toggle_direction = "right";
   };
 in
 {
