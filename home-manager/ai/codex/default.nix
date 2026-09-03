@@ -29,6 +29,8 @@ in
       permissions.workspace-git = {
         extends = ":workspace";
         filesystem.":workspace_roots".".git" = "write";
+        # pre-commit が未ステージ変更を退避するキャッシュを Codex から書けるようにする。
+        filesystem."${homeDirectory}/.cache" = "write";
         network.enabled = true;
       };
 
