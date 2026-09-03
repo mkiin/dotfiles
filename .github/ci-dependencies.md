@@ -22,6 +22,7 @@
 | CI: Nix build | `workflows/nix-build.yaml`  | `push`(main) / `pull_request` / 手動 | nixos と home-manager(wsl) をビルド                                       |
 | CI: Nix diff  | `workflows/nix-diff.yaml`   | `pull_request`(Nix 関連 paths)       | derivation 差分を PR にコメント                                           |
 | Cache: Warm   | `workflows/cache-warm.yaml` | 毎日 03:00 UTC / 手動                | Renovate の翌朝の更新を先取りビルドして cachix を温める（非ブロッキング） |
+| Dependencies: Update dwproton | `workflows/update-dwproton.yaml` | 毎日 02:30 UTC / 手動 | dwproton の version と Nix hash を更新する PR を作成 |
 
 ## Composite Action（再利用部品）
 
@@ -49,6 +50,10 @@ renovate.json
 └─ github-actions             → uses: のバージョン更新 PR
      └─ どちらも CI（lint / nix-build / nix-diff）で検証 → 緑なら auto-merge
 ```
+
+dwproton は `fetchurl` の version と hash を同時に変える必要があるため、専用 workflow が更新する。
+`scripts/update-dwproton.sh` が GitHub mirror の最新リリースを取得し、配布アーカイブを `nix store prefetch-file` して両方を更新する。
+workflow 内の外部 Actions はバージョンタグで指定し、通常どおり Renovate の github-actions manager が更新する。
 
 ### pull_request / push トリガー（CI）
 

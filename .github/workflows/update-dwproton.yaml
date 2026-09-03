@@ -1,0 +1,40 @@
+name: "Dependencies: Update dwproton"
+
+on:
+  schedule:
+    - cron: "30 2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup Nix
+        uses: ./.github/actions/setup-nix
+
+      - name: Update dwproton version and hash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash scripts/update-dwproton.sh
+
+      - name: Create update pull request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          branch: update/dwproton
+          delete-branch: true
+          commit-message: "chore(nikke): update dwproton"
+          title: "chore(nikke): update dwproton"
+          labels: |
+            dependencies
+            automated
+          body: |
+            dwprotonの最新リリースに合わせて、versionとNix hashを更新します。
+
