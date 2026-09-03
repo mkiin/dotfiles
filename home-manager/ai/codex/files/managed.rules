@@ -16,6 +16,10 @@ prefix_rule(pattern=["git", "blame"], decision="allow")
 prefix_rule(pattern=["git", "ls-files"], decision="allow")
 prefix_rule(pattern=["git", "shortlog"], decision="allow")
 
+# ローカルコミットに必要な書き込みのみ許可する。
+prefix_rule(pattern=["git", "add"], decision="allow")
+prefix_rule(pattern=["git", "commit"], decision="allow")
+
 # テキスト検索・閲覧・整形系（読み取り主体で副作用なし）。sed は -i でも
 # workspace-write サンドボックス内なので恒久許可してループを回す。
 prefix_rule(pattern=["sed"], decision="allow")
