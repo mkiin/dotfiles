@@ -65,8 +65,8 @@ apply_launcher_update() {
   [ ! -L "$LAUNCHER_UPDATE_DIR" ] || die "ランチャー更新先がシンボリックリンクになっている: $LAUNCHER_UPDATE_DIR"
   session_running && die "NIKKE セッション稼働中のためランチャーを更新できない"
   case "$LAUNCHER_UPDATE_DIR" in
-    "$PREFIX/drive_c/NIKKE/Launcher/update_files") ;;
-    *) die "安全でないランチャー更新パス: $LAUNCHER_UPDATE_DIR" ;;
+  "$PREFIX/drive_c/NIKKE/Launcher/update_files") ;;
+  *) die "安全でないランチャー更新パス: $LAUNCHER_UPDATE_DIR" ;;
   esac
 
   log "保留中のランチャー更新を反映: $LAUNCHER_UPDATE_DIR"

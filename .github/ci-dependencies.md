@@ -16,13 +16,13 @@
 
 ## Workflow 一覧とトリガー
 
-| Workflow      | ファイル                    | トリガー                             | 役割                                                                      |
-| ------------- | --------------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| CI: Lint      | `workflows/lint.yaml`       | `push` / `pull_request`              | `nix flake check` + フォーマット確認                                      |
-| CI: Nix build | `workflows/nix-build.yaml`  | `push`(main) / `pull_request` / 手動 | nixos と home-manager(wsl) をビルド                                       |
-| CI: Nix diff  | `workflows/nix-diff.yaml`   | `pull_request`(Nix 関連 paths)       | derivation 差分を PR にコメント                                           |
-| Cache: Warm   | `workflows/cache-warm.yaml` | 毎日 03:00 UTC / 手動                | Renovate の翌朝の更新を先取りビルドして cachix を温める（非ブロッキング） |
-| Dependencies: Update dwproton | `workflows/update-dwproton.yaml` | 毎日 02:30 UTC / 手動 | dwproton の version と Nix hash を更新する PR を作成 |
+| Workflow                      | ファイル                         | トリガー                             | 役割                                                                      |
+| ----------------------------- | -------------------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| CI: Lint                      | `workflows/lint.yaml`            | `push` / `pull_request`              | `nix flake check` + フォーマット確認                                      |
+| CI: Nix build                 | `workflows/nix-build.yaml`       | `push`(main) / `pull_request` / 手動 | nixos と home-manager(wsl) をビルド                                       |
+| CI: Nix diff                  | `workflows/nix-diff.yaml`        | `pull_request`(Nix 関連 paths)       | derivation 差分を PR にコメント                                           |
+| Cache: Warm                   | `workflows/cache-warm.yaml`      | 毎日 03:00 UTC / 手動                | Renovate の翌朝の更新を先取りビルドして cachix を温める（非ブロッキング） |
+| Dependencies: Update dwproton | `workflows/update-dwproton.yaml` | 毎日 02:30 UTC / 手動                | dwproton の version と Nix hash を更新する PR を作成                      |
 
 ## Composite Action（再利用部品）
 

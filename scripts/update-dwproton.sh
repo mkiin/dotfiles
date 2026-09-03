@@ -8,19 +8,19 @@ tag=$(gh api "repos/$DWP_REPO/releases/latest" --jq '.tag_name')
 case "$tag" in
 dwproton-*) version=${tag#dwproton-} ;;
 *)
-	printf 'Unexpected dwproton release tag: %s\n' "$tag" >&2
-	exit 1
-	;;
+  printf 'Unexpected dwproton release tag: %s\n' "$tag" >&2
+  exit 1
+  ;;
 esac
 
 current=$(sed -n 's/^[[:space:]]*version = "\([^"]*\)";.*/\1/p' "$DWP_FILE")
 [ -n "$current" ] || {
-	printf 'Could not read the current dwproton version from %s\n' "$DWP_FILE" >&2
-	exit 1
+  printf 'Could not read the current dwproton version from %s\n' "$DWP_FILE" >&2
+  exit 1
 }
 if [ "$current" = "$version" ]; then
-	printf 'dwproton is already up to date: %s\n' "$version"
-	exit 0
+  printf 'dwproton is already up to date: %s\n' "$version"
+  exit 0
 fi
 
 url="https://dawn.wine/dawn-winery/dwproton/releases/download/dwproton-${version}/dwproton-${version}-x86_64.tar.xz"
@@ -28,9 +28,9 @@ hash=$(nix store prefetch-file --json "$url" | jq -r '.hash')
 case "$hash" in
 sha256-*) ;;
 *)
-	printf 'Unexpected Nix hash: %s\n' "$hash" >&2
-	exit 1
-	;;
+  printf 'Unexpected Nix hash: %s\n' "$hash" >&2
+  exit 1
+  ;;
 esac
 
 tmp=$(mktemp "${DWP_FILE}.XXXXXX")
