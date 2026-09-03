@@ -118,6 +118,22 @@
         "type": "github"
       }
     },
+    "archify-skill": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788312290,
+        "narHash": "sha256-BH4GflfrIncpcCQVfGY2z9WNLhfIH3fV26jb/YtYHj8=",
+        "owner": "tt-a1i",
+        "repo": "archify",
+        "rev": "06dd052602dd9a369e4d034e24faef0917b5a60c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tt-a1i",
+        "repo": "archify",
+        "type": "github"
+      }
+    },
     "blueprint": {
       "inputs": {
         "nixpkgs": [
@@ -965,6 +981,7 @@
         "agenix": "agenix",
         "agent-skills": "agent-skills",
         "anthropic-skills": "anthropic-skills",
+        "archify-skill": "archify-skill",
         "cloudflare-skills": "cloudflare-skills",
         "disko": "disko",
         "firefox-addons": "firefox-addons",

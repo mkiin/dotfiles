@@ -4,10 +4,14 @@ let
     superpowers-skill
     cloudflare-skills
     anthropic-skills
+    archify-skill
     ;
   local-skills = inputs.self + "/home-manager/ai/agent-skills/files/skills";
 in
 {
+  # 更新は flake input で固定するので、archify 自身の更新通知 GET は無効化する。
+  home.sessionVariables.ARCHIFY_UPDATE_CHECK_DISABLED = "1";
+
   programs.agent-skills = {
     enable = true;
 
@@ -42,6 +46,12 @@ in
         subdir = "skills";
         filter.maxDepth = 1;
       };
+      # External: archify（SKILL.md はリポジトリ直下の archify/ にあるので subdir はルート）
+      archify = {
+        path = archify-skill;
+        subdir = ".";
+        filter.maxDepth = 1;
+      };
     };
 
     # local と superpowers は全 skill を有効化
@@ -62,6 +72,7 @@ in
       "wrangler"
       "frontend-design"
       "herdr"
+      "archify"
     ];
 
     targets.claude = {

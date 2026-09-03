@@ -76,6 +76,10 @@
       url = "github:anthropics/skills";
       flake = false;
     };
+    archify-skill = {
+      url = "github:tt-a1i/archify";
+      flake = false;
+    };
 
     herdr.url = "github:ogulcancelik/herdr";
     herdr.inputs.nixpkgs.follows = "nixpkgs";
