@@ -57,7 +57,7 @@ let
   reviewr = {
     theme = "gruvbox";
     base_branches = [ "main" ];
-    default_scope = "last-turn";
+    default_scope = "uncommitted";
     navigator_position = "left";
     toggle_placement = "split";
     toggle_direction = "right";
