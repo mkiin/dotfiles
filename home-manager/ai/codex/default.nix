@@ -23,11 +23,11 @@ in
     enableMcpIntegration = true;
 
     settings = {
-      # full-auto 相当。承認は一切求めず、workspace 内の読み書き・コマンドは
-      # そのまま実行する。サンドボックス外に出る操作は確認ではなく失敗させる
-      # (network_access は既定 false)。
-      approval_policy = "never";
+      # 通常は workspace 内で実行し、.git など保護対象への書き込みだけ権限昇格へ
+      # 回す。managed.rules で許可したコマンドは確認なしで実行できる。
+      approval_policy = "on-request";
       sandbox_mode = "workspace-write";
+      sandbox_workspace_write.network_access = true;
 
       projects = lib.genAttrs trustedRepos (_: {
         trust_level = "trusted";

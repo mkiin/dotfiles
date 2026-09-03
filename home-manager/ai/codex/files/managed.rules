@@ -1,7 +1,8 @@
 # Codex execpolicy — nix 管理の許可コマンドリスト（宣言的・版管理対象）。
 # ~/.codex/rules/ 内の全 .rules が自動ロードされる。default.rules は Codex が
 # TUI の「常に許可」で実行時追記するため触らず、こちらに恒久ルールを集約する。
-# decision="allow" は「サンドボックス外でも確認なしで実行」を意味する。
+# decision="allow" は権限昇格時の承認確認を省略する。サンドボックス自体の
+# 書き込み範囲は config.toml の sandbox_mode が決める。
 # 検証: codex execpolicy check --pretty --rules ~/.codex/rules/managed.rules -- <cmd...>
 
 # git 読み取り系（副作用なし）。
