@@ -23,11 +23,14 @@ in
     enableMcpIntegration = true;
 
     settings = {
-      # 通常は workspace 内で実行し、.git など保護対象への書き込みだけ権限昇格へ
-      # 回す。managed.rules で許可したコマンドは確認なしで実行できる。
-      approval_policy = "on-request";
-      sandbox_mode = "workspace-write";
-      sandbox_workspace_write.network_access = true;
+      # workspace の制限を維持しつつ、Git 操作に必要な .git の書き込みだけ許可する。
+      approval_policy = "never";
+      default_permissions = "workspace-git";
+      permissions.workspace-git = {
+        extends = ":workspace";
+        filesystem.":workspace_roots".".git" = "write";
+        network.enabled = true;
+      };
 
       projects = lib.genAttrs trustedRepos (_: {
         trust_level = "trusted";
