@@ -64,10 +64,11 @@ hl.bind(mainMod .. " + O", hl.dsp.focus({ workspace = "m+1" }))
 hl.bind(mainMod .. " + SHIFT + I", hl.dsp.window.move({ workspace = "m-1", follow = false }))
 hl.bind(mainMod .. " + SHIFT + O", hl.dsp.window.move({ workspace = "m+1", follow = false }))
 
--- ワークスペース切替。WS は 1..5 運用なので 6 以降は束縛しない
-for i = 1, 5 do
-	hl.bind(mainMod .. " + " .. i, hl.dsp.focus({ workspace = i }))
-	hl.bind(mainMod .. " + SHIFT + " .. i, hl.dsp.window.move({ workspace = i }))
+-- ワークスペース切替。WS は 1..10 運用で、10 番は数字行の並び通り 0 キーに置く
+for i = 1, 10 do
+	local key = i == 10 and "0" or tostring(i)
+	hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ workspace = i }))
+	hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
 end
 
 -- スペシャルワークスペース(stash)。S=表示トグル、SHIFT+S=フォーカス窓の退避/復帰。
