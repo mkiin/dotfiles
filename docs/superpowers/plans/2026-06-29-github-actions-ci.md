@@ -12,13 +12,7 @@
 
 - 対象 system は **x86_64-linux のみ**。arm / darwin ジョブは作らない。
 - 全ジョブの `runs-on` は **`ubuntu-latest`**。
-- third-party action は **commit SHA で pin**し、`# vX` コメントを付ける。本プランで使う pin（ryoppippi と同一の既知良好版）:
-  - `actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7`
-  - `dorny/paths-filter@fbd0ab8f3e69293af611ebaee6363fc25e6d187d # v4.0.1`
-  - `nixbuild/nix-quick-install-action@9f63be77f412a248c9d9a65a4c82cf066cdf8f0c # v35`
-  - `nix-community/cache-nix-action@7df957e333c1e5da7721f60227dbba6d06080569 # v7.0.2`
-  - `natsukium/nix-diff-action@4091452e4c7b3c7ea4ecbaec84be7f0066d810d7 # main`
-  - `actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0`
+- third-party action はバージョンタグで指定し、Renovate の github-actions manager で更新する。
 - ビルドターゲットの属性パス（検証済み）:
   - nixos: `.#nixosConfigurations.nixos.config.system.build.toplevel`
   - wsl-home: `.#homeConfigurations."mkiin@wsl".activationPackage`
