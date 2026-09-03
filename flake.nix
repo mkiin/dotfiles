@@ -95,6 +95,13 @@
       system = "x86_64-linux";
       pkgs = import inputs.nixpkgs { inherit system; };
       treefmtEval = inputs.treefmt-nix.lib.evalModule pkgs ./lib/treefmt;
+      preCommitCheck = inputs.git-hooks.lib.${system}.run {
+        src = ./.;
+        hooks.treefmt = {
+          enable = true;
+          package = treefmtEval.config.build.wrapper;
+        };
+      };
       nom = pkgs.lib.getExe pkgs.nix-output-monitor;
     in
     {
@@ -113,6 +120,12 @@
 
       formatter.${system} = treefmtEval.config.build.wrapper;
       packages.${system}.fmt = treefmtEval.config.build.wrapper;
+      checks.${system}.pre-commit = preCommitCheck;
+
+      devShells.${system}.default = pkgs.mkShell {
+        inherit (preCommitCheck) shellHook;
+        packages = preCommitCheck.enabledPackages;
+      };
 
       apps.${system} = {
         update = {
