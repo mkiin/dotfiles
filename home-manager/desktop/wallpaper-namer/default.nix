@@ -28,6 +28,7 @@ in
       Environment = "WALLPAPER_DIR=${dir}";
       EnvironmentFile = "/run/agenix/gemini-api-key.env";
       ExecStart = "${namer}/bin/wallpaper-namer";
+      ExecStartPost = "${pkgs.pyprland}/bin/pypr reload";
     };
   };
 }
