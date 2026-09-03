@@ -1,16 +1,11 @@
 #!/usr/bin/env bash
-# NIKKE(anime-games-launcher / dwproton)を ACE の初期化レースに強い形で起動する監視ラッパー。
-# ACE 本体は一切改ざんしない。「正しく初期化させる」ための無侵襲な下ごしらえ+自動リトライ+宙吊り復旧のみ。
-#   1. Steam を健全化(古い常駐は ACE-kick 要因。ACE 初期化には Steam 常駐が要る)
-#   2. ACE サービスの Start を 4(遅延起動)にする冪等な system.reg tweak
-#   3. lottery 起動: 初期化ウィンドウ内に本体が出なければ畳んで自動リトライ。出たらウォッチドッグへ
+# NIKKE(anime-games-launcher / dwproton)の起動ラッパー。
+# 公式ランチャーの保留中の更新を反映し、更新終了時だけ自動再起動する。
 set -euo pipefail
 
 # --- 調整可能パラメータ ---
-STEAM_MAX_UPTIME_H="${STEAM_MAX_UPTIME_H:-3}" # Steam 常駐がこの時間を超えたら再起動を促す
-MAX_RETRIES="${MAX_RETRIES:-4}"               # 起動失敗(session 早期終了)時のリトライ回数
-WATCH_INTERVAL_S=5                            # ウォッチドッグのポーリング間隔
-UPDATE_TIMEOUT_S="${UPDATE_TIMEOUT_S:-600}"   # umu ランタイム更新の打ち切り時間
+MAX_UPDATE_RESTARTS="${MAX_UPDATE_RESTARTS:-2}" # ランチャー更新による再起動回数の上限
+WATCH_INTERVAL_S=5                              # ゲーム起動確認のポーリング間隔
 
 log() { printf '\n\033[1;34m==>\033[0m %s\n' "$*"; }
 warn() { printf '\033[1;33m[warn]\033[0m %s\n' "$*"; }
@@ -27,7 +22,8 @@ NIKKE_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/nikke"
 PREFIX="$NIKKE_HOME/prefix"
 PROTON="${NIKKE_PROTON:-}"
 LAUNCHER="$PREFIX/drive_c/NIKKE/Launcher/nikke_launcher.exe"
-REG="$PREFIX/system.reg"
+LAUNCHER_DIR="${LAUNCHER%/*}"
+LAUNCHER_UPDATE_DIR="$LAUNCHER_DIR/update_files"
 # umu/proton/launcher の各プロセス argv には $LAUNCHER(=prefix 絶対パス)が乗る。
 # これをセッション生存判定/kill のトークンにする(旧 AGL の goddess_of_victory_nikke 相当)。
 # nikke ラッパー自身の argv には prefix パスが出ないため pkill の self-match は起きない。
@@ -50,20 +46,6 @@ nikke_window_count() {
 game_running() { [ "$(nikke_window_count)" -ge 2 ]; }
 session_running() { pgrep -f "$SESSION_MATCH" >/dev/null 2>&1; }
 
-# NIKKE ランチャーの枠/影は steam_proton・空タイトルの Xwayland override-redirect 窓として
-# 描かれ、本体を kill しても Hyprland のタイル境界に取り残され「端の残像」になる。
-# 本体が完全に消えている前提で、残った steam_proton 窓を閉じる(稼働中は誤爆しないよう即 return)。
-cleanup_stray_windows() {
-  session_running && return 0
-  command -v hyprctl >/dev/null 2>&1 || return 0
-  command -v jq >/dev/null 2>&1 || return 0
-  hyprctl clients -j 2>/dev/null |
-    jq -r '.[] | select(.class == "steam_proton") | .address' 2>/dev/null |
-    while read -r addr; do
-      [ -n "$addr" ] && hyprctl dispatch closewindow "address:$addr" >/dev/null 2>&1 || true
-    done
-}
-
 # 宙吊りセッションを畳む。prefix 固有トークンで一致(pkill は自 PID を除外するので self-match しない)。
 cleanup_session() {
   pkill -TERM -f "$SESSION_MATCH" 2>/dev/null || true
@@ -72,144 +54,36 @@ cleanup_session() {
     sleep 1
   done
   session_running && pkill -KILL -f "$SESSION_MATCH" 2>/dev/null
-  sleep 1
-  cleanup_stray_windows
 }
 
-# --- 1. Steam 健全化 ---
-preflight_steam() {
-  local pid up_s up_h
-  pid=$(pgrep -x steam | head -1 || true)
-  if [ -z "$pid" ]; then
-    log "Steam が起動していない → 起動する(ACE 初期化に必要)"
-    start_steam
-    return
-  fi
-  up_s=$(ps -o etimes= -p "$pid" 2>/dev/null | tr -d ' ' || echo 0)
-  up_h=$((up_s / 3600))
-  if [ "$up_h" -ge "$STEAM_MAX_UPTIME_H" ]; then
-    warn "Steam が ${up_h}h 起動しっぱなし(ACE-kick の要因)。再起動を推奨。"
-    if [ -t 0 ]; then
-      read -r -p "Steam を再起動しますか? [y/N] " ans
-      case "$ans" in
-      [yY]*) restart_steam ;;
-      *) log "Steam 再起動をスキップ" ;;
-      esac
-    else
-      warn "非対話のため Steam 再起動はスキップ(STEAM_MAX_UPTIME_H で調整可)"
-    fi
-  else
-    log "Steam 起動 ${up_h}h(しきい値 ${STEAM_MAX_UPTIME_H}h 未満) → そのまま"
-  fi
-}
-start_steam() {
-  command -v steam >/dev/null 2>&1 || {
-    warn "steam コマンドが無い。手動で起動してください。"
-    return
-  }
-  nohup steam -silent >/dev/null 2>&1 &
-  log "Steam の起動を待機..."
-  for _ in $(seq 1 30); do
-    pgrep -x steam >/dev/null 2>&1 && {
-      sleep 5
-      return
-    }
-    sleep 1
-  done
-  warn "Steam の起動確認がタイムアウト。続行します。"
-}
-restart_steam() {
-  command -v steam >/dev/null 2>&1 || return
-  log "Steam をシャットダウン"
-  steam -shutdown >/dev/null 2>&1 || pkill -TERM -x steam || true
-  for _ in $(seq 1 30); do
-    pgrep -x steam >/dev/null 2>&1 || break
-    sleep 1
-  done
-  pkill -KILL -x steam 2>/dev/null || true
-  start_steam
+# 公式ランチャーは自己更新を update_files/ へ展開するが、Wine 上では実行中の exe/DLL を
+# Windows と同じ手順で置換できない。セッション停止中に限り内容を Launcher/ へ反映する。
+# コピーに失敗した場合は update_files/ を残し、次回の再実行や手動調査を可能にする。
+apply_launcher_update() {
+  [ -e "$LAUNCHER_UPDATE_DIR" ] || return 0
+  [ -d "$LAUNCHER_UPDATE_DIR" ] || die "ランチャー更新先がディレクトリではない: $LAUNCHER_UPDATE_DIR"
+  [ ! -L "$LAUNCHER_UPDATE_DIR" ] || die "ランチャー更新先がシンボリックリンクになっている: $LAUNCHER_UPDATE_DIR"
+  session_running && die "NIKKE セッション稼働中のためランチャーを更新できない"
+  case "$LAUNCHER_UPDATE_DIR" in
+    "$PREFIX/drive_c/NIKKE/Launcher/update_files") ;;
+    *) die "安全でないランチャー更新パス: $LAUNCHER_UPDATE_DIR" ;;
+  esac
+
+  log "保留中のランチャー更新を反映: $LAUNCHER_UPDATE_DIR"
+  cp -a -- "$LAUNCHER_UPDATE_DIR"/. "$LAUNCHER_DIR"/
+  rm -rf -- "$LAUNCHER_UPDATE_DIR"
+  [ -e "$LAUNCHER" ] || die "更新後のランチャーが見つからない: $LAUNCHER"
+  log "ランチャー更新の反映完了"
 }
 
-# --- 2. umu ランタイム更新(起動から切り離す) ---
-# umu は既定でゲーム起動と同じプロセス内でランタイム更新を走らせる。この更新が停滞すると
-# 起動が DL 待ちのまま進まず、しかも umu.lock を掴んだプロセスが残って以降の起動を
-# 永久にブロックする。更新は打ち切り可能な独立ステップへ追い出し、本番起動は
-# UMU_RUNTIME_UPDATE=0 で走らせて「更新の失敗が起動を殺さない」ようにする。
-# UMU_NO_PROTON=1 はランタイムの面倒だけ見て proton を起動しないモード。
-update_runtime() {
-  [ "${NIKKE_SKIP_RUNTIME_UPDATE:-0}" = 1 ] && {
-    log "ランタイム更新をスキップ(NIKKE_SKIP_RUNTIME_UPDATE=1)"
-    return
-  }
-  log "umu ランタイムを更新(最大 ${UPDATE_TIMEOUT_S}s)"
-  # timeout が殺せるのは直接の子(steam-run)だけで、umu.lock を掴んだ umu 本体は孫として残る。
-  # かといって pkill -f umu-run で薙ぐと他の umu 経由ゲームまで巻き込む。setsid で更新専用の
-  # セッションを作り、自分が起こした子孫だけをプロセスグループごと畳む。
-  local pid pgid ok=0 waited=0
-  GAMEID=umu-nikke UMU_NO_PROTON=1 UMU_RUNTIME_UPDATE=1 \
-    setsid ${STEAMRUN:+"$STEAMRUN"} "$UMU" true \
-    </dev/null >"$NIKKE_HOME/umu-update.log" 2>&1 &
-  pid=$!
-  pgid=$(ps -o pgid= -p "$pid" 2>/dev/null | tr -d ' ')
-  while kill -0 "$pid" 2>/dev/null && [ "$waited" -lt "$UPDATE_TIMEOUT_S" ]; do
-    sleep 1
-    waited=$((waited + 1))
-  done
-  if kill -0 "$pid" 2>/dev/null; then
-    warn "ランタイム更新が ${UPDATE_TIMEOUT_S}s で終わらないため打ち切る"
-  elif wait "$pid"; then
-    ok=1
-  else
-    warn "ランタイム更新に失敗"
-  fi
-  # setsid が新セッションを作れていなければ自分のグループを殺すことになるので必ず突き合わせる。
-  if [ -n "$pgid" ] && [ "$pgid" != "$(ps -o pgid= -p $$ | tr -d ' ')" ]; then
-    kill -KILL "-$pgid" 2>/dev/null || true
-  fi
-  wait "$pid" 2>/dev/null || true
-  [ "$ok" = 1 ] && {
-    log "ランタイム更新 OK"
-    return
-  }
-  warn "既存ランタイムで起動する(ログ: $NIKKE_HOME/umu-update.log)"
-}
-
-# --- 3. ACE サービスの Start=4 tweak(冪等) ---
-apply_reg_tweak() {
-  [ -f "$REG" ] || {
-    warn "system.reg が無い。tweak をスキップ"
-    return
-  }
-  if session_running; then
-    warn "prefix が稼働中。tweak は system.reg 停止時のみ → 一旦畳む"
-    cleanup_session
-  fi
-  if ! grep -q '"Start"=dword:00000003' "$REG"; then
-    log "ACE Start は既に非3(tweak 済み) → スキップ"
-    return
-  fi
-  [ -f "$REG.orig" ] || cp -p "$REG" "$REG.orig" # 初回の素の状態を保全
-  cp -p "$REG" "$REG.bak"                        # 直前状態
-  local tmp
-  tmp=$(mktemp)
-  # ACE-BASE / AntiCheatExpert Protection ブロック内の Start:3 のみ 4 へ。他サービスの Start:3 は触らない。
-  awk '
-    /^\[/ { inblk = (index($0,"ACE-BASE]")>0 || index($0,"AntiCheatExpert Protection]")>0) }
-    inblk && $0=="\"Start\"=dword:00000003" { $0="\"Start\"=dword:00000004" }
-    { print }
-  ' "$REG" >"$tmp"
-  mv "$tmp" "$REG"
-  log "ACE サービスの Start を 4(遅延起動)に設定(バックアップ: system.reg.bak)"
-}
-
-# --- 4. lottery 起動 + ウォッチドッグ ---
-launch_once() {
+# --- ランチャー起動 ---
+launch_and_wait() {
   log "NIKKE 起動(steam-run + umu-run / AGL 再現)"
   # AGL の実起動を再現: PROTON_USE_WOW64=1 を付け、steam-run で umu-run をくるむ。
   # STORE=none は AGL は付けない(付けると umu の GAMEID 解決経路が変わる)ので外す。
   # setsid で新セッション化し、nikke スクリプト/端末のプロセスグループから切り離す。
   # nohup だけだと SIGHUP は防げても Ctrl-C(SIGINT)は同一 pgroup 経由でゲームまで届き
-  # セッションごと落ちる。setsid + </dev/null で端末を完全に手放し、watchdog や端末が
+  # セッションごと落ちる。setsid + </dev/null で端末を完全に手放し、ラッパーや端末が
   # 死んでもゲームは残す。umu/proton の出力は死因追跡のため umu.log に残す。
   GAMEID=umu-nikke PROTON_USE_WOW64=1 UMU_RUNTIME_UPDATE=0 PROTONPATH="$PROTON" WINEPREFIX="$PREFIX" \
     setsid ${STEAMRUN:+"$STEAMRUN"} "$UMU" "$LAUNCHER" </dev/null >"$NIKKE_HOME/umu.log" 2>&1 &
@@ -226,51 +100,36 @@ launch_once() {
   return 1
 }
 
-watchdog() {
-  log "ウォッチドッグ開始(セッション終了を監視)。ランチャーを隠しても閉じてもゲームは残る。Ctrl-C で監視のみ終了。"
-  # 観測専用。生存判定は umu セッション(wine prefix)のみで行い、こちらからは決して kill しない。
-  # 旧実装は「crashhandler かつ本体窓なし」で宙吊りと見なし cleanup_session で強制 kill していたが、
-  # ランチャーを「隠す」と窓が減って game_running=false になり、健全なセッションを誤って皆殺しにした。
-  # 窓枚数でゲームの生死を判定するのが誤りの根。宙吊りの後始末は cmd_run 起動時の判定に委ね、
-  # ここでは何も殺さない(健全なプレイを殺すより、稀な宙吊りを手動で畳む方が遥かにマシ)。
-  while session_running; do
-    sleep "$WATCH_INTERVAL_S"
-  done
-  log "NIKKE 正常終了"
-  cleanup_stray_windows
-  return 0
-}
-
 cmd_run() {
   [ -n "$PROTON" ] || die "NIKKE_PROTON 未設定。端末直叩きでなく nix の nikke ラッパー経由で起動してください"
   [ -d "$PROTON" ] || die "dwproton が無い: $PROTON"
   [ -e "$LAUNCHER" ] || die "NIKKE が見つからない: $LAUNCHER (Miniloader で C:\\NIKKE へ導入してください)"
   log "prefix: $PREFIX"
   log "proton: $(basename "$PROTON")"
-  preflight_steam
-  apply_reg_tweak
-  # apply_reg_tweak が宙吊りセッションを畳んだ後に更新する(lock 競合を避ける)。
-  update_runtime
-  local n
-  for n in $(seq 1 "$MAX_RETRIES"); do
-    log "起動試行 $n/$MAX_RETRIES"
-    if launch_once; then
-      watchdog || true
+  apply_launcher_update
+  local update_restarts=0
+  while true; do
+    if launch_and_wait; then
+      log "NIKKE 起動完了"
       exit 0
     fi
-    cleanup_session
-    warn "リトライします..."
-    sleep 2
+    if [ -e "$LAUNCHER_UPDATE_DIR" ]; then
+      if [ "$update_restarts" -ge "$MAX_UPDATE_RESTARTS" ]; then
+        die "ランチャー更新が ${MAX_UPDATE_RESTARTS} 回続いたため停止。保留ファイル: $LAUNCHER_UPDATE_DIR"
+      fi
+      update_restarts=$((update_restarts + 1))
+      log "ランチャー更新を検出。反映して再起動 (${update_restarts}/${MAX_UPDATE_RESTARTS})"
+      apply_launcher_update
+      continue
+    fi
+    die "ゲーム本体が起動する前に NIKKE セッションが終了しました。ログ: $NIKKE_HOME/umu.log"
   done
-  die "$MAX_RETRIES 回試みても ACE の初期化に失敗。時間を置くか、Steam 再起動後に再試行してください。"
 }
 
-# ACE のデッドロックでゲームが固まると窓は残るのに操作を受け付けない。
-# その状態を手で畳むための出口(watchdog は健全なプレイを殺さないよう何もしない方針のため)。
+# ゲームやWineセッションが固まった状態を手で畳むための出口。
 cmd_kill() {
   if ! session_running; then
     log "NIKKE セッションは動いていない"
-    cleanup_stray_windows
     return 0
   fi
   log "NIKKE セッションを畳む"
@@ -282,12 +141,11 @@ cmd_kill() {
 usage() {
   cat <<'EOF'
 usage: nikke [run|kill]
-  run     (既定) NIKKE を起動(umu ランタイム更新 + Lottery + watchdog)
-  kill    固まった/残ったセッションを畳む(窓の残像も片付ける)
+  run     (既定) NIKKE を起動し、ランチャー更新を反映
+  kill    固まった/残ったセッションを畳む
 
 env:
-  NIKKE_SKIP_RUNTIME_UPDATE=1  umu ランタイム更新を飛ばす
-  UPDATE_TIMEOUT_S=600         更新の打ち切り時間(秒)
+  MAX_UPDATE_RESTARTS=2  ランチャー更新による再起動回数の上限
 EOF
 }
 

@@ -24,6 +24,7 @@
     ./vesktop
     ./upscayl
     ./obsidian
+    ./umu-runtime
     ./nikke
   ];
 
