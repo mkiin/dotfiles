@@ -5,6 +5,7 @@
 import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Notifications
+import Quickshell.Hyprland
 import QtQuick
 import "theme" as QsTheme
 import "windows"
@@ -133,6 +134,10 @@ ShellRoot {
 
     // waybar が先に起動していると初回 exec が空振りするので、こちらの準備完了時に一度撃つ。
     Component.onCompleted: {
+        // Hyprland シングルトンは初回参照で初めて IPC を張り、monitors が埋まるのは数 ms 後。
+        // パネルを開く瞬間に初参照すると focusedMonitor が null で screens[0] に落ちるため、
+        // 起動時に触って先に初期化しておく。
+        void Hyprland.monitors;
         root.refreshWaybar(1);
         root.refreshWaybar(2);
     }

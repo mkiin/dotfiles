@@ -12,8 +12,8 @@ import "../features/notifications" as QsNotifications
 // waybar 直下・右上に積む通知トースト。全モニタへ同じものを出す。
 // PopupCard は使わない。あれは画面全面を覆って枠外クリックを拾う器で、
 // 常時出るトーストに使うと下のウィンドウの操作を奪う。
-// フォーカスモニタだけに出す案は捨てた。Quickshell.Hyprland の focusedMonitor と
-// monitors がこの環境では空を返し、どのモニタを見ているかを知る手段が無い。
+// フォーカスモニタだけに出す案は捨てた。通知は視線がどこにあっても気づけるべきで、
+// 到着時にフォーカスしていたモニタへ固定すると見落とす。
 Variants {
     id: variants
 
