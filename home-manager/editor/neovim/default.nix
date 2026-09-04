@@ -14,6 +14,7 @@
       gcc
       typescript-go
       lua-language-server
+      stylua
       nixd
       nixfmt
       oxfmt
