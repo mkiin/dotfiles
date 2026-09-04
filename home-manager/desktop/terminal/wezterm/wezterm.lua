@@ -88,7 +88,11 @@ config.keys = {
 	{ key = ".", mods = "LEADER", action = act.ScrollToPrompt(1) },
 
 	-- 移動: リサイズモード
-	{ key = "r", mods = "LEADER", action = act.ActivateKeyTable({ name = "resize_pane", one_shot = false }) },
+	{
+		key = "r",
+		mods = "LEADER",
+		action = act.ActivateKeyTable({ name = "resize_pane", one_shot = false }),
+	},
 
 	-- 分割
 	{ key = "s", mods = "LEADER", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) }, -- 左右
