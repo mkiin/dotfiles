@@ -18,7 +18,7 @@
 
 | Workflow                      | ファイル                         | トリガー                             | 役割                                                                      |
 | ----------------------------- | -------------------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| CI: Lint                      | `workflows/lint.yaml`            | `push` / `pull_request`              | `nix flake check` + フォーマット確認                                      |
+| CI: Lint                      | `workflows/lint.yaml`            | `push`(main) / `pull_request`        | `nix flake check` + フォーマット確認                                      |
 | CI: Nix build                 | `workflows/nix-build.yaml`       | `push`(main) / `pull_request` / 手動 | nixos と home-manager(wsl) をビルド                                       |
 | CI: Nix diff                  | `workflows/nix-diff.yaml`        | `pull_request`(Nix 関連 paths)       | derivation 差分を PR にコメント                                           |
 | Cache: Warm                   | `workflows/cache-warm.yaml`      | 毎日 03:00 UTC / 手動                | Renovate の翌朝の更新を先取りビルドして cachix を温める（非ブロッキング） |
@@ -63,9 +63,12 @@ pull_request
 ├─ nix-build.yaml  : job changes(paths-filter) → job build [matrix: nixos / wsl-home]
 └─ nix-diff.yaml   : nix-diff-action で nixos の derivation 差分を PR コメント
 
-push(main)      → nix-build.yaml
-push(全ブランチ) → lint.yaml
+push(main) → nix-build.yaml + lint.yaml
 ```
+
+lint の push を main に絞ってあるのは、同一リポジトリ内のブランチだと `push` と `pull_request` が
+両方発火し、`concurrency.group` の `github.ref` が別物（`refs/heads/*` と `refs/pull/*/merge`）で
+互いにキャンセルもされず、同じ lint を丸ごと 2 回走らせるため。
 
 ## ⚠️ ハマりどころ / 前提条件（重要）
 
