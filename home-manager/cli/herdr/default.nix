@@ -1,6 +1,41 @@
-{ pkgs, ... }:
+{
+  config,
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
 let
   tomlFormat = pkgs.formats.toml { };
+  herdr = lib.getExe inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default;
+
+  reviewrFocus = pkgs.writeShellApplication {
+    name = "herdr-reviewr-focus";
+    runtimeInputs = [
+      pkgs.coreutils
+      pkgs.jq
+    ];
+    text = builtins.readFile ./plugins/reviewr-focus/toggle.sh;
+  };
+
+  reviewrFocusPlugin = tomlFormat.generate "herdr-reviewr-focus-plugin.toml" {
+    id = "local.reviewr-focus";
+    name = "reviewr-focus";
+    version = "1.0.0";
+    min_herdr_version = "0.8.2";
+    platforms = [ "linux" ];
+    actions = [
+      {
+        id = "toggle";
+        title = "Toggle reviewr and focus its tab";
+        contexts = [
+          "pane"
+          "workspace"
+        ];
+        command = [ "${reviewrFocus}/bin/herdr-reviewr-focus" ];
+      }
+    ];
+  };
 
   settings = {
     onboarding = false;
@@ -32,6 +67,7 @@ let
       close_pane = "prefix+m";
       zoom = "prefix+z";
       resize_mode = "prefix+r";
+      toggle_sidebar = "prefix+shift+b";
 
       # command は action id を取る。プラグイン間で id が衝突すると
       # ambiguous_plugin_action になるため <plugin_id>.<action_id> で修飾する。
@@ -45,7 +81,7 @@ let
         {
           key = "prefix+g";
           type = "plugin_action";
-          command = "persiyanov.reviewr.toggle";
+          command = "local.reviewr-focus.toggle";
           description = "toggle reviewr";
         }
       ];
@@ -59,12 +95,17 @@ let
     base_branches = [ "main" ];
     default_scope = "uncommitted";
     navigator_position = "left";
-    toggle_placement = "split";
-    toggle_direction = "right";
+    toggle_placement = "tab";
   };
 in
 {
   xdg.configFile."herdr/config.toml".source = tomlFormat.generate "herdr-config.toml" settings;
   xdg.configFile."herdr/plugins/config/persiyanov.reviewr/config.toml".source =
     tomlFormat.generate "reviewr-config.toml" reviewr;
+  xdg.configFile."herdr/plugins/local/reviewr-focus/herdr-plugin.toml".source = reviewrFocusPlugin;
+
+  home.activation.linkHerdrReviewrFocus = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    ${herdr} plugin link "${config.xdg.configHome}/herdr/plugins/local/reviewr-focus" >/dev/null
+    ${herdr} server reload-config >/dev/null 2>&1 || true
+  '';
 }
