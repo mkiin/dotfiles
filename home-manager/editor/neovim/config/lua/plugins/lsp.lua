@@ -20,16 +20,11 @@ return {
 					},
 				},
 				lua_ls = {
-					settings = {
-						Lua = {
-							diagnostics = {
-								globals = { "vim" },
-							},
-							workspace = {
-								library = vim.api.nvim_get_runtime_file("", true),
-								checkThirdParty = false,
-							},
-						},
+					-- .git を root マーカーにすると dotfiles 等の非 Lua リポジトリ全体を走査し、
+					-- result/.direnv 経由で /nix/store まで辿って応答が返らなくなる
+					root_markers = {
+						{ ".emmyrc.json", ".luarc.json", ".luarc.jsonc" },
+						{ ".luacheckrc", ".stylua.toml", "stylua.toml", "selene.toml", "selene.yml" },
 					},
 				},
 				nixd = {},
