@@ -6,8 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 jobs:
   update:
@@ -23,11 +22,19 @@ jobs:
       - name: Update dwproton version and hash
         env:
           GH_TOKEN: ${{ github.token }}
-        run: bash scripts/update-dwproton.sh
+        run: bash home-manager/desktop/dwproton/update.sh
+
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.DWPROTON_APP_ID }}
+          private-key: ${{ secrets.DWPROTON_APP_PRIVATE_KEY }}
 
       - name: Create update pull request
         uses: peter-evans/create-pull-request@v8
         with:
+          token: ${{ steps.app-token.outputs.token }}
           branch: update/dwproton
           delete-branch: true
           commit-message: "chore(nikke): update dwproton"
@@ -37,4 +44,3 @@ jobs:
             automated
           body: |
             dwprotonの最新リリースに合わせて、versionとNix hashを更新します。
-

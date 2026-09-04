@@ -52,7 +52,7 @@ renovate.json
 ```
 
 dwproton は `fetchurl` の version と hash を同時に変える必要があるため、専用 workflow が更新する。
-`scripts/update-dwproton.sh` が GitHub mirror の最新リリースを取得し、配布アーカイブを `nix store prefetch-file` して両方を更新する。
+`home-manager/desktop/dwproton/update.sh` が GitHub mirror の最新リリースを取得し、配布アーカイブを `nix store prefetch-file` して両方を更新する。
 workflow 内の外部 Actions はバージョンタグで指定し、通常どおり Renovate の github-actions manager が更新する。
 
 ### pull_request / push トリガー（CI）

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DWP_FILE="${DWP_FILE:-home-manager/desktop/nikke/dwproton.nix}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DWP_FILE="${DWP_FILE:-$SCRIPT_DIR/default.nix}"
 DWP_REPO="${DWP_REPO:-dawn-winery/dwproton-mirror}"
 
 tag=$(gh api "repos/$DWP_REPO/releases/latest" --jq '.tag_name')

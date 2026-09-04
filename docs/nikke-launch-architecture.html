@@ -138,7 +138,7 @@
 </div>
 <div class="arrow">↓ exec</div>
 <div class="layer">
-  <div class="who">② nikke.sh（監視ラッパー） <span class="tag">scripts/nikke.sh</span></div>
+  <div class="who">② nikke.sh（監視ラッパー） <span class="tag">home-manager/desktop/nikke/nikke.sh</span></div>
   <div class="why">ACE（アンチチート）の初期化レースに対する運用対策の層。Steam 常駐の健全化、レジストリ tweak、起動リトライ、ウォッチドッグを担う。<b>下の層のどれも「起動が確率的に失敗する」ことへの対処を持たない</b>ため、この層が生まれた。</div>
 </div>
 <div class="arrow">↓ setsid + 起動</div>
@@ -427,7 +427,7 @@ dwproton は「nix 管理されていない」ように見えるが、実際は�
 </tr>
 <tr>
   <td><b>fetchurl 固定 derivation</b></td>
-  <td><b>dwproton</b>（<code>home-manager/desktop/nikke/default.nix</code>）</td>
+  <td><b>dwproton</b>（<code>home-manager/desktop/dwproton/default.nix</code>）</td>
   <td class="bad">手動。version と hash を書き換えて build</td>
 </tr>
 </table>
@@ -439,7 +439,7 @@ Renovate は dawn.wine（Forgejo）を既定では追跡しないため、11.0-5
 これが「nix で管理していないのでは」という印象の正体である。
 </p>
 
-<pre><code># home-manager/desktop/nikke/default.nix（更新後）
+<pre><code># home-manager/desktop/dwproton/default.nix（更新後）
 version = "11.0-11";
 src = fetchurl {
   url = "https://dawn.wine/dawn-winery/dwproton/releases/download/dwproton-${version}/...";
