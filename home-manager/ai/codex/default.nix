@@ -14,6 +14,7 @@ let
   trustedRepos = [
     "${ghqDir}/dotfiles"
     "${ghqDir}/airmonitor"
+    "${ghqDir}/pantsu-bot"
   ];
 in
 {
