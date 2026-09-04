@@ -32,6 +32,7 @@ jobs:
           private-key: ${{ secrets.DWPROTON_APP_PRIVATE_KEY }}
 
       - name: Create update pull request
+        id: cpr
         uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ steps.app-token.outputs.token }}
@@ -44,3 +45,10 @@ jobs:
             automated
           body: |
             dwprotonの最新リリースに合わせて、versionとNix hashを更新します。
+
+      # Renovate の PR と違い自前 workflow の PR は誰も auto-merge を押さないため、ここで有効化する。
+      - name: Enable auto-merge
+        if: steps.cpr.outputs.pull-request-operation == 'created'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh pr merge --auto --squash "${{ steps.cpr.outputs.pull-request-number }}"
