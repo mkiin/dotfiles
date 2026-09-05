@@ -4,7 +4,7 @@ check_contrast = true
 saturation = 0
 
 [templates]
-waybar = { template = "waybar.css", target = "~/.config/waybar/colors-waybar.css" }
+waybar = { template = "waybar.css", target = "~/.config/waybar/colors.css" }
 ghostty = { template = "ghostty.conf", target = "~/.config/ghostty/themes/wallust" }
 wezterm = { template = "wezterm.toml", target = "~/.config/wezterm/colors/wallust.toml" }
 pywal = { template = "pywal-colors.json", target = "~/.cache/wal/colors.json" }

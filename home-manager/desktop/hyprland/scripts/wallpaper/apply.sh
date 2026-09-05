@@ -124,11 +124,11 @@ else
   log "matugen SOURCE_IDX=$source_idx"
 
   spawn matugen matugen_with_fallback "$img" "$source_idx"
-  # wallust: matugen が出さない @color0..15 (Pywal 系) を waybar style 用に追加生成
+  # wallust: waybar/wlogout/ghostty/wezterm 用のパレット
   spawn wallust wallust run "$img" --quiet
   wait_all
 
-  "$HOME/.config/hypr/scripts/waybar/reload-css.sh" 2>>"$LOG" ||
+  "$HOME/.config/waybar/scripts/reload-css.sh" 2>>"$LOG" ||
     log "waybar/reload-css failed rc=$?"
   # ghostty: theme は window 起動時にしか読まれないため SIGUSR2 で reload_config を要求
   pkill -x -SIGUSR2 ghostty 2>>"$LOG" &&

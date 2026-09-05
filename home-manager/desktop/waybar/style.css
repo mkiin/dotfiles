@@ -1,0 +1,176 @@
+@import "colors.css";
+
+* {
+  border: none;
+  border-radius: 0;
+  font-family: "JetBrainsMono Nerd Font Propo";
+  font-size: 16px;
+  min-height: 0;
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
+}
+
+button,
+button:hover,
+button:focus,
+button:focus-visible {
+  box-shadow: none;
+  outline: none;
+  text-shadow: none;
+  background-image: none;
+}
+
+tooltip,
+tooltip label {
+  background-image: none;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+window#waybar {
+  background: transparent;
+}
+
+tooltip {
+  background: @background;
+  border: 1px solid @color8;
+  border-radius: 12px;
+}
+
+tooltip label {
+  color: @foreground;
+  padding: 6px;
+}
+
+.modules-left {
+  margin-left: 14px;
+}
+
+.modules-right {
+  margin-right: 14px;
+}
+
+#workspaces {
+  background: @background;
+  color: @foreground;
+  padding: 5px 3px;
+  margin: 0 6px;
+  border-radius: 16px;
+  border: 1px solid @color0;
+  box-shadow: rgba(0, 0, 0, 0.116) 2px 2px 5px 2px;
+}
+
+#workspaces button {
+  padding: 0 6px;
+  margin: 0 3px;
+  border-radius: 50px;
+  color: transparent;
+  background: @color0;
+  transition: all 0.3s ease-in-out;
+}
+
+#workspaces button.active,
+#workspaces button:hover,
+#workspaces button.urgent {
+  color: @background;
+  min-width: 50px;
+}
+
+#workspaces button.active {
+  background-color: @color4;
+  font-size: 13px;
+}
+
+#workspaces button:hover {
+  background-color: @color5;
+}
+
+#workspaces button.urgent {
+  background-color: @color1;
+}
+
+#tray,
+#pulseaudio,
+#network,
+#clock,
+#window,
+#custom-weather,
+#custom-media,
+#custom-launcher,
+#custom-notification,
+#submap {
+  background-color: @background;
+  color: @color6;
+  padding: 0 15px;
+  margin: 0 6px;
+  border-radius: 50px;
+  border: 1px solid @color0;
+  box-shadow: rgba(0, 0, 0, 0.116) 2px 2px 5px 2px;
+}
+
+window#waybar.empty #window {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+}
+
+#tray > widget {
+  padding: 0 4px;
+}
+
+#tray > .passive {
+  -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+  -gtk-icon-effect: highlight;
+}
+
+#tray menu {
+  background-color: @background;
+  border: 1px solid @color0;
+  border-radius: 12px;
+  padding: 4px;
+}
+
+#tray menu menuitem {
+  color: @foreground;
+}
+
+#tray menu menuitem:hover {
+  background-color: @color0;
+  color: @foreground;
+}
+
+#tray menu menuitem:disabled {
+  color: @color8;
+}
+
+#tray menu separator {
+  background-color: @color0;
+}
+
+#custom-launcher,
+#window,
+#custom-notification {
+  color: @foreground;
+}
+
+#clock {
+  color: @color4;
+}
+
+#custom-weather {
+  color: @color1;
+}
+
+#pulseaudio {
+  color: @color3;
+}
+
+#network {
+  color: @color5;
+}

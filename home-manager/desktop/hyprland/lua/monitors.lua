@@ -3,5 +3,14 @@ hl.monitor({ output = "DP-2", mode = "2560x1440@180", position = "1920x0", scale
 hl.monitor({ output = "DP-3", mode = "1920x1080@144", position = "4480x0", scale = 1 })
 hl.monitor({ output = "HDMI-A-1", disabled = true })
 
--- WS はグローバルプール。monitor= の workspace_rule は書かない。WS は最初に開いた
--- モニターに生まれてそこに居続けるので、所属は使ううちに自然に決まる (i3/sway 方式)。
+-- Waybar の persistent-workspaces と所属を揃える。各画面の初期 WS は 1 / 4 / 8。
+hl.workspace_rule({ workspace = "1", monitor = "DP-1", default = true, persistent = true })
+hl.workspace_rule({ workspace = "2", monitor = "DP-1", persistent = true })
+hl.workspace_rule({ workspace = "3", monitor = "DP-1", persistent = true })
+hl.workspace_rule({ workspace = "4", monitor = "DP-2", default = true, persistent = true })
+hl.workspace_rule({ workspace = "5", monitor = "DP-2", persistent = true })
+hl.workspace_rule({ workspace = "6", monitor = "DP-2", persistent = true })
+hl.workspace_rule({ workspace = "7", monitor = "DP-2", persistent = true })
+hl.workspace_rule({ workspace = "8", monitor = "DP-3", default = true, persistent = true })
+hl.workspace_rule({ workspace = "9", monitor = "DP-3", persistent = true })
+hl.workspace_rule({ workspace = "10", monitor = "DP-3", persistent = true })
