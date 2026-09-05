@@ -5,7 +5,6 @@ set -uo pipefail
 
 STATE_FILE="${XDG_STATE_HOME:-$HOME/.local/state}/hypr/state.env"
 
-# 壁紙の回転/選択は pyprland に移行済み。ここに残すのは color/transition の runtime 可変値のみ。
 declare -A DEFAULTS=(
   [MATUGEN_SOURCE_INDEX]=0
   [MATUGEN_RANDOM_INDEX]=false
@@ -34,14 +33,13 @@ state_get() {
 state_set() {
   local key="$1" val="$2"
   mkdir -p "$(dirname "$STATE_FILE")"
-  # 並行 set でも last-writer-wins ではなく逐次反映させるため flock で直列化。
   exec {LOCK_FD}>"$STATE_FILE.lock"
   flock -x "$LOCK_FD"
   touch "$STATE_FILE"
   local tmp
   tmp=$(mktemp "${STATE_FILE}.XXXXXX")
-  grep -vE "^${key}=" "$STATE_FILE" > "$tmp" 2>/dev/null || true
-  printf '%s=%s\n' "$key" "$val" >> "$tmp"
+  grep -vE "^${key}=" "$STATE_FILE" >"$tmp" 2>/dev/null || true
+  printf '%s=%s\n' "$key" "$val" >>"$tmp"
   mv "$tmp" "$STATE_FILE"
   exec {LOCK_FD}>&-
 }
@@ -64,7 +62,7 @@ state_cycle() {
   cur=$(state_get "$key")
   local found=0 first="$1"
   for v in "$@"; do
-    if (( found )); then
+    if ((found)); then
       state_set "$key" "$v"
       return
     fi
@@ -75,9 +73,24 @@ state_cycle() {
 
 cmd="${1:-}"
 case "$cmd" in
-  get)    shift; state_get "$@" ;;
-  set)    shift; state_set "$@" ;;
-  toggle) shift; state_toggle "$@" ;;
-  cycle)  shift; state_cycle "$@" ;;
-  *) echo "usage: hyprctl-state {get|set|toggle|cycle} KEY [args]" >&2; exit 2 ;;
+get)
+  shift
+  state_get "$@"
+  ;;
+set)
+  shift
+  state_set "$@"
+  ;;
+toggle)
+  shift
+  state_toggle "$@"
+  ;;
+cycle)
+  shift
+  state_cycle "$@"
+  ;;
+*)
+  echo "usage: hyprctl-state {get|set|toggle|cycle} KEY [args]" >&2
+  exit 2
+  ;;
 esac
