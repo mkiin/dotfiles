@@ -7,6 +7,7 @@
     noto-fonts-color-emoji
     nerd-fonts.jetbrains-mono
     udev-gothic
+    dejavu_fonts
     inter
     material-design-icons
   ];

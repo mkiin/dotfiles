@@ -21,10 +21,13 @@ end)
 -- ビープ音を無効化
 config.audible_bell = "Disabled"
 
--- フォント
+-- フォント。✔✘⇡⇣⇕ 等は Nerd Font に無く fontconfig 非同期解決になり、
+-- wallust の palette 書き換えによる config reload のたびに Last Resort 表示で揺れるため
+-- 収録元の DejaVu を静的リストに入れておく。
 config.font = wezterm.font_with_fallback({
 	"JetBrainsMono Nerd Font",
 	"UDEV Gothic",
+	"DejaVu Sans Mono",
 })
 config.font_size = 14.0
 
