@@ -174,7 +174,7 @@
                 pkgs.coreutils
                 pkgs.gnugrep
               ];
-              text = builtins.readFile ./scripts/backup-agenix-key.sh;
+              text = builtins.readFile ./nixos/core/secrets/backup-agenix-key.sh;
             }
           );
         };
@@ -190,7 +190,7 @@
                 pkgs.coreutils
                 pkgs.gnugrep
               ];
-              text = builtins.readFile ./scripts/restore-agenix-key.sh;
+              text = builtins.readFile ./nixos/core/secrets/restore-agenix-key.sh;
             }
           );
         };

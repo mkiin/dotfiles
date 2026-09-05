@@ -2,7 +2,7 @@
 # WSL (Ubuntu/Debian) 用 dotfiles ブートストラップ。冪等。
 set -euo pipefail
 
-REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
 log() { printf '\n\033[1;34m==>\033[0m %s\n' "$*"; }
 warn() { printf '\033[1;33m[warn]\033[0m %s\n' "$*"; }
@@ -37,9 +37,9 @@ if [[ -s "$REPO_ROOT/packages/apt.txt" ]]; then
 fi
 
 # 4. apt 自動スナップショットフックを配置
-APT_HOOK_SRC="$REPO_ROOT/hooks/99-sync-user-packages.apt.conf"
+APT_HOOK_SRC="$REPO_ROOT/hosts/wsl/99-sync-user-packages.apt.conf"
 APT_HOOK_DST="/etc/apt/apt.conf.d/99sync-user-packages"
-if [[ ! -f $APT_HOOK_DST ]]; then
+if ! cmp -s "$APT_HOOK_SRC" "$APT_HOOK_DST"; then
   log "apt フックを配置"
   sudo install -m 644 -o root -g root "$APT_HOOK_SRC" "$APT_HOOK_DST"
 else
