@@ -18,12 +18,11 @@
       env = {
         ENABLE_BACKGROUND_TASKS = "1";
         FORCE_AUTO_BACKGROUND_TASKS = "1";
-        # 自動圧縮も /compact も止める。要約で文脈が欠けるより限界で止まる方が扱いやすい
-        # (DISABLE_MICROCOMPACT は 2.1.220 のバンドルに存在せず無効だったので置き換え)
         DISABLE_COMPACT = "1";
         DISABLE_INTERLEAVED_THINKING = "1";
         DISABLE_ERROR_REPORTING = "1";
         CLAUDE_CODE_NO_FLICKER = "1";
+        CLAUDE_CODE_THRIFTY_SONIC = "0";
       };
       permissions = {
         deny = [ ];
@@ -37,6 +36,10 @@
             {
               type = "command";
               command = "bash ${inputs.self}/home-manager/ai/claude-code/files/hooks/block-git-clone.sh";
+            }
+            {
+              type = "command";
+              command = "bash ${inputs.self}/home-manager/ai/claude-code/files/hooks/block-file-tool-bypass.sh";
             }
           ];
         }
