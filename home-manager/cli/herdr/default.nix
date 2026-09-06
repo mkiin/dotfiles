@@ -48,6 +48,9 @@ let
       focus_pane_right = "prefix+l";
 
       # navigate モードは素の hjkl（prefix+ 不可のフィールド）
+      # workspace 上下は矢印が押しづらいので ctrl+p/n へ。hjkl はペインが占有済み。
+      navigate_workspace_up = "ctrl+p";
+      navigate_workspace_down = "ctrl+n";
       navigate_pane_left = "h";
       navigate_pane_down = "j";
       navigate_pane_up = "k";
