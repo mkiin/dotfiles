@@ -77,13 +77,11 @@ bluetooth ポップアップの空リスト時に高さが潰れる問題も修�
 
 github actionかなんかで、自動でアップデートするようにしたい。
 
-## oil.nvim の gitignore 非表示（保留）
+## ファイラーの gitignore 非表示 ✅ 完了
 
-ファイラーを neo-tree から oil.nvim に移行した際の積み残し。
+oil.nvim では「dotfiles は出すが gitignore 対象は出さない」が実現できなかった。oil の隠し区分は 1 種類しかなく、`g.`（toggle_hidden）で両方が同時に出てくるため。
 
-- 「gitignore 対象を常に非表示」にしたいが、oil には native の gitignore フィルタが無い。
-- `view_options.is_hidden_file` で `git check-ignore` / `git ls-files` を噛ませれば「hidden 扱い」にはできるが、oil の隠し区分は1種類だけなので `g.`（toggle_hidden）を押すと dotfiles と一緒に必ず出てくる。「トグルでも絶対に出さない」は oil では不可。
-- 現状は素の `show_hidden`（dotfiles トグルのみ）で妥協。gitignore 隠しが本当に欲しくなったら公式 recipes の is_hidden_file + git キャッシュ実装（doc/recipes.md）を導入するか検討する。
+snacks.explorer への移行で解決した。`hidden`（dotfiles）と `ignored`（gitignore 対象）が独立した設定であり、トグルも `H` と `I` に分かれている。`editor.lua` で `explorer = { hidden = true }` とし、`ignored` は既定の false のままにしてある。
 
 ## パスワードの宣言的管理（agenix）✅ 完了
 

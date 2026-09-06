@@ -16,6 +16,7 @@ return {
 				sources = {
 					files = { hidden = true, exclude = { "node_modules", ".git", "dist", ".next" } },
 					grep = { hidden = true, exclude = { "node_modules", ".git", "dist", ".next" } },
+					explorer = { hidden = true },
 				},
 			}
 		end,

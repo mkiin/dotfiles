@@ -2,18 +2,18 @@
 
 LazyVim をベースにした Neovim 環境のプラグイン一覧である。
 
-`lazy-lock.json` に記録されているプラグインは、ファイラー移行後の最終状態で合計 **48 個**になる。
+`lazy-lock.json` に記録されているプラグインは合計 **47 個**で、うち有効なものが 43 個、無効化しているものが 4 個である。
 
-内訳は次のとおり。
+有効な 43 個の内訳は次のとおり。
 
-- **LazyVim コア由来**：31 個。LazyVim 本体が既定で導入する土台部分（補完、Treesitter、UI、ライブラリなど）。
+- **LazyVim コア由来**：27 個。LazyVim 本体が既定で導入する土台部分（補完、Treesitter、UI、ライブラリなど）。
 - **extra 由来**：6 個。`lazyvim.json` で有効化した LazyVim extra が持ち込むプラグイン。
-- **ユーザー独自追加**：11 個。独自の spec ファイル（`lua/plugins/*.lua`）で足したもの。
+- **ユーザー独自追加**：10 個。独自の spec ファイル（`lua/plugins/*.lua`）で足したもの。
 
-ファイラーは `nvim-neo-tree/neo-tree.nvim` から `stevearc/oil.nvim` へ移行済みで、neo-tree は使用しない。
-oil.nvim をメインファイラーとし、LazyVim extra 由来の `mini.files` を補助ファイラーとして併用する。
+ファイラーは `neo-tree.nvim` から `oil.nvim` を経て、snacks.nvim 同梱の **snacks.explorer** に集約した。
+主用途がプロジェクト構造の把握であり、ファイルの記述を AI に任せる運用では oil.nvim の一括編集能力が使われないため、木構造を持つツリー型に戻した。snacks.nvim は LazyVim のコアプラグインとして無条件に読み込まれるので、explorer の採用による依存の追加はない。
 
-なお `lazy-lock.json` には無効化しているプラグイン（`nvim-lint`、`mason.nvim`、`mason-lspconfig.nvim`、`gitsigns.nvim`）も記録として残るため、合計 48 個の中にはこれらも含まれる。
+なお `lazy-lock.json` には無効化しているプラグイン（`nvim-lint`、`mason.nvim`、`mason-lspconfig.nvim`、`gitsigns.nvim`）も記録として残るため、合計 47 個の中にはこれらも含まれる。
 
 ## カテゴリ別プラグイン一覧
 
@@ -55,8 +55,7 @@ oil.nvim をメインファイラーとし、LazyVim extra 由来の `mini.files
 
 ### ファイラー
 
-- oil.nvim — バッファとしてディレクトリを編集するメインファイラー — 独自
-- mini.files — 二列表示の補助ファイラー — extra（editor.mini-files）
+- snacks.explorer — ツリー型ファイラー。snacks.nvim に同梱され、独立したプラグインとしては数えない — extra（editor.snacks_explorer、LazyVim の既定）
 
 ### Treesitter
 
@@ -95,22 +94,23 @@ oil.nvim をメインファイラーとし、LazyVim extra 由来の `mini.files
 
 ## 有効化している LazyVim extras
 
-`lazyvim.json` で有効化している extra は次のとおり（ファイラー移行に伴い `editor.neo-tree` は除外している）。
+`lazyvim.json` で有効化している extra は次のとおり。
 
 - `lazyvim.plugins.extras.coding.mini-surround`
 - `lazyvim.plugins.extras.coding.neogen`
 - `lazyvim.plugins.extras.coding.yanky`
 - `lazyvim.plugins.extras.editor.inc-rename`
 - `lazyvim.plugins.extras.editor.mini-diff`
-- `lazyvim.plugins.extras.editor.mini-files`
+- `lazyvim.plugins.extras.lang.markdown`
 
 `editor.mini-diff` を有効にしているため、既定の gitsigns は無効化され、差分表示は mini.diff が担う。
 
+これとは別に `editor.snacks_explorer` が LazyVim の既定ファイラーとして自動で有効になる（`lazyvim.json` の `install_version` が 8 以上のとき）。明示的に列挙する必要はないが、`<leader>e` の割り当て元はこの extra である。
+
 ## ユーザー独自追加プラグイン
 
-独自の spec で追加したプラグインは 11 個ある。
+独自の spec で追加したプラグインは 10 個ある。
 
-- oil.nvim — メインファイラー（依存として mini.icons を利用） — `lua/plugins/`（移行で追加）
 - image.nvim — 画像表示 — `image.lua`
 - claudecode.nvim — Claude Code 連携 — `claudecode.lua`
 - diffview.nvim — 差分ビューア — `diffview.lua`
@@ -131,7 +131,7 @@ LazyVim が既定で導入するが、明示的に無効化しているプラグ
 - mason-lspconfig.nvim — 上記に同じく `enabled = false`。
 - gitsigns.nvim — `editor.mini-diff` extra を有効化したことにより LazyVim 側で無効化される。差分表示は mini.diff が引き継ぐ。
 
-いずれも `lazy-lock.json` にはロック情報が残るため、合計 48 個に含めて数えている。
+いずれも `lazy-lock.json` にはロック情報が残るため、合計 47 個に含めて数えている。
 
 ## アイコン・フォント
 
