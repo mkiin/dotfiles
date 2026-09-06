@@ -81,7 +81,7 @@ github actionかなんかで、自動でアップデートするようにした�
 
 oil.nvim では「dotfiles は出すが gitignore 対象は出さない」が実現できなかった。oil の隠し区分は 1 種類しかなく、`g.`（toggle_hidden）で両方が同時に出てくるため。
 
-snacks.explorer への移行で解決した。`hidden`（dotfiles）と `ignored`（gitignore 対象）が独立した設定であり、トグルも `H` と `I` に分かれている。`editor.lua` で `explorer = { hidden = true }` とし、`ignored` は既定の false のままにしてある。
+snacks.explorer への移行で解決した。`hidden`（dotfiles）と `ignored`（gitignore 対象）が独立した設定であり、トグルも `H` と `I` に分かれている。`snacks.lua` で `explorer = { hidden = true }` とし、`ignored` は既定の false のままにしてある。
 
 ## パスワードの宣言的管理（agenix）✅ 完了
 

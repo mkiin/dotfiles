@@ -2,13 +2,13 @@
 
 LazyVim をベースにした Neovim 環境のプラグイン一覧である。
 
-`lazy-lock.json` に記録されているプラグインは合計 **47 個**で、うち有効なものが 43 個、無効化しているものが 4 個である。
+`lazy-lock.json` に記録されているプラグインは合計 **44 個**で、うち有効なものが 40 個、無効化しているものが 4 個である。
 
-有効な 43 個の内訳は次のとおり。
+有効な 40 個の内訳は次のとおり。
 
 - **LazyVim コア由来**：27 個。LazyVim 本体が既定で導入する土台部分（補完、Treesitter、UI、ライブラリなど）。
 - **extra 由来**：6 個。`lazyvim.json` で有効化した LazyVim extra が持ち込むプラグイン。
-- **ユーザー独自追加**：10 個。独自の spec ファイル（`lua/plugins/*.lua`）で足したもの。
+- **ユーザー独自追加**：7 個。独自の spec ファイル（`lua/plugins/*.lua`）で足したもの。
 
 ファイラーは `neo-tree.nvim` から `oil.nvim` を経て、snacks.nvim 同梱の **snacks.explorer** に集約した。
 主用途がプロジェクト構造の把握であり、ファイルの記述を AI に任せる運用では oil.nvim の一括編集能力が使われないため、木構造を持つツリー型に戻した。snacks.nvim は LazyVim のコアプラグインとして無条件に読み込まれるので、explorer の採用による依存の追加はない。
@@ -21,7 +21,7 @@ LazyVim をベースにした Neovim 環境のプラグイン一覧である。
 
 ### UI・ステータス
 
-- snacks.nvim — ピッカー、通知、ダッシュボード等を束ねる統合 UI — コア
+- snacks.nvim — 通知、ダッシュボード、ターミナル、ファイラーを束ねる統合 UI — コア
 - noice.nvim — コマンドライン、メッセージ、ポップアップの再構成 — コア
 - nui.nvim — noice などが使う UI コンポーネントライブラリ — コア
 - bufferline.nvim — バッファをタブ風に並べる上部ライン — コア
@@ -37,7 +37,6 @@ LazyVim をベースにした Neovim 環境のプラグイン一覧である。
 - tokyonight.nvim — 既定のカラースキーム — コア
 - kanagawa.nvim — dragon テーマを既定に設定 — 独自
 - catppuccin — カラースキーム — 独自
-- rose-pine — カラースキーム — 独自
 - themery.nvim — 上記テーマを切り替えるスイッチャー — 独自
 
 ### エディタ・編集
@@ -75,14 +74,19 @@ LazyVim をベースにした Neovim 環境のプラグイン一覧である。
 
 - conform.nvim — フォーマッタ統合（oxfmt、deno_fmt、shfmt を言語別に割当） — コア
 
+### 検索・ピッカー
+
+- fzf-lua — ファイル、grep、git、LSP を横断する fuzzy finder — extra（editor.fzf）
+
+`options.lua` の `vim.g.lazyvim_picker = "fzf"` により、LazyVim の検索系キーマップは snacks.picker ではなく fzf-lua に接続される。snacks.picker は explorer の基盤としてのみ動き続ける。
+
 ### Git
 
-- diffview.nvim — 差分とファイル履歴のビューア — 独自
-- mini.diff — バッファ内の差分表示（gitsigns を置き換える） — extra（editor.mini-diff）
+git 専用のプラグインは置いていない。サインカラムへの差分表示も行わない。
+コミット履歴、ブランチ、staging の操作は fzf-lua の git 系ピッカーが担う。`<leader>gs`（git_status）ではプレビューで差分を見ながら `←` で stage、`→` で unstage、`ctrl-x` で reset ができる。
 
 ### コーディング支援
 
-- claudecode.nvim — Claude Code 連携（wezterm ペインで外部起動） — 独自
 - neogen — ドキュメンテーションコメントの生成 — extra（coding.neogen）
 
 ### アイコン・ライブラリ・基盤
@@ -99,39 +103,38 @@ LazyVim をベースにした Neovim 環境のプラグイン一覧である。
 - `lazyvim.plugins.extras.coding.mini-surround`
 - `lazyvim.plugins.extras.coding.neogen`
 - `lazyvim.plugins.extras.coding.yanky`
+- `lazyvim.plugins.extras.editor.fzf`
 - `lazyvim.plugins.extras.editor.inc-rename`
-- `lazyvim.plugins.extras.editor.mini-diff`
 - `lazyvim.plugins.extras.lang.markdown`
-
-`editor.mini-diff` を有効にしているため、既定の gitsigns は無効化され、差分表示は mini.diff が担う。
 
 これとは別に `editor.snacks_explorer` が LazyVim の既定ファイラーとして自動で有効になる（`lazyvim.json` の `install_version` が 8 以上のとき）。明示的に列挙する必要はないが、`<leader>e` の割り当て元はこの extra である。
 
 ## ユーザー独自追加プラグイン
 
-独自の spec で追加したプラグインは 10 個ある。
+独自の spec で追加したプラグインは 7 個ある。
+
+`lua/plugins/` は 1 ファイル 1 プラグインで、ファイル名がプラグイン名に対応する。ドットはモジュール名を壊すためハイフンに置き換える（`blink.cmp` は `blink-cmp.lua`）。
 
 - image.nvim — 画像表示 — `image.lua`
-- claudecode.nvim — Claude Code 連携 — `claudecode.lua`
-- diffview.nvim — 差分ビューア — `diffview.lua`
-- themery.nvim — テーマスイッチャー — `colorscheme.lua`
-- kanagawa.nvim — カラースキーム — `colorscheme.lua`
-- catppuccin — カラースキーム — `colorscheme.lua`
-- rose-pine — カラースキーム — `colorscheme.lua`
-- nvim-highlight-colors — カラーコード表示 — `colorscheme.lua`
-- incline.nvim — winbar 表示 — `ui.lua`
-- smart-newline.nvim — 改行整形 — `coding.lua`
+- themery.nvim — テーマスイッチャー — `themery.lua`
+- kanagawa.nvim — カラースキーム — `kanagawa.lua`
+- catppuccin — カラースキーム — `catppuccin.lua`
+- nvim-highlight-colors — カラーコード表示 — `nvim-highlight-colors.lua`
+- incline.nvim — winbar 表示 — `incline.lua`
+- smart-newline.nvim — 改行整形 — `smart-newline.lua`
 
 ## 無効化しているプラグイン
 
 LazyVim が既定で導入するが、明示的に無効化しているプラグインがある。
 
-- nvim-lint — `lsp.lua` で `enabled = false`。診断は LSP に任せる方針。
-- mason.nvim — `lsp.lua` で `enabled = false`。LSP サーバーやフォーマッタは Nix 側で供給するため、Mason による自動導入を使わない。
-- mason-lspconfig.nvim — 上記に同じく `enabled = false`。
-- gitsigns.nvim — `editor.mini-diff` extra を有効化したことにより LazyVim 側で無効化される。差分表示は mini.diff が引き継ぐ。
+- nvim-lint — `nvim-lint.lua` で `enabled = false`。診断は LSP に任せる方針。
+- mason.nvim — `mason.lua` で `enabled = false`。LSP サーバーやフォーマッタは Nix 側で供給するため、Mason による自動導入を使わない。
+- mason-lspconfig.nvim — `mason-lspconfig.lua` で同じく `enabled = false`。
+- gitsigns.nvim — `gitsigns.lua` で `enabled = false`。以前は `editor.mini-diff` extra によって LazyVim 側で自動的に無効化されていたが、その extra を外したことで既定に戻って復活するため、明示的に落としている。
 
-いずれも `lazy-lock.json` にはロック情報が残るため、合計 47 個に含めて数えている。
+いずれも `lazy-lock.json` にはロック情報が残るため、合計 44 個に含めて数えている。
+
+このほかに markdown-preview.nvim が `lang.markdown` extra 側の条件で無効になっているが、一度も導入されていないため `lazy-lock.json` には現れず、44 個には含まれない。
 
 ## アイコン・フォント
 

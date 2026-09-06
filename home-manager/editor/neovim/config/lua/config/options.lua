@@ -106,7 +106,7 @@ end
 -- ========================================
 -- LazyVim固有設定
 -- ========================================
-vim.g.lazyvim_picker = "snacks"
+vim.g.lazyvim_picker = "fzf"
 vim.g.lazyvim_blink_main = false
 vim.g.snacks_animate = false
 
