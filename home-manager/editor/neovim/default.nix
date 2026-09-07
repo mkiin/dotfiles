@@ -23,6 +23,7 @@
       shfmt
       tree-sitter
       clang-tools
+      ruff
     ];
   };
 
