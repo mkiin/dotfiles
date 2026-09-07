@@ -15,6 +15,7 @@ let
     "${ghqDir}/dotfiles"
     "${ghqDir}/airmonitor"
     "${ghqDir}/pantsu-bot"
+    "${ghqDir}/the-farmer-was-replaced"
   ];
 in
 {
