@@ -13,22 +13,6 @@ let
     # claude-code / codex を numtide/llm-agents.nix（日次更新・prebuilt）から供給する。
     inputs.llm-agents.overlays.shared-nixpkgs
 
-    # unstable の cantarell-fonts 0.311 は上流で otfautohint がビルド失敗し、かつ
-    # バイナリキャッシュにも無い（steam-run の FHS 環境が間接的に引き込む）。
-    # キャッシュ済みで動作する stable 版 (0.303.1) にピン留めして switch ブロックを回避する。
-    # 上流修正/キャッシュ復旧後に削除してよい。
-    (_final: prev: {
-      inherit
-        (
-          (import inputs.nixpkgs-stable {
-            inherit (prev.stdenv.hostPlatform) system;
-            config.allowUnfree = true;
-          })
-        )
-        cantarell-fonts
-        ;
-    })
-
     # noto-fonts-cjk の可変フォント版(VF ttc)は Firefox 系で太字(600 前後)の
     # 欧文の送り幅が壊れて字が重なる。fonts.enableDefaultPackages も素の
     # パッケージを引き込むため、overlay で全域を静的版に差し替える。
@@ -43,8 +27,6 @@ let
     import inputs.nixpkgs {
       inherit system;
       config.allowUnfree = true;
-      # vesktop がビルド時に引く pnpm。上流が修正版に上げたら削除する
-      config.permittedInsecurePackages = [ "pnpm-10.29.2" ];
       overlays = defaultOverlays;
     };
 
