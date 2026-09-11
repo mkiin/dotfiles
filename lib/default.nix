@@ -30,13 +30,6 @@ let
       overlays = defaultOverlays;
     };
 
-  mkStable =
-    system:
-    import inputs.nixpkgs-stable {
-      inherit system;
-      config.allowUnfree = true;
-    };
-
   # Nix パス = モジュール同階層のコロケーション参照。
   # 文字列 = 絶対パス（"''${dotfilesDir}/images/..." 等）。`../..` で遡る参照は書かない。
   mkLnk =
@@ -69,7 +62,6 @@ in
     }:
     let
       pkgs = mkPkgs system;
-      pkgs-stable = mkStable system;
       dotfilesDir = dotfilesDirOf system username;
     in
     inputs.home-manager.lib.homeManagerConfiguration {
@@ -79,7 +71,6 @@ in
           inputs
           system
           username
-          pkgs-stable
           dotfilesDir
           ;
         homeDirectory = homeDirOf system username;
@@ -97,7 +88,6 @@ in
     }:
     let
       pkgs = mkPkgs system;
-      pkgs-stable = mkStable system;
       dotfilesDir = dotfilesDirOf system username;
     in
     inputs.nixpkgs.lib.nixosSystem {
@@ -108,7 +98,6 @@ in
           system
           username
           hostname
-          pkgs-stable
           ;
         homeDirectory = homeDirOf system username;
       };
@@ -127,7 +116,6 @@ in
               inputs
               system
               username
-              pkgs-stable
               dotfilesDir
               ;
             homeDirectory = homeDirOf system username;

@@ -1,6 +1,5 @@
 { inputs, pkgs, ... }:
 let
-  firefox-addons = inputs.firefox-addons.packages.${pkgs.stdenv.hostPlatform.system};
   missav-keep-playing = import ./extensions/missav-keep-playing/xpi.nix { inherit pkgs; };
 in
 {
@@ -12,11 +11,7 @@ in
   programs.zen-browser = {
     enable = true;
     profiles.default = {
-      extensions.packages =
-        (with firefox-addons; [
-          ublock-origin
-        ])
-        ++ [ missav-keep-playing ];
+      extensions.packages = [ missav-keep-playing ];
 
       settings = {
         "browser.tabs.warnOnClose" = false;

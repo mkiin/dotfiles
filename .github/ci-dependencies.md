@@ -142,7 +142,7 @@ nixpkgs に追従するため、lock が nixpkgs を更新するたびに派生�
   数秒で終わり対策不要（公開 cachix も無い）。
 - `cantarell-fonts` は unstable 版がビルド失敗 & 未キャッシュのため、`lib/default.nix` の overlay で
   stable 版にピン留めして回避済み（キャッシュ追加の代わりの別解）。
-- その他の入力（agenix / disko / xremap / mcp-servers-nix / nix-index-database 等）は
+- その他の入力（agenix / mcp-servers-nix 等）は
   `inputs.nixpkgs.follows = "nixpkgs"` で nixpkgs に追従するため `cache.nixos.org` でカバーされる。
 
 将来 hyprland 以外で「独自 nixpkgs を持つ重い flake 入力」を足したら、同じ手順
