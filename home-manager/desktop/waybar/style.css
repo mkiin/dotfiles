@@ -92,14 +92,14 @@ tooltip label {
 
 #tray,
 #pulseaudio,
+#bluetooth,
 #network,
 #clock,
 #window,
 #custom-weather,
 #custom-media,
 #custom-launcher,
-#custom-notification,
-#submap {
+#custom-notification {
   background-color: @background;
   color: @color6;
   padding: 0 15px;
@@ -173,4 +173,8 @@ window#waybar.empty #window {
 
 #network {
   color: @color5;
+}
+
+#bluetooth {
+  color: @color4;
 }
