@@ -8,6 +8,7 @@ return {
 			javascriptreact = { "oxfmt" },
 			typescript = { "oxfmt" },
 			typescriptreact = { "oxfmt" },
+			python = { "ruff_format" },
 			json = { "oxfmt" },
 			vue = { "oxfmt" },
 			jsonc = { "deno_fmt" },

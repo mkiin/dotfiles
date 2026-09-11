@@ -66,7 +66,7 @@ tooltip label {
   margin: 0 3px;
   border-radius: 50px;
   color: transparent;
-  background: @color0;
+  background: @ws-idle;
   transition: all 0.3s ease-in-out;
 }
 
@@ -92,14 +92,14 @@ tooltip label {
 
 #tray,
 #pulseaudio,
+#bluetooth,
 #network,
 #clock,
 #window,
 #custom-weather,
 #custom-media,
 #custom-launcher,
-#custom-notification,
-#submap {
+#custom-notification {
   background-color: @background;
   color: @color6;
   padding: 0 15px;
@@ -160,11 +160,11 @@ window#waybar.empty #window {
 }
 
 #clock {
-  color: @color4;
+  color: @color6;
 }
 
 #custom-weather {
-  color: @color1;
+  color: @color7;
 }
 
 #pulseaudio {
@@ -173,4 +173,8 @@ window#waybar.empty #window {
 
 #network {
   color: @color5;
+}
+
+#bluetooth {
+  color: @color4;
 }

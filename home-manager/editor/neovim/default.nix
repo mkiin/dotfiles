@@ -12,7 +12,7 @@
     withRuby = false;
     extraPackages = with pkgs; [
       gcc
-      typescript-go
+      typescript
       lua-language-server
       stylua
       nixd
@@ -23,6 +23,7 @@
       shfmt
       tree-sitter
       clang-tools
+      ruff
     ];
   };
 

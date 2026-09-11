@@ -73,14 +73,13 @@ map("n", "<Plug>(q)t", "<C-^>", { desc = "Switch to alternate buffer" })
 map("n", "gf", "gF", opts) -- gf でファイルを開く時に行番号も考慮
 
 map("n", "i", function()
-	-- インサートモード開始の挙動改善（空行では cc に変換）
 	if vim.bo.buftype == "terminal" then
 		vim.schedule(function()
 			vim.cmd("startinsert")
 		end)
 		return "<Ignore>"
 	end
-	return vim.fn.empty(vim.fn.getline(".")) == 1 and '"_cc' or "i"
+	return "i"
 end, { noremap = true, silent = true, expr = true })
 
 map("n", "A", function()
@@ -90,7 +89,7 @@ map("n", "A", function()
 		end)
 		return "<Ignore>"
 	end
-	return vim.fn.empty(vim.fn.getline(".")) == 1 and '"_cc' or "A"
+	return "A"
 end, { noremap = true, silent = true, expr = true })
 
 map("n", "V", function()

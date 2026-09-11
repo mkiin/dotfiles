@@ -5,7 +5,7 @@
 
   "modules-left": ["custom/launcher", "custom/weather", "hyprland/window"],
   "modules-center": ["clock", "hyprland/workspaces"],
-  "modules-right": ["tray", "pulseaudio", "network", "custom/notification"],
+  "modules-right": ["tray", "pulseaudio", "bluetooth", "network", "custom/notification"],
 
   "custom/launcher": {
     "format": "",
@@ -83,6 +83,18 @@
     "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
     "scroll-step": 0,
     "ignored-sinks": ["Easy Effects Sink"]
+  },
+
+  "bluetooth": {
+    "format": "󰂯",
+    "format-disabled": "󰂲",
+    "format-off": "󰂲",
+    "format-connected": "󰂱 {device_alias}",
+    "tooltip-format": "Bluetooth: {status}",
+    "tooltip-format-connected": "{num_connections} connected\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}",
+    "on-click": "qs -c shell ipc call bluetooth toggle",
+    "max-length": 30
   },
 
   "network": {
