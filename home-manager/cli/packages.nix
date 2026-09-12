@@ -29,6 +29,7 @@
       mise
       # codex の workspace-write サンドボックスが要求する bwrap 本体
       bubblewrap
+      dragon-drop
     ]
     ++ [
       # agent 向けターミナルマルチプレクサ（自前 flake を参照）
