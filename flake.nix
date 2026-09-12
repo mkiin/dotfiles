@@ -51,15 +51,31 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    mcp-servers-nix.url = "github:natsukium/mcp-servers-nix";
-    mcp-servers-nix.inputs.nixpkgs.follows = "nixpkgs";
+    mcp-servers-nix = {
+      url = "github:natsukium/mcp-servers-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
-    llm-agents.url = "github:numtide/llm-agents.nix";
-    llm-agents.inputs.nixpkgs.follows = "nixpkgs";
+    llm-agents = {
+      url = "github:numtide/llm-agents.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
-    agent-skills.url = "github:Kyure-A/agent-skills-nix";
-    agent-skills.inputs.nixpkgs.follows = "nixpkgs";
-    agent-skills.inputs.home-manager.follows = "home-manager";
+    agent-skills = {
+      url = "github:Kyure-A/agent-skills-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
+
+    herdr = {
+      url = "github:ogulcancelik/herdr";
+      inputs.nixpkgs.follws = "nixpkgs";
+    };
+
+    wallpaper-namer = {
+      url = "github:mkiin/wallpaper-namer/v0.2.1";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     superpowers-skill = {
       url = "github:obra/superpowers";
@@ -78,11 +94,6 @@
       flake = false;
     };
 
-    herdr.url = "github:ogulcancelik/herdr";
-    herdr.inputs.nixpkgs.follows = "nixpkgs";
-
-    wallpaper-namer.url = "github:mkiin/wallpaper-namer/v0.2.1";
-    wallpaper-namer.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =

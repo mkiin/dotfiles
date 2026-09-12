@@ -1,6 +1,11 @@
 return {
 	"stevearc/conform.nvim",
 	opts = {
+		formatters = {
+			nixfmt = {
+				args = { "-" },
+			},
+		},
 		formatters_by_ft = {
 			nix = { "nixfmt" },
 			c = { "clang_format" },
