@@ -34,6 +34,7 @@ in
     imv
     obsidian
     umu-launcher
+    limo
     (pkgs.writeShellScriptBin "nikke" ''
       export NIKKE_PROTON=${dwproton}
       export PROTON_NO_FSYNC=1

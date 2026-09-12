@@ -69,7 +69,7 @@
 
     herdr = {
       url = "github:ogulcancelik/herdr";
-      inputs.nixpkgs.follws = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     wallpaper-namer = {
