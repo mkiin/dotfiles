@@ -4,7 +4,7 @@ local terminal = vars.terminal
 local fileManager = vars.fileManager
 local browser = vars.browser
 
--- 壁紙 (pyprland wallpapers): W=次へ+回転再開 / SHIFT+W=回転停止
+-- 壁紙
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("pypr wall next"))
 hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd("pypr wall pause"))
 
@@ -50,17 +50,8 @@ hl.bind(mainMod .. " + SHIFT + J", hl.dsp.window.move({ direction = "d" }))
 hl.bind(mainMod .. " + SHIFT + K", hl.dsp.window.move({ direction = "u" }))
 hl.bind(mainMod .. " + SHIFT + L", hl.dsp.window.move({ direction = "r" }))
 
--- WS はグローバルプール (i3/sway 方式)。WS をモニター間で動かさず、フォーカスの方を
--- 移動させる。Hyprland は「各モニターが常にちょうど 1 つの WS を表示する」不変条件を
--- 持つため、WS を手元に引き寄せると供給元のモニターが代わりの WS を調達してしまい
--- (控えから奪う / 番号外の WS を生成する)、所属が操作のたびに乱れる。動かさなければ
--- 所属は固定され、SUPER+N の行き先が常に同じ物理モニターになる。
-
--- 前後移動は m±1 = 現在のモニターに属する WS 内で巡回。他モニターへ飛ばず、
--- 他モニターが表示中だからと番号を飛ばすこともない。
 hl.bind(mainMod .. " + I", hl.dsp.focus({ workspace = "m-1" }))
 hl.bind(mainMod .. " + O", hl.dsp.focus({ workspace = "m+1" }))
--- follow = false で movetoworkspacesilent 相当(送るだけで自分は付いていかない)
 hl.bind(mainMod .. " + SHIFT + I", hl.dsp.window.move({ workspace = "m-1", follow = false }))
 hl.bind(mainMod .. " + SHIFT + O", hl.dsp.window.move({ workspace = "m+1", follow = false }))
 
@@ -72,7 +63,6 @@ for i = 1, 10 do
 end
 
 -- スペシャルワークスペース(stash)。S=表示トグル、SHIFT+S=フォーカス窓の退避/復帰。
--- 退避/復帰は往復動作が要るため native の片方向 move ではなく pyprland toggle_special を使う。
 hl.bind(mainMod .. " + S", hl.dsp.workspace.toggle_special("stash"))
 hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("pypr toggle_special stash"))
 hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd("pypr lost_windows"))

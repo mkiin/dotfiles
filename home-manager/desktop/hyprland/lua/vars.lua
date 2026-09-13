@@ -1,5 +1,5 @@
 local M = {}
-M.terminal = "wezterm"
+M.terminal = "ghostty"
 M.fileManager = "wezterm start -- yazi"
 M.browser = "zen-beta"
 M.mainMod = "SUPER"
