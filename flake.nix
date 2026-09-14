@@ -100,6 +100,6 @@
   outputs =
     inputs:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
-      imorts = [ ./flake ];
+      imports = [ ./flake ];
     };
 }
