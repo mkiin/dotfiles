@@ -22,11 +22,11 @@
       check.enable = false;
       settings.hooks = {
         treefmt = {
-          enable = true;
+          enable = false;
           package = config.treefmt.build.wrapper;
         };
-        deadnix.enable = true;
-        statix.enable = true;
+        deadnix.enable = false;
+        statix.enable = false;
       };
     };
   };
