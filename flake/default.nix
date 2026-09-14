@@ -6,7 +6,6 @@
 
     ./writers.nix
     ./formatter.nix
-    ./checks.nix
     ./devshell.nix
     ./apps
     ./hosts
