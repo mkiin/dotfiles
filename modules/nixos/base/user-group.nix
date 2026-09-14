@@ -1,4 +1,4 @@
-{ vars, ... }:
+{ pkgs, vars, ... }:
 {
 
   users.mutableUsers = false;
@@ -21,4 +21,9 @@
       "fileshare"
     ];
   };
+
+  users.defaultUserShell = pkgs.bashInteractive;
+  environment.shell = with pkgs; [
+    bashInteractive
+  ];
 }

@@ -7,6 +7,7 @@
   };
 
   environment.systemPackages = with pkgs; [
+    # core
     nushell
     zsh
     bash
@@ -29,5 +30,11 @@
     tealdeer
     trash-cli
     fastfetch
+    gnumake
+
+    # nixos only
+    btop
+    dig
+    wl-clipboard-rs
   ];
 }

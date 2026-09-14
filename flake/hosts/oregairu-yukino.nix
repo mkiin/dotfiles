@@ -14,6 +14,7 @@
 
     modules = [
       ../../hosts/oregairu-yukino
+      ../../modules/nixos/desktop
     ];
   };
 }
