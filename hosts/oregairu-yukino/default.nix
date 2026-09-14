@@ -1,4 +1,4 @@
-{ }:
+{ ... }:
 #############################################################
 #
 #  Yukino - my main computer, with NixOS + Ryzen7 7800x3D + RTX 5070ti GPU, for gaming & daily use.

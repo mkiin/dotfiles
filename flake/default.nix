@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ lib, inputs, ... }:
 {
   imports = [
     inputs.treefmt-nix.flakeModule
@@ -15,5 +15,8 @@
     "x86_64-linux"
   ];
 
-  _module.args.vars = import ../vars;
+  _module.args.vars = {
+    vars = import ../vars;
+    mylib = import ../lib { inherit lib; };
+  };
 }
