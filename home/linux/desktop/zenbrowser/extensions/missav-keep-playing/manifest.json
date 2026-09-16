@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "MissAV Keep Playing",
+  "version": "1.1",
+  "description": "ウィンドウのフォーカスが外れても動画を一時停止させない",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "missav-keep-playing@local",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://missav.ai/*", "*://*.missav.ai/*"],
+      "js": ["content.js"],
+      "run_at": "document_start",
+      "all_frames": true,
+      "world": "MAIN"
+    }
+  ]
+}

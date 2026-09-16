@@ -6,4 +6,5 @@ in
   useremail = "blckcaties@gmail.com";
   linuxhomedir = "/home/${username}";
   darwinhomedir = "/Users/${username}";
+  dotfilesdir = "ghq/github.com/mkiin/dotfiles";
 }

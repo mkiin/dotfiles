@@ -1,5 +1,3 @@
-# このリポジトリの検証コマンド（反映しないビルド/整形）。/nix/store への書き込みと
-# fetch がサンドボックス内では通らないため、外に出す。
 prefix_rule(pattern=["nix", "build"], decision="allow")
 prefix_rule(pattern=["nix", "run", ".#build"], decision="allow")
 prefix_rule(pattern=["nix", "run", ".#fmt"], decision="allow")

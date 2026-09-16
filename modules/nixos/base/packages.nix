@@ -7,34 +7,14 @@
   };
 
   environment.systemPackages = with pkgs; [
-    # core
-    nushell
-    zsh
-    bash
-    neovim
     git
-    gh
-    zip
-    unzip
-    jq
-    fzf
-    fd
-    ripgrep
-    duf
-    ncdu
+    neovim
     curl
     file
     openssh
-    which
-    tree
-    tealdeer
-    trash-cli
-    fastfetch
-    gnumake
-
-    # nixos only
+    duf
+    dust
     btop
     dig
-    wl-clipboard-rs
   ];
 }
