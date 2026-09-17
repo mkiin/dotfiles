@@ -2,29 +2,8 @@
   inputs,
   vars,
   mylib,
+  ...
 }:
-let
-  desktopModules = [
-    ../../modules/nixos/desktop
-
-    {
-      modules.desktop.fonts.enable = true;
-      modules.desktop.wayland.enable = true;
-      modules.secrets.desktop.enable = true;
-      modules.desktop.gaming.enable = true;
-    }
-  ];
-
-  hyprlandModules = [
-    {
-      programs.hyprland.enable = true;
-    }
-  ];
-
-  hostModules = [
-    ../../hosts/oregairu-yukino
-  ];
-in
 {
   flake.nixosConfigurations.oregairu-yukino = inputs.nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
@@ -33,6 +12,29 @@ in
       inherit inputs vars mylib;
     };
 
-    modules = hostModules ++ desktopModules ++ hyprlandModules;
+    modules = [
+      ../../hosts/oregairu-yukino
+      ../../modules/nixos/desktop
+
+      {
+        programs.hyprland.enable = true;
+        modules.desktop.fonts.enable = true;
+        modules.desktop.gaming.enable = true;
+      }
+
+      inputs.home-manager.nixosModules.home-manager
+      {
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
+
+        home-manager.extraSpecialArgs = {
+          inherit inputs vars mylib;
+        };
+
+        home-manager.users.${vars.username}.imports = [
+          ../../home/hosts/oregairu-yukino
+        ];
+      }
+    ];
   };
 }

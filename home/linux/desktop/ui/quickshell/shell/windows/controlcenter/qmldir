@@ -1,0 +1,5 @@
+module qs.windows.controlcenter
+ControlCenterWindow 1.0 ControlCenterWindow.qml
+QuickActions 1.0 QuickActions.qml
+MediaCard 1.0 MediaCard.qml
+NotificationList 1.0 NotificationList.qml

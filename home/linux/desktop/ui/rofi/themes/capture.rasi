@@ -1,0 +1,66 @@
+@import "colors.rasi"
+
+configuration {
+    font:            "JetBrainsMono Nerd Font 12";
+    disable-history: true;
+    fullscreen:      false;
+    hide-scrollbar:  true;
+    sidebar-mode:    false;
+}
+
+* {
+    background-color: @surface;
+    text-color:       @on-surface;
+}
+
+window {
+    transparency:     "real";
+    border-radius:    12px;
+    location:         east;
+    anchor:           east;
+    width:            100px;
+    x-offset:         -15px;
+    y-offset:         0px;
+    background-color: @surface;
+}
+
+listview {
+    columns:          1;
+    lines:            3;
+    spacing:          0px;
+    cycle:            true;
+    dynamic:          true;
+    layout:           vertical;
+    scrollbar:        false;
+    background-color: transparent;
+}
+
+mainbox {
+    children:         [ "listview" ];
+    spacing:          10px;
+    margin:           8px;
+}
+
+element {
+    text-color:       @on-surface;
+    orientation:      vertical;
+    border-radius:    8px;
+    background-color: transparent;
+}
+
+element-text {
+    /* Mono バリアント必須: 無印はアイコンのインクがセル送り幅から右にあふれ中央寄せがズレる */
+    font:             "JetBrainsMono Nerd Font Mono 20";
+    expand:           true;
+    horizontal-align: 0.5;
+    vertical-align:   0.5;
+    /* 実測補正: 行高53px + 上6/下25 = 84px(タイル幅と一致)。MDI グリフが線ボックス中心より 9px 下に描かれるため非対称 */
+    padding:          6px 0px 25px 0px;
+}
+
+element selected {
+    text-color:   @primary;
+    border-radius: 8px;
+    border:       1px;
+    border-color: @primary;
+}
