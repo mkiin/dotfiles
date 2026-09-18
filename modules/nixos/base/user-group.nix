@@ -1,20 +1,20 @@
-{ pkgs, vars, ... }:
+{ pkgs, myvars, ... }:
 {
 
   users.mutableUsers = false;
   users.groups = {
-    "${vars.username}" = { };
+    "${myvars.username}" = { };
     docker = { };
     plugdev = { };
     uinput = { };
     fileshare = { };
   };
 
-  users.users."${vars.username}" = {
-    home = "/home/${vars.username}";
+  users.users."${myvars.username}" = {
+    home = "/home/${myvars.username}";
     isNormalUser = true;
     extraGroups = [
-      vars.username
+      myvars.username
       "users"
       "wheel"
       "networkmanager" # for nmtui / nm-connection-editor

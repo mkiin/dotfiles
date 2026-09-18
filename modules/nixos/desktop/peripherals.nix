@@ -2,6 +2,7 @@
 {
   environment.systemPackages = with pkgs; [
     pulseaudio
+    file-roller
   ];
 
   services.pipewire = {
@@ -16,6 +17,8 @@
   security.rtkit.enable = true;
   # Disable pulseaudio, it conflicts with pipewire too.
   services.pulseaudio.enable = false;
+  services.gvfs.enable = true; # ゴミ箱機能、USBマウント、ネットワーク共有
+  services.tumbler.enable = true; # 画像・動画のサムネイル生成
 
   hardware.bluetooth = {
     enable = true;

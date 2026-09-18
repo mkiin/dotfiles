@@ -1,8 +1,6 @@
-{ pkgs, vars, ... }:
+{ myvars, mylib, ... }:
 {
+  imports = mylib.scanPaths ./.;
 
-  home.homeDirectory = "/home/${vars.username}";
-  home.packages = with pkgs; [
-    bubblewrap # require codex sand box
-  ];
+  home.homeDirectory = "/home/${myvars.username}";
 }

@@ -4,16 +4,6 @@
 
 - 未着手
 
-## 初回セットアップの自動化
-
-- `~/.config/scripts/notify.sh` が存在せず壁紙適用の最後でエラーになる問題の調査・修正
-
-## pyprlandの導入
-
-### scratchpads
-
-見送り。vesktop(Electron 単一インスタンス)の窓追跡が安定せず、pyprland の手動スライドが Hyprland のアニメと衝突するため撤去した。
-
 ## 壁紙選択ランチャーの作成
 
 quickshellで作成するが、参考になるデザインがまだみつかっていないため保留。

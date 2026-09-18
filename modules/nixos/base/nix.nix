@@ -1,5 +1,5 @@
 {
-  vars,
+  myvars,
   lib,
   ...
 }:
@@ -22,7 +22,7 @@
       "flakes"
     ];
 
-    trusted-users = [ vars.username ];
+    trusted-users = [ myvars.username ];
 
     substituters = [
     ];

@@ -3,7 +3,7 @@ let
   cfg = config.modules.desktop.hyprland;
 
   luaModules = [
-    "vars"
+    "myvars"
     "color-scheme"
     "appearance"
     "input"
@@ -28,6 +28,14 @@ in
       });
 
       extraConfig = builtins.readFile ./conf/hyprland.lua;
+    };
+
+    home.file.".wayland-session" = {
+      executable = true;
+      text = ''
+        uwsm stop 2>/dev/null || true
+        exec uwsm start hyprland-uwsm.desktop
+      '';
     };
   };
 }

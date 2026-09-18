@@ -1,12 +1,12 @@
 {
   config,
-  vars,
+  myvars,
   pkgs,
   ...
 }:
 let
   retentionDays = 30;
-  username = vars.username;
+  username = myvars.username;
   homeDirectory = config.users.users.${username}.home;
 in
 {

@@ -20,7 +20,7 @@ in
 
   xdg.configFile = {
     "hypr/hyprland.lua".source = lnk ./lua/hyprland.lua;
-    "hypr/vars.lua".source = lnk ./lua/vars.lua;
+    "hypr/myvars.lua".source = lnk ./lua/myvars.lua;
     "hypr/color-scheme.lua".source = lnk ./lua/color-scheme.lua;
     "hypr/appearance.lua".source = lnk ./lua/appearance.lua;
     "hypr/env.lua".source = lnk ./lua/env.lua;

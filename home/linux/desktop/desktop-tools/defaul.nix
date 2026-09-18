@@ -1,5 +1,5 @@
 # tools/screenshot/default.nix
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 let
   screenshot-menu = pkgs.writeShellApplication {
@@ -23,8 +23,31 @@ let
 
     text = builtins.readFile ./record-menu.sh;
   };
+
+  wallpaperApply = pkgs.writeShellApplication {
+    name = "wallpaper-apply";
+    runtimeInputs = with pkgs; [
+      awww
+      hyprland # hyprctl
+      jq
+      matugen
+      wallust
+      procps # pkill
+      coreutils # date, sleep, mktemp, ln
+      gnused # sed
+      util-linux # flock
+    ];
+    text = builtins.readFile ./scripts/apply.sh;
+  };
+
 in
 {
+  imports = lib.scanPaths ./.;
+
+  _module.args = {
+    inherit wallpaperApply;
+  };
+
   home.sessionVariables = {
     NIXOS_OZONE_WL = "1"; # for any ozone-based browser & electron apps to run on wayland
     MOZ_ENABLE_WAYLAND = "1"; # for firefox to run on wayland
@@ -46,6 +69,8 @@ in
   home.packages = with pkgs; [
     screenshot-menu
     record-menu
+    wallpaperApply
+
     wl-clipboard
     wf-recorder
     libnotify

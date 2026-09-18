@@ -1,9 +1,9 @@
-{ pkgs, vars, ... }:
+{ pkgs, myvars, ... }:
 {
   programs.rbw.rbw = {
     enable = true;
     settings = {
-      email = "${vars.useremail}";
+      email = "${myvars.useremail}";
       pinentry = pkgs.pinentry-curses;
     };
   };

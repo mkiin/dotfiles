@@ -22,4 +22,9 @@
   home.packages = [
     pkgs.xdg-utils
   ];
+
+  home.sessionVariables = {
+    BROWSER = "zen-beta";
+    FILEMANAGER = "thunar";
+  };
 }

@@ -16,5 +16,6 @@
     dust
     btop
     dig
+    trash-cli
   ];
 }

@@ -15,8 +15,8 @@
     "x86_64-linux"
   ];
 
-  _module.args.vars = {
-    vars = import ../vars;
+  _module.args = {
+    myvars = import ../vars;
     mylib = import ../lib { inherit lib; };
   };
 }

@@ -1,4 +1,4 @@
-{ pkgs, vars, ... }:
+{ pkgs, myvars, ... }:
 {
   home.packages = [
     pkgs.ghq
@@ -40,8 +40,8 @@
 
     settings = {
       user = {
-        name = vars.username;
-        inherit (vars) useremail;
+        name = myvars.username;
+        inherit (myvars) useremail;
       };
       # Repository creation
       init.defaultBranch = "main";

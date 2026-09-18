@@ -3,9 +3,9 @@
 let
   browser = [ "zen-beta.desktop" ];
   editor = [ "nvim.desktop" ];
+  fileManager = [ "thunar.desktop" ];
   imageViewer = [ "imv-dir.desktop" ];
   mediaPlayer = [ "mpv.desktop" ];
-  fileManager = [ "yazi.desktop" ];
 in
 {
   xdg.mimeApps = {
