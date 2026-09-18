@@ -1,6 +1,6 @@
 { ... }:
 {
-  sercurity.polkit.enable = true;
+  security.polkit.enable = true;
   # security with GNOME Keyring
   services.gnome = {
     gnome-keyring.enable = true;
