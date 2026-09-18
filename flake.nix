@@ -60,11 +60,16 @@
     agent-skills = {
       url = "github:Kyure-A/agent-skills-nix";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
+      # inputs.home-manager.follows = "home-manager";
     };
 
     wallpaper-namer = {
       url = "github:mkiin/wallpaper-namer/v0.2.1";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    hyprcap = {
+      url = "github:alonso-herreros/hyprcap";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
