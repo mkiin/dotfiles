@@ -1,6 +1,8 @@
 local M = {}
-M.terminal = "ghostty"
-M.fileManager = "wezterm start -- yazi"
-M.browser = "zen-beta"
+
+M.terminal = os.getenv("TERMINAL") or "ghostty"
+M.fileManager = os.getenv("FILE_MANAGER") or "wezterm start -- yazi"
+M.browser = os.getenv("BROWSER") or "zen-beta"
 M.mainMod = "SUPER"
+
 return M

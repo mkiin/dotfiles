@@ -1,7 +1,7 @@
 {
   config,
   pkgs,
-  dotfilesDir,
+  myvars,
   ...
 }:
 {
@@ -16,7 +16,7 @@
     ]
 
     [wallpapers]
-    path = "${dotfilesDir}/images/wallpaper"
+    path = "${myvars.dotfilesdir}/images/wallpaper"
     interval = 30
     extensions = ["jpg", "jpeg", "png", "webp"]
     command = "${config.home.homeDirectory}/.config/hypr/scripts/wallpaper/apply.sh [file]"

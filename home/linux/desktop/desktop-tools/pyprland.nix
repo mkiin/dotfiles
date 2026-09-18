@@ -1,4 +1,5 @@
 {
+  config,
   myvars,
   lib,
   pkgs,
@@ -28,7 +29,6 @@ in
         "png"
         "webp"
       ];
-      # ※ 先ほどのリファクタリングに合わせてパスを調整
       command = "${lib.getExe wallpaperApply} [file]";
     };
 
@@ -40,7 +40,7 @@ in
     ];
 
     scratchpads.fetch = {
-      command = "wezterm start --class fetch-scratch -- sh -c 'fastfetch; exec $SHELL'";
+      command = "ghostty --class=fetch-scratch -e sh -c 'fastfetch; exec $SHELL'";
       class = "fetch-scratch";
       size = "50% 55%";
       position = "25% 22%";
@@ -50,5 +50,37 @@ in
     };
   };
 
-  # ... (systemd サービスはそのまま)
+  systemd.user.services.awww-daemon = {
+    Unit = {
+      Description = "awww wallpaper daemon";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      ExecStart = "${pkgs.awww}/bin/awww-daemon --no-cache";
+      Restart = "on-failure";
+      RestartSec = 2;
+    };
+    Install.WantedBy = [ "graphical-session.target" ];
+  };
+
+  systemd.user.services.pyprland = {
+    Unit = {
+      Description = "pyprland daemon";
+      PartOf = [ "graphical-session.target" ];
+      After = [
+        "graphical-session.target"
+        "awww-daemon.service"
+      ];
+      Requires = [ "awww-daemon.service" ];
+      X-Restart-Triggers = [ config.xdg.configFile."pypr/config.toml".source ];
+    };
+    Service = {
+      ExecStart = "${pkgs.pyprland}/bin/pypr";
+      Restart = "on-failure";
+      RestartSec = 2;
+    };
+    Install.WantedBy = [ "graphical-session.target" ];
+  };
+
 }

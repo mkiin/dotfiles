@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 let
   cfg = config.modules.desktop.hyprland;
 
@@ -36,6 +41,22 @@ in
         uwsm stop 2>/dev/null || true
         exec uwsm start hyprland-uwsm.desktop
       '';
+    };
+
+    systemd.user.services.polkit-agent = {
+      Unit = {
+        Description = "PolicyKit Authentication Agent";
+        After = [ "graphical-session.target" ];
+        PartOf = [ "graphical-session.target" ];
+      };
+
+      Service = {
+        Type = "simple";
+        ExecStart = "${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1";
+        Restart = "on-failure";
+      };
+
+      Install.WantedBy = [ "graphical-session.target" ];
     };
   };
 }
