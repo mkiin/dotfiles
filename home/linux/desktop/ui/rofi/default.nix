@@ -12,7 +12,7 @@ let
       coreutils
     ];
 
-    text = builtins.readFile .scripts/launch.sh;
+    text = builtins.readFile scripts/launch.sh;
   };
 in
 {

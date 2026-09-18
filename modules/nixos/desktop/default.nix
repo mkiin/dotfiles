@@ -10,11 +10,7 @@ let
   cfg = config.modules.desktop.wayland;
 in
 {
-  options.modules.desktop = {
-    wayland = {
-      enable = lib.mkEnableOption "Wayland Display Server";
-    };
-  };
+  options.modules.desktop.wayland.enable = lib.mkEnableOption "Wayland Display Server";
   imports = mylib.scanPaths ./. ++ [ ../base ];
 
   config = lib.mkIf cfg.enable {

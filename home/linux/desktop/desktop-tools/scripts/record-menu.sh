@@ -1,32 +1,26 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-theme="$HOME/.config/rofi/themes/capture.rasi"
-
-sel="$(
+choice="$(
   printf '%s\n' \
-    "󰍹" \
-    "󰖯" \
-    "󰻃" \
-    "󰩭" \
-    "󰛿" |
-    rofi -dmenu -l 5 -theme "$theme"
+    "Monitor" \
+    "Window" \
+    "Active Window" \
+    "Region" |
+    rofi -dmenu -p "Record"
 )" || exit 0
 
-case "$sel" in
-"󰍹")
-  hyprcap rec-start monitor:active
+case "$choice" in
+"Monitor")
+  hyprcap rec monitor:active
   ;;
-"󰖯")
-  hyprcap rec-start window
+"Window")
+  hyprcap rec window
   ;;
-"󰻃")
-  hyprcap rec-start window:active
+"Active Window")
+  hyprcap rec window:active
   ;;
-"󰩭")
-  hyprcap rec-start region
-  ;;
-"󰛿")
-  hyprcap rec-stop
+"Region")
+  hyprcap rec region
   ;;
 esac

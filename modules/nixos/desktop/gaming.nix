@@ -8,7 +8,7 @@ in
   config = lib.mkIf cfg.enable {
     programs.steam = {
       enable = true;
-      protontricks = true;
+      protontricks.enable = true;
       extest.enable = true;
     };
     programs.gamemode.enable = true;

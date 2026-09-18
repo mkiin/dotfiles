@@ -110,5 +110,5 @@ in
   };
 
   # hypr ではなく hyprlock ディレクトリにフォールバック色を配置
-  xdg.configFile."hyprlock/colors.conf".source = ./colors.conf;
+  # xdg.configFile."hyprlock/colors.conf".source = ./colors.conf;
 }

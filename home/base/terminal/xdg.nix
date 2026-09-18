@@ -1,10 +1,11 @@
-{ homeDirectory, ... }:
+{ config, ... }:
 {
   xdg = {
     enable = true;
-    cacheHome = "${homeDirectory}/.cache";
-    configHome = "${homeDirectory}/.config";
-    dataHome = "${homeDirectory}/.local/share";
-    stateHome = "${homeDirectory}/.local/state";
+    userDirs.setSessionVariables = true;
+    cacheHome = "${config.home.homeDirectory}/.cache";
+    configHome = "${config.home.homeDirectory}/.config";
+    dataHome = "${config.home.homeDirectory}/.local/share";
+    stateHome = "${config.home.homeDirectory}/.local/state";
   };
 }

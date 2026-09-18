@@ -2,8 +2,8 @@
 
 let
   # プラグインを組み込んだ Thunar パッケージを生成
-  thunarWithPlugins = pkgs.xfce.thunar.override {
-    thunarPlugins = with pkgs.xfce; [
+  thunarWithPlugins = pkgs.thunar.override {
+    thunarPlugins = with pkgs; [
       thunar-archive-plugin # zip / tar などの圧縮・解凍
       thunar-volman # USB メディア管理
     ];

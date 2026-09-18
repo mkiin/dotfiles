@@ -14,7 +14,10 @@ in
     description = "Purge trash items older than ${toString retentionDays} days";
 
     after = [ "local-fs.target" ];
-    requiresMountsFor = [ homeDirectory ];
+
+    unitConfig = {
+      RequiresMountsFor = [ homeDirectory ];
+    };
 
     environment = {
       HOME = homeDirectory;

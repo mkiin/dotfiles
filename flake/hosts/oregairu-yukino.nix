@@ -18,6 +18,7 @@
 
       {
         programs.hyprland.enable = true;
+        modules.desktop.wayland.enable = true;
         modules.desktop.fonts.enable = true;
         modules.desktop.gaming.enable = true;
       }

@@ -76,7 +76,6 @@ in
   };
 
   xdg.configFile = {
-    "wlogout/colors.css".source = ./colors.css;
     "wlogout/icons".source = ./icons;
   };
 }

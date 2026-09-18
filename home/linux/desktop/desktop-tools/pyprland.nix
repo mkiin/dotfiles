@@ -1,11 +1,12 @@
 {
+  myvars,
   lib,
   pkgs,
-  dotfilesDir,
   wallpaperApply,
   ...
 }:
 let
+  inherit (myvars) dotfilesdir;
   tomlFormat = pkgs.formats.toml { };
 in
 {
@@ -19,7 +20,7 @@ in
     ];
 
     wallpapers = {
-      path = "${dotfilesDir}/images/wallpaper";
+      path = "${dotfilesdir}/images/wallpaper";
       interval = 30;
       extensions = [
         "jpg"

@@ -1,5 +1,10 @@
 # tools/screenshot/default.nix
-{ pkgs, lib, ... }:
+{
+  inputs,
+  pkgs,
+  mylib,
+  ...
+}:
 
 let
   screenshot-menu = pkgs.writeShellApplication {
@@ -7,10 +12,10 @@ let
 
     runtimeInputs = with pkgs; [
       rofi
-      hyprshot-rs
+      inputs.hyprcap.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
 
-    text = builtins.readFile ./screenshot-menu.sh;
+    text = builtins.readFile scripts/screenshot-menu.sh;
   };
 
   record-menu = pkgs.writeShellApplication {
@@ -18,10 +23,10 @@ let
 
     runtimeInputs = with pkgs; [
       rofi
-      hyprcap
+      inputs.hyprcap.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
 
-    text = builtins.readFile ./record-menu.sh;
+    text = builtins.readFile scripts/record-menu.sh;
   };
 
   wallpaperApply = pkgs.writeShellApplication {
@@ -37,12 +42,12 @@ let
       gnused # sed
       util-linux # flock
     ];
-    text = builtins.readFile ./scripts/apply.sh;
+    text = builtins.readFile scripts/apply.sh;
   };
 
 in
 {
-  imports = lib.scanPaths ./.;
+  imports = mylib.scanPaths ./.;
 
   _module.args = {
     inherit wallpaperApply;
@@ -57,7 +62,7 @@ in
     # misc
     QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
     QT_QPA_PLATFORM = "wayland;xcb";
-    QT_QPA_PLATFORMTHEME = "qt6ct";
+    # QT_QPA_PLATFORMTHEME = "qt6ct";
     QT_AUTO_SCREEN_SCALE_FACTOR = "1";
     SDL_VIDEODRIVER = "wayland";
     GDK_BACKEND = "wayland";

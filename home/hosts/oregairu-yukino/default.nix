@@ -1,7 +1,7 @@
-{ myvars, ... }:
+{ ... }:
 {
   imports = [
-    ../../base/home.nix
+    ../../base
     ../../linux/desktop
   ];
 

@@ -5,50 +5,51 @@
   ...
 }:
 let
-  cfg = config.modules.desktop;
+  cfg = config.modules.desktop.fonts;
 in
 {
   options.modules.desktop.fonts.enable = lib.mkEnableOption "desktop fonts";
 
-  config.fonts.packages =
-    with pkgs;
-    lib.mkIf cfg.fonts.enable [
-      nerd-fonts.symbols-only
-      nerd-fonts.jetbrains-mono
+  config = lib.mkIf cfg.enable {
+    fonts = {
+      packages = with pkgs; [
+        nerd-fonts.symbols-only
+        nerd-fonts.jetbrains-mono
 
-      noto-fonts-cjk-sans
-      noto-fonts-cjk-serif
-      noto-fonts-color-emoji
+        noto-fonts-cjk-sans
+        noto-fonts-cjk-serif
+        noto-fonts-color-emoji
 
-      udev-gothic-nf
+        udev-gothic-nf
+        biz-ud-gothic
+      ];
 
-      biz-ud-gothic
-    ];
-  fonts = {
-    enableDefaultFonts = false;
+      enableDefaultPackages = false;
 
-    fontconfig = {
-      defaultFonts = {
-        serif = [
-          "Noto Serif CJK JP"
-        ];
+      fontconfig = {
+        defaultFonts = {
+          serif = [
+            "Noto Serif CJK JP"
+          ];
 
-        sansSerif = [
-          "BIZ UDGothic"
-          "Noto Sans CJK JP"
-        ];
+          sansSerif = [
+            "BIZ UDGothic"
+            "Noto Sans CJK JP"
+          ];
 
-        monospace = [
-          "UDEV Gothic NF"
-        ];
+          monospace = [
+            "UDEV Gothic NF"
+          ];
 
-        emoji = [
-          "Noto Color Emoji"
-        ];
+          emoji = [
+            "Noto Color Emoji"
+          ];
+        };
+
+        antialias = true;
+        hinting.enable = false;
+        subpixel.rgba = "rgb";
       };
-      antialias = true;
-      hinting.enable = false;
-      subpixel.rgba = "rbg";
     };
   };
 }

@@ -4,7 +4,7 @@
   # security with GNOME Keyring
   services.gnome = {
     gnome-keyring.enable = true;
-    gcr-ssh-agent = false;
+    gcr-ssh-agent.enable = false;
   };
 
   # seahorse is a GUI App for GNOME Keyring.

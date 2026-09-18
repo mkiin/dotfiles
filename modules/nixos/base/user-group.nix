@@ -1,6 +1,6 @@
 { pkgs, myvars, ... }:
 {
-
+  users.allowNoPasswordLogin = true;
   users.mutableUsers = false;
   users.groups = {
     "${myvars.username}" = { };
@@ -23,7 +23,8 @@
   };
 
   users.defaultUserShell = pkgs.bashInteractive;
-  environment.shell = with pkgs; [
-    bashInteractive
+  environment.shells = [
+    pkgs.bashInteractive
+    pkgs.zsh
   ];
 }

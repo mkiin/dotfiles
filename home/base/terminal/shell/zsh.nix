@@ -5,6 +5,7 @@
     defaultKeymap = "emacs";
     autocd = true;
     enableCompletion = true;
+    dotDir = "${config.xdg.configHome}/zsh";
 
     history = {
       size = 100000;
@@ -25,7 +26,7 @@
       "PUSHD_IGNORE_DUPS"
     ];
 
-    autosuggestions.enable = true;
+    autosuggestion.enable = true;
 
     zsh-abbr = {
       enable = true;

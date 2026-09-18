@@ -3,7 +3,7 @@ let
   cfg = config.modules.desktop.hyprland;
 
   luaModules = [
-    "myvars"
+    "vars"
     "color-scheme"
     "appearance"
     "input"

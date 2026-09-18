@@ -8,10 +8,10 @@
   };
 
   hardware.nvidia = {
-    modesetting = true;
     open = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
     nvidiaSettings = true;
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
     powerManagement.enable = true;
+    modesetting.enable = true;
   };
 }

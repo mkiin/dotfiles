@@ -1,6 +1,6 @@
 { pkgs, myvars, ... }:
 {
-  programs.rbw.rbw = {
+  programs.rbw = {
     enable = true;
     settings = {
       email = "${myvars.useremail}";

@@ -137,9 +137,12 @@ else
   "$HOME/.config/waybar/scripts/reload-css.sh" 2>>"$LOG" ||
     log "waybar/reload-css failed rc=$?"
 
-  pkill -x -SIGUSR2 ghostty 2>>"$LOG" &&
-    log "ghostty SIGUSR2 sent" ||
-    log "ghostty SIGUSR2 failed rc=$? (no running ghostty?)"
+  if pkill -x -SIGUSR2 ghostty 2>>"$LOG"; then
+    log "ghostty SIGUSR2 sent"
+  else
+    rc=$?
+    log "ghostty SIGUSR2 failed rc=$rc (no running ghostty?)"
+  fi
 
   hyprctl reload 2>>"$LOG" || log "hyprctl reload failed rc=$?"
 

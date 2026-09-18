@@ -35,7 +35,7 @@ run(modkey("SHIFT + W"), "pypr wall pause")
 -- Capture
 
 run(modkey("P"), "screenshot-menu")
-run(modkey("ALT + P"), "hyprshot-rs -m output -m DP-3")
+-- run(modkey("ALT + P"), "hyprshot-rs -m output -m DP-3")
 
 run(modkey("R"), "record-menu")
 

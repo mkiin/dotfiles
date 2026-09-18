@@ -2,7 +2,6 @@
   pkgs,
   lib,
   config,
-  lnk,
   ...
 }:
 {
@@ -28,7 +27,7 @@
   };
 
   xdg.configFile."nvim/init.lua".enable = lib.mkForce false;
-  xdg.configFile."nvim".source = lnk ./config;
+  xdg.configFile."nvim".source = ./config;
 
   home.activation.restoreNeovimPlugins = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     LAZY_DIR="$HOME/.local/share/nvim/lazy"
