@@ -1,16 +1,22 @@
-{ ... }:
+{ config, ... }:
 {
   imports = [
     ../../base
     ../../linux/desktop
   ];
 
+  programs.ssh.settings."github.com" = {
+    IdentityFile = "${config.home.homeDirectory}/.ssh/oregairu-yukino";
+    IdentitiesOnly = true;
+  };
+  programs.git.signing.key = "${config.home.homeDirectory}/.ssh/oregairu-yukino.pub";
+
   modules.desktop.hyprland.enable = true;
 
   # 画面ロック・画面暗転の設定
   modules.desktop.hypridle = {
     # keyboardBacklightTimeout = 900;
-    lockTimeout = 1200; # 15min
+    lockTimeout = 1200; # 20jmin
     screenOffTimeout = 1800; # 30min
   };
 

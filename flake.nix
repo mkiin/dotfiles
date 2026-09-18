@@ -63,6 +63,11 @@
       # inputs.home-manager.follows = "home-manager";
     };
 
+    mysecrets = {
+      url = "git+ssh://git@github.com/mkiin/nix-secrets.git?shallow=1";
+      flake = false;
+    };
+
     wallpaper-namer = {
       url = "github:mkiin/wallpaper-namer/v0.2.1";
       inputs.nixpkgs.follows = "nixpkgs";

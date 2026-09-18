@@ -2,6 +2,7 @@
   inputs,
   myvars,
   mylib,
+  mysecrets,
   ...
 }:
 {
@@ -9,10 +10,16 @@
     system = "x86_64-linux";
 
     specialArgs = {
-      inherit inputs myvars mylib;
+      inherit
+        inputs
+        myvars
+        mylib
+        mysecrets
+        ;
     };
 
     modules = [
+      ../../secrets
       ../../hosts/oregairu-yukino
       ../../modules/nixos/desktop
 
@@ -29,7 +36,11 @@
         home-manager.useUserPackages = true;
 
         home-manager.extraSpecialArgs = {
-          inherit inputs myvars mylib;
+          inherit
+            inputs
+            myvars
+            mylib
+            ;
         };
 
         home-manager.users.${myvars.username}.imports = [

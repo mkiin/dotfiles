@@ -735,6 +735,23 @@
         "type": "github"
       }
     },
+    "mysecrets": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1789774445,
+        "narHash": "sha256-EBEmWsyzgXaH2gkn3u+h+INU3RUcE1oUXp2S3t4lncM=",
+        "ref": "refs/heads/main",
+        "rev": "d9f2df76b1bc4667d27c8d51218b292da5402170",
+        "shallow": true,
+        "type": "git",
+        "url": "ssh://git@github.com/mkiin/nix-secrets.git"
+      },
+      "original": {
+        "shallow": true,
+        "type": "git",
+        "url": "ssh://git@github.com/mkiin/nix-secrets.git"
+      }
+    },
     "nixos-hardware": {
       "inputs": {
         "nixpkgs": "nixpkgs_2"
@@ -849,6 +866,7 @@
         "hyprcap": "hyprcap",
         "hyprland": "hyprland",
         "llm-agents": "llm-agents",
+        "mysecrets": "mysecrets",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_3",
         "superpowers-skill": "superpowers-skill",

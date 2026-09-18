@@ -1,6 +1,10 @@
-{ pkgs, myvars, ... }:
 {
-  users.allowNoPasswordLogin = true;
+  pkgs,
+  config,
+  myvars,
+  ...
+}:
+{
   users.mutableUsers = false;
   users.groups = {
     "${myvars.username}" = { };
@@ -12,7 +16,10 @@
 
   users.users."${myvars.username}" = {
     home = "/home/${myvars.username}";
+    hashedPasswordFile = config.age.secrets."user-password".path;
     isNormalUser = true;
+    openssh.authorizedKeys.keys = myvars.mainSshAuthorizedKeys;
+
     extraGroups = [
       myvars.username
       "users"
@@ -27,4 +34,5 @@
     pkgs.bashInteractive
     pkgs.zsh
   ];
+
 }
