@@ -13,7 +13,7 @@ hl.config({
 		touchpad = { natural_scroll = false },
 	},
 	cursor = {
-		no_warps = true,
+		no_warps = false,
 		warp_on_change_workspace = 2,
 		sync_gsettings_theme = false,
 		enable_hyprcursor = true,
