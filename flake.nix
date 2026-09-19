@@ -22,6 +22,10 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     hyprland.url = "github:hyprwm/Hyprland";
 
+    waybar-pr = {
+      url = "github:tonybutt/Waybar/919939aa435d1442d423e180fb3bd452802befa4";
+    };
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";

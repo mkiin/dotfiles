@@ -33,8 +33,8 @@ in
           ];
 
           sansSerif = [
-            "BIZ UDGothic"
             "Noto Sans CJK JP"
+            "BIZ UDGothic"
           ];
 
           monospace = [

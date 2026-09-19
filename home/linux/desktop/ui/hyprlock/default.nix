@@ -20,7 +20,6 @@ in
 
       general {
           hide_cursor = true
-          grace = 0
           ignore_empty_input = true
       }
 

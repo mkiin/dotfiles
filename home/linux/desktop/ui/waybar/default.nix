@@ -1,8 +1,10 @@
-{ ... }:
+{ inputs, pkgs, ... }:
 {
   programs.waybar = {
     enable = true;
     systemd.enable = true;
+
+    package = inputs.waybar-pr.packages.${pkgs.system}.waybar;
   };
 
   xdg.configFile = {
