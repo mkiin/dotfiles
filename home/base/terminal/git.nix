@@ -41,7 +41,7 @@
     settings = {
       user = {
         name = myvars.username;
-        inherit (myvars) useremail;
+        email = myvars.useremail;
       };
       # Repository creation
       init.defaultBranch = "main";

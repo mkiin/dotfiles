@@ -1,2 +1,0 @@
-module qs.features.network
-singleton Network Network.qml

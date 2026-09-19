@@ -1,4 +1,3 @@
-require("env")
 require("color-scheme")
 require("appearance")
 require("input")

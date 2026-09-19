@@ -20,9 +20,9 @@ in
     pkgs.rofi
     rofiLauncher
   ];
-
   xdg.configFile = {
     "rofi/config.rasi".source = ./config.rasi;
-    "rofi/themes".source = ./themes;
+    "rofi/themes/app-launcher.rasi".source = ./themes/app-launcher.rasi;
+    "rofi/themes/capture.rasi".source = ./themes/capture.rasi;
   };
 }

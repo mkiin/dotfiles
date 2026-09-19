@@ -1,3 +1,0 @@
-prefix_rule(pattern=["nix", "build"], decision="allow")
-prefix_rule(pattern=["nix", "run", ".#build"], decision="allow")
-prefix_rule(pattern=["nix", "run", ".#fmt"], decision="allow")

@@ -9,11 +9,7 @@
     settings = {
       "$schema" = "https://starship.rs/config-schema.json";
 
-      format = ''
-        $directory\
-        $git_branch\
-        $character
-      '';
+      format = "$directory$git_branch$character";
 
       directory = {
         truncation_length = 3;

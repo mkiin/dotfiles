@@ -1,2 +1,0 @@
-module qs.features.media
-singleton Players Players.qml

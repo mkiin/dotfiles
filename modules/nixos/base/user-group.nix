@@ -5,6 +5,7 @@
   ...
 }:
 {
+  programs.zsh.enable = true;
   users.mutableUsers = false;
   users.groups = {
     "${myvars.username}" = { };
@@ -16,6 +17,7 @@
 
   users.users."${myvars.username}" = {
     home = "/home/${myvars.username}";
+    shell = pkgs.zsh;
     hashedPasswordFile = config.age.secrets."user-password".path;
     isNormalUser = true;
     openssh.authorizedKeys.keys = myvars.mainSshAuthorizedKeys;
@@ -29,7 +31,6 @@
     ];
   };
 
-  users.defaultUserShell = pkgs.bashInteractive;
   environment.shells = [
     pkgs.bashInteractive
     pkgs.zsh

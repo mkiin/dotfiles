@@ -16,7 +16,7 @@
   "custom/launcher": {
     "format": "",
     "tooltip": false,
-    "on-click": "$HOME/.config/rofi/launch.sh"
+    "on-click": "rofiLauncher"
   },
 
   "custom/weather": {
@@ -63,11 +63,6 @@
       "9": "9",
       "10": "10",
       "default": ""
-    },
-    "persistent-workspaces": {
-      "DP-1": [1, 2, 3],
-      "DP-2": [4, 5, 6, 7],
-      "DP-3": [8, 9, 10]
     },
     "on-click": "activate",
     "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"m+1\" })'",

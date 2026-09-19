@@ -39,9 +39,11 @@
     defaultCommand = "fd --type f --hidden --follow --exclude .git";
     historyWidget.command = "";
 
-    fileWidget = {
+    fileWidget.zsh = {
       command = "fd --type f --hidden --follow --exclude .git";
-      options = [ "--preview 'bat --color=always --style=numbers --line-range=:200 {}'" ];
+      options = [
+        "--preview 'bat --color=always --style=numbers --line-range=:200 {}'"
+      ];
     };
 
     changeDirWidget = {

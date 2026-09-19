@@ -13,7 +13,7 @@ in
   home.packages = [
     thunarWithPlugins
   ];
-  xfconf.settings.thunar = {
-    "last-show-hidden" = true; # 隠しファイルをデフォルトで表示
-  };
+  # xfconf.settings.thunar = {
+  #   "last-show-hidden" = true; # 隠しファイルをデフォルトで表示
+  # };
 }

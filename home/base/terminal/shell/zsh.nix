@@ -1,5 +1,6 @@
 { config, ... }:
 {
+  xdg.configFile."zsh/functions.zsh".source = ./functions.zsh;
   programs.zsh = {
     enable = true;
     defaultKeymap = "emacs";
@@ -45,7 +46,7 @@
         gb = "git branch";
 
         clr = "clear";
-        soc = "source ~/.zshrc";
+        soc = "source $ZDOTDIR/.zshrc";
         lg = "lazygit";
         ff = "fastfetch";
         pn = "pnpm";
@@ -66,7 +67,7 @@
       zstyle ':completion:*' menu select
 
 
-      source "${config.xdg.configHome}./functions.zsh"
+      source "${config.xdg.configHome}/zsh/functions.zsh"
       export USER_ID=$(id -u)
       export GROUP_ID=$(id -g)
     '';

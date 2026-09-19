@@ -1,2 +1,0 @@
-module qs.features.audio
-singleton Audio Audio.qml
