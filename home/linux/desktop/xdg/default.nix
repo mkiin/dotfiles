@@ -25,6 +25,6 @@
 
   home.sessionVariables = {
     BROWSER = "zen-beta";
-    FILEMANAGER = "thunar";
+    FILE_MANAGER = "thunar";
   };
 }

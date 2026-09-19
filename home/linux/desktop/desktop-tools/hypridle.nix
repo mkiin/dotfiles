@@ -27,8 +27,10 @@ in
       enable = true;
       settings = {
         general = {
-          lock_cmd = "loginctl lock-session";
+          lock_cmd = "pidof hyprlock || hyprlock --no-fade-in";
           before_sleep_cmd = "loginctl lock-session";
+          after_sleep_cmd = "hyprctl dispatch dpms on";
+          inhibit_sleep = 3;
           ## TODO 通知抑制について設計が必要
           ignore_dbus_inhibit = true;
         };
@@ -53,9 +55,12 @@ in
             on-timeout = "hyprctl dispatch dpms off";
             on-resume = "hyprctl dispatch dpms on";
           }
+          {
+            timeout = 1860;
+            on-timeout = "systemctl suspend";
+          }
         ];
       };
-
     };
 
   };

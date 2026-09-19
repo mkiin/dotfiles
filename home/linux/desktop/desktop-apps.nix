@@ -1,5 +1,9 @@
-{ myvars, ... }:
+{ pkgs, myvars, ... }:
 {
+  home.packages = with pkgs; [
+    limo # mod manager
+  ];
+
   programs.vesktop = {
     enable = true;
 

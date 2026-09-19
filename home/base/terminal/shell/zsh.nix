@@ -46,7 +46,7 @@
         gb = "git branch";
 
         clr = "clear";
-        soc = "source $ZDOTDIR/.zshrc";
+        src = "source $ZDOTDIR/.zshrc";
         lg = "lazygit";
         ff = "fastfetch";
         pn = "pnpm";

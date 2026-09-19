@@ -86,6 +86,9 @@
     fd.enable = true;
   };
 
-  home.packages = with pkgs; [ ffmpeg ];
+  home.packages = with pkgs; [
+    ffmpeg
+    jq
+  ];
 
 }
