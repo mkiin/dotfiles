@@ -4,7 +4,7 @@
     enable = true;
     systemd.enable = true;
 
-    package = inputs.waybar-pr.packages.${pkgs.system}.waybar;
+    package = inputs.waybar-pr.packages.${pkgs.stdenv.hostPlatform.system}.waybar;
   };
 
   xdg.configFile = {
