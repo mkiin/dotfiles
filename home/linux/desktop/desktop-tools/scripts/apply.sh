@@ -120,16 +120,10 @@ else
     TAGS=()
   }
 
-  matugen_with_fallback() {
-    matugen image "$1" --source-color-index "$2" ||
-      matugen image "$1" --source-color-index 0
-  }
-
   # matugen (色抽出インデックスは 0 固定)
-  source_idx=0
-  log "matugen SOURCE_IDX=$source_idx"
+  log "matugen SOURCE_IDX=0"
 
-  spawn matugen matugen_with_fallback "$img" "$source_idx"
+  spawn matugen matugen image "$img" --source-color-index 0
   spawn wallust wallust run "$img" --quiet
   wait_all
 
@@ -137,11 +131,11 @@ else
   "$HOME/.config/waybar/scripts/reload-css.sh" 2>>"$LOG" ||
     log "waybar/reload-css failed rc=$?"
 
-  if pkill -x -SIGUSR2 ghostty 2>>"$LOG"; then
+  if pkill -USR2 -u "$(id -u)" -x 'ghostty|\.ghostty-wrappe' 2>>"$LOG"; then
     log "ghostty SIGUSR2 sent"
   else
     rc=$?
-    log "ghostty SIGUSR2 failed rc=$rc (no running ghostty?)"
+    log "ghostty SIGUSR2 failed rc=$rc"
   fi
 
   hyprctl reload 2>>"$LOG" || log "hyprctl reload failed rc=$?"

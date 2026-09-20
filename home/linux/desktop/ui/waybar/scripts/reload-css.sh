@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-f="${HOME}/.config/waybar/style.css"
-tmp=$(mktemp)
-trap 'rm -f "$tmp"' EXIT
-cp "$f" "$tmp"
-cat "$tmp" >"$f"
+# style.css is a Home Manager symlink into the read-only Nix store.
+pkill -SIGUSR2 -x waybar

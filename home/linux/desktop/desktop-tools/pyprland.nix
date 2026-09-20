@@ -11,6 +11,8 @@ let
   tomlFormat = pkgs.formats.toml { };
 in
 {
+  home.packages = [ pkgs.pyprland ];
+
   xdg.configFile."pypr/config.toml".source = tomlFormat.generate "pypr-config" {
     pyprland.plugins = [
       "scratchpads"
@@ -21,7 +23,7 @@ in
     ];
 
     wallpapers = {
-      path = "${dotfilesdir}/images/wallpaper";
+      path = "${config.home.homeDirectory}/${dotfilesdir}/images/wallpaper";
       interval = 30;
       extensions = [
         "jpg"
@@ -82,5 +84,4 @@ in
     };
     Install.WantedBy = [ "graphical-session.target" ];
   };
-
 }
