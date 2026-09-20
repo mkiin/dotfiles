@@ -11,9 +11,16 @@
 
       nixBuildFlags = " --accept-flake-config --print-build-logs --show-trace";
 
-      isAgentCheck = ''
-        def is-ai-agent [] {
-          [
+      isNonInteractive = ''
+        def is-non-interactive [] {
+          let github_actions = (
+            $env
+            | get --optional GITHUB_ACTIONS
+            | default ""
+            | str downcase
+          ) == "true"
+
+          let ai_agent = [
             CLAUDE_CODE
             CLAUDECODE
             CODEX_SANDBOX
@@ -24,10 +31,16 @@
             GOOSE_PROVIDER
             CURSOR_AGENT
             AI_AGENT
-          ] | any {|name| $env | get --optional $name | default "" | is-not-empty }
+          ] | any {|name|
+            $env
+            | get --optional $name
+            | default ""
+            | is-not-empty
+          }
+
+          $github_actions or $ai_agent
         }
       '';
-
       resolveHost = ''
         def resolve-host [name: any] {
           if $name == null {
@@ -44,7 +57,7 @@
           type = "app";
           program = toString (
             writeNu "nixos-build" ''
-              ${isAgentCheck}
+              ${isNonInteractive}
               ${resolveHost}
 
               def main [name?: string] {
@@ -67,7 +80,7 @@
           type = "app";
           program = toString (
             writeNu "nixos-switch" ''
-              ${isAgentCheck}
+              ${isNonInteractive}
               ${resolveHost}
 
               def main [name?: string] {

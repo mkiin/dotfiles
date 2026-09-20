@@ -1,5 +1,11 @@
 name: "Setup Nix"
 description: "Install Nix with binary cache configured"
+
+inputs:
+  ssh-private-key:
+    description: SSH private key for private flake inputs
+    required: true
+
 runs:
   using: "composite"
   steps:
@@ -14,3 +20,14 @@ runs:
       with:
         primary-key: nix-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('flake.lock') }}
         restore-prefixes-first-match: nix-${{ runner.os }}-${{ runner.arch }}-
+
+    - name: Setup SSH for private flake input
+      shell: bash
+      env:
+        SSH_PRIVATE_KEY: ${{ inputs.ssh-private-key }}
+      run: |
+        mkdir -p ~/.ssh
+        chmod 700 ~/.ssh
+        printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
