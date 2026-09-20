@@ -1,0 +1,12 @@
+backend = "wal"
+color_space = "lab"
+check_contrast = true
+saturation = 0
+
+[templates]
+waybar   = { template = "waybar.css",   target = "~/.config/waybar/colors.css" }
+wlogout  = { template = "wlogout.css",  target = "~/.config/wlogout/colors.css" }
+hyprlock = { template = "hyprlock.conf", target = "~/.config/hyprlock/colors.conf" }
+ghostty  = { template = "ghostty.conf", target = "~/.config/ghostty/themes/wallust" }
+wezterm  = { template = "wezterm.toml", target = "~/.config/wezterm/colors/wallust.toml" }
+pywal    = { template = "pywal.json",   target = "~/.cache/wal/colors.json" }

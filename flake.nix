@@ -19,7 +19,12 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
+    flake-parts.url = "github:hercules-ci/flake-parts";
     hyprland.url = "github:hyprwm/Hyprland";
+
+    waybar-pr = {
+      url = "github:tonybutt/Waybar/919939aa435d1442d423e180fb3bd452802befa4";
+    };
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -51,11 +56,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    mcp-servers-nix = {
-      url = "github:natsukium/mcp-servers-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     llm-agents = {
       url = "github:numtide/llm-agents.nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -64,16 +64,21 @@
     agent-skills = {
       url = "github:Kyure-A/agent-skills-nix";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
+      # inputs.home-manager.follows = "home-manager";
     };
 
-    herdr = {
-      url = "github:ogulcancelik/herdr";
-      inputs.nixpkgs.follows = "nixpkgs";
+    mysecrets = {
+      url = "git+ssh://git@github.com/mkiin/nix-secrets.git?shallow=1";
+      flake = false;
     };
 
     wallpaper-namer = {
       url = "github:mkiin/wallpaper-namer/v0.2.1";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    hyprcap = {
+      url = "github:alonso-herreros/hyprcap";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -98,134 +103,7 @@
 
   outputs =
     inputs:
-    let
-      mylib = import ./lib inputs;
-      system = "x86_64-linux";
-      pkgs = import inputs.nixpkgs { inherit system; };
-      treefmtEval = inputs.treefmt-nix.lib.evalModule pkgs ./lib/treefmt;
-      preCommitCheck = inputs.git-hooks.lib.${system}.run {
-        src = ./.;
-        hooks.treefmt = {
-          enable = true;
-          package = treefmtEval.config.build.wrapper;
-        };
-      };
-      nom = pkgs.lib.getExe pkgs.nix-output-monitor;
-    in
-    {
-      nixosConfigurations.nixos = mylib.makeNixosConfig {
-        system = "x86_64-linux";
-        hostname = "nixos";
-        username = "mkiin";
-        modules = [ ./hosts/nixos ];
-      };
-
-      homeConfigurations."mkiin@wsl" = mylib.makeHomeManagerConfig {
-        system = "x86_64-linux";
-        username = "mkiin";
-        modules = [ ./hosts/wsl/home-manager.nix ];
-      };
-
-      formatter.${system} = treefmtEval.config.build.wrapper;
-      packages.${system}.fmt = treefmtEval.config.build.wrapper;
-      checks.${system}.pre-commit = preCommitCheck;
-
-      devShells.${system}.default = pkgs.mkShell {
-        inherit (preCommitCheck) shellHook;
-        packages = preCommitCheck.enabledPackages;
-      };
-
-      apps.${system} = {
-        update = {
-          type = "app";
-          program = toString (
-            pkgs.writeShellScript "update" ''
-              set -e
-              echo "Updating flake.lock..."
-              nix flake update
-              echo "Done! Run 'nix run .#switch' to apply changes."
-            ''
-          );
-        };
-
-        build = {
-          type = "app";
-          program = toString (
-            pkgs.writeShellScript "build" ''
-              set -e
-              echo "Building nixos configuration..."
-              ${nom} build .#nixosConfigurations.nixos.config.system.build.toplevel "$@"
-              echo "Build successful! Run 'nix run .#switch' to apply."
-            ''
-          );
-        };
-
-        switch = {
-          type = "app";
-          program = toString (
-            pkgs.writeShellScript "switch" ''
-              set -eo pipefail
-              echo "Building and switching nixos configuration..."
-              sudo nixos-rebuild switch --flake .#nixos "$@" |& ${nom}
-              echo "Done!"
-            ''
-          );
-        };
-
-        backup-agenix-key = {
-          type = "app";
-          program = pkgs.lib.getExe (
-            pkgs.writeShellApplication {
-              name = "backup-agenix-key";
-              runtimeInputs = [
-                pkgs.rbw
-                pkgs.coreutils
-                pkgs.gnugrep
-              ];
-              text = builtins.readFile ./nixos/core/secrets/backup-agenix-key.sh;
-            }
-          );
-        };
-
-        restore-agenix-key = {
-          type = "app";
-          program = pkgs.lib.getExe (
-            pkgs.writeShellApplication {
-              name = "restore-agenix-key";
-              runtimeInputs = [
-                pkgs.rbw
-                pkgs.pinentry-curses
-                pkgs.coreutils
-                pkgs.gnugrep
-              ];
-              text = builtins.readFile ./nixos/core/secrets/restore-agenix-key.sh;
-            }
-          );
-        };
-
-        backup-wallpaper = {
-          type = "app";
-          program = toString (
-            pkgs.writeShellScript "backup-wallpaper" ''
-              set -eo pipefail
-              ${pkgs.rclone}/bin/rclone sync images/wallpaper \
-                r2:dotfile-wallpaper/wallpaper --config /run/agenix/rclone-r2.conf --progress
-              echo "Backed up wallpapers to R2."
-            ''
-          );
-        };
-
-        restore-wallpaper = {
-          type = "app";
-          program = toString (
-            pkgs.writeShellScript "restore-wallpaper" ''
-              set -eo pipefail
-              ${pkgs.rclone}/bin/rclone copy \
-                r2:dotfile-wallpaper/wallpaper images/wallpaper --config /run/agenix/rclone-r2.conf --progress
-              echo "Restored wallpapers from R2."
-            ''
-          );
-        };
-      };
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = [ ./flake ];
     };
 }
