@@ -17,7 +17,7 @@
             $env
             | get --optional GITHUB_ACTIONS
             | default ""
-            | str lowcase
+            | str lowercase
           ) == "true"
 
           let ai_agent = [
