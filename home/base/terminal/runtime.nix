@@ -3,6 +3,35 @@
   home.packages = with pkgs; [
     nodejs-slim_24
     pnpm
+    # JS / TS
+    oxlint
+    oxfmt
+
+    # Rust
+    rust-analyzer
+    rustfmt
+    clippy
+
+    # C / C++
+    clang-tools
+
+    # Lua
+    lua-language-server
+    stylua
+
+    # Shell
+    bash-language-server
+    shellcheck
+    shfmt
+
+    # Nix
+    nixd
+    nixfmt-rfc-style
+    statix
+
+    # Python
+    ruff
+    ty
   ];
 
   programs.bun.enable = true;
