@@ -16,7 +16,7 @@
   "custom/launcher": {
     "format": "",
     "tooltip": false,
-    "on-click": "rofiLauncher"
+    "on-click": "rofi-launcher"
   },
 
   "custom/weather": {
