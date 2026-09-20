@@ -15,15 +15,22 @@
     userKeymaps = [
       {
         context = "vim_mode == insert";
-        bindings."j j" = "vim::NormalBefore";
+        bindings = {
+          "j j" = "vim::NormalBefore";
+        };
       }
 
       {
         context = "VimControl && !menu";
-        bindings."shift-m" = [
-          "workspace::SendKeystrokes"
-          "%"
-        ];
+        bindings = {
+          "shift-m" = [
+            "workspace::SendKeystrokes"
+            "%"
+          ];
+
+          "shift-h" = "pane::ActivatePreviousItem";
+          "shift-l" = "pane::ActivateNextItem";
+        };
       }
 
       {
@@ -33,19 +40,45 @@
             "workspace::SendKeystrokes"
             "ctrl-r"
           ];
+        };
+      }
 
-          "t" = null;
-          "shift-t" = null;
+      {
+        context = "Editor";
+        bindings = {
+          "ctrl-shift-h" = "workspace::ActivatePaneLeft";
+          "ctrl-shift-j" = "workspace::ActivatePaneDown";
+          "ctrl-shift-k" = "workspace::ActivatePaneUp";
+          "ctrl-shift-l" = "workspace::ActivatePaneRight";
+
+          "ctrl-h" = null;
+          "ctrl-j" = null;
+          "ctrl-l" = null;
         };
       }
 
       {
         context = "Dock";
         bindings = {
-          "ctrl-w h" = "workspace::ActivatePaneLeft";
-          "ctrl-w j" = "workspace::ActivatePaneDown";
-          "ctrl-w k" = "workspace::ActivatePaneUp";
-          "ctrl-w l" = "workspace::ActivatePaneRight";
+          "ctrl-shift-h" = "workspace::ActivatePaneLeft";
+          "ctrl-shift-j" = "workspace::ActivatePaneDown";
+          "ctrl-shift-k" = "workspace::ActivatePaneUp";
+          "ctrl-shift-l" = "workspace::ActivatePaneRight";
+        };
+      }
+
+      {
+        context = "Workspace";
+        bindings = {
+          "alt-j" = "terminal_panel::ToggleFocus";
+        };
+      }
+
+      {
+        context = "BufferSearchBar";
+        bindings = {
+          "ctrl-h" = null;
+          "ctrl-l" = null;
         };
       }
     ];

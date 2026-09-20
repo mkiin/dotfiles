@@ -2,7 +2,7 @@
 {
   imports = [
     ./core.nix
-    ./languages.nix
+    ./lang.nix
     ./ui.nix
     ./keymaps.nix
   ];
