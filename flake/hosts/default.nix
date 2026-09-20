@@ -1,6 +1,6 @@
 {
   imports = [
     ./oregairu-yukino.nix
-    ./oregairu-yui.nix
+    # ./oregairu-yui.nix
   ];
 }
