@@ -10,5 +10,6 @@ Singleton {
     readonly property bool connected: false
     readonly property string ssid: ""
 
-    function toggleWifi(): void {}
+    function toggleWifi(): void {
+    }
 }

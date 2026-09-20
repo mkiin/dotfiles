@@ -17,22 +17,18 @@ Singleton {
 
     property var data: ({
             background: "#101418",
-
             primary: "#99ccfa",
             onPrimary: "#003353",
             primaryContainer: "#084b72",
             onPrimaryContainer: "#cde5ff",
-
             secondary: "#b8c8da",
             onSecondary: "#233240",
             secondaryContainer: "#394857",
             onSecondaryContainer: "#d4e4f6",
-
             tertiary: "#d2bfe7",
             onTertiary: "#372b4a",
             tertiaryContainer: "#4e4161",
             onTertiaryContainer: "#eddcff",
-
             surface: "#101418",
             surfaceDim: "#101418",
             surfaceBright: "#36393e",
@@ -42,28 +38,22 @@ Singleton {
             surfaceContainerHigh: "#272a2e",
             surfaceContainerHighest: "#313539",
             surfaceVariant: "#42474e",
-
             onSurface: "#e0e2e8",
             onSurfaceVariant: "#c2c7ce",
-
             outline: "#8c9198",
             outlineVariant: "#42474e",
-
             error: "#ffb4ab",
             onError: "#690005",
             errorContainer: "#93000a",
             onErrorContainer: "#ffdad6",
-
             success: "#a6e3a1",
             onSuccess: "#0d1b0c",
             warning: "#f9e2af",
             onWarning: "#241d04",
             info: "#99ccfa",
-
             inverseSurface: "#e0e2e8",
             inverseOnSurface: "#2d3135",
             inversePrimary: "#2c638b",
-
             scrim: "#000000",
             shadow: "#000000"
         })
