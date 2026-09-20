@@ -52,6 +52,7 @@
         pn = "pnpm";
         nk = "nikke kill";
         vim = "nvim";
+        zd = "zeditor";
 
         cla = "claude";
         claa = "claude --enable-auto-mode";
