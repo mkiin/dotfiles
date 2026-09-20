@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/actions/setup-nix
+
+      - name: Check flake
+        run: nix flake check --show-trace
+
+      - name: Check formatting
+        run: nix run .#fmt -- --fail-on-change
+
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/actions/setup-nix
+
+      - uses: cachix/cachix-action@v17
+        with:
+          name: mkiin-dotfiles
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+      - name: Build NixOS
+        run: nix run .#build -- oregairu-yukino

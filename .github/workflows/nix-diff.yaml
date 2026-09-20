@@ -1,36 +1,44 @@
-name: "CI: Nix diff"
+name: "Nix Diff"
 
 on:
   pull_request:
     paths:
       - "flake.lock"
-      - "flake.nix"
-      - "hosts/**"
-      - "lib/**"
-      - "nixos/**"
-      - "home-manager/**"
-      - "packages/**"
 
 permissions:
   contents: read
   pull-requests: write
 
+concurrency:
+  group: nix-diff-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
-  nix-diff:
+  diff:
     runs-on: ubuntu-latest
+    timeout-minutes: 120
+
     steps:
-      - uses: actions/checkout@v7
+      - name: Checkout
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Setup Nix
         uses: ./.github/actions/setup-nix
 
-      - name: Run nix-diff
+      - name: Setup Cachix
+        uses: cachix/cachix-action@v17
+        with:
+          name: mkiin-dotfiles
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+      - name: Compare NixOS systems
         uses: natsukium/nix-diff-action@v1.1.1
         with:
-          skip-no-change: true
-          # "mkiin@wsl" は '@' を含み attribute regex を通らないため nixos のみ
           attributes: |
-            - displayName: nixos
-              attribute: nixosConfigurations.nixos.config.system.build.toplevel
+            - displayName: oregairu-yukino
+              attribute: nixosConfigurations.oregairu-yukino.config.system.build.toplevel
+          build: false
+          comment-strategy: update
+          skip-no-change: false
