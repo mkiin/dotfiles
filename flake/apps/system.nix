@@ -67,7 +67,7 @@
 
                 print $"Building NixOS configuration: ($host)"
 
-                if (is-ai-agent) {
+                if (is-non-interactive) {
                   exec nix build $target ${nixBuildFlags}
                 } else {
                   exec ${nom} build $target ${nixBuildFlags}
@@ -89,7 +89,7 @@
                 let quoted_host = $host | to json --raw
                 let build_target = $".#nixosConfigurations.($quoted_host).config.system.build.toplevel"
 
-                let builder = if (is-ai-agent) {
+                let builder = if (is-non-interactive) {
                   "nix"
                 } else {
                   "${nom}"
