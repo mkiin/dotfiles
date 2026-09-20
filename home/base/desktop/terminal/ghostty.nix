@@ -12,7 +12,10 @@
     installBatSyntax = !pkgs.stdenv.hostPlatform.isDarwin;
 
     settings = {
-      font-family = "JetBrainsMono Nerd Font";
+      font-family = [
+        "JetBrainsMono Nerd Font "
+        "UDEV Gothic NF"
+      ];
       font-size = 14;
 
       theme = "wallust";
