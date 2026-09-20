@@ -13,6 +13,6 @@ sel="$(
 
 case "$sel" in
 "󰩭") hyprcap shot region --copy --write ;;
-"󰖯") hyprcap shot window:active --copy --write ;;
-"󰍹") hyprcap shot monitor:active --copy --write ;;
+"󰖯") hyprcap shot window --copy --write ;;
+"󰍹") hyprcap shot monitor --copy --write ;;
 esac
