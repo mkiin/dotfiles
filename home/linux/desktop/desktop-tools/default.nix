@@ -6,7 +6,7 @@
 }:
 
 let
-  screenshot-menu = pkgs.writeShellApplication {
+  screenshotMenu = pkgs.writeShellApplication {
     name = "screenshot-menu";
 
     runtimeInputs = with pkgs; [
@@ -17,7 +17,7 @@ let
     text = builtins.readFile scripts/screenshot-menu.sh;
   };
 
-  record-menu = pkgs.writeShellApplication {
+  recordMenu = pkgs.writeShellApplication {
     name = "record-menu";
 
     runtimeInputs = with pkgs; [
@@ -74,8 +74,8 @@ in
   };
 
   home.packages = with pkgs; [
-    screenshot-menu
-    record-menu
+    screenshotMenu
+    recordMenu
     wallpaperApply
 
     wl-clipboard

@@ -12,7 +12,7 @@ sel="$(
 )" || exit 0
 
 case "$sel" in
-"󰩭") hyprcap shot region ;;
-"󰖯") hyprcap shot window:active ;;
-"󰍹") hyprcap shot monitor:active ;;
+"󰩭") hyprcap shot region --copy --write ;;
+"󰖯") hyprcap shot window:active --copy --write ;;
+"󰍹") hyprcap shot monitor:active --copy --write ;;
 esac
