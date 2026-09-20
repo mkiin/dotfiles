@@ -163,6 +163,10 @@ window#waybar.empty #window {
   color: @color6;
 }
 
+.calendar-today {
+  color: @color6;
+}
+
 #custom-weather {
   color: @color7;
 }
