@@ -17,5 +17,7 @@
     btop
     dig
     trash-cli
+    zip
+    unzip
   ];
 }
