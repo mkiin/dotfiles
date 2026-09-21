@@ -2,7 +2,7 @@
 {
   imports = [
     ../../base
-    ../../linux/desktop
+    ../../linux/desktop.nix
   ];
 
   programs.ssh.settings."github.com" = {
