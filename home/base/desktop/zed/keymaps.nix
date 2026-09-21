@@ -27,19 +27,20 @@
             "workspace::SendKeystrokes"
             "%"
           ];
-
-          "shift-h" = "pane::ActivatePreviousItem";
-          "shift-l" = "pane::ActivateNextItem";
         };
       }
 
       {
-        context = "vim_mode == normal && !menu";
+        context = "Editor && vim_mode == normal && !menu";
         bindings = {
           "shift-u" = [
             "workspace::SendKeystrokes"
             "ctrl-r"
           ];
+
+          # previous / next tab
+          "shift-h" = "pane::ActivatePreviousItem";
+          "shift-l" = "pane::ActivateNextItem";
         };
       }
 

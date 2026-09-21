@@ -3,6 +3,7 @@
   programs.zed-editor = {
     enable = true;
     mutableUserSettings = true;
+    mutableUserKeymaps = true;
 
     extensions = [
       "kanagawa-themes"

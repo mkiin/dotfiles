@@ -28,6 +28,7 @@
       "wheel"
       "networkmanager" # for nmtui / nm-connection-editor
       "fileshare"
+      "dialout"
     ];
   };
 
