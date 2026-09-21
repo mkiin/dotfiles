@@ -1058,17 +1058,17 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1789750187,
-        "narHash": "sha256-24zl1AUL+K4o6UK0TC20PlfJhcFxClOx4TdmaJLegw0=",
+        "lastModified": 1789390610,
+        "narHash": "sha256-IBzLcGvqKHN2FXiBk6cx0VAwyeP2ssrXWqQWE+diWgc=",
         "owner": "tonybutt",
         "repo": "Waybar",
-        "rev": "919939aa435d1442d423e180fb3bd452802befa4",
+        "rev": "2a12740b77ce62cf372f2ae73db1edf4ec3ad551",
         "type": "github"
       },
       "original": {
         "owner": "tonybutt",
         "repo": "Waybar",
-        "rev": "919939aa435d1442d423e180fb3bd452802befa4",
+        "rev": "2a12740b77ce62cf372f2ae73db1edf4ec3ad551",
         "type": "github"
       }
     },

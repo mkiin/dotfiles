@@ -23,7 +23,7 @@
     hyprland.url = "github:hyprwm/Hyprland";
 
     waybar-pr = {
-      url = "github:tonybutt/Waybar/919939aa435d1442d423e180fb3bd452802befa4";
+      url = "github:tonybutt/Waybar/2a12740b77ce62cf372f2ae73db1edf4ec3ad551";
     };
 
     home-manager = {
