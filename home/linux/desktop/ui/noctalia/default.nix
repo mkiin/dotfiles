@@ -20,15 +20,19 @@ in
       bar.default.enabled = false;
 
       wallpaper = {
-        enable = true;
+        enabled = true;
         directory = "${wallpaperDir}";
         default.path = "${wallpaperDir}/yukino-yukinoshita-cute-close-up.png";
         fill_mode = "crop";
-        transition = [ "face" ];
+        transition = [
+          "fade"
+          "disc"
+          "stripes"
+        ];
         transition_duration = 800;
         transition_on_startup = false;
         automation = {
-          enable = true;
+          enabled = true;
           interval_seconds = 3600;
           order = "alphabetical";
         };
@@ -41,6 +45,11 @@ in
           media = false;
           keyboard_backlight = false;
         };
+      };
+
+      lockscreen = {
+        enabled = true;
+        lock_before_suspend = true;
       };
     };
   };
