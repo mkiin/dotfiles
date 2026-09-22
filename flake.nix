@@ -5,8 +5,8 @@
     extra-substituters = [
       "https://hyprland.cachix.org" # hyprland
       "https://noctalia.cachix.org" # noctalia
-      "https://ezkea.cachix.org" # aagl
-      "https://cache.numtide.com" # llm-agents
+      # "https://ezkea.cachix.org" # aagl
+      # "https://cache.numtide.com" # llm-agents
       "https://mkiin-dotfiles.cachix.org" # mkiin-dotfiles
     ];
     extra-trusted-public-keys = [
