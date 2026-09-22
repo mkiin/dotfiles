@@ -16,7 +16,7 @@
   "custom/launcher": {
     "format": "",
     "tooltip": false,
-    "on-click": "rofi-launcher"
+    "on-click": "noctalia msg panel-toggle launcher"
   },
 
   "custom/weather": {
@@ -89,7 +89,7 @@
       "default": ["󰕿", "󰖀", "󰕾"]
     },
     "tooltip-format": "{desc} — {volume}%",
-    "on-click": "qs -c shell ipc call audio toggle",
+    "on-click": "noctalia msg panel-toggle control-center audio",
     "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
     "scroll-step": 0,
     "ignored-sinks": ["Easy Effects Sink"]
@@ -103,7 +103,7 @@
     "tooltip-format": "Bluetooth: {status}",
     "tooltip-format-connected": "{num_connections} connected\n{device_enumerate}",
     "tooltip-format-enumerate-connected": "{device_alias}",
-    "on-click": "qs -c shell ipc call bluetooth toggle",
+    "on-click": "noctalia msg panel-toggle control-center bluetooth",
     "max-length": 30
   },
 

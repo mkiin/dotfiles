@@ -23,9 +23,9 @@ run(modkey("E"), fileManager)
 run(modkey("B"), browser)
 run(modkey("D"), "vesktop")
 
-run(modkey("A"), "rofi-launcher")
-run(modkey("N"), "qs -c shell ipc call cc toggle")
-run(modkey("Q"), "pkill -x wlogout || wlogout")
+run(modkey("A"), "noctalia msg panel-toggle launcher")
+run(modkey("N"), "noctalia msg panel-toggle control-center notifications")
+run(modkey("Q"), "noctalia msg panel-toggle session")
 
 -- Wallpaper
 

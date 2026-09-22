@@ -29,7 +29,7 @@
     llm-agents.url = "github:numtide/llm-agents.nix";
 
     waybar-pr = {
-      url = "github:tonybutt/Waybar/919939aa435d1442d423e180fb3bd452802befa4";
+      url = "github:tonybutt/Waybar/2ac3e1397afc234b3a37bec13bf5c3ea279df3fb";
     };
 
     home-manager = {

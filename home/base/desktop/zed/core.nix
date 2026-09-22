@@ -14,6 +14,7 @@
       "nu"
       "terraform"
       "toml"
+      "lua"
     ];
 
     userSettings = {
