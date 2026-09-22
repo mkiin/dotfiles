@@ -117,24 +117,16 @@
     "tooltip-format-wifi": "{essid} ({signalStrength}%)\n󰇚 {bandwidthDownBits}   󰕒 {bandwidthUpBits}\n{ipaddr}",
     "tooltip-format-ethernet": "{ifname} via {gwaddr}\n󰇚 {bandwidthDownBits}   󰕒 {bandwidthUpBits}\n{ipaddr}/{cidr}",
     "tooltip-format-disconnected": "Disconnected",
+    "on-click": "noctalia msg panel-toggle control-center network",
     "max-length": 50
   },
 
   "custom/notification": {
-    "format": "{icon}",
-    "format-icons": {
-      "notification": "󱅫",
-      "none": "󰂜",
-      "dnd-notification": "󰂠",
-      "dnd-none": "󰪓"
-    },
-    "tooltip": true,
-    "return-type": "json",
-    "interval": "once",
-    "signal": 2,
-    "exec-if": "which qs",
-    "exec": "qs -c shell ipc call cc status",
-    "on-click": "qs -c shell ipc call cc toggle",
-    "escape": true
+    "format": "{}",
+    "exec": "noctalia msg notification-dnd-status | sed -n 's/^on$/󰪓/p; s/^off$/󰂜/p'",
+    "interval": 2,
+    "tooltip": false,
+    "on-click": "noctalia msg panel-toggle control-center notifications",
+    "on-click-right": "noctalia msg notification-dnd-toggle"
   }
 }

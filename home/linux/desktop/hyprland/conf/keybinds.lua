@@ -29,14 +29,12 @@ run(modkey("Q"), "noctalia msg panel-toggle session")
 
 -- Wallpaper
 
-run(modkey("W"), "pypr wall next")
-run(modkey("SHIFT + W"), "pypr wall pause")
+run(modkey("W"), "noctalia msg wallpaper-next")
+run(modkey("SHIFT + W"), "noctalia msg panel-toggle wallpaper")
 
 -- Capture
 
 run(modkey("P"), "screenshot-menu")
--- run(modkey("ALT + P"), "hyprshot-rs -m output -m DP-3")
-
 run(modkey("R"), "record-menu")
 
 -- Window
@@ -161,6 +159,10 @@ bind(modkey("S"), hl.dsp.workspace.toggle_special("stash"))
 run(modkey("SHIFT + S"), "pypr toggle_special stash")
 run(modkey("SHIFT + M"), "pypr lost_windows")
 run(modkey("SHIFT + F"), "pypr toggle fetch")
+
+-- Dock Winddow
+
+run(modkey("SHIFT + D"), "noctalia msg dock-toggle")
 
 -- Mouse
 

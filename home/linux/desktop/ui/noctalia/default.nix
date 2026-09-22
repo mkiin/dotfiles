@@ -1,4 +1,12 @@
-{ inputs, ... }:
+{
+  inputs,
+  config,
+  myvars,
+  ...
+}:
+let
+  wallpaperDir = "${config.home.homeDirectory}/${myvars.dotfilesdir}/images/wallpaper";
+in
 {
   imports = [
     inputs.noctalia.homeModules.default
@@ -9,11 +17,21 @@
     systemd.enable = true;
 
     settings = {
-      # バーは Waybar を使う
       bar.default.enabled = false;
-
-      # 既存の壁紙管理を使う
-      wallpaper.enabled = false;
+      wallpaper = {
+        enable = true;
+        directory = "${wallpaperDir}";
+        default.path = "${wallpaperDir}/yukino-yukinoshita-cute-close-up.png";
+        fill_mode = "crop";
+        transition = [ "face" ];
+        transition_duration = 800;
+        transition_on_startup = false;
+        automation = {
+          enable = true;
+          interval_seconds = 3600;
+          order = "alphabetical";
+        };
+      };
     };
   };
 }

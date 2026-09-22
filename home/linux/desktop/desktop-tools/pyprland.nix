@@ -1,13 +1,13 @@
 {
   config,
-  myvars,
-  lib,
+  # myvars,
+  # lib,
   pkgs,
-  wallpaperApply,
+  # wallpaperApply,
   ...
 }:
 let
-  inherit (myvars) dotfilesdir;
+  # inherit (myvars) dotfilesdir;
   tomlFormat = pkgs.formats.toml { };
 in
 {
@@ -16,23 +16,23 @@ in
   xdg.configFile."pypr/config.toml".source = tomlFormat.generate "pypr-config" {
     pyprland.plugins = [
       "scratchpads"
-      "wallpapers"
+      # "wallpapers"
       "toggle_special"
       "lost_windows"
       "fcitx5_switcher"
     ];
 
-    wallpapers = {
-      path = "${config.home.homeDirectory}/${dotfilesdir}/images/wallpaper";
-      interval = 30;
-      extensions = [
-        "jpg"
-        "jpeg"
-        "png"
-        "webp"
-      ];
-      command = "${lib.getExe wallpaperApply} [file]";
-    };
+    # wallpapers = {
+    #   path = "${config.home.homeDirectory}/${dotfilesdir}/images/wallpaper";
+    #   interval = 30;
+    #   extensions = [
+    #     "jpg"
+    #     "jpeg"
+    #     "png"
+    #     "webp"
+    #   ];
+    #   command = "${lib.getExe wallpaperApply} [file]";
+    # };
 
     toggle_special.name = "stash";
 
@@ -52,19 +52,19 @@ in
     };
   };
 
-  systemd.user.services.awww-daemon = {
-    Unit = {
-      Description = "awww wallpaper daemon";
-      PartOf = [ "graphical-session.target" ];
-      After = [ "graphical-session.target" ];
-    };
-    Service = {
-      ExecStart = "${pkgs.awww}/bin/awww-daemon --no-cache";
-      Restart = "on-failure";
-      RestartSec = 2;
-    };
-    Install.WantedBy = [ "graphical-session.target" ];
-  };
+  # systemd.user.services.awww-daemon = {
+  #   Unit = {
+  #     Description = "awww wallpaper daemon";
+  #     PartOf = [ "graphical-session.target" ];
+  #     After = [ "graphical-session.target" ];
+  #   };
+  #   Service = {
+  #     ExecStart = "${pkgs.awww}/bin/awww-daemon --no-cache";
+  #     Restart = "on-failure";
+  #     RestartSec = 2;
+  #   };
+  #   Install.WantedBy = [ "graphical-session.target" ];
+  # };
 
   systemd.user.services.pyprland = {
     Unit = {
@@ -72,9 +72,9 @@ in
       PartOf = [ "graphical-session.target" ];
       After = [
         "graphical-session.target"
-        "awww-daemon.service"
+        # "awww-daemon.service"
       ];
-      Requires = [ "awww-daemon.service" ];
+      # Requires = [ "awww-daemon.service" ];
       X-Restart-Triggers = [ config.xdg.configFile."pypr/config.toml".source ];
     };
     Service = {
