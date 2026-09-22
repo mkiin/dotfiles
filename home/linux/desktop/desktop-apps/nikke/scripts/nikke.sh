@@ -2,7 +2,7 @@
 set -euo pipefail
 
 MAX_UPDATE_RESTARTS="${MAX_UPDATE_RESTARTS:-2}"
-WATCH_INTERVAL_S="${WATCH_INTERVAL_S:-5}"
+STARTUP_GRACE_S="${STARTUP_GRACE_S:-8}"
 
 NIKKE_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/nikke"
 PREFIX="$NIKKE_HOME/prefix"
@@ -88,26 +88,6 @@ cleanup_session() {
   rm -f "$SID_FILE"
 }
 
-nikke_window_count() {
-  command -v hyprctl >/dev/null 2>&1 || {
-    echo 0
-    return
-  }
-
-  hyprctl clients -j 2>/dev/null |
-    jq -r '
-      [
-        .[]
-        | select(.class == "steam_proton" and .title == "NIKKE")
-      ]
-      | length
-    ' 2>/dev/null || echo 0
-}
-
-game_running() {
-  [ "$(nikke_window_count)" -ge 2 ]
-}
-
 apply_launcher_update() {
   [ -e "$LAUNCHER_UPDATE_DIR" ] || return 0
 
@@ -136,7 +116,7 @@ apply_launcher_update() {
   log "Launcher update applied"
 }
 
-launch_and_wait() {
+start_session() {
   mkdir -p "$NIKKE_HOME" "$RUNTIME_DIR"
 
   session_running &&
@@ -145,7 +125,6 @@ launch_and_wait() {
   rm -f "$SID_FILE"
 
   log "Starting NIKKE"
-  log "Proton: $PROTON"
 
   GAMEID=umu-nikke \
     PROTON_USE_WOW64=1 \
@@ -159,22 +138,45 @@ launch_and_wait() {
     </dev/null \
     >"$LOG_FILE" 2>&1 &
 
-  local sid=$!
+  local pid=$!
+  local sid=""
+
+  # Resolve the session created by setsid.
+  for _ in 1 2 3 4 5; do
+    sid="$(ps -o sid= -p "$pid" 2>/dev/null | tr -d '[:space:]')"
+
+    if [ -n "$sid" ]; then
+      break
+    fi
+
+    kill -0 "$pid" 2>/dev/null || break
+    sleep 0.2
+  done
+
+  [ -n "$sid" ] || {
+    wait "$pid" 2>/dev/null || true
+    warn "NIKKE session failed to start"
+    return 1
+  }
+
   printf '%s\n' "$sid" >"$SID_FILE"
 
   log "Session started (SID=$sid)"
 
-  while session_running; do
-    if game_running; then
-      log "Game window detected"
-      return 0
+  # Treat the launch as successful once the session survives startup.
+  local elapsed=0
+
+  while [ "$elapsed" -lt "$STARTUP_GRACE_S" ]; do
+    if ! session_running; then
+      warn "Session exited during startup"
+      return 1
     fi
 
-    sleep "$WATCH_INTERVAL_S"
+    sleep 1
+    elapsed=$((elapsed + 1))
   done
 
-  warn "Session exited before the game window appeared"
-  return 1
+  return 0
 }
 
 cmd_run() {
@@ -198,13 +200,13 @@ cmd_run() {
   local update_restarts=0
 
   while true; do
-    if launch_and_wait; then
-      log "NIKKE started"
+    if start_session; then
+      log "NIKKE session is running"
       return 0
     fi
 
     if [ ! -e "$LAUNCHER_UPDATE_DIR" ]; then
-      die "NIKKE exited before launch; see $LOG_FILE"
+      die "NIKKE exited during startup; see $LOG_FILE"
     fi
 
     if [ "$update_restarts" -ge "$MAX_UPDATE_RESTARTS" ]; then
@@ -233,12 +235,7 @@ cmd_kill() {
 cmd_status() {
   local sid
 
-  if ! sid="$(read_session_id)"; then
-    echo "NIKKE: stopped"
-    return 0
-  fi
-
-  if ! session_running; then
+  if ! sid="$(read_session_id)" || ! session_running; then
     echo "NIKKE: stopped"
     return 0
   fi
@@ -259,7 +256,7 @@ Commands:
 Environment:
   NIKKE_PROTON         DWProton directory
   MAX_UPDATE_RESTARTS  Launcher update restart limit (default: 2)
-  WATCH_INTERVAL_S     Game window polling interval (default: 5)
+  STARTUP_GRACE_S      Startup survival check in seconds (default: 8)
 EOF
 }
 
