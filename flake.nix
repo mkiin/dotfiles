@@ -3,18 +3,18 @@
 
   nixConfig = {
     extra-substituters = [
-      "https://hyprland.cachix.org"
-      "https://ezkea.cachix.org"
-      "https://mkiin-dotfiles.cachix.org"
-      "https://cache.numtide.com"
-      "https://noctalia.cachix.org"
+      "https://hyprland.cachix.org" # hyprland
+      "https://noctalia.cachix.org" # noctalia
+      "https://ezkea.cachix.org" # aagl
+      "https://cache.numtide.com" # llm-agents
+      "https://mkiin-dotfiles.cachix.org" # mkiin-dotfiles
     ];
     extra-trusted-public-keys = [
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
-      "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI="
-      "mkiin-dotfiles.cachix.org-1:LJ6X3uYDglOyphSEDcaz/wrwGDmetitbmrUDkwvUzjM="
-      "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
       "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
+      "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI="
+      "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
+      "mkiin-dotfiles.cachix.org-1:LJ6X3uYDglOyphSEDcaz/wrwGDmetitbmrUDkwvUzjM="
     ];
   };
 
@@ -22,24 +22,18 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
     flake-parts.url = "github:hercules-ci/flake-parts";
+
     hyprland.url = "github:hyprwm/Hyprland";
+    noctalia.url = "github:noctalia-dev/noctalia";
+    aagl.url = "github:ezKEa/aagl-gtk-on-nix";
+    llm-agents.url = "github:numtide/llm-agents.nix";
 
     waybar-pr = {
-      url = "github:tonybutt/Waybar/2a12740b77ce62cf372f2ae73db1edf4ec3ad551";
+      url = "github:tonybutt/Waybar/919939aa435d1442d423e180fb3bd452802befa4";
     };
 
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    noctalia = {
-      url = "github:noctalia-dev/noctalia";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    aagl = {
-      url = "github:ezKEa/aagl-gtk-on-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -63,11 +57,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    llm-agents = {
-      url = "github:numtide/llm-agents.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     agent-skills = {
       url = "github:Kyure-A/agent-skills-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -76,11 +65,6 @@
     mysecrets = {
       url = "git+ssh://git@github.com/mkiin/nix-secrets.git?shallow=1";
       flake = false;
-    };
-
-    wallpaper-namer = {
-      url = "github:mkiin/wallpaper-namer/v0.2.1";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     hyprcap = {

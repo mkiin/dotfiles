@@ -26,7 +26,7 @@
 
     # Nix
     nixd
-    nixfmt-rfc-style
+    nixfmt
     statix
 
     # Python
