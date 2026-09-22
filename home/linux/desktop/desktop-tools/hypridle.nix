@@ -20,6 +20,11 @@ in
       type = lib.types.int;
       description = "Seconds of idle before turning off the monitors (DPMS).";
     };
+    suspendTimeout = lib.mkOption {
+      type = lib.types.int;
+      description = "Seconds of idle before suspending.";
+    };
+
   };
 
   config = {
@@ -27,8 +32,8 @@ in
       enable = true;
       settings = {
         general = {
-          lock_cmd = "pidof hyprlock || hyprlock --no-fade-in";
-          before_sleep_cmd = "loginctl lock-session";
+          lock_cmd = "noctalia msg session lock";
+          # before_sleep_cmd = "loginctl lock-session";
           after_sleep_cmd = "hyprctl dispatch dpms on";
           inhibit_sleep = 3;
           ## TODO 通知抑制について設計が必要
@@ -56,8 +61,10 @@ in
             on-resume = "hyprctl dispatch dpms on";
           }
           {
-            timeout = 1860;
-            on-timeout = "systemctl suspend";
+            timeout = cfg.suspendTimeout;
+            condition_cmd = "! playerctl -a status 2>/dev/null | grep -q '^Playing$'";
+            condition_retry = 30;
+            on-timeout = "noctalia msg session lock-and-suspend";
           }
         ];
       };
