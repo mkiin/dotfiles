@@ -18,6 +18,7 @@ in
 
     settings = {
       bar.default.enabled = false;
+
       wallpaper = {
         enable = true;
         directory = "${wallpaperDir}";
@@ -30,6 +31,15 @@ in
           enable = true;
           interval_seconds = 3600;
           order = "alphabetical";
+        };
+      };
+
+      osd = {
+        kinds = {
+          dnd = false;
+          keyboard_layout = false;
+          media = false;
+          keyboard_backlight = false;
         };
       };
     };
