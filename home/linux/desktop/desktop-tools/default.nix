@@ -2,6 +2,7 @@
 {
   inputs,
   pkgs,
+  mylib,
   ...
 }:
 
@@ -45,11 +46,7 @@ let
   # };
 in
 {
-  imports = [
-    ./hypridle.nix
-    ./pyprland.nix
-  ];
-
+  imports = mylib.scanPaths ./.;
   # _module.args = {
   #   inherit wallpaperApply;
   # };

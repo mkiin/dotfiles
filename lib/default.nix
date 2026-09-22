@@ -1,17 +1,19 @@
 { lib, ... }:
 {
   scanPaths =
-    path:
-    builtins.map (f: (path + "/${f}")) (
+    dir:
+    let
+      entries = builtins.readDir dir;
+    in
+    map (name: dir + "/${name}") (
       builtins.attrNames (
-        lib.attrsets.filterAttrs (
-          path: _type:
-          (_type == "directory") # include directories
-          || (
-            (path != "default.nix") # ignore default.nix
-            && (lib.strings.hasSuffix ".nix" path) # include .nix files
-          )
-        ) (builtins.readDir path)
+        lib.filterAttrs (
+          name: type:
+          if type == "directory" then
+            builtins.pathExists (dir + "/${name}/default.nix")
+          else
+            name != "default.nix" && lib.hasSuffix ".nix" name
+        ) entries
       )
     );
 }
