@@ -10,10 +10,11 @@ in
 {
   options.modules.desktop.gaming.enable = lib.mkEnableOption "Install Game Suite";
 
+  imports = [
+    inputs.aagl.nixosModules.default
+  ];
+
   config = lib.mkIf cfg.enable {
-    imports = [
-      inputs.aagl.nixosModules.default
-    ];
     programs.steam = {
       enable = true;
       protontricks.enable = true;
