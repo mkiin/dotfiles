@@ -1,5 +1,4 @@
 {
-  pkgs,
   config,
   lib,
   myvars,
@@ -11,18 +10,17 @@ let
 in
 {
   options.modules.desktop.wayland.enable = lib.mkEnableOption "Wayland Display Server";
+
   imports = mylib.scanPaths ./. ++ [ ../base ];
 
   config = lib.mkIf cfg.enable {
-    services.greetd = {
+    services.displayManager.noctalia-greeter = {
       enable = true;
       settings = {
-        default_session = {
-          user = myvars.username;
-          command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd $HOME/.wayland-session";
-        };
+        session.default = "Hyprland (uwsm-managed)";
+        user.default = myvars.username;
+        keyboard.layout = "us";
       };
     };
   };
-
 }
