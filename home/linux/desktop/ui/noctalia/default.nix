@@ -17,6 +17,7 @@ in
     systemd.enable = true;
 
     settings = {
+      shell.greeter_sync.auto_sync = true;
       bar.default.enabled = false;
 
       wallpaper = {
@@ -38,6 +39,11 @@ in
         };
       };
 
+      theme = {
+        source = "wallpaper";
+        wallpaper_scheme = "m3-content";
+      };
+
       osd = {
         kinds = {
           dnd = false;
@@ -47,6 +53,11 @@ in
         };
       };
 
+      dock = {
+        enabled = true;
+        layer = "overlay";
+      };
+
       lockscreen = {
         enabled = true;
         lock_before_suspend = true;
@@ -54,6 +65,10 @@ in
 
       hooks = {
         wallpaper_changed = "${config.xdg.configHome}/waybar/scripts/reload-css.sh";
+        started = ''
+          noctalia msg greeter-sync
+          ${config.xdg.configHome}/waybar/scripts/reload-css.sh
+        '';
       };
     };
   };
