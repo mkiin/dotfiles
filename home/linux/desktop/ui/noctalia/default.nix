@@ -51,6 +51,10 @@ in
         enabled = true;
         lock_before_suspend = true;
       };
+
+      hooks = {
+        wallpaper_changed = "${config.xdg.configHome}/waybar/scripts/reload-css.sh";
+      };
     };
   };
 }
