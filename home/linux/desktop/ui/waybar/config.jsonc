@@ -3,14 +3,14 @@
   "margin-top": 18,
   "reload_style_on_change": true,
 
-  "modules-left": ["custom/launcher", "custom/weather", "hyprland/window"],
-  "modules-center": ["clock", "hyprland/workspaces"],
+  "modules-left": ["custom/launcher", "custom/weather", "clock", "hyprland/window"],
+  "modules-center": [ "hyprland/workspaces"],
   "modules-right": [
     "tray",
     "pulseaudio",
     "bluetooth",
     "network",
-    "custom/notification"
+    "custom/control-center"
   ],
 
   "custom/launcher": {
@@ -25,6 +25,12 @@
     "return-type": "json",
     "exec": "~/.config/waybar/scripts/weather/weather.sh",
     "interval": 900
+  },
+
+  "custom/control-center" : {
+    "format" : "",
+    "tooltip": false,
+    "on-click" : "noctalia msg panel-toggle control-center"
   },
 
   "hyprland/window": {
@@ -128,5 +134,5 @@
     "tooltip": false,
     "on-click": "noctalia msg panel-toggle control-center notifications",
     "on-click-right": "noctalia msg notification-dnd-toggle"
-  }
+  },
 }

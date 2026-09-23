@@ -99,6 +99,7 @@ tooltip label {
 #custom-weather,
 #custom-media,
 #custom-launcher,
+#custom-control-center,
 #custom-notification {
   background-color: @background;
   color: @color6;
@@ -155,6 +156,7 @@ window#waybar.empty #window {
 
 #custom-launcher,
 #window,
+#custom-control-center,
 #custom-notification {
   color: @foreground;
 }
