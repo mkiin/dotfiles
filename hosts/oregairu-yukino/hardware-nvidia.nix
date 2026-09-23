@@ -7,6 +7,12 @@
     enable32Bit = true;
   };
 
+  boot.initrd.kernelModules = [
+    "nvidia"
+    "nvidia_modeset"
+    "nvidia_drm"
+  ];
+
   hardware.nvidia = {
     open = true;
     nvidiaSettings = true;
