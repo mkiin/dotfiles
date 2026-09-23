@@ -22,18 +22,6 @@ in
       "fcitx5_switcher"
     ];
 
-    # wallpapers = {
-    #   path = "${config.home.homeDirectory}/${dotfilesdir}/images/wallpaper";
-    #   interval = 30;
-    #   extensions = [
-    #     "jpg"
-    #     "jpeg"
-    #     "png"
-    #     "webp"
-    #   ];
-    #   command = "${lib.getExe wallpaperApply} [file]";
-    # };
-
     toggle_special.name = "stash";
 
     fcitx5_switcher.inactive_classes = [
@@ -52,29 +40,11 @@ in
     };
   };
 
-  # systemd.user.services.awww-daemon = {
-  #   Unit = {
-  #     Description = "awww wallpaper daemon";
-  #     PartOf = [ "graphical-session.target" ];
-  #     After = [ "graphical-session.target" ];
-  #   };
-  #   Service = {
-  #     ExecStart = "${pkgs.awww}/bin/awww-daemon --no-cache";
-  #     Restart = "on-failure";
-  #     RestartSec = 2;
-  #   };
-  #   Install.WantedBy = [ "graphical-session.target" ];
-  # };
-
   systemd.user.services.pyprland = {
     Unit = {
       Description = "pyprland daemon";
       PartOf = [ "graphical-session.target" ];
-      After = [
-        "graphical-session.target"
-        # "awww-daemon.service"
-      ];
-      # Requires = [ "awww-daemon.service" ];
+      After = [ "graphical-session.target" ];
       X-Restart-Triggers = [ config.xdg.configFile."pypr/config.toml".source ];
     };
     Service = {
