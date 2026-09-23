@@ -29,27 +29,9 @@ let
     text = builtins.readFile scripts/record-menu.sh;
   };
 
-  # wallpaperApply = pkgs.writeShellApplication {
-  #   name = "wallpaper-apply";
-  #   runtimeInputs = with pkgs; [
-  #     awww
-  #     hyprland # hyprctl
-  #     jq
-  #     matugen
-  #     wallust
-  #     procps # pkill
-  #     coreutils # date, sleep, mktemp, ln
-  #     gnused # sed
-  #     util-linux # flock
-  #   ];
-  #   text = builtins.readFile scripts/apply.sh;
-  # };
 in
 {
   imports = mylib.scanPaths ./.;
-  # _module.args = {
-  #   inherit wallpaperApply;
-  # };
 
   home.sessionVariables = {
     NIXOS_OZONE_WL = "1"; # for any ozone-based browser & electron apps to run on wayland
@@ -72,7 +54,6 @@ in
   home.packages = with pkgs; [
     screenshotMenu
     recordMenu
-    # wallpaperApply
 
     wl-clipboard
     wf-recorder
