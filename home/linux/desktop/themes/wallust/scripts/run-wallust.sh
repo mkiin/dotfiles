@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-img="$(noctalia msg wallpaper-get)"
+
+img="${NOCTALIA_WALLPAPER_PATH:-$(noctalia msg wallpaper-get)}"
+
 wallust run "$img" --quiet
