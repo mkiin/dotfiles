@@ -32,6 +32,8 @@
     # Python
     ruff
     ty
+
+    package-version-server
   ];
 
   programs.bun.enable = true;
