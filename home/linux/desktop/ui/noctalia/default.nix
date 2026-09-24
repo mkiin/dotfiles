@@ -17,7 +17,7 @@ in
     systemd.enable = true;
 
     settings = {
-      shell.greeter_sync.auto_sync = true;
+      # shell.greeter_sync.auto_sync = true;
       bar.default.enabled = false;
 
       wallpaper = {
@@ -70,6 +70,9 @@ in
           ${config.xdg.configHome}/waybar/scripts/reload-css.sh
         '';
       };
+
+      shell.greeter_sync.auto_sync = false;
+      shell.session.show_shortcuts = false;
     };
   };
 }
