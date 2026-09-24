@@ -44,7 +44,10 @@ in
         templates = {
           enable_builtin_templates = true;
           enable_community_templates = true;
-          builtin_ids = [ "btop" ];
+          builtin_ids = [
+            "btop"
+            "ghostty"
+          ];
           community_ids = [
             "discord"
             "obsidian"
