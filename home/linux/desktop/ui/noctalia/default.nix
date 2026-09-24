@@ -17,7 +17,6 @@ in
     systemd.enable = true;
 
     settings = {
-      # shell.greeter_sync.auto_sync = true;
       bar.default.enabled = false;
 
       wallpaper = {
@@ -54,7 +53,11 @@ in
       };
 
       osd = {
+        position = "bottom_right";
         kinds = {
+          volume = false;
+          volume_output = false;
+          volume_input = false;
           dnd = false;
           keyboard_layout = false;
           media = false;
@@ -87,6 +90,14 @@ in
       shell = {
         greeter_sync.auto_sync = true;
         session.show_shortcuts = false;
+        settings_window_translucent = true;
+        panel = {
+          transparency_mode = "glass";
+          # Noctalia's bar is disabled; open these panels without a bar anchor.
+          control_center_placement = "floating";
+          wallpaper_placement = "floating";
+          session_placement = "floating";
+        };
       };
 
       plugins = {

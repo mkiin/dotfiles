@@ -34,7 +34,7 @@ run(modkey("SHIFT + W"), "noctalia msg panel-toggle wallpaper")
 
 -- Capture
 
-run(modkey("P"), "screenshot-menu")
+run(modkey("Z"), "hyprcap shot window --copy --write")
 run(modkey("R"), "record-menu")
 
 -- Window

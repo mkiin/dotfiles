@@ -3,4 +3,4 @@ set -euo pipefail
 
 img="${NOCTALIA_WALLPAPER_PATH:-$(noctalia msg wallpaper-get)}"
 
-wallust run "$img" --quiet
+wallust run -s "$img" --quiet

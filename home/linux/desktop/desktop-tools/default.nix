@@ -57,6 +57,7 @@ in
 
     wl-clipboard
     wf-recorder
+    gpu-screen-recorder
     libnotify
     grim
     slurp
