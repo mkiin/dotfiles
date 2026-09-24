@@ -29,7 +29,7 @@ in
   xdg.configFile = {
     "wallust/wallust.toml".source = ./wallust.toml;
     "wallust/templates".source = ./templates;
-    "wallust/scrips".source = ./scripts;
+    "wallust/scripts".source = ./scripts;
   };
 
   # 初回ビルド時に未生成のファイルだけフォールバックを自動配置
