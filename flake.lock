@@ -1096,17 +1096,17 @@
         "nixpkgs": "nixpkgs_7"
       },
       "locked": {
-        "lastModified": 1789397089,
-        "narHash": "sha256-MIIthdCnY720bn/XAXj2W4Z/OmFPBUkK/u0tfKhHYfQ=",
+        "lastModified": 1789390610,
+        "narHash": "sha256-IBzLcGvqKHN2FXiBk6cx0VAwyeP2ssrXWqQWE+diWgc=",
         "owner": "tonybutt",
         "repo": "Waybar",
-        "rev": "2ac3e1397afc234b3a37bec13bf5c3ea279df3fb",
+        "rev": "2a12740b77ce62cf372f2ae73db1edf4ec3ad551",
         "type": "github"
       },
       "original": {
         "owner": "tonybutt",
         "repo": "Waybar",
-        "rev": "2ac3e1397afc234b3a37bec13bf5c3ea279df3fb",
+        "rev": "2a12740b77ce62cf372f2ae73db1edf4ec3ad551",
         "type": "github"
       }
     },
