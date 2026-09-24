@@ -108,6 +108,8 @@ in
         # URL bar の Top Sites を非表示
         "e122b5d9-d385-4bf8-9971-e137809097d0"
       ];
+
+      settings."toolkit.legacyUserProfileCustomizations.stylesheets" = true;
     };
   };
 }

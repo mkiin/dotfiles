@@ -67,7 +67,6 @@
       zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
       zstyle ':completion:*' menu select
 
-
       source "${config.xdg.configHome}/zsh/functions.zsh"
       export USER_ID=$(id -u)
       export GROUP_ID=$(id -g)

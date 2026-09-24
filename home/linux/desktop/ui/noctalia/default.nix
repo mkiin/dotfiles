@@ -42,6 +42,15 @@ in
       theme = {
         source = "wallpaper";
         wallpaper_scheme = "m3-content";
+        templates = {
+          enable_builtin_templates = true;
+          enable_community_templates = true;
+          builtin_ids = [ "btop" ];
+          community_ids = [
+            "discord"
+            "obsidian"
+          ];
+        };
       };
 
       osd = {
@@ -64,15 +73,35 @@ in
       };
 
       hooks = {
-        wallpaper_changed = "${config.xdg.configHome}/waybar/scripts/reload-css.sh";
-        started = ''
-          noctalia msg greeter-sync
-          ${config.xdg.configHome}/waybar/scripts/reload-css.sh
-        '';
+        wallpaper_changed = [
+          "${config.xdg.configHome}/wallust/scripts/run-wallust.sh"
+          "${config.xdg.configHome}/waybar/scripts/reload-css.sh"
+        ];
+        started = [
+          "noctalia msg greeter-sync"
+          "${config.xdg.configHome}/wallust/scripts/run-wallust.sh"
+          "${config.xdg.configHome}/waybar/scripts/reload-css.sh"
+        ];
       };
 
-      shell.greeter_sync.auto_sync = false;
-      shell.session.show_shortcuts = false;
+      shell = {
+        greeter_sync.auto_sync = true;
+        session.show_shortcuts = false;
+      };
+
+      plugins = {
+        enabled = [
+          "noctalia/bitwarden"
+          "noctalia/screen_recorder"
+        ];
+        auto_update = "all";
+        source = {
+          name = "official";
+          kind = "git";
+          location = "https://github.com/noctalia-dev/official-plugins";
+          enabled = true;
+        };
+      };
     };
   };
 }

@@ -7,4 +7,5 @@
       pinentry = pkgs.pinentry-curses;
     };
   };
+  home.packages = [ pkgs.bitwarden-cli ];
 }

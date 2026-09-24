@@ -24,7 +24,6 @@
     enable = true;
     powerOnBoot = true;
   };
-  services.blueman.enable = true;
 
   services = {
     printing.enable = true;

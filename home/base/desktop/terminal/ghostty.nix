@@ -18,7 +18,7 @@
       ];
       font-size = 14;
 
-      theme = "wallust";
+      theme = if pkgs.stdenv.hostPlatform.isDarwin then "wallust" else "noctalia";
 
       cursor-style = "block";
       cursor-style-blink = true;

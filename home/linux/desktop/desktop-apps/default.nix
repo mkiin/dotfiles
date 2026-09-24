@@ -14,5 +14,6 @@
       hardwareAcceleration = true;
       arRPC = true;
     };
+    vencord.settings.enabledThemes = [ "noctalia.theme.css" ];
   };
 }

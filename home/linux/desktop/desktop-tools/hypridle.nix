@@ -36,7 +36,6 @@ in
           # before_sleep_cmd = "loginctl lock-session";
           after_sleep_cmd = "hyprctl dispatch dpms on";
           inhibit_sleep = 3;
-          ## TODO 通知抑制について設計が必要
           ignore_dbus_inhibit = true;
         };
         listener = [
