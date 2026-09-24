@@ -2,11 +2,12 @@
 {
   programs.zed-editor = {
     enable = true;
-    mutableUserSettings = true;
-    mutableUserKeymaps = true;
+    mutableUserSettings = false;
+    mutableUserDebug = false;
 
     extensions = [
       "kanagawa-themes"
+      "colored-zed-icons-theme"
       "oxc"
       "dockerfile"
       "just"

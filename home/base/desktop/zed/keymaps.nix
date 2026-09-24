@@ -1,6 +1,8 @@
 { ... }:
 {
   programs.zed-editor = {
+    mutableUserKeymaps = false;
+
     userSettings = {
       vim_mode = true;
       helix_mode = false;
@@ -31,6 +33,40 @@
       }
 
       {
+        context = "Editor && mode != full";
+        bindings = {
+          # Emacs-like cursor movement
+          "ctrl-a" = [
+            "editor::MoveToBeginningOfLine"
+            { stop_at_soft_wraps = false; }
+          ];
+
+          "ctrl-e" = [
+            "editor::MoveToEndOfLine"
+            { stop_at_soft_wraps = false; }
+          ];
+
+          "ctrl-b" = "editor::MoveLeft";
+          "ctrl-f" = "editor::MoveRight";
+
+          # deletion
+          "ctrl-h" = "editor::Backspace";
+          "ctrl-d" = "editor::Delete";
+
+          "ctrl-u" = "editor::DeleteToBeginningOfLine";
+          "ctrl-k" = "editor::DeleteToEndOfLine";
+
+          "ctrl-w" = [
+            "editor::DeleteToPreviousWordStart"
+            {
+              ignore_newlines = false;
+              ignore_brackets = false;
+            }
+          ];
+        };
+      }
+
+      {
         context = "Editor && vim_mode == normal && !menu";
         bindings = {
           "shift-u" = [
@@ -41,6 +77,31 @@
           # previous / next tab
           "shift-h" = "pane::ActivatePreviousItem";
           "shift-l" = "pane::ActivateNextItem";
+
+          # leader-like mappings
+          "space space" = "file_finder::Toggle";
+          "space s" = "workspace::NewSearch";
+
+          # quit / close
+          "space q q" = "pane::CloseActiveItem";
+          "space q o" = "pane::CloseOtherItems";
+          # "space q a" = "pane::CloseAllItems";
+
+          "space g" = [
+            "task::Spawn"
+            {
+              task_name = "lazygit";
+              reveal_target = "center";
+            }
+          ];
+        };
+      }
+
+      {
+        context = "Terminal";
+        bindings = {
+          "ctrl-n" = null;
+          "ctrl-p" = null;
         };
       }
 
@@ -52,9 +113,9 @@
           "ctrl-shift-k" = "workspace::ActivatePaneUp";
           "ctrl-shift-l" = "workspace::ActivatePaneRight";
 
-          "ctrl-h" = null;
-          "ctrl-j" = null;
-          "ctrl-l" = null;
+          "ctrl-j" = "terminal_panel::ToggleFocus";
+          # "ctrl-h" = null;
+          # "ctrl-l" = null;
         };
       }
 
@@ -71,15 +132,15 @@
       {
         context = "Workspace";
         bindings = {
-          "alt-j" = "terminal_panel::ToggleFocus";
+          "ctrl-j" = "terminal_panel::ToggleFocus";
         };
       }
 
       {
         context = "BufferSearchBar";
         bindings = {
-          "ctrl-h" = null;
-          "ctrl-l" = null;
+          # "ctrl-h" = null;
+          # "ctrl-l" = null;
         };
       }
     ];

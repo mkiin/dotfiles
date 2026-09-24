@@ -5,5 +5,6 @@
     ./lang.nix
     ./ui.nix
     ./keymaps.nix
+    ./tasks.nix
   ];
 }

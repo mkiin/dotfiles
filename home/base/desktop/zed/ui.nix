@@ -2,6 +2,7 @@
 {
   programs.zed-editor.userSettings = {
     theme = "Kanagawa Wave";
+    icon_theme = "Colored Zed Icons Theme Dark";
 
     auto_signature_help = true;
     code_lens = "on";
@@ -35,10 +36,10 @@
     };
 
     ui_font_family = lib.mkDefault "LXGW WenKai Screen";
-    ui_font_size = lib.mkDefault 20.0;
+    ui_font_size = lib.mkDefault 18.0;
 
     buffer_font_family = lib.mkDefault "Maple Mono NF CN";
-    buffer_font_size = lib.mkDefault 18.0;
+    buffer_font_size = lib.mkDefault 16.0;
 
     agent_ui_font_size = lib.mkDefault 16.0;
     agent_buffer_font_size = lib.mkDefault 15.0;
