@@ -35,6 +35,14 @@ in
       extraConfig = builtins.readFile ./conf/hyprland.lua;
     };
 
+    home.file.".wayland-session" = {
+      executable = true;
+      text = ''
+        uwsm stop 2>/dev/null || true
+        exec uwsm start hyprland-uwsm.desktop
+      '';
+    };
+
     systemd.user.services.polkit-agent = {
       Unit = {
         Description = "PolicyKit Authentication Agent";
