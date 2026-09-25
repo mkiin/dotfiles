@@ -27,10 +27,8 @@ in
         appearance = {
           hide_logo = true;
           wallpaper = {
-            "DP-2" = {
-              path = "${wallpaper}";
-              fill_mode = "crop";
-            };
+            path = "${wallpaper}";
+            fill_mode = "crop";
           };
           palette = {
             primary = "#c3c4e2";
