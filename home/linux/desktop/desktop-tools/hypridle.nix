@@ -63,7 +63,7 @@ in
             timeout = cfg.suspendTimeout;
             condition_cmd = "! playerctl -a status 2>/dev/null | grep -q '^Playing$'";
             condition_retry = 30;
-            on-timeout = "noctalia msg session lock-and-suspend";
+            on-timeout = "systemctl suspend";
           }
         ];
       };
