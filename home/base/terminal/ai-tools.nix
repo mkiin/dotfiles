@@ -1,10 +1,10 @@
 {
   pkgs,
-  llm-agents,
+  inputs,
   ...
 }:
 let
-  agentPackages = llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
+  agentPackages = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
 in
 {
   home.packages = [
