@@ -13,22 +13,22 @@ hl.config({
 			enabled = true,
 			range = 15,
 			render_power = 4,
-			offset = "0 0",
+			-- offset = "0 0",
 			color = "rgba(00000080)",
 			color_inactive = "rgba(00000033)",
 		},
 		blur = {
 			enabled = true,
-			size = 1,
-			passes = 4,
-			contrast = 1.1,
-			brightness = 1.1,
-			vibrancy = 0.2,
-			vibrancy_darkness = 0.2,
-			noise = 0.03,
-			new_optimizations = true,
-			ignore_opacity = true,
-			xray = false,
+			size = 3, -- ぼかす広さ
+			passes = 4, -- ぼかし処理回数
+			contrast = 0.9, -- ぼかした背後の明暗差
+			brightness = 1.1, -- ぼかした背後の明るさ
+			vibrancy = 0.2, -- ぼかした色の彩度を増やす
+			vibrancy_darkness = 0.2, -- 暗い部分に対する彩度補強の強さ
+			noise = 0.01, -- ぼかしに加える粒上感
+			new_optimizations = true, -- ぼかしの最適化
+			ignore_opacity = true, -- ぼかし層がウィンドウ不透明度を無視する設定
+			xray = true, -- floatウィンドウのボカシがはいごのタイルウィンドウを無視する
 		},
 	},
 	animations = { enabled = true },
