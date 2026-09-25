@@ -15,6 +15,15 @@ in
   imports = mylib.scanPaths ./. ++ [ ../base ];
 
   config = lib.mkIf cfg.enable {
+    # services.greetd = {
+    #   enable = true;
+    #   settings = {
+    #     default_session = {
+    #       user = myvars.username;
+    #       command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd $HOME/.wayland-session";
+    #     };
+    #   };
+    # };
     services.displayManager.noctalia-greeter = {
       enable = true;
       passwordlessSyncUsers = [ myvars.username ];
