@@ -44,10 +44,7 @@ in
         templates = {
           enable_builtin_templates = true;
           enable_community_templates = true;
-          builtin_ids = [
-            "btop"
-            "ghostty"
-          ];
+          builtin_ids = [ "btop" ];
           community_ids = [
             "discord"
             "obsidian"
@@ -80,13 +77,11 @@ in
 
       hooks = {
         wallpaper_changed = [
-          "${config.xdg.configHome}/wallust/scripts/run-wallust.sh"
-          "${config.xdg.configHome}/waybar/scripts/reload-css.sh"
+          "${config.xdg.configHome}/desktop-tools/scripts/apply.sh"
         ];
         started = [
           "noctalia msg greeter-sync"
-          "${config.xdg.configHome}/wallust/scripts/run-wallust.sh"
-          "${config.xdg.configHome}/waybar/scripts/reload-css.sh"
+          "${config.xdg.configHome}/desktop-tools/scripts/apply.sh"
         ];
       };
 

@@ -7,6 +7,7 @@
 }:
 
 let
+
   screenshotMenu = pkgs.writeShellApplication {
     name = "screenshot-menu";
 
@@ -32,6 +33,8 @@ let
 in
 {
   imports = mylib.scanPaths ./.;
+
+  xdg.configFile."desktop-tools/scripts/apply.sh".source = ./scripts/apply.sh;
 
   home.sessionVariables = {
     NIXOS_OZONE_WL = "1"; # for any ozone-based browser & electron apps to run on wayland
