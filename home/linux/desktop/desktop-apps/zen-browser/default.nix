@@ -90,20 +90,6 @@ in
         "font.name.monospace.x-western" = "JetBrainsMono Nerd Font";
       };
 
-      spaces = {
-        Personal = {
-          id = "5d4c9e3d-e72a-4bd3-9c28-a0890768ded1";
-          position = 1000;
-          icon = "🏠";
-        };
-
-        Dev = {
-          id = "e3e428d8-c7e8-4d3b-9e29-d10aa3f80cae";
-          position = 2000;
-          icon = "💻";
-        };
-      };
-
       mods = [
         # URL bar の Top Sites を非表示
         "e122b5d9-d385-4bf8-9971-e137809097d0"
