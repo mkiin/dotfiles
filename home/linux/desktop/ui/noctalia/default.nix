@@ -56,7 +56,7 @@ in
       };
 
       osd = {
-        position = "bottom_right";
+        position = "top_right";
         kinds = {
           volume = false;
           volume_output = false;
@@ -75,7 +75,7 @@ in
 
       lockscreen = {
         enabled = true;
-        # lock_before_suspend = true;
+        lock_before_suspend = false;
       };
 
       hooks = {
