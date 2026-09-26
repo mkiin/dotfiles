@@ -41,7 +41,6 @@ in
         listener = [
           {
             timeout = cfg.lockTimeout;
-            ignore_inhibit = true;
             # Skip while media is playing, same as screen-off above.
             condition_cmd = "! playerctl -a status 2>/dev/null | grep -q '^Playing$'";
             condition_retry = 30;
