@@ -19,5 +19,6 @@
     trash-cli
     zip
     unzip
+    p7zip
   ];
 }

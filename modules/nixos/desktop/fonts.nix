@@ -6,6 +6,62 @@
 }:
 let
   cfg = config.modules.desktop.fonts;
+
+  sfProDmg = pkgs.requireFile {
+    name = "SF-Pro.dmg";
+
+    hash = "sha256-loqzuLH5LC2K9h6waA9cIiTE541ZuYa/AEUCp/wBKRg=";
+
+    message = ''
+      SF Pro is not distributed by this configuration.
+
+      Download SF-Pro.dmg from:
+        https://developer.apple.com/fonts/
+
+      Then add it to the Nix store with:
+        nix-store --add-fixed sha256 ~/.local/share/fonts/SF-Pro.dmg
+    '';
+  };
+
+  sf-pro = pkgs.stdenvNoCC.mkDerivation {
+    pname = "sf-pro";
+    version = "local";
+
+    src = sfProDmg;
+
+    nativeBuildInputs = with pkgs; [
+      p7zip
+      cpio
+    ];
+
+    dontUnpack = true;
+
+    installPhase = ''
+      runHook preInstall
+
+      workdir="$TMPDIR/sf-pro"
+      mkdir -p "$workdir"
+      cd "$workdir"
+
+      7z x "$src"
+
+      test -f 'Payload~'
+
+      mkdir payload
+      cd payload
+
+      cpio -id \
+        './Library/Fonts/SF-Pro-Text-*.otf' \
+        < ../'Payload~'
+
+      mkdir -p "$out/share/fonts/opentype"
+
+      cp ./Library/Fonts/SF-Pro-Text-*.otf \
+        "$out/share/fonts/opentype/"
+
+      runHook postInstall
+    '';
+  };
 in
 {
   options.modules.desktop.fonts.enable = lib.mkEnableOption "desktop fonts";
@@ -22,6 +78,12 @@ in
 
         udev-gothic-nf
         biz-ud-gothic
+
+        inter
+        geist-font
+        source-sans
+
+        sf-pro
       ];
 
       enableDefaultPackages = false;
