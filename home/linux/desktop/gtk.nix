@@ -15,8 +15,8 @@
     enable = true;
 
     font = {
-      name = "Noto Sans";
-      package = pkgs.noto-fonts;
+      name = "Inter";
+      package = pkgs.inter;
       size = 11;
     };
 
