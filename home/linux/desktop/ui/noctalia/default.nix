@@ -17,8 +17,6 @@ in
     systemd.enable = true;
 
     settings = {
-      bar.default.enabled = false;
-
       wallpaper = {
         enabled = true;
         directory = "${wallpaperDir}";
@@ -91,7 +89,6 @@ in
         settings_window_translucent = true;
         panel = {
           transparency_mode = "glass";
-          # Noctalia's bar is disabled; open these panels without a bar anchor.
           control_center_placement = "floating";
           wallpaper_placement = "floating";
           session_placement = "floating";
@@ -110,6 +107,12 @@ in
           location = "https://github.com/noctalia-dev/official-plugins";
           enabled = true;
         };
+      };
+
+      weather = {
+        enabled = true;
+        refresh_minutes = 15;
+        unit = "celsius";
       };
     };
   };
