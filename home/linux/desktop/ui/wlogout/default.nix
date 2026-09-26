@@ -19,9 +19,6 @@ let
 
       # ※ loginctl 方式にする場合はこちら:
       # setsid -f sh -c 'sleep 0.25; loginctl lock-session'
-
-      # ※ 将来 quickshell 等に移行する場合はここを差し替えるだけ:
-      # quickshell ipc call lock
     '';
   };
 

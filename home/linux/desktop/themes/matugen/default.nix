@@ -9,7 +9,6 @@ let
     "rofi.rasi" = "$HOME/.config/rofi/themes/colors.rasi";
     "hyprland.lua" = "$HOME/.config/hypr/colors.lua";
     # "wlogout.css" = "$HOME/.config/wlogout/colors.css";
-    "quickshell.json" = "$HOME/.cache/quickshell/matugen-colors.json";
   };
 
   # fallback/ 配下に実際に存在するファイルだけを対象に activation script を生成
