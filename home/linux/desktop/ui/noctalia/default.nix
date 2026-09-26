@@ -10,8 +10,9 @@ in
 {
   imports = [
     inputs.noctalia.homeModules.default
+    ./bar.nix
+    ./widget.nix
   ];
-
   programs.noctalia = {
     enable = true;
     systemd.enable = true;
@@ -85,10 +86,25 @@ in
 
       shell = {
         greeter_sync.auto_sync = true;
-        session.show_shortcuts = false;
+        font_family = "SF Pro Text";
+        session = {
+          show_shortcuts = false;
+          actions = [
+            { action = "lock"; }
+            { action = "logout"; }
+            { action = "lock_and_suspend"; }
+            { action = "reboot"; }
+            {
+              action = "shutdown";
+              variant = "default";
+            }
+          ];
+        };
         settings_window_translucent = true;
         panel = {
           transparency_mode = "glass";
+          control_center_position = "center";
+          session_position = "center";
           control_center_placement = "floating";
           wallpaper_placement = "floating";
           session_placement = "floating";
@@ -113,6 +129,13 @@ in
         enabled = true;
         refresh_minutes = 15;
         unit = "celsius";
+      };
+
+      location = {
+        auto_locate = false;
+        address = "Sapporo, Hokkaido, Japan";
+        # latitude = 43.0620;
+        # longitude = 141.3544;
       };
     };
   };

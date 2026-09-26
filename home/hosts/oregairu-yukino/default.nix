@@ -16,9 +16,9 @@
   # 画面ロック・画面暗転の設定
   modules.desktop.hypridle = {
     # keyboardBacklightTimeout = 900;
-    lockTimeout = 60;
-    screenOffTimeout = 90;
-    suspendTimeout = 120;
+    lockTimeout = 900;
+    screenOffTimeout = 1800;
+    suspendTimeout = 3600;
   };
 
   # Yukino 固有のモニター設定

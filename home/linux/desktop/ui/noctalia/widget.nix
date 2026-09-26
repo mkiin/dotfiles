@@ -1,36 +1,32 @@
-{ ... }:
+{ pkgs, ... }:
 {
   programs.noctalia.settings = {
     widget = {
       launcher = {
-        type = "launcher";
+        custom_image = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+        custom_image_colorize = true;
       };
 
       weather = {
-        type = "weather";
+        show_condition = false;
       };
 
       clock = {
-        type = "clock";
         format = "{:%I:%M %p}";
-
         actions.left = "panel-toggle control-center calendar";
       };
 
-      active_window = {
-        type = "active_window";
-      };
+      active_window = { };
 
       workspaces = {
-        type = "workspaces";
+        show_labels = false;
+        labels_only_when_occupied = true;
+        anchor = true;
       };
 
-      tray = {
-        type = "tray";
-      };
+      tray = { };
 
       volume = {
-        type = "volume";
         show_label = true;
 
         actions = {
@@ -39,28 +35,27 @@
         };
       };
 
-      bluetooth = {
-        type = "bluetooth";
-
-        actions.left = "panel-toggle control-center bluetooth";
-      };
-
       network = {
-        type = "network";
         show_label = true;
-
         actions.left = "panel-toggle control-center network";
       };
 
-      control-center = {
-        type = "control-center";
-      };
-    };
+      clipboard = { };
 
-    weather = {
-      enabled = true;
-      refresh_minutes = 15;
-      unit = "celsius";
+      screenshot = { };
+
+      screen-recorder = {
+        type = "noctalia/screen_recorder:recorder";
+      };
+
+      notifications = { };
+
+      wallpaper = { };
+
+      theme-mode = { };
+
+      control-center = { };
+
     };
   };
 }

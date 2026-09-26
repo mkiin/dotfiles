@@ -2,28 +2,45 @@
 {
   programs.noctalia.settings.bar.default = {
     enabled = true;
+
     position = "top";
     margin_edge = 18;
     margin_ends = 14;
+
     background_opacity = 0.0;
+    widget_spacing = 10;
+
+    capsule = true;
 
     start = [
       "launcher"
       "weather"
-      "clock"
       "active_window"
     ];
 
     center = [
+      "clock"
       "workspaces"
+      "notifications"
     ];
 
     end = [
       "tray"
       "volume"
-      "bluetooth"
       "network"
-      "control-center"
+      "group:tools"
+      "session"
+    ];
+
+    capsule_group = [
+      {
+        id = "tools";
+        members = [
+          "clipboard"
+          "screenshot"
+          "screen-recorder"
+        ];
+      }
     ];
   };
 }

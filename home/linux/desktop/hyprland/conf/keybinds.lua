@@ -7,6 +7,7 @@ local browser = vars.browser
 
 local bind = hl.bind
 local exec = hl.dsp.exec_cmd
+local ipc = "noctalia msg "
 
 local function modkey(keys)
 	return mod .. " + " .. keys
@@ -23,14 +24,10 @@ run(modkey("E"), fileManager)
 run(modkey("B"), browser)
 run(modkey("D"), "vesktop")
 
-run(modkey("A"), "noctalia msg panel-toggle launcher")
-run(modkey("N"), "noctalia msg panel-toggle control-center notifications")
-run(modkey("Q"), "noctalia msg panel-toggle session")
-
 -- Wallpaper
 
-run(modkey("W"), "noctalia msg wallpaper-next")
-run(modkey("SHIFT + W"), "noctalia msg panel-toggle wallpaper")
+run(modkey("W"), ipc .. "wallpaper-next")
+run(modkey("SHIFT + W"), ipc .. "panel-toggle wallpaper")
 
 -- Capture
 
@@ -43,6 +40,13 @@ bind(modkey("C"), hl.dsp.window.close())
 bind(modkey("V"), hl.dsp.window.float({ action = "toggle" }))
 bind(modkey("F"), hl.dsp.window.fullscreen())
 bind(modkey("T"), hl.dsp.layout("togglesplit"))
+
+-- Noctalia
+run(modkey("A"), ipc .. "panel-toggle launcher")
+run(modkey("Space"), ipc .. "panel-toggle control-center")
+run(modkey("S"), ipc .. "settings-toggle")
+run(modkey("Q"), ipc .. "panel-toggle session")
+hl.bind("ALT + Tab", hl.dsp.exec_cmd(ipc .. "window-switcher"))
 
 -- Focus / Move / Resize
 
@@ -154,9 +158,8 @@ end
 
 -- Special workspace / Pyprland
 
-bind(modkey("S"), hl.dsp.workspace.toggle_special("stash"))
-
-run(modkey("SHIFT + S"), "pypr toggle_special stash")
+bind(modkey("N"), hl.dsp.workspace.toggle_special("stash"))
+run(modkey("SHIFT + N"), "pypr toggle_special stash")
 run(modkey("SHIFT + M"), "pypr lost_windows")
 run(modkey("SHIFT + F"), "pypr toggle fetch")
 
