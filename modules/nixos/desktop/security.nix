@@ -1,4 +1,4 @@
-{ ... }:
+{ myvars, ... }:
 {
   security.polkit.enable = true;
   # security with GNOME Keyring
@@ -30,4 +30,16 @@
   #   enableSSHSupport = false;
   #   settings.default-cache-ttl = 4 * 60 * 60; # 4 hours
   # };
+  #
+  security.sudo.extraRules = [
+    {
+      users = [ "${myvars.username}" ];
+      commands = [
+        {
+          command = "/run/current-system/sw/bin/nixos-rebuild";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+    }
+  ];
 }
