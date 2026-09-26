@@ -87,6 +87,8 @@ in
       shell = {
         greeter_sync.auto_sync = true;
         font_family = "SF Pro Text";
+        settings_window_translucent = true;
+
         session = {
           show_shortcuts = false;
           actions = [
@@ -100,7 +102,12 @@ in
             }
           ];
         };
-        settings_window_translucent = true;
+
+        launcher = {
+          categories = false;
+          app_grid = true;
+        };
+
         panel = {
           transparency_mode = "glass";
           control_center_position = "center";
@@ -115,16 +122,24 @@ in
         enabled = [
           "noctalia/bitwarden"
           "noctalia/screen_recorder"
+          "theblackdon/theme-switcher"
         ];
         auto_update = "all";
-        source = {
-          name = "official";
-          kind = "git";
-          location = "https://github.com/noctalia-dev/official-plugins";
-          enabled = true;
-        };
+        source = [
+          {
+            name = "official";
+            kind = "git";
+            location = "https://github.com/noctalia-dev/official-plugins";
+            enabled = true;
+          }
+          {
+            name = "community";
+            kind = "git";
+            location = "https://github.com/noctalia-dev/community-plugins";
+            enabled = true;
+          }
+        ];
       };
-
       weather = {
         enabled = true;
         refresh_minutes = 15;
