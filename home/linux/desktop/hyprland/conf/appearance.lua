@@ -22,7 +22,7 @@ hl.config({
 			size = 3, -- ぼかす広さ
 			passes = 4, -- ぼかし処理回数
 			contrast = 0.9, -- ぼかした背後の明暗差
-			brightness = 1.1, -- ぼかした背後の明るさ
+			brightness = 1, -- ぼかした背後の明るさ
 			vibrancy = 0.2, -- ぼかした色の彩度を増やす
 			vibrancy_darkness = 0.2, -- 暗い部分に対する彩度補強の強さ
 			noise = 0.01, -- ぼかしに加える粒上感
