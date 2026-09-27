@@ -24,8 +24,6 @@
         anchor = true;
       };
 
-      tray = { };
-
       volume = {
         show_label = true;
 
@@ -40,13 +38,32 @@
         actions.left = "panel-toggle control-center network";
       };
 
-      clipboard = { };
-
-      screenshot = { };
-
       screen-recorder = {
         type = "noctalia/screen_recorder:recorder";
       };
+
+      theme-switcher = {
+        type = "theblackdon/theme-switcher:theme-switcher";
+      };
+
+      taskbar = {
+        group_by_workspace = false;
+        show_all_outputs = true;
+        only_active_workspace = false;
+        show_window_title = false;
+        show_active_indicator = true;
+        icon_scale = 1.0;
+        item_spacing = 6;
+        active_indicator_color = "primary";
+        active_opacity = 1.0;
+        inactive_opacity = 0.75;
+      };
+
+      tray = { };
+
+      clipboard = { };
+
+      screenshot = { };
 
       notifications = { };
 

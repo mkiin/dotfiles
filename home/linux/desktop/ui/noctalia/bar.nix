@@ -11,22 +11,23 @@
     widget_spacing = 10;
 
     thickness = 40;
-    scale = 1.15;
+    scale = 1.10;
+    font_scale = 1.10;
 
     capsule = true;
     capsule_thickness = 0.90;
     capsule_padding = 10.00;
+    capsule_border = "outline";
 
     start = [
       "launcher"
       "weather"
-      "active_window"
+      "taskbar"
     ];
 
     center = [
       "clock"
       "workspaces"
-      "notifications"
     ];
 
     end = [
@@ -41,6 +42,7 @@
       {
         id = "tools";
         members = [
+          "wallpaper"
           "clipboard"
           "screenshot"
           "screen-recorder"

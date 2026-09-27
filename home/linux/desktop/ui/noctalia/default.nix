@@ -88,6 +88,7 @@ in
         greeter_sync.auto_sync = true;
         font_family = "SF Pro Text";
         settings_window_translucent = true;
+        polkit_agent = true;
 
         session = {
           show_shortcuts = false;

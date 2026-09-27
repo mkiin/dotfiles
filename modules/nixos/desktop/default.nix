@@ -7,7 +7,7 @@
 }:
 let
   cfg = config.modules.desktop.wayland;
-  wallpaper = ../../../images/wallpaper/yukino-yukinoshita-cute-close-up.png;
+  wallpaper = ../../../images/yukino-yukinoshita-cute-close-up.png;
 in
 {
   options.modules.desktop.wayland.enable = lib.mkEnableOption "Wayland Display Server";
