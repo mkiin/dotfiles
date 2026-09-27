@@ -5,7 +5,7 @@
   ...
 }:
 let
-  wallpaperDir = "${config.home.homeDirectory}/${myvars.dotfilesdir}/images/wallpaper";
+  wallpaperDir = "${config.home.homeDirectory}/${myvars.dotfilesdir}/images";
 in
 {
   imports = [
