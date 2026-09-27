@@ -7,7 +7,5 @@ result
 
 .pre-commit-config.yaml
 
-/images/wallpaper/*
-!/images/wallpaper/.gitkeep
-!/images/wallpaper/selection.json
-!/images/wallpaper/yukino-yukinoshita-cute-close-up.png
+/images/*
+!/images/yukino-yukinoshita-cute-close-up.png
