@@ -54,18 +54,10 @@ in
   };
 
   home.packages = with pkgs; [
-    screenshotMenu
-    recordMenu
-
     wl-clipboard
-    wf-recorder
     gpu-screen-recorder
     libnotify
-    grim
-    slurp
   ];
-
-  programs.satty.enable = true;
 
   services.cliphist = {
     enable = true;
@@ -73,5 +65,4 @@ in
   };
 
   services.wl-clip-persist.enable = true;
-
 }

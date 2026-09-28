@@ -30,7 +30,7 @@ in
     ];
 
     scratchpads.fetch = {
-      command = "ghostty --class=fetch-scratch -e sh -c 'fastfetch; exec $SHELL'";
+      command = "kitty --class fetch-scratch --config ~/.config/kitty/fastfetch.conf sh -c 'fastfetch; exec $SHELL'";
       class = "fetch-scratch";
       size = "50% 55%";
       position = "25% 22%";

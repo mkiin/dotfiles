@@ -8,8 +8,8 @@
 
     settings = {
       "$schema" = "https://starship.rs/config-schema.json";
-
       format = "$directory$git_branch$character";
+      add_newline = false;
 
       directory = {
         truncation_length = 3;

@@ -1,4 +1,4 @@
-require("color-scheme")
+-- require("color-scheme")
 require("appearance")
 require("input")
 require("keybinds")

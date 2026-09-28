@@ -18,7 +18,7 @@
       ];
       font-size = 14;
 
-      theme = "wallust";
+      theme = if pkgs.stdenv.hostPlatform.isDarwin then "wallust" else "noctalia";
       app-notifications = "no-config-reload";
 
       cursor-style = "block";
@@ -31,6 +31,8 @@
       window-decoration = "none";
       window-padding-balance = true;
       window-padding-color = "extend";
+      window-padding-x = 14;
+      window-padding-y = 25;
       window-theme = "ghostty";
       window-show-tab-bar = "never";
       window-new-tab-position = "end";
