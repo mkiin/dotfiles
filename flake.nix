@@ -28,10 +28,6 @@
     aagl.url = "github:ezKEa/aagl-gtk-on-nix";
     llm-agents.url = "github:numtide/llm-agents.nix";
 
-    waybar-pr = {
-      url = "github:tonybutt/Waybar/2a12740b77ce62cf372f2ae73db1edf4ec3ad551";
-    };
-
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
