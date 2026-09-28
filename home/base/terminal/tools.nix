@@ -28,6 +28,7 @@
   programs.zoxide = {
     enable = true;
     enableZshIntegration = true;
+    options = [ "--cmd cd" ];
   };
 
   # fuzzy searcher
@@ -55,6 +56,8 @@
       "--height=40%"
       "--layout=reverse"
       "--border"
+      "--preview-border=line"
+      "--no-scrollbar"
     ];
   };
 
@@ -78,7 +81,23 @@
       search_mode = "fuzzy";
       filter_mode = "global";
       filter_mode_shell_up_key_binding = "directory";
-      enter_accept = false;
+
+      style = "full";
+      inline_height = 14;
+      show_help = false;
+      show_tabs = false;
+      show_numeric_shortcuts = false;
+      show_preview = false;
+      ui = {
+        columns = [
+          "time"
+          "command"
+        ];
+      };
+      search.filters = [
+        "global"
+        "directory"
+      ];
     };
   };
 
@@ -89,6 +108,7 @@
   home.packages = with pkgs; [
     ffmpeg
     jq
+    fastfetch
   ];
 
 }

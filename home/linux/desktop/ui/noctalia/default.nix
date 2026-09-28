@@ -31,15 +31,16 @@ in
         transition_duration = 800;
         transition_on_startup = false;
         automation = {
-          enabled = true;
+          # enabled = true;
           interval_seconds = 3600;
           order = "alphabetical";
         };
       };
 
       theme = {
-        source = "wallpaper";
-        wallpaper_scheme = "m3-content";
+        source = "community";
+        community_palette = "Catppuccin Mocha Sapphire";
+        # wallpaper_scheme = "";
         templates = {
           enable_builtin_templates = true;
           enable_community_templates = true;
