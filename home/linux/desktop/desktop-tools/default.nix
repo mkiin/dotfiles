@@ -1,6 +1,5 @@
 # tools/screenshot/default.nix
 {
-  inputs,
   pkgs,
   mylib,
   ...
@@ -8,27 +7,27 @@
 
 let
 
-  screenshotMenu = pkgs.writeShellApplication {
-    name = "screenshot-menu";
+  # screenshotMenu = pkgs.writeShellApplication {
+  #   name = "screenshot-menu";
 
-    runtimeInputs = with pkgs; [
-      rofi
-      inputs.hyprcap.packages.${pkgs.stdenv.hostPlatform.system}.default
-    ];
+  #   runtimeInputs = with pkgs; [
+  #     rofi
+  #     inputs.hyprcap.packages.${pkgs.stdenv.hostPlatform.system}.default
+  #   ];
 
-    text = builtins.readFile scripts/screenshot-menu.sh;
-  };
+  #   text = builtins.readFile scripts/screenshot-menu.sh;
+  # };
 
-  recordMenu = pkgs.writeShellApplication {
-    name = "record-menu";
+  # recordMenu = pkgs.writeShellApplication {
+  #   name = "record-menu";
 
-    runtimeInputs = with pkgs; [
-      rofi
-      inputs.hyprcap.packages.${pkgs.stdenv.hostPlatform.system}.default
-    ];
+  #   runtimeInputs = with pkgs; [
+  #     rofi
+  #     inputs.hyprcap.packages.${pkgs.stdenv.hostPlatform.system}.default
+  #   ];
 
-    text = builtins.readFile scripts/record-menu.sh;
-  };
+  #   text = builtins.readFile scripts/record-menu.sh;
+  # };
 
 in
 {

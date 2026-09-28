@@ -63,9 +63,9 @@
       flake = false;
     };
 
-    hyprcap = {
-      url = "github:alonso-herreros/hyprcap";
-      inputs.nixpkgs.follows = "nixpkgs";
+    fastfetch-src = {
+      url = "github:fastfetch-cli/fastfetch/2.69.0";
+      flake = false;
     };
 
     superpowers-skill = {

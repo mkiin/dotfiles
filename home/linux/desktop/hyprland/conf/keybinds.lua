@@ -31,8 +31,10 @@ run(modkey("SHIFT + W"), ipc .. "panel-toggle wallpaper")
 
 -- Capture
 
-run(modkey("Z"), "hyprcap shot window --copy --write")
-run(modkey("R"), "record-menu")
+run(modkey("Z"), ipc .. "screenshot-fullscreen")
+run(modkey("X"), ipc .. "plugin noctalia/screen_recorder:service all toggle")
+run(modkey("R"), ipc .. "plugin noctalia/screen_recorder:service all replay-toggle")
+run(modkey("T"), ipc .. "plugin noctalia/screen_recorder:service all replay-save")
 
 -- Window
 

@@ -26,7 +26,4 @@
     content = ./monitors.lua;
     autoLoad = false;
   };
-
-  # xdg.configFile."niri/niri-hardware.kdl".source =
-  #   mkSymlink "${config.home.homeDirectory}/nix-config/hosts/idols-ai/niri-hardware.kdl";
 }
