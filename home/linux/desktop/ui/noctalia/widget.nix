@@ -42,10 +42,6 @@
         type = "noctalia/screen_recorder:recorder";
       };
 
-      theme-switcher = {
-        type = "theblackdon/theme-switcher:theme-switcher";
-      };
-
       taskbar = {
         group_by_workspace = false;
         show_all_outputs = true;

@@ -42,6 +42,7 @@
       {
         id = "tools";
         members = [
+          "notifications"
           "wallpaper"
           "clipboard"
           "screenshot"
@@ -49,6 +50,7 @@
         ];
         padding = 10;
         widget_spacing = 15;
+        border = "outline";
       }
     ];
   };

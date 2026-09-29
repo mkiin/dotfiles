@@ -25,8 +25,8 @@ in
         fill_mode = "crop";
         transition = [
           "fade"
-          "disc"
-          "stripes"
+          # "disc"
+          # "stripes"
         ];
         transition_duration = 800;
         transition_on_startup = false;
@@ -47,6 +47,7 @@ in
           builtin_ids = [
             "btop"
             "ghostty"
+            "kitty"
             "hyprland"
           ];
           community_ids = [
@@ -146,6 +147,13 @@ in
           }
         ];
       };
+
+      plugin_settings."noctalia/screen_recorder" = {
+        video_source = "focused";
+        frame_rate = 30;
+        audio_codec = "aac";
+      };
+
       weather = {
         enabled = true;
         refresh_minutes = 15;
