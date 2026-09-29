@@ -123,7 +123,7 @@ in
 
       logo = {
         type = "kitty";
-        source = "${../../../assets/doro-normal.GIF}";
+        source = "${../../../assets/doro-sleeping.GIF}";
         height = 10;
         preserveAspectRatio = true;
         padding = {

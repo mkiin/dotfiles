@@ -1,4 +1,8 @@
-{ ... }:
+{ pkgs, ... }:
+let
+  isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
+  themeFile = if isDarwin then "themes/wallust.conf" else "themes/noctalia.conf";
+in
 {
   programs.kitty = {
     enable = true;
@@ -6,16 +10,11 @@
     settings = {
       font_family = "JetBrains Mono Nerd Font";
       font_size = 14.0;
-
       window_margin_width = 21.75;
-
       background_opacity = 0.6;
-
       cursor_shape = "beam";
       cursor_trail = 1;
-
       confirm_os_window_close = 0;
-
       enable_audio_bell = false;
       scrollback_lines = 20000;
     };
@@ -31,5 +30,9 @@
       "ctrl+minus" = "change_font_size all -1";
       "ctrl+0" = "change_font_size all 0";
     };
+
+    extraConfig = ''
+      include ${themeFile}
+    '';
   };
 }

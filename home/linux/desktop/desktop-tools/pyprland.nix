@@ -16,7 +16,6 @@ in
   xdg.configFile."pypr/config.toml".source = tomlFormat.generate "pypr-config" {
     pyprland.plugins = [
       "scratchpads"
-      # "wallpapers"
       "toggle_special"
       "lost_windows"
       "fcitx5_switcher"
@@ -30,10 +29,10 @@ in
     ];
 
     scratchpads.fetch = {
-      command = "kitty --class fetch-scratch --config ~/.config/kitty/fastfetch.conf sh -c 'fastfetch; exec $SHELL'";
+      command = "kitty --class fetch-scratch --hold fastfetch";
       class = "fetch-scratch";
-      size = "50% 55%";
-      position = "25% 22%";
+      size = "900px 520px";
+      margin = 300;
       animation = "fromTop";
       lazy = true;
       unfocus = "hide";

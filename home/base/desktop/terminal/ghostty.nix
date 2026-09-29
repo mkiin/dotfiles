@@ -31,8 +31,8 @@
       window-decoration = "none";
       window-padding-balance = true;
       window-padding-color = "extend";
-      window-padding-x = 14;
-      window-padding-y = 25;
+      window-padding-x = 36;
+      window-padding-y = 36;
       window-theme = "ghostty";
       window-show-tab-bar = "never";
       window-new-tab-position = "end";
