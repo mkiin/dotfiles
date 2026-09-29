@@ -29,7 +29,7 @@ in
         general = {
           lock_cmd = "pidof hyprlock || hyprlock --no-fade-in";
           before_sleep_cmd = "loginctl lock-session";
-          after_sleep_cmd = "hyprctl dispatch dpms on";
+          after_sleep_cmd = "hyprctl dispatch 'hl.dsp.dpms({ action = \"enable\" })'";
           inhibit_sleep = 3;
           ## TODO 通知抑制について設計が必要
           ignore_dbus_inhibit = true;
@@ -52,11 +52,11 @@ in
             # active playback.
             condition_cmd = "! playerctl -a status 2>/dev/null | grep -q '^Playing$'";
             condition_retry = 30;
-            on-timeout = "hyprctl dispatch dpms off";
-            on-resume = "hyprctl dispatch dpms on";
+            on-timeout = "hyprctl dispatch 'hl.dsp.dpms({ action = \"disable\" })'";
+            on-resume = "hyprctl dispatch 'hl.dsp.dpms({ action = \"enable\" })'";
           }
           {
-            timeout = 1860;
+            timeout = 90;
             on-timeout = "systemctl suspend";
           }
         ];
