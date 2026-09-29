@@ -127,7 +127,7 @@ in
         height = 10;
         preserveAspectRatio = true;
         padding = {
-          top = 6;
+          top = 3;
         };
         animationFrame = 0;
       };

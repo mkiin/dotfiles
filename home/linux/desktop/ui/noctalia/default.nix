@@ -49,6 +49,8 @@ in
             "ghostty"
             "kitty"
             "hyprland"
+            "gtk3"
+            "gtk4"
           ];
           community_ids = [
             "discord"

@@ -11,7 +11,7 @@ in
       font_family = "JetBrains Mono Nerd Font";
       font_size = 14.0;
       window_margin_width = 21.75;
-      background_opacity = 0.6;
+      background_opacity = 1.0;
       cursor_shape = "beam";
       cursor_trail = 1;
       confirm_os_window_close = 0;

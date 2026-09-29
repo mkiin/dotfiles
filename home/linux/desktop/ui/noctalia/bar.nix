@@ -10,7 +10,7 @@
     background_opacity = 0.0;
     widget_spacing = 10;
 
-    thickness = 40;
+    thickness = 44;
     scale = 1.10;
     font_scale = 1.10;
 
