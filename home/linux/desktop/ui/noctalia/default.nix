@@ -77,7 +77,7 @@ in
 
       lockscreen = {
         enabled = true;
-        lock_before_suspend = false;
+        lock_before_suspend = true;
       };
 
       hooks = {
@@ -102,6 +102,12 @@ in
             { action = "lock"; }
             { action = "logout"; }
             { action = "lock_and_suspend"; }
+            {
+              action = "command";
+              label = "Hibernate";
+              glyph = "bedtime";
+              command = "systemctl hibernate";
+            }
             { action = "reboot"; }
             {
               action = "shutdown";
@@ -167,28 +173,6 @@ in
         # longitude = 141.3544;
       };
 
-      idle = {
-        behavior_order = [
-          "lock"
-          "screen-off"
-          "suspend"
-        ];
-        pre_action_fade_seconds = 2.0;
-        behavior = {
-          lock = {
-            enabled = true;
-            timeout = 60;
-          };
-          screen-off = {
-            enabled = true;
-            timeout = 90;
-          };
-          suspend = {
-            enabled = true;
-            timeout = 100;
-          };
-        };
-      };
     };
   };
 }

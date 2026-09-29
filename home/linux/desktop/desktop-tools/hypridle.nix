@@ -29,12 +29,12 @@ in
 
   config = {
     services.hypridle = {
-      enable = false;
+      enable = true;
       settings = {
         general = {
           lock_cmd = "noctalia msg session lock";
-          # before_sleep_cmd = "loginctl lock-session";
-          after_sleep_cmd = "hyprctl dispatch dpms on";
+          before_sleep_cmd = "noctalia msg session lock";
+          after_sleep_cmd = "noctalia msg dpms-on";
           inhibit_sleep = 3;
           ignore_dbus_inhibit = true;
         };
@@ -44,7 +44,7 @@ in
             # Skip while media is playing, same as screen-off above.
             condition_cmd = "! playerctl -a status 2>/dev/null | grep -q '^Playing$'";
             condition_retry = 30;
-            on-timeout = "loginctl lock-session";
+            on-timeout = "noctalia msg session lock";
           }
           {
             timeout = cfg.screenOffTimeout;
@@ -55,14 +55,14 @@ in
             # active playback.
             condition_cmd = "! playerctl -a status 2>/dev/null | grep -q '^Playing$'";
             condition_retry = 30;
-            on-timeout = "hyprctl dispatch dpms off";
-            on-resume = "hyprctl dispatch dpms on";
+            on-timeout = "noctalia msg dpms-off";
+            on-resume = "noctalia msg dpms-on";
           }
           {
             timeout = cfg.suspendTimeout;
             condition_cmd = "! playerctl -a status 2>/dev/null | grep -q '^Playing$'";
             condition_retry = 30;
-            on-timeout = "systemctl suspend";
+            on-timeout = "noctalia msg session suspend";
           }
         ];
       };
