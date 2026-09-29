@@ -166,6 +166,29 @@ in
         # latitude = 43.0620;
         # longitude = 141.3544;
       };
+
+      idle = {
+        behavior_order = [
+          "lock"
+          "screen-off"
+          "suspend"
+        ];
+        pre_action_fade_seconds = 2.0;
+        behavior = {
+          lock = {
+            enabled = true;
+            timeout = 60;
+          };
+          screen-off = {
+            enabled = true;
+            timeout = 90;
+          };
+          suspend = {
+            enabled = true;
+            timeout = 100;
+          };
+        };
+      };
     };
   };
 }

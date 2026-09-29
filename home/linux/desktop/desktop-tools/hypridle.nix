@@ -29,7 +29,7 @@ in
 
   config = {
     services.hypridle = {
-      enable = true;
+      enable = false;
       settings = {
         general = {
           lock_cmd = "noctalia msg session lock";
