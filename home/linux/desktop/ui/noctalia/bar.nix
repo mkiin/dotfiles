@@ -1,6 +1,6 @@
 { ... }:
 {
-  programs.noctalia.settings.bar.default = {
+  programs.noctalia.settings.bar.capsule = {
     enabled = true;
 
     position = "top";

@@ -4,6 +4,7 @@
     lockscreen = {
       enabled = true;
       lock_before_suspend = true;
+      blurred_desktop = false;
       blur_intensity = 0.0;
       allow_empty_password = true;
     };

@@ -26,11 +26,6 @@
       ];
     };
 
-    launcher = {
-      categories = false;
-      app_grid = true;
-    };
-
     panel = {
       transparency_mode = "glass";
       control_center_position = "center";
