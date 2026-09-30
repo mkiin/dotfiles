@@ -41,7 +41,7 @@ in
     scratchpads.btop = {
       command = "kitty --class btop-scratch --override font_size=11 --hold btop";
       class = "btop-scratch";
-      size = "720px 460px";
+      size = "820px 540px";
       margin = 300;
       animation = "fromTop";
       lazy = true;

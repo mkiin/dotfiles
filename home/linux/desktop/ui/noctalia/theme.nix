@@ -18,6 +18,7 @@
       community_ids = [
         "discord"
         "obsidian"
+        "zed"
       ];
     };
   };

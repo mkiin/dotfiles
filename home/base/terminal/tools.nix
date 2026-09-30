@@ -121,21 +121,25 @@ in
       terminal_sync = true;
       graph_symbol = "braille";
 
-      shown_boxes = "cpu mem net";
+      shown_boxes = "cpu mem net proc";
       update_ms = 1000;
 
-      cpu_single_graph = true;
-      show_gpu_info = "Off";
-      show_coretemp = false;
-      show_cpu_watts = false;
-      clock_format = "";
+      cpu_single_graph = false;
+      show_gpu_info = "Auto";
+      show_coretemp = true;
+      show_cpu_watts = true;
+      clock_format = "%X";
 
       mem_graphs = true;
-      show_disks = false;
-      show_swap = false;
+      show_disks = true;
+      show_swap = true;
 
       net_auto = true;
       net_sync = true;
+
+      proc_sorting = "memory";
+      proc_mem_bytes = true;
+      proc_cpu_graphs = true;
     };
   };
 

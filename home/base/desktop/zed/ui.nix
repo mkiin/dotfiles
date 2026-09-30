@@ -1,7 +1,7 @@
 { lib, ... }:
 {
   programs.zed-editor.userSettings = {
-    theme = "Kanagawa Wave";
+    theme = "Noctalia Dark";
     icon_theme = "Colored Zed Icons Theme Dark";
 
     auto_signature_help = true;

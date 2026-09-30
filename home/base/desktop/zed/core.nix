@@ -16,6 +16,7 @@
       "terraform"
       "toml"
       "lua"
+      "windows-batch"
     ];
 
     userSettings = {
