@@ -20,7 +20,7 @@
     capsule_border = "outline";
 
     start = [
-      "launcher"
+      "control-center"
       "weather"
       "taskbar"
     ];
@@ -43,6 +43,7 @@
       {
         id = "tools";
         members = [
+          "desktop-widgets"
           "notifications"
           "wallpaper"
           "clipboard"

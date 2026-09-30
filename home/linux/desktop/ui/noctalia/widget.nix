@@ -1,9 +1,9 @@
-{ pkgs, ... }:
+{ ... }:
 {
   programs.noctalia.settings = {
     widget = {
       launcher = {
-        custom_image = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+        # custom_image = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
         custom_image_colorize = true;
       };
 
@@ -41,6 +41,13 @@
 
       screen-recorder = {
         type = "noctalia/screen_recorder:recorder";
+      };
+
+      desktop-widgets = {
+        type = "custom_button";
+        glyph = "layout-dashboard";
+        tooltip = "Toggle desktop widgets";
+        actions.left = "desktop-widgets-toggle";
       };
 
       session = {
