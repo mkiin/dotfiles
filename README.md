@@ -89,4 +89,10 @@ nix run .#switch -- oregairu-yukino
 
 ## Screenshots
 
-<!-- Add screenshots here -->
+### Desktop
+
+![Hyprland desktop](assets/screen-shot/desktop-1.png)
+
+### Lock screen
+
+![Noctalia lock screen](assets/screen-shot/lockscreen.png)
