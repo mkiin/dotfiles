@@ -38,7 +38,7 @@
       window-new-tab-position = "end";
       maximize = true;
 
-      background-opacity = 0.8;
+      background-opacity = 0.9;
       background-opacity-cells = true;
       background-blur = true;
 

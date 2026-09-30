@@ -3,7 +3,7 @@
   imports = [
     inputs.noctalia.homeModules.default
     ./bar.nix
-    ./desktop-widgets.nix
+    ./lockscreen.nix
     ./plugins.nix
     ./shell.nix
     ./theme.nix
@@ -31,11 +31,6 @@
       dock = {
         enabled = true;
         layer = "overlay";
-      };
-
-      lockscreen = {
-        enabled = true;
-        lock_before_suspend = true;
       };
 
       hooks = {

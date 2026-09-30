@@ -19,16 +19,16 @@ hl.config({
 		},
 		blur = {
 			enabled = true,
-			size = 3, -- ぼかす広さ
-			passes = 2, -- ぼかし処理回数
-			-- contrast = 0.9, -- ぼかした背後の明暗差
-			-- brightness = 1, -- ぼかした背後の明るさ
-			vibrancy = 0.1696, -- ぼかした色の彩度を増やす
-			-- vibrancy_darkness = 0.2, -- 暗い部分に対する彩度補強の強さ
-			-- noise = 0.01, -- ぼかしに加える粒上感
-			-- new_optimizations = true, -- ぼかしの最適化
-			-- ignore_opacity = true, -- ぼかし層がウィンドウ不透明度を無視する設定
-			-- xray = true, -- floatウィンドウのボカシがはいごのタイルウィンドウを無視する
+			size = 3, -- 背景の輪郭が文字に干渉しない程度に広くぼかす
+			passes = 2,
+			-- contrast = 1.5,
+			-- brightness = 0.9, -- 透過背景を暗くして明るい文字とのコントラストを確保
+			-- vibrancy = 0.15,
+			-- vibrancy_darkness = 0.2,
+			noise = 0.01,
+			new_optimizations = true,
+			ignore_opacity = false,
+			xray = false,
 		},
 	},
 	animations = { enabled = true },

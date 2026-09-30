@@ -46,7 +46,6 @@
       desktop-widgets = {
         type = "custom_button";
         glyph = "layout-dashboard";
-        tooltip = "Toggle desktop widgets";
         actions.left = "desktop-widgets-toggle";
       };
 

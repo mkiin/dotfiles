@@ -43,12 +43,12 @@
       {
         id = "tools";
         members = [
-          "desktop-widgets"
           "notifications"
           "wallpaper"
           "clipboard"
           "screenshot"
           "screen-recorder"
+          "desktop-widgets"
         ];
         padding = 10;
         widget_spacing = 15;
