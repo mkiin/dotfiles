@@ -164,6 +164,7 @@ bind(modkey("N"), hl.dsp.workspace.toggle_special("stash"))
 run(modkey("SHIFT + N"), "pypr toggle_special stash")
 run(modkey("SHIFT + M"), "pypr lost_windows")
 run(modkey("SHIFT + F"), "pypr toggle fetch")
+run(modkey("SHIFT + B"), "pypr toggle btop")
 
 -- Dock Winddow
 

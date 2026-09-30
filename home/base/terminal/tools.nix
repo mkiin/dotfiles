@@ -111,8 +111,32 @@ in
     };
   };
 
-  programs = {
-    fd.enable = true;
+  programs.btop = {
+    enable = true;
+    settings = {
+      color_theme = "noctalia";
+      theme_background = false;
+      truecolor = true;
+      rounded_corners = true;
+      terminal_sync = true;
+      graph_symbol = "braille";
+
+      shown_boxes = "cpu mem net";
+      update_ms = 1000;
+
+      cpu_single_graph = true;
+      show_gpu_info = "Off";
+      show_coretemp = false;
+      show_cpu_watts = false;
+      clock_format = "";
+
+      mem_graphs = true;
+      show_disks = false;
+      show_swap = false;
+
+      net_auto = true;
+      net_sync = true;
+    };
   };
 
   programs.fastfetch = {
@@ -227,6 +251,8 @@ in
       ];
     };
   };
+
+  programs.fd.enable = true;
 
   home.packages = with pkgs; [
     ffmpeg

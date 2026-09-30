@@ -31,11 +31,21 @@ in
     scratchpads.fetch = {
       command = "kitty --class fetch-scratch --hold fastfetch";
       class = "fetch-scratch";
-      size = "900px 520px";
+      size = "830px 520px";
       margin = 300;
       animation = "fromTop";
       lazy = true;
-      unfocus = "hide";
+      # unfocus = "hide";
+    };
+
+    scratchpads.btop = {
+      command = "kitty --class btop-scratch --override font_size=11 --hold btop";
+      class = "btop-scratch";
+      size = "720px 460px";
+      margin = 300;
+      animation = "fromTop";
+      lazy = true;
+      # unfocus = "hide";
     };
   };
 
