@@ -28,6 +28,7 @@
     center = [
       "clock"
       "workspaces"
+      "group:player"
     ];
 
     end = [
@@ -50,6 +51,16 @@
         ];
         padding = 10;
         widget_spacing = 15;
+        border = "outline";
+      }
+      {
+        id = "player";
+        members = [
+          "media"
+          "audio-vis"
+        ];
+        padding = 7;
+        widget_spacing = 4;
         border = "outline";
       }
     ];

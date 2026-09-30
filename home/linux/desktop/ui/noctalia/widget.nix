@@ -22,6 +22,7 @@
         show_labels = false;
         labels_only_when_occupied = true;
         anchor = true;
+        focused_output_only = true;
       };
 
       volume = {
@@ -42,6 +43,10 @@
         type = "noctalia/screen_recorder:recorder";
       };
 
+      session = {
+        icon_color = "error";
+      };
+
       taskbar = {
         group_by_workspace = false;
         show_all_outputs = true;
@@ -53,6 +58,28 @@
         active_indicator_color = "primary";
         active_opacity = 1.0;
         inactive_opacity = 0.75;
+      };
+
+      audio-vis = {
+        type = "audio_visualizer";
+        width = 100;
+        bands = 16;
+        mirrored = true;
+        centered = true;
+        show_when_idle = true;
+        color_1 = "primary";
+        color_2 = "secondary";
+      };
+
+      media = {
+        album_art_only = true;
+        # hide_album_art = false;
+        hide_artist = true;
+        min_length = 100;
+        max_length = 180;
+        art_size = 16;
+        title_scroll = "on_hover";
+        hide_when_no_media = false;
       };
 
       tray = { };
