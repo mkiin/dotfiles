@@ -15,7 +15,7 @@ return {
 					},
 				},
 			},
-			tsgo = {
+			tsc = {
 				server_capabilities = {
 					documentFormattingProvider = false,
 					documentRangeFormattingProvider = false,

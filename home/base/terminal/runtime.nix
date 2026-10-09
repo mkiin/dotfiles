@@ -4,6 +4,7 @@
     nodejs-slim_24
     pnpm
     # JS / TS
+    typescript
     oxlint
     oxfmt
 
@@ -13,6 +14,7 @@
     clippy
 
     # C / C++
+    gcc
     clang-tools
 
     # Lua
@@ -32,6 +34,9 @@
     # Python
     ruff
     ty
+
+    # Editor tooling
+    tree-sitter
 
     package-version-server
   ];

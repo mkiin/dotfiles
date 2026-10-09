@@ -9,21 +9,6 @@
     enable = true;
     withPython3 = false;
     withRuby = false;
-    extraPackages = with pkgs; [
-      gcc
-      typescript
-      lua-language-server
-      stylua
-      nixd
-      nixfmt
-      oxfmt
-      bash-language-server
-      shellcheck
-      shfmt
-      tree-sitter
-      clang-tools
-      ruff
-    ];
   };
 
   xdg.configFile."nvim/init.lua".enable = lib.mkForce false;
