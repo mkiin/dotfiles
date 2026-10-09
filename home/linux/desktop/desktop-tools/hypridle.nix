@@ -36,7 +36,7 @@ in
           before_sleep_cmd = "noctalia msg session lock";
           after_sleep_cmd = "noctalia msg dpms-on";
           inhibit_sleep = 3;
-          ignore_dbus_inhibit = true;
+          # ignore_dbus_inhibit = true;
         };
         listener = [
           {
@@ -48,7 +48,7 @@ in
           }
           {
             timeout = cfg.screenOffTimeout;
-            ignore_inhibit = true;
+            # ignore_inhibit = true;
             # Some apps keep idle-inhibit active even when they are only sitting
             # on a page, which can prevent screen-off forever. Ignore those
             # inhibitors for screen-off, but skip while an MPRIS player reports
