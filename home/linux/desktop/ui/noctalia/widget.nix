@@ -100,7 +100,9 @@
 
       theme-mode = { };
 
-      control-center = { };
+      control-center = {
+        actions.right = "panel-toggle launcher";
+      };
 
     };
   };
