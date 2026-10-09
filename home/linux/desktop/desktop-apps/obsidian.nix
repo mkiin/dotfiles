@@ -1,4 +1,12 @@
-{ myvars, ... }:
+{ pkgs, myvars, ... }:
+let
+  obsidianGit = pkgs.fetchzip {
+    name = "obsidian-git-2.41.1";
+    url = "https://github.com/Vinzent03/obsidian-git/releases/download/2.41.1/obsidian-git-2.41.1.zip";
+    hash = "sha256-HmaLo9x4sl2axmfsUKvD0J5QzjYtL7iiiVcMMnQ+q1g=";
+    passthru.manifestId = "obsidian-git";
+  };
+in
 {
   programs.obsidian = {
     enable = true;
@@ -52,7 +60,7 @@
           # --- Optional ---
 
           # "graph"
-          # "canvas"
+          "canvas"
           # "workspaces"
           # "zk-prefixer"
           # "random-note"
@@ -71,43 +79,36 @@
         #
         # Home Manager が plugin 本体と.obsidian/plugins/<plugin>/data.json を管理する。
         communityPlugins = [
-          # Obsidian Git
-          #
-          # {
-          #   pkg = pkgs.obsidianPlugins.obsidian-git;
-          #
-          #   settings = {
-          #     # 自動 commit
-          #     autoSaveInterval = 5;
-          #     autoBackupAfterFileChange = true;
-          #
-          #     # 起動時に pull
-          #     autoPullOnBoot = true;
-          #
-          #     # 定期 pull / push は最初は無効
-          #     autoPullInterval = 0;
-          #     autoPushInterval = 0;
-          #
-          #     # sync 時は pull → push
-          #     pullBeforePush = true;
-          #     disablePush = false;
-          #
-          #     # commit message
-          #     autoCommitMessage = "vault backup: {{date}}";
-          #     commitDateFormat = "YYYY-MM-DD HH:mm:ss";
-          #
-          #     # merge
-          #     syncMethod = "merge";
-          #     mergeStrategy = "none";
-          #
-          #     # UI
-          #     showStatusBar = true;
-          #     showBranchStatusBar = true;
-          #     changedFilesInStatusBar = true;
-          #
-          #     updateSubmodules = false;
-          #   };
-          # }
+          {
+            pkg = obsidianGit;
+
+            settings = {
+              # 編集が止まってから5分後に自動 commit → pull → push
+              autoSaveInterval = 5;
+              autoBackupAfterFileChange = true;
+              differentIntervalCommitAndPush = false;
+
+              # 起動時に pull。独立した定期 pull / push は無効
+              autoPullOnBoot = true;
+              autoPullInterval = 0;
+              autoPushInterval = 0;
+
+              # 自動・手動 sync 時は pull → push
+              pullBeforePush = true;
+              disablePush = false;
+
+              autoCommitMessage = "vault backup: {{date}}";
+              commitDateFormat = "YYYY-MM-DD HH:mm:ss";
+
+              syncMethod = "merge";
+              mergeStrategy = "none";
+
+              showStatusBar = true;
+              showBranchStatusBar = true;
+              changedFilesInStatusBar = true;
+              updateSubmodules = false;
+            };
+          }
 
           # ほかの community plugin も同じ形式
           #
