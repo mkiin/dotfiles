@@ -17,6 +17,7 @@
       "toml"
       "lua"
       "windows-batch"
+      "tsgo"
     ];
 
     userSettings = {

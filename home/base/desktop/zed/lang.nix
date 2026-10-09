@@ -12,9 +12,11 @@ let
     ];
 
     language_servers = [
-      "typescript-language-server"
+      "typescript-ls"
       "oxlint"
       "oxfmt"
+      "!vtsls"
+      "!typescript-language-server"
       "!eslint"
     ];
   };
