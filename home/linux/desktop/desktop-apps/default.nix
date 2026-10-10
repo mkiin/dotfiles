@@ -5,15 +5,4 @@
     limo # mod manager
   ];
 
-  programs.vesktop = {
-    enable = true;
-
-    settings = {
-      tray = true;
-      minimizeToTray = true;
-      hardwareAcceleration = true;
-      arRPC = true;
-    };
-    vencord.settings.enabledThemes = [ "noctalia.theme.css" ];
-  };
 }
