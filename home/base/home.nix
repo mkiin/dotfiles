@@ -8,7 +8,7 @@
       EDITOR = "nvim";
       VISUAL = "nvim";
       SHELL = "${pkgs.zsh}/bin/zsh";
-
+      TERMINAL = "ghostty";
       DELTA_PAGER = "less -R";
     };
   };

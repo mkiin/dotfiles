@@ -55,8 +55,6 @@ in
 
   home.packages = with pkgs; [
     wl-clipboard
-    gpu-screen-recorder
-    libnotify
   ];
 
   services.cliphist = {

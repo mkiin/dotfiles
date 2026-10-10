@@ -10,14 +10,6 @@ hl.window_rule({
 	no_focus = true,
 })
 
-hl.window_rule({
-	name = "float-pwvucontrol",
-	match = { class = [[^com\.saivert\.pwvucontrol$]] },
-	float = true,
-	size = "700 800",
-	center = true,
-})
-
 hl.layer_rule({
 	name = "logout-dialog",
 	match = { namespace = "logout_dialog" },
