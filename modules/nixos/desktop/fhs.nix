@@ -1,4 +1,9 @@
-{ pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   base = pkgs.appimageTools.defaultFhsEnvArgs;
@@ -24,22 +29,28 @@ let
   );
 in
 {
-  environment.systemPackages = [
-    fhs
-  ];
-
-  # AppImage
-  programs.appimage = {
-    enable = true;
-    binfmt = true;
+  options.modules.desktop.fhs.enable = lib.mkEnableOption "FHS and AppImage support" // {
+    default = true;
   };
 
-  # Generic non-NixOS dynamically linked binaries
-  programs.nix-ld = {
-    enable = true;
-
-    libraries = with pkgs; [
-      stdenv.cc.cc
+  config = lib.mkIf config.modules.desktop.fhs.enable {
+    environment.systemPackages = [
+      fhs
     ];
+
+    # AppImage
+    programs.appimage = {
+      enable = true;
+      binfmt = true;
+    };
+
+    # Generic non-NixOS dynamically linked binaries
+    programs.nix-ld = {
+      enable = true;
+
+      libraries = with pkgs; [
+        stdenv.cc.cc
+      ];
+    };
   };
 }

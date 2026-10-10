@@ -3,6 +3,7 @@
   lib,
   myvars,
   mylib,
+  hostVars,
   ...
 }:
 let
@@ -31,7 +32,7 @@ in
         session.default = "Hyprland (uwsm-managed)";
         user.default = myvars.username;
         keyboard.layout = "us";
-        output.name = "DP-2";
+        output.name = lib.mkIf (hostVars.primaryOutput != null) hostVars.primaryOutput;
 
         appearance = {
           hide_logo = true;
