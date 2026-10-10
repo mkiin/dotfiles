@@ -17,6 +17,11 @@
         SCREENSHOTS = "${config.xdg.userDirs.pictures}/Screenshots";
       };
     };
+
+    autostart = {
+      enable = true;
+      entries = [ ];
+    };
   };
 
   home.packages = [
