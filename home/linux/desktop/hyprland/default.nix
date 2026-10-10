@@ -16,7 +16,12 @@ let
   ];
 in
 {
-  options.modules.desktop.hyprland.enable = lib.mkEnableOption "personal Hyprland configuration";
+  options.modules.desktop.hyprland = {
+    enable = lib.mkEnableOption "personal Hyprland configuration";
+    effects.enable = lib.mkEnableOption "Hyprland blur, shadows and animations" // {
+      default = true;
+    };
+  };
 
   config = lib.mkIf cfg.enable {
     wayland.windowManager.hyprland = {
@@ -31,7 +36,14 @@ in
         autoLoad = false;
       });
 
-      extraConfig = builtins.readFile ./conf/hyprland.lua;
+      extraConfig =
+        builtins.readFile ./conf/hyprland.lua
+        + lib.optionalString (!cfg.effects.enable) ''
+          hl.config({
+            decoration = { blur = { enabled = false }, shadow = { enabled = false } },
+            animations = { enabled = false },
+          })
+        '';
     };
 
     home.file.".wayland-session" = {

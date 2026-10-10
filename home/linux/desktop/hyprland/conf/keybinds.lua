@@ -32,9 +32,6 @@ run(modkey("SHIFT + W"), ipc .. "panel-toggle wallpaper")
 -- Capture
 
 run(modkey("Z"), ipc .. "screenshot-fullscreen")
-run(modkey("X"), ipc .. "plugin noctalia/screen_recorder:service all toggle")
-run(modkey("R"), ipc .. "plugin noctalia/screen_recorder:service all replay-toggle")
-run(modkey("T"), ipc .. "plugin noctalia/screen_recorder:service all replay-save")
 
 -- Window
 
@@ -158,13 +155,9 @@ for workspace = 1, 10 do
 	)
 end
 
--- Special workspace / Pyprland
+-- Special workspace
 
 bind(modkey("N"), hl.dsp.workspace.toggle_special("stash"))
-run(modkey("SHIFT + N"), "pypr toggle_special stash")
-run(modkey("SHIFT + M"), "pypr lost_windows")
-run(modkey("SHIFT + F"), "pypr toggle fetch")
-run(modkey("SHIFT + B"), "pypr toggle btop")
 
 -- Dock Winddow
 
