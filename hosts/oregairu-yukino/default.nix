@@ -11,6 +11,8 @@
     ./hardware-nvidia.nix
   ];
 
+  _module.args.hostVars.primaryOutput = "DP-2";
+
   modules.desktop.power = {
     zswap.enable = true;
     zramSwap.enable = false;
