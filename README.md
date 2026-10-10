@@ -66,11 +66,12 @@ Home Manager is integrated into the NixOS configuration and manages the user env
 
 ## Installation
 
-Clone the repository:
+Temporarily make Git and ghq available, then clone the repository with ghq:
 
 ```sh
-git clone git@github.com:mkiin/dotfiles.git
-cd dotfiles
+nix shell nixpkgs#git nixpkgs#ghq
+ghq get git@github.com:mkiin/dotfiles.git
+cd "$(ghq root)/github.com/mkiin/dotfiles"
 ```
 
 This configuration depends on a private flake input for secrets, so SSH access to the secrets repository is required.
