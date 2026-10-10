@@ -3,7 +3,6 @@
 {
   imports = [
     ./mime.nix
-    ./autostart.nix
   ];
 
   xdg = {

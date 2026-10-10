@@ -25,6 +25,7 @@ in
     #     };
     #   };
     # };
+    programs.gpu-screen-recorder.enable = true;
     services.displayManager.noctalia-greeter = {
       enable = true;
       passwordlessSyncUsers = [ myvars.username ];

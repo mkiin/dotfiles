@@ -16,8 +16,9 @@
     ../../linux/desktop/desktop-apps/vesktop.nix
     ../../linux/desktop/desktop-apps/zen-browser
     ../../linux/desktop/desktop-apps/obsidian.nix
-    ../../linux/desktop/ui/noctalia
+    ../../linux/desktop/noctalia
     ../../linux/desktop/xdg
+    ../../linux/laptop/noctalia.nix
   ];
 
   programs.ssh = {

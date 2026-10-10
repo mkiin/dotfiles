@@ -30,6 +30,5 @@
     enable = true;
     allowImages = true;
   };
-  programs.gpu-screen-recorder.enable = true;
   services.wl-clip-persist.enable = true;
 }

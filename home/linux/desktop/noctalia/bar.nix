@@ -69,7 +69,7 @@
       ];
     };
   };
-  widget = {
+  programs.noctalia.settings.widget = {
     launcher = {
       # custom_image = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
       custom_image_colorize = true;
