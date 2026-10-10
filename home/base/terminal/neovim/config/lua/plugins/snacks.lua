@@ -22,7 +22,10 @@ return {
 		}
 		opts.picker = opts.picker or {}
 		opts.picker.sources = vim.tbl_deep_extend("force", opts.picker.sources or {}, {
-			explorer = { hidden = true },
+			explorer = {
+				hidden = true,
+				layout = { layout = { width = 35, min_width = 35 } },
+			},
 			files = { hidden = true },
 			grep = { hidden = true },
 		})

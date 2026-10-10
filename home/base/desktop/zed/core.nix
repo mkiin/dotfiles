@@ -29,6 +29,8 @@
       search.regex = false;
       use_smartcase_search = true;
 
+      inlay_hints.show_type_hints = false;
+
       terminal = {
         default_height = 280;
 
