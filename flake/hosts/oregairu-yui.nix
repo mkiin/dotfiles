@@ -21,9 +21,8 @@
     modules = [
       ../../secrets
       ../../hosts/oregairu-yui
-      ../../modules/nixos/laptop
+      ../../modules/nixos/desktop
       {
-        modules.laptop.enable = true;
         modules.desktop.wayland.enable = true;
         modules.desktop.fonts.enable = true;
         modules.desktop.gaming.enable = false;

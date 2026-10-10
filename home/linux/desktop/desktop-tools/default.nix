@@ -1,39 +1,10 @@
-# tools/screenshot/default.nix
 {
   pkgs,
   mylib,
   ...
 }:
-
-let
-
-  # screenshotMenu = pkgs.writeShellApplication {
-  #   name = "screenshot-menu";
-
-  #   runtimeInputs = with pkgs; [
-  #     rofi
-  #     inputs.hyprcap.packages.${pkgs.stdenv.hostPlatform.system}.default
-  #   ];
-
-  #   text = builtins.readFile scripts/screenshot-menu.sh;
-  # };
-
-  # recordMenu = pkgs.writeShellApplication {
-  #   name = "record-menu";
-
-  #   runtimeInputs = with pkgs; [
-  #     rofi
-  #     inputs.hyprcap.packages.${pkgs.stdenv.hostPlatform.system}.default
-  #   ];
-
-  #   text = builtins.readFile scripts/record-menu.sh;
-  # };
-
-in
 {
   imports = mylib.scanPaths ./.;
-
-  xdg.configFile."desktop-tools/scripts/apply.sh".source = ./scripts/apply.sh;
 
   home.sessionVariables = {
     NIXOS_OZONE_WL = "1"; # for any ozone-based browser & electron apps to run on wayland
@@ -49,8 +20,6 @@ in
     SDL_VIDEODRIVER = "wayland";
     GDK_BACKEND = "wayland";
     XDG_SESSION_TYPE = "wayland";
-    LIBVA_DRIVER_NAME = "nvidia";
-    NVD_BACKEND = "direct";
   };
 
   home.packages = with pkgs; [
@@ -61,6 +30,6 @@ in
     enable = true;
     allowImages = true;
   };
-
+  programs.gpu-screen-recorder.enable = true;
   services.wl-clip-persist.enable = true;
 }

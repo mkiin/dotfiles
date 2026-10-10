@@ -1,4 +1,4 @@
-{ inputs, config, ... }:
+{ inputs, ... }:
 {
   imports = [
     inputs.noctalia.homeModules.default
@@ -33,15 +33,7 @@
         layer = "overlay";
       };
 
-      hooks = {
-        wallpaper_changed = [
-          "${config.xdg.configHome}/desktop-tools/scripts/apply.sh"
-        ];
-        started = [
-          "noctalia msg greeter-sync"
-          "${config.xdg.configHome}/desktop-tools/scripts/apply.sh"
-        ];
-      };
+      hooks.started = [ "noctalia msg greeter-sync" ];
 
       weather = {
         enabled = true;
