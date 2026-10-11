@@ -1,5 +1,7 @@
 {
   pkgs,
+  config,
+  lib,
   ...
 }:
 
@@ -93,5 +95,15 @@
         "f11=toggle_fullscreen"
       ];
     };
+  };
+  home.activation = lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
+    initGhosttyNoctaliaTheme = lib.hm.dag.entryBetween [ "onFilesChange" ] [ "linkGeneration" ] ''
+      theme="${config.xdg.configHome}/ghostty/themes/noctalia"
+
+      if [[ ! -e "$theme" && ! -L "$theme" ]]; then
+        run ${pkgs.coreutils}/bin/install -Dm644 \
+          ${./fallback} "$theme"
+      fi
+    '';
   };
 }
