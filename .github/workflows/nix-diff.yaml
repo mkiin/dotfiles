@@ -39,6 +39,8 @@ jobs:
           attributes: |
             - displayName: oregairu-yukino
               attribute: nixosConfigurations.oregairu-yukino.config.system.build.toplevel
+            - displayName: oregairu-yui
+              attribute: nixosConfigurations.oregairu-yui.config.system.build.toplevel
           build: false
           comment-strategy: update
           skip-no-change: false

@@ -26,8 +26,14 @@ jobs:
         run: nix flake check --show-trace
 
   build:
+    name: Build NixOS (${{ matrix.host }})
     runs-on: ubuntu-latest
     timeout-minutes: 120
+    strategy:
+      matrix:
+        host:
+          - oregairu-yukino
+          - oregairu-yui
 
     steps:
       - uses: actions/checkout@v7
@@ -42,4 +48,4 @@ jobs:
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
       - name: Build NixOS
-        run: nix run .#build -- oregairu-yukino
+        run: nix run .#build -- ${{ matrix.host }}
