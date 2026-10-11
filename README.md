@@ -69,16 +69,23 @@ Home Manager is integrated into the NixOS configuration and manages the user env
 Temporarily make Git and ghq available, then clone the repository with ghq:
 
 ```sh
-nix shell nixpkgs#git nixpkgs#ghq
-ghq get git@github.com:mkiin/dotfiles.git
+export GIT_SSH_COMMAND="ssh -i $HOME/.ssh/oregairu-yui -o IdentitiesOnly=yes"
+nix --experimental-features 'nix-command flakes' \
+shell nixpkgs#git nixpkgs ghq \
+--command ghq get git@github.com:mkiin/dotfiles.git \
 cd "$(ghq root)/github.com/mkiin/dotfiles"
 ```
 
 This configuration depends on a private flake input for secrets, so SSH access to the secrets repository is required.
 
+```ssh
+export NIX_CONFIG='extra-experimental-features = nix-command flakes'
+```
+
 Build the target host first:
 
 ```sh
+nix shell pkgs#git \
 nix run .#build -- oregairu-yukino
 ```
 
