@@ -5,16 +5,16 @@
     extra-substituters = [
       "https://hyprland.cachix.org" # hyprland
       "https://noctalia.cachix.org" # noctalia
-      # "https://ezkea.cachix.org" # aagl
-      # "https://cache.numtide.com" # llm-agents
+      "https://ezkea.cachix.org" # aagl
+      "https://cache.numtide.com" # llm-agents
       "https://mkiin-dotfiles.cachix.org" # mkiin-dotfiles
     ];
     extra-trusted-public-keys = [
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
       "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
+      "mkiin-dotfiles.cachix.org-1:LJ6X3uYDglOyphSEDcaz/wrwGDmetitbmrUDkwvUzjM="
       "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI="
       "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
-      "mkiin-dotfiles.cachix.org-1:LJ6X3uYDglOyphSEDcaz/wrwGDmetitbmrUDkwvUzjM="
     ];
   };
 
