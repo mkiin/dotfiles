@@ -20,6 +20,8 @@ in
           vimMode = true;
           showLineNumber = true;
           readableLineLength = false;
+          attachmentFolderPath = "attachments";
+          alwaysUpdateLinks = true;
         };
 
         appearance = {
