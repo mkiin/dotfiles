@@ -2,14 +2,10 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
   "dependencyDashboard": false,
+  "enabledManagers": ["github-actions"],
   "labels": ["dependencies", "automated"],
-  "nix": {
-    "enabled": true
-  },
   "lockFileMaintenance": {
-    "enabled": true,
-    "schedule": ["before 6am"],
-    "automerge": true
+    "enabled": false
   },
   "packageRules": [
     {

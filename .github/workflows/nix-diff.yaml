@@ -26,6 +26,8 @@ jobs:
 
       - name: Setup Nix
         uses: ./.github/actions/setup-nix
+        with:
+          ssh-private-key: ${{ secrets.NIX_SECRETS_SSH_KEY }}
 
       - name: Setup Cachix
         uses: cachix/cachix-action@v17
