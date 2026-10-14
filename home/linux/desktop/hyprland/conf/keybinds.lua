@@ -36,7 +36,26 @@ run(modkey("Z"), ipc .. "screenshot-fullscreen")
 -- Window
 
 bind(modkey("C"), hl.dsp.window.close())
-bind(modkey("V"), hl.dsp.window.float({ action = "toggle" }))
+bind(modkey("V"), function()
+	local window = hl.get_active_window()
+	if not window then
+		return
+	end
+
+	local was_floating = window.floating
+	local monitor = hl.get_active_monitor()
+	hl.dispatch(hl.dsp.window.float({ action = "toggle", window = window }))
+
+	if not was_floating and monitor then
+		hl.dispatch(hl.dsp.window.resize({
+			x = math.floor(monitor.width * 0.9),
+			y = math.floor(monitor.height * 0.9),
+			relative = false,
+			window = window,
+		}))
+		hl.dispatch(hl.dsp.window.center({ window = window }))
+	end
+end)
 bind(modkey("F"), hl.dsp.window.fullscreen())
 bind(modkey("T"), hl.dsp.layout("togglesplit"))
 
