@@ -48,12 +48,18 @@ bind(modkey("V"), function()
 
 	if not was_floating and monitor then
 		hl.dispatch(hl.dsp.window.resize({
-			x = math.floor(monitor.width * 0.9),
-			y = math.floor(monitor.height * 0.9),
+			x = math.floor(monitor.width * 0.8),
+			y = math.floor(monitor.height * 0.8),
 			relative = false,
 			window = window,
 		}))
-		hl.dispatch(hl.dsp.window.center({ window = window }))
+		-- hl.dispatch(hl.dsp.window.center({ window = window }))
+		-- hl.dispatch(hl.dsp.window.move({
+		-- 	x = window.at.x,
+		-- 	y = monitor.y + monitor.reserved.top + 12,
+		-- 	relative = false,
+		-- 	window = window,
+		-- }))
 	end
 end)
 bind(modkey("F"), hl.dsp.window.fullscreen())

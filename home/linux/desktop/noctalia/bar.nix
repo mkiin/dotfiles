@@ -86,6 +86,7 @@
 
     workspaces = {
       show_labels = false;
+      show_tooltip = false;
       labels_only_when_occupied = true;
       anchor = true;
       focused_output_only = true;
