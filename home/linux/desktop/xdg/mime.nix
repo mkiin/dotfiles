@@ -3,7 +3,7 @@
 let
   browser = [ "zen-beta.desktop" ];
   editor = [ "nvim.desktop" ];
-  fileManager = [ "thunar.desktop" ];
+  fileManager = [ "org.gnome.Nautilus.desktop" ];
   imageViewer = [ "imv-dir.desktop" ];
   mediaPlayer = [ "mpv.desktop" ];
 in
