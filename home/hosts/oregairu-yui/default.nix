@@ -12,7 +12,7 @@
     ../../linux/desktop/gtk.nix
     ../../linux/desktop/hyprland
     ../../linux/desktop/desktop-tools
-    ../../linux/desktop/desktop-apps/thunar.nix
+    ../../linux/desktop/desktop-apps/nautilus.nix
     ../../linux/desktop/desktop-apps/vesktop.nix
     ../../linux/desktop/desktop-apps/zen-browser
     ../../linux/desktop/desktop-apps/obsidian.nix

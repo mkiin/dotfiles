@@ -29,6 +29,6 @@
 
   home.sessionVariables = {
     BROWSER = "zen-beta";
-    FILE_MANAGER = "thunar";
+    FILE_MANAGER = "nautilus";
   };
 }

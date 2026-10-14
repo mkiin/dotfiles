@@ -80,8 +80,9 @@ in
         "intl.accept_languages" = "ja,en-US,en";
 
         # Default / fallback fonts
-        "font.name.serif.ja" = "Noto Serif CJK JP";
-        "font.name.sans-serif.ja" = "Noto Sans CJK JP";
+        "browser.display.use_document_fonts" = 1;
+        "font.name.serif.ja" = "BIZ UDMincho";
+        "font.name.sans-serif.ja" = "BIZ UDGothic";
         "font.name.monospace.ja" = "UDEV Gothic";
         "font.default.ja" = "sans-serif";
 

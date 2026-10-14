@@ -18,10 +18,12 @@ in
 
         noto-fonts-cjk-sans
         noto-fonts-cjk-serif
+        noto-fonts
         noto-fonts-color-emoji
 
         udev-gothic-nf
         biz-ud-gothic
+        (google-fonts.override { fonts = [ "BIZUDMincho" ]; })
 
         inter
         geist-font
