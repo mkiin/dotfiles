@@ -1,11 +1,25 @@
-{ pkgs, ... }:
 {
-  home.packages = [ pkgs.gpu-screen-recorder ];
+  config,
+  myvars,
+  pkgs,
+  ...
+}:
+let
+  videoDir = "${config.home.homeDirectory}/${myvars.dotfilesdir}/wallpaper/videos";
+in
+{
+  home.packages = with pkgs; [
+    gpu-screen-recorder
+    mpvpaper
+    mpv
+    socat
+  ];
 
   programs.noctalia.settings = {
     plugins = {
       enabled = [
         "noctalia/bitwarden"
+        "noctalia/mpvpaper"
         "noctalia/screen_recorder"
       ];
       auto_update = "all";
@@ -30,5 +44,7 @@
       frame_rate = 30;
       audio_codec = "aac";
     };
+
+    plugin_settings."noctalia/mpvpaper".video_directory = videoDir;
   };
 }

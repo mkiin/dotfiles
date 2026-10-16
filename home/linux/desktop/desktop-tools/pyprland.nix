@@ -17,12 +17,9 @@ in
     xdg.configFile."pypr/config.toml".source = tomlFormat.generate "pypr-config" {
       pyprland.plugins = [
         "scratchpads"
-        "toggle_special"
         "lost_windows"
         "fcitx5_switcher"
       ];
-
-      toggle_special.name = "stash";
 
       fcitx5_switcher.inactive_classes = [
         "org.wezfurlong.wezterm"

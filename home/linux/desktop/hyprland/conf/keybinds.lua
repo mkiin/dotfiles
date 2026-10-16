@@ -180,10 +180,6 @@ for workspace = 1, 10 do
 	)
 end
 
--- Special workspace
-
-bind(modkey("N"), hl.dsp.workspace.toggle_special("stash"))
-
 -- Dock Winddow
 
 run(modkey("SHIFT + D"), "noctalia msg dock-toggle")
