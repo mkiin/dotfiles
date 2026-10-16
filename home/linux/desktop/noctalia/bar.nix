@@ -45,8 +45,9 @@
         {
           id = "tools";
           members = [
+            "wallpaper-images"
+            "wallpaper-videos"
             "notifications"
-            "wallpaper"
             "clipboard"
             "screenshot"
             "screen-recorder"
@@ -55,6 +56,7 @@
           padding = 10;
           widget_spacing = 15;
           border = "outline";
+          opacity = 0.8;
         }
         {
           id = "player";
@@ -65,11 +67,26 @@
           padding = 7;
           widget_spacing = 4;
           border = "outline";
+          opacity = 0.8;
         }
       ];
     };
   };
   programs.noctalia.settings.widget = {
+    wallpaper-images = {
+      type = "custom_button";
+      glyph = "photo";
+      tooltip = "Images";
+      actions.left = "panel-toggle wallpaper";
+    };
+
+    wallpaper-videos = {
+      type = "custom_button";
+      glyph = "movie";
+      tooltip = "Videos";
+      actions.left = "panel-toggle noctalia/mpvpaper:picker";
+    };
+
     launcher = {
       # custom_image = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
       custom_image_colorize = true;

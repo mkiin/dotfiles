@@ -45,6 +45,9 @@ in
       audio_codec = "aac";
     };
 
-    plugin_settings."noctalia/mpvpaper".video_directory = videoDir;
+    plugin_settings."noctalia/mpvpaper" = {
+      video_directory = videoDir;
+      picker_placement = "floating";
+    };
   };
 }
