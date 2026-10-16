@@ -28,7 +28,7 @@
 
     panel = {
       transparency_mode = "glass";
-      control_center_position = "top";
+      control_center_position = "follow_bar";
       session_position = "center";
       control_center_placement = "floating";
       wallpaper_placement = "floating";
