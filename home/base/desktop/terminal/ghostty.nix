@@ -83,7 +83,7 @@
         "ctrl+shift+right=next_tab"
 
         # 現在の split / surface を閉じる
-        "ctrl+shift+w=close_surface"
+        "ctrl+shift+m=close_surface"
 
         # tab ごと閉じる
         "ctrl+shift+q=close_tab"
