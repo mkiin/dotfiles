@@ -202,3 +202,6 @@ bind(
 
 bind(modkey("mouse:272"), hl.dsp.window.drag(), { mouse = true })
 bind(modkey("mouse:273"), hl.dsp.window.resize(), { mouse = true })
+
+-- caps lock で imeをoffにする
+bind("Escape", exec("fcitx5-remote -c"), { non_consuming = true })

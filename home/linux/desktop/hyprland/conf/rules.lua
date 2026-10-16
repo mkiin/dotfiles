@@ -21,6 +21,14 @@ hl.window_rule({
 })
 
 hl.window_rule({
+	name = "mpv-floating",
+	match = { class = "^mpv$" },
+	float = true,
+	size = { 800, 600 },
+	center = true,
+})
+
+hl.window_rule({
 	name = "fix-xwayland-drags",
 	match = { class = "^$", title = "^$", xwayland = true, float = true, fullscreen = false, pin = false },
 	no_focus = true,
