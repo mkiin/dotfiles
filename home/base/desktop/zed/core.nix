@@ -36,7 +36,7 @@
 
         shell.with_arguments = {
           program = "zsh";
-          args = [ "-l" ];
+          args = [ ];
         };
       };
 
