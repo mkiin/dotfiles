@@ -1,4 +1,13 @@
 { pkgs, ... }:
 {
   home.packages = [ pkgs.nautilus ];
+
+  dconf.settings = {
+    "org/gnome/nautilus/window-state".maximized = false;
+    "org/gnome/nautilus/compression"."default-compression-format" = "zip";
+    "org/gnome/nautilus/preferences" = {
+      "fts-enabled" = false;
+      "show-delete-permanently" = true;
+    };
+  };
 }
