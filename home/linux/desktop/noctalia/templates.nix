@@ -2,7 +2,7 @@
 {
   programs.noctalia.settings.theme = {
     source = "community";
-    community_palette = "Catppuccin Mocha Sapphire";
+    community_palette = "Rose Pine Moon Alt";
     # wallpaper_scheme = "";
     templates = {
       enable_builtin_templates = true;

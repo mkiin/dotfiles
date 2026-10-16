@@ -7,7 +7,6 @@
       enabled = [
         "noctalia/bitwarden"
         "noctalia/screen_recorder"
-        "theblackdon/theme-switcher"
       ];
       auto_update = "all";
       source = [
