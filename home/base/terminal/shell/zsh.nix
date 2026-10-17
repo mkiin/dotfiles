@@ -60,6 +60,8 @@
         cod = "codex";
         coda = "codex --full-auto";
         codx = "codex --dangerously-bypass-approvals-and-sandbox";
+
+        op = "opencode";
       };
     };
 

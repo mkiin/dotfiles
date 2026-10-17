@@ -19,5 +19,8 @@ in
       model = "opencode/deepseek-v4.1-flash-free";
       permission = "allow";
     };
+    tui = {
+      theme = "system";
+    };
   };
 }
