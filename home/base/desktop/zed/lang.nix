@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 let
   oxcLanguage = {
@@ -53,6 +53,15 @@ in
         arguments = [ "-" ];
       };
 
+      Luau = {
+        formatter.external = {
+          command = "stylua";
+          arguments = [ "-" ];
+        };
+
+        language_servers = [ "luau-lsp" ];
+      };
+
       Shell = {
         formatter.external = {
           command = "shfmt";
@@ -89,6 +98,18 @@ in
     };
 
     lsp = {
+      luau-lsp.settings.binary.path = "${pkgs.luau-lsp}/bin/luau-lsp";
+
+      oxlint.binary = {
+        path = "${pkgs.oxlint}/bin/oxlint";
+        arguments = [ "--lsp" ];
+      };
+
+      oxfmt.binary = {
+        path = "${pkgs.oxfmt}/bin/oxfmt";
+        arguments = [ "--lsp" ];
+      };
+
       oxlint.initialization_options.settings = {
         run = "onType";
         fixKind = "safe_fix";

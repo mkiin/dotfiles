@@ -19,6 +19,7 @@
 
     # Lua
     lua-language-server
+    luau-lsp
     stylua
 
     # Shell

@@ -16,6 +16,7 @@
       "terraform"
       "toml"
       "lua"
+      "luau"
       "windows-batch"
       "tsgo"
     ];

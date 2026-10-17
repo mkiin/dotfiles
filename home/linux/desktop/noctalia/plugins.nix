@@ -18,9 +18,10 @@ in
   programs.noctalia.settings = {
     plugins = {
       enabled = [
+        "mkiin/wallpaper-picker"
         "noctalia/bitwarden"
-        "noctalia/mpvpaper"
         "noctalia/screen_recorder"
+        "tranzem/media-lyrics"
       ];
       auto_update = "all";
       source = [
@@ -36,6 +37,12 @@ in
           location = "https://github.com/noctalia-dev/community-plugins";
           enabled = true;
         }
+        {
+          name = "mkiin";
+          kind = "git";
+          location = "https://github.com/mkiin/noctalia-plugins";
+          enabled = true;
+        }
       ];
     };
 
@@ -45,9 +52,8 @@ in
       audio_codec = "aac";
     };
 
-    plugin_settings."noctalia/mpvpaper" = {
+    plugin_settings."mkiin/wallpaper-picker" = {
       video_directory = videoDir;
-      picker_placement = "floating";
     };
   };
 }

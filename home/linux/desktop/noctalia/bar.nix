@@ -45,8 +45,7 @@
         {
           id = "tools";
           members = [
-            "wallpaper-images"
-            "wallpaper-videos"
+            "wallpaper"
             "notifications"
             "clipboard"
             "screenshot"
@@ -73,18 +72,11 @@
     };
   };
   programs.noctalia.settings.widget = {
-    wallpaper-images = {
+    wallpaper = {
       type = "custom_button";
       glyph = "photo";
-      tooltip = "Images";
-      actions.left = "panel-toggle wallpaper";
-    };
-
-    wallpaper-videos = {
-      type = "custom_button";
-      glyph = "movie";
-      tooltip = "Videos";
-      actions.left = "panel-toggle noctalia/mpvpaper:picker";
+      tooltip = "Wallpaper";
+      actions.left = "panel-toggle mkiin/wallpaper-picker:picker";
     };
 
     launcher = {
