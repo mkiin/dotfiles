@@ -8,7 +8,16 @@ let
 in
 {
   home.packages = [
-    # Agents
     agentPackages.codex
   ];
+
+  programs.opencode = {
+    enable = true;
+    package = agentPackages.opencode;
+
+    settings = {
+      model = "opencode/deepseek-v4.1-flash-free";
+      permission = "allow";
+    };
+  };
 }
