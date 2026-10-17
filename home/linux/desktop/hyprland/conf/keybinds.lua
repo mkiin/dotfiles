@@ -31,7 +31,7 @@ run(modkey("SHIFT + W"), ipc .. "panel-toggle wallpaper")
 
 -- Capture
 
-run(modkey("Z"), ipc .. "screenshot-fullscreen")
+run(modkey("Z"), ipc .. "screenshot-region")
 
 -- Window
 
