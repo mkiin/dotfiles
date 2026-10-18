@@ -18,6 +18,9 @@ in
     settings = {
       model = "opencode/deepseek-v4.1-flash-free";
       permission = "allow";
+      plugin = [
+        "${inputs.ponytail-skill}/.opencode/plugins/ponytail.mjs"
+      ];
     };
     tui = {
       theme = "system";

@@ -1,0 +1,12 @@
+// oregairu-yukino: host-specific key bindings (injected into `binds {}`).
+
+// Noctalia screen recorder plugin
+Mod+X { spawn-sh "noctalia msg plugin noctalia/screen_recorder:service all toggle"; }
+Mod+R { spawn-sh "noctalia msg plugin noctalia/screen_recorder:service all replay-toggle"; }
+Mod+T { spawn-sh "noctalia msg plugin noctalia/screen_recorder:service all replay-save"; }
+
+// pyprland scratchpads (module commented out for the niri migration;
+// niri has no direct scratchpad/lost_windows equivalent).
+// Mod+Shift+M { spawn-sh "pypr lost_windows"; }
+// Mod+Shift+F { spawn-sh "pypr toggle fetch"; }
+// Mod+Shift+B { spawn-sh "pypr toggle btop"; }

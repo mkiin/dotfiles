@@ -86,7 +86,10 @@
       url = "github:tt-a1i/archify";
       flake = false;
     };
-
+    ponytail-skill = {
+      url = "github:DietrichGebert/ponytail";
+      flake = false;
+    };
   };
 
   outputs =
