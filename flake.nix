@@ -22,7 +22,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
     flake-parts.url = "github:hercules-ci/flake-parts";
-
+    nvimx.url = "github:myuron/nvimx";
     hyprland.url = "github:hyprwm/Hyprland";
     noctalia.url = "github:noctalia-dev/noctalia";
     aagl.url = "github:ezKEa/aagl-gtk-on-nix";
@@ -53,8 +53,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nvimx.url = "github:myuron/nvimx";
-
     agent-skills = {
       url = "github:Kyure-A/agent-skills-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -70,22 +68,11 @@
       flake = false;
     };
 
-    superpowers-skill = {
-      url = "github:obra/superpowers";
-      flake = false;
-    };
     cloudflare-skills = {
       url = "github:cloudflare/skills";
       flake = false;
     };
-    anthropic-skills = {
-      url = "github:anthropics/skills";
-      flake = false;
-    };
-    archify-skill = {
-      url = "github:tt-a1i/archify";
-      flake = false;
-    };
+
     ponytail-skill = {
       url = "github:DietrichGebert/ponytail";
       flake = false;
