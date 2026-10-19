@@ -9,6 +9,7 @@
       margin_ends = 14;
 
       background_opacity = 0.0;
+      compositor_blur = false;
       widget_spacing = 10;
 
       thickness = 35;

@@ -1,6 +1,7 @@
 { config, ... }:
 {
   imports = [
+    ./kanshi.nix
     ../../base
     ../../base/desktop
     ../../linux/desktop.nix
@@ -16,26 +17,15 @@
   };
   programs.git.signing.key = "${config.home.homeDirectory}/.ssh/oregairu-yukino.pub";
 
-  modules.desktop.hyprland.enable = true;
-  modules.desktop.nvidia.enable = true;
-  modules.desktop.pyprland.enable = true;
-
-  # 画面ロック・画面暗転の設定
-  modules.desktop.hypridle = {
-    # keyboardBacklightTimeout = 900;
+  modules.desktop.noctalia.idle = {
     lockTimeout = 900;
     screenOffTimeout = 1800;
     suspendTimeout = 3600;
   };
 
-  wayland.windowManager.hyprland.extraLuaFiles = {
-    host-keybinds = {
-      content = ./keybinds.lua;
-      autoLoad = true;
-    };
-    monitors = {
-      content = ./monitors.lua;
-      autoLoad = false;
-    };
-  };
+  modules.desktop.niri.enable = true;
+  modules.desktop.niri.extraBinds = builtins.readFile ./niri-binds.kdl;
+  modules.desktop.nvidia.enable = true;
+  modules.desktop.pyprland.enable = false;
+
 }

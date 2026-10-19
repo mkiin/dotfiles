@@ -5,12 +5,14 @@
 }:
 {
   imports = [
+    ./kanshi.nix
     ../../base
     ../../base/desktop/terminal/ghostty.nix
     ../../base/desktop/terminal/kitty.nix
     ../../linux/terminal
     ../../linux/desktop/gtk.nix
-    ../../linux/desktop/hyprland
+    ../../linux/desktop/niri
+    ../../linux/desktop/kanshi
     ../../linux/desktop/desktop-tools
     ../../linux/desktop/desktop-apps/nautilus.nix
     ../../linux/desktop/desktop-apps/vesktop.nix
@@ -31,26 +33,15 @@
   };
   programs.git.signing.key = "${config.home.homeDirectory}/.ssh/oregairu-yui.pub";
 
-  modules.desktop.hyprland.enable = true;
-  modules.desktop.nvidia.enable = false;
-  modules.desktop.pyprland.enable = false;
-
-  modules.desktop.hypridle = {
+  modules.desktop.noctalia.idle = {
     lockTimeout = 900;
     screenOffTimeout = 1800;
     suspendTimeout = 3600;
   };
 
-  wayland.windowManager.hyprland.extraLuaFiles = {
-    host-keybinds = {
-      content = ./keybinds.lua;
-      autoLoad = true;
-    };
-    monitors = {
-      content = ./monitors.lua;
-      autoLoad = false;
-    };
-  };
+  modules.desktop.niri.enable = true;
+  modules.desktop.nvidia.enable = false;
+  modules.desktop.pyprland.enable = false;
 
   home.packages = with pkgs; [
     brightnessctl

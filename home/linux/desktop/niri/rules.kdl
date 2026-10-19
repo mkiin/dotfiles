@@ -1,0 +1,33 @@
+// Rounded corners for a modern look.
+window-rule {
+	geometry-corner-radius 20
+	clip-to-geometry true
+}
+
+// Floating Noctalia settings window.
+window-rule {
+	match app-id="dev.noctalia.Noctalia"
+	open-floating true
+	default-column-width { fixed 1080; }
+	default-window-height { fixed 920; }
+}
+
+window-rule {
+	match app-id=r#"^org\.gnome\.Nautilus$"#
+	open-floating true
+	default-column-width { proportion 0.4; }
+}
+
+window-rule {
+	match app-id="^mpv$"
+	open-floating true
+	default-column-width { fixed 800; }
+	default-window-height { fixed 600; }
+}
+
+window-rule {
+	match app-id="^imv$"
+	open-floating true
+	default-column-width { fixed 800; }
+	default-window-height { fixed 600; }
+}

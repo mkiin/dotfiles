@@ -27,7 +27,7 @@
         modules.desktop.fonts.enable = true;
         modules.desktop.gaming.enable = false;
         modules.desktop.fhs.enable = false;
-        programs.hyprland.enable = true;
+        programs.niri.enable = true;
       }
 
       inputs.home-manager.nixosModules.home-manager

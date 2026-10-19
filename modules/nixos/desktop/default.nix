@@ -30,7 +30,7 @@ in
       enable = true;
       passwordlessSyncUsers = [ myvars.username ];
       settings = {
-        session.default = "Hyprland (uwsm-managed)";
+        session.default = "niri";
         user.default = myvars.username;
         keyboard.layout = "us";
         output.name = lib.mkIf (hostVars.primaryOutput != null) hostVars.primaryOutput;

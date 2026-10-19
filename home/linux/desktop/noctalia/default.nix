@@ -1,4 +1,10 @@
-{ inputs, pkgs, ... }:
+{
+  inputs,
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 {
   imports = [
     inputs.noctalia.homeModules.default
@@ -8,9 +14,24 @@
     ./templates.nix
     ./wallpaper.nix
   ];
-  programs.noctalia = {
+  options.modules.desktop.noctalia.idle = {
+    lockTimeout = lib.mkOption {
+      type = lib.types.ints.positive;
+      description = "Seconds of idle before locking.";
+    };
+    screenOffTimeout = lib.mkOption {
+      type = lib.types.ints.positive;
+      description = "Seconds of idle before turning off displays.";
+    };
+    suspendTimeout = lib.mkOption {
+      type = lib.types.ints.positive;
+      description = "Seconds of idle before suspending.";
+    };
+  };
+
+  config.programs.noctalia = {
     enable = true;
-    systemd.enable = true;
+    systemd.enable = false;
     package = inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs (old: {
       patches = (old.patches or [ ]) ++ [
         ./../../../../patches/noctalia-control-center-video-wallpaper.patch
@@ -18,6 +39,24 @@
     });
 
     settings = {
+      idle.behavior = {
+        lock = {
+          enabled = true;
+          timeout = config.modules.desktop.noctalia.idle.lockTimeout;
+          action = "lock";
+        };
+        screen-off = {
+          enabled = true;
+          timeout = config.modules.desktop.noctalia.idle.screenOffTimeout;
+          action = "screen_off";
+        };
+        suspend = {
+          enabled = true;
+          timeout = config.modules.desktop.noctalia.idle.suspendTimeout;
+          action = "lock_and_suspend";
+        };
+      };
+
       osd = {
         position = "top_right";
         kinds = {

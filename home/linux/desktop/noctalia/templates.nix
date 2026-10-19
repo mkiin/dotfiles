@@ -11,7 +11,7 @@
         "btop"
         "ghostty"
         "kitty"
-        "hyprland"
+        "niri"
         "gtk3"
         "gtk4"
       ];

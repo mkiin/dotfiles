@@ -1,0 +1,68 @@
+// Common key bindings (the module injects these into the single `binds {}` node).
+
+Mod+Shift+Slash { show-hotkey-overlay; }
+Mod+Shift+E { quit; }
+
+// Applications
+Mod+G { spawn "ghostty"; }
+Mod+E { spawn "nautilus"; }
+Mod+B { spawn "zen-beta"; }
+Mod+D { spawn "vesktop"; }
+
+// Wallpaper
+Mod+W { spawn-sh "noctalia msg wallpaper-next"; }
+Mod+Shift+W { spawn-sh "noctalia msg panel-toggle wallpaper"; }
+
+// Capture
+Mod+Z { spawn-sh "noctalia msg screenshot-region"; }
+
+// Window
+Mod+C { close-window; }
+Mod+V { toggle-window-floating; }
+Mod+F { fullscreen-window; }
+
+// Noctalia
+Mod+A { spawn-sh "noctalia msg panel-toggle launcher"; }
+Mod+Space { spawn-sh "noctalia msg panel-toggle control-center"; }
+Mod+S { spawn-sh "noctalia msg settings-toggle"; }
+Mod+Q { spawn-sh "noctalia msg panel-toggle session"; }
+Alt+Tab { spawn-sh "noctalia msg window-switcher hold"; }
+Mod+Shift+D { spawn-sh "noctalia msg dock-toggle"; }
+
+// Focus
+Mod+H { focus-column-left; }
+Mod+J { focus-window-down; }
+Mod+K { focus-window-up; }
+Mod+L { focus-column-right; }
+Mod+Left { focus-column-left; }
+Mod+Down { focus-window-down; }
+Mod+Up { focus-window-up; }
+Mod+Right { focus-column-right; }
+
+// Reorder columns / windows
+Mod+Shift+H { move-column-left; }
+Mod+Shift+J { move-window-down; }
+Mod+Shift+K { move-window-up; }
+Mod+Shift+L { move-column-right; }
+
+// Monitor focus
+Mod+Ctrl+H { focus-monitor-left; }
+Mod+Ctrl+L { focus-monitor-right; }
+// Resize
+Mod+Shift+Minus { set-window-height "-10%"; }
+Mod+Shift+Equal { set-window-height "+10%"; }
+
+// Workspaces
+Mod+Ctrl+K { focus-workspace-up; }
+Mod+Ctrl+J { focus-workspace-down; }
+Mod+O { toggle-overview; }
+Mod+Shift+Up { move-column-to-workspace-up; }
+Mod+Shift+Down { move-column-to-workspace-down; }
+
+Mod+WheelScrollUp { focus-workspace-up; }
+Mod+WheelScrollDown { focus-workspace-down; }
+
+Mod+Shift+Left { move-column-to-monitor-left; }
+Mod+Shift+Right { move-column-to-monitor-right; }
+Mod+Minus { set-column-width "-10%"; }
+Mod+Equal { set-column-width "+10%"; }

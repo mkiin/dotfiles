@@ -1,0 +1,74 @@
+// niri configuration (managed by Home Manager)
+// https://niri-wm.github.io/niri/Configuration:-Introduction
+
+// Noctalia shell (started with spawn-at-startup per noctalia-dev docs,
+// because the systemd user service is disabled).
+spawn-at-startup "noctalia"
+
+screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+environment {
+	QT_QPA_PLATFORM "wayland"
+	QT_AUTO_SCREEN_SCALE_FACTOR "1"
+	QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
+	ELECTRON_OZONE_PLATFORM_HINT "auto"
+	NIXOS_OZONE_WL "1"
+	MOZ_ENABLE_WAYLAND "1"
+	SDL_VIDEODRIVER "wayland"
+}
+
+input {
+	keyboard {
+		xkb {
+			layout "us"
+			options "caps:none"
+		}
+		repeat-delay 250
+		repeat-rate 40
+		numlock
+	}
+	mouse {
+		accel-profile "flat"
+		accel-speed 0.0
+		scroll-factor 1.0
+	}
+	touchpad {
+		tap
+		accel-profile "adaptive"
+		accel-speed 0.0
+		scroll-factor 1.0
+	}
+}
+
+layout {
+	gaps 10
+	default-column-width { proportion 0.5; }
+	focus-ring {
+		off
+	}
+	border {
+		off
+	}
+	shadow {
+		on
+		softness 30
+		spread 5
+		offset x=0 y=5
+		color "#000000ee"
+	}
+}
+
+
+hotkey-overlay {
+	skip-at-startup
+}
+
+// Noctalia notifications / window activation.
+debug {
+	honor-xdg-activation-with-invalid-serial
+}
+
+animations {
+ workspace-switch { off; }
+ horizontal-view-movement { spring damping-ratio=1.0 stiffness=1600 epsilon=0.0001; }
+}
