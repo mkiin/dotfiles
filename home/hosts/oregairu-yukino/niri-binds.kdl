@@ -1,4 +1,4 @@
 // Noctalia screen recorder plugin
 Mod+X { spawn-sh "noctalia msg plugin noctalia/screen_recorder:service all toggle"; }
 Mod+R { spawn-sh "noctalia msg plugin noctalia/screen_recorder:service all replay-toggle"; }
-Mod+T { spawn-sh "noctalia msg plugin noctalia/screen_recorder:service all replay-save"; }
+Mod+G { spawn-sh "noctalia msg plugin noctalia/screen_recorder:service all replay-save"; }
