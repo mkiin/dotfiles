@@ -11,6 +11,7 @@
       "oxc"
       "dockerfile"
       "just"
+      "kdl"
       "nix"
       "nu"
       "terraform"

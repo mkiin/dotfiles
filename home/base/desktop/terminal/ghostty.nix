@@ -38,7 +38,7 @@
       window-theme = "ghostty";
       window-show-tab-bar = "never";
       window-new-tab-position = "end";
-      maximize = true;
+      # maximize = true;
 
       background-opacity = 0.9;
       background-opacity-cells = true;

@@ -82,22 +82,6 @@
     "anthropic-skills": {
       "flake": false,
       "locked": {
-        "lastModified": 1791571549,
-        "narHash": "sha256-+UIqBnzyeIOvJSKYaDaE3GYPEpLw7qQqyUw5S971AfU=",
-        "owner": "anthropics",
-        "repo": "skills",
-        "rev": "dbd4588f9e1033efb41dad4bef2f7947c8993d44",
-        "type": "github"
-      },
-      "original": {
-        "owner": "anthropics",
-        "repo": "skills",
-        "type": "github"
-      }
-    },
-    "anthropic-skills_2": {
-      "flake": false,
-      "locked": {
         "lastModified": 1784744409,
         "narHash": "sha256-XPXKd05IEiyTPlAPkowfJUal1UfRlxEHo+GgszgHQCI=",
         "owner": "anthropics",
@@ -141,22 +125,6 @@
       "original": {
         "owner": "hyprwm",
         "repo": "aquamarine",
-        "type": "github"
-      }
-    },
-    "archify-skill": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1792371125,
-        "narHash": "sha256-mzZEL+9Cy9zwuPPlTvtn9Ng4Pr6R5k4i0qWN+8ELSuU=",
-        "owner": "tt-a1i",
-        "repo": "archify",
-        "rev": "654da74e084e5a1faf708779c23d6172766be9c1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "tt-a1i",
-        "repo": "archify",
         "type": "github"
       }
     },
@@ -982,7 +950,7 @@
     "nvimx": {
       "inputs": {
         "agent-skills": "agent-skills_2",
-        "anthropic-skills": "anthropic-skills_2",
+        "anthropic-skills": "anthropic-skills",
         "home-manager": "home-manager_3",
         "lazy-nvim": "lazy-nvim",
         "nixpkgs": "nixpkgs_8",
@@ -1045,8 +1013,6 @@
         "aagl": "aagl",
         "agenix": "agenix",
         "agent-skills": "agent-skills",
-        "anthropic-skills": "anthropic-skills",
-        "archify-skill": "archify-skill",
         "cloudflare-skills": "cloudflare-skills",
         "fastfetch-src": "fastfetch-src",
         "flake-parts": "flake-parts",
@@ -1060,7 +1026,6 @@
         "noctalia": "noctalia",
         "nvimx": "nvimx",
         "ponytail-skill": "ponytail-skill",
-        "superpowers-skill": "superpowers-skill",
         "treefmt-nix": "treefmt-nix_3",
         "zen-browser": "zen-browser"
       }
@@ -1083,22 +1048,6 @@
       "original": {
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "type": "github"
-      }
-    },
-    "superpowers-skill": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1791592084,
-        "narHash": "sha256-UCVI+T7j1Xh1LDkrvnJduis7eHFqrizCyGTWAGW5d6U=",
-        "owner": "obra",
-        "repo": "superpowers",
-        "rev": "bb92a77741419a4ab5f06e711a283343f1ada0c3",
-        "type": "github"
-      },
-      "original": {
-        "owner": "obra",
-        "repo": "superpowers",
         "type": "github"
       }
     },

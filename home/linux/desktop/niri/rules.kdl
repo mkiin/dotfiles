@@ -1,10 +1,17 @@
 // Rounded corners for a modern look.
 window-rule {
+	open-maximized true
 	geometry-corner-radius 20
 	clip-to-geometry true
+	draw-border-with-background false
 }
 
-// Floating Noctalia settings window.
+window-rule {
+	match app-id=r#"^com\.mitchellh\.ghostty$"#
+	match app-id=r#"^dev\.zed\.Zed$"#
+	open-maximized-to-edges false
+}
+
 window-rule {
 	match app-id="dev.noctalia.Noctalia"
 	open-floating true

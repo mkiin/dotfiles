@@ -1,8 +1,3 @@
-// niri configuration (managed by Home Manager)
-// https://niri-wm.github.io/niri/Configuration:-Introduction
-
-// Noctalia shell (started with spawn-at-startup per noctalia-dev docs,
-// because the systemd user service is disabled).
 spawn-at-startup "noctalia"
 
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
@@ -18,6 +13,7 @@ environment {
 }
 
 input {
+	focus-follows-mouse
 	keyboard {
 		xkb {
 			layout "us"
@@ -54,10 +50,10 @@ layout {
 		softness 30
 		spread 5
 		offset x=0 y=5
-		color "#000000ee"
+		color "#000000cc"
+		inactive-color "#00000099"
 	}
 }
-
 
 hotkey-overlay {
 	skip-at-startup
