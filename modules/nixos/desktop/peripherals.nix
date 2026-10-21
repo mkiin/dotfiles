@@ -34,8 +34,8 @@
       enable = true;
       keyboards.default.settings = {
         main = {
-          # overloads the capslock key to function as both escape (when tapped) and control (when held)
-          capslock = "overload(control, esc)";
+          # Hold Escape for 50 ms so games can detect the tap.
+          capslock = "overload(control, macro(esc+50ms))";
           esc = "capslock";
         };
       };
