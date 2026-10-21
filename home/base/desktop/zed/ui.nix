@@ -2,6 +2,15 @@
 {
   programs.zed-editor.userSettings = {
     theme = "Kanagawa";
+    theme_overrides.Kanagawa.syntax = {
+      comment.font_style = "normal";
+      "comment.doc".font_style = "normal";
+      emphasis.font_style = "normal";
+      function.font_style = "normal";
+      hint.font_style = "normal";
+      "variable.parameter".font_style = "normal";
+      "variable.special".font_style = "normal";
+    };
     icon_theme = "Colored Zed Icons Theme Dark";
 
     auto_signature_help = true;

@@ -48,6 +48,8 @@
   home.file.".npmrc".text = ''
     prefix=${config.home.homeDirectory}/.npm
     min-release-age=2
+    engine-strict=true
+    use-pnpm=true
   '';
 
   xdg.configFile."pnpm/config.yaml".text = ''
