@@ -9,12 +9,12 @@
 
   programs.nvimx = {
     enable = true;
-    configDir = ./neovim;
-    lockDir = ./neovim/nvimx-lock;
+    configDir = ./lua;
+    lockDir = ./nvimx-lock;
 
     lock = {
       projectDir = "${config.home.homeDirectory}/${myvars.dotfilesdir}";
-      configDirRelative = "home/base/terminal/neovim";
+      configDirRelative = "home/base/terminal/neovim/lua";
       lockDirRelative = "home/base/terminal/neovim/nvimx-lock";
     };
   };
