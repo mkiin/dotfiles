@@ -45,6 +45,14 @@
   programs.bun.enable = true;
   programs.uv.enable = true;
 
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+    enableZshIntegration = true;
+    enableBashIntegration = true;
+    enableNushellIntegration = true;
+  };
+
   home.file.".npmrc".text = ''
     prefix=${config.home.homeDirectory}/.npm
     min-release-age=2
@@ -74,5 +82,4 @@
     name = "pytorch"
     url = "https://download.pytorch.org/whl/cu128"
   '';
-
 }

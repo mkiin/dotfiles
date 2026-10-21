@@ -18,8 +18,8 @@
         "*.lock"
         ".git/**"
         "secrets/**"
-        "home/linux/desktop/themes/wallust/templates/**"
-        "home/linux/desktop/themes/matugen/templates/**"
+        "home/base/gui/themes/wallust/templates/**"
+        "home/base/gui/themes/matugen/templates/**"
       ];
     };
     pre-commit = {

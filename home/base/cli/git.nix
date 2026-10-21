@@ -1,5 +1,7 @@
 { pkgs, myvars, ... }:
 {
+  home.sessionVariables.DELTA_PAGER = "less -R";
+
   home.packages = [
     pkgs.ghq
   ];

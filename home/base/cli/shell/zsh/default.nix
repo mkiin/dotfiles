@@ -1,6 +1,8 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 {
-  xdg.configFile."zsh/functions.zsh".source = ./functions.zsh;
+  home.sessionVariables.SHELL = "${pkgs.zsh}/bin/zsh";
+
+  xdg.configFile."zsh/function.zsh".source = ./function.zsh;
   programs.zsh = {
     enable = true;
     defaultKeymap = "emacs";
@@ -69,7 +71,7 @@
       zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
       zstyle ':completion:*' menu select
 
-      source "${config.xdg.configHome}/zsh/functions.zsh"
+      source "${config.xdg.configHome}/zsh/function.zsh"
       export USER_ID=$(id -u)
       export GROUP_ID=$(id -g)
     '';

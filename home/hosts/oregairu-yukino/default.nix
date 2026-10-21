@@ -1,10 +1,14 @@
 { config, ... }:
 {
   imports = [
-    ./kanshi.nix
-    ../../base
-    ../../base/desktop
     ../../linux/desktop.nix
+    ../../base/gui/nvidia.nix
+    ../../base/gui/hyprland
+    ../../base/gui/fonts.nix
+    ../../base/gui/media.nix
+    ../../base/gui/themes
+    ../../base/gui/desktop-apps/nikke
+    ./kanshi.nix
   ];
 
   programs.ssh = {

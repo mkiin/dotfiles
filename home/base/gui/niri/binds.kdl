@@ -1,7 +1,7 @@
 // Common key bindings (the module injects these into the single `binds {}` node).
 
 // Applications
-Mod+T { spawn "ghostty"; }
+Mod+T { spawn-sh "$TERMINAL"; }
 Mod+E { spawn "nautilus"; }
 Mod+B { spawn "zen-beta"; }
 Mod+D { spawn "vesktop"; }

@@ -7,6 +7,11 @@
 {
   imports = [ inputs.nvimx.homeModules.nvimx ];
 
+  home.sessionVariables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+  };
+
   programs.nvimx = {
     enable = true;
     configDir = ./lua;
@@ -14,8 +19,8 @@
 
     lock = {
       projectDir = "${config.home.homeDirectory}/${myvars.dotfilesdir}";
-      configDirRelative = "home/base/terminal/neovim/lua";
-      lockDirRelative = "home/base/terminal/neovim/nvimx-lock";
+      configDirRelative = "home/base/cli/neovim/lua";
+      lockDirRelative = "home/base/cli/neovim/nvimx-lock";
     };
   };
 }

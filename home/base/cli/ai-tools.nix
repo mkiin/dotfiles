@@ -11,6 +11,8 @@ in
     inputs.agent-skills.homeManagerModules.default
   ];
 
+  home.packages = [ pkgs.bubblewrap ]; # Codex sandbox
+
   programs.agent-skills = {
     enable = true;
     sources.ponytail = {
