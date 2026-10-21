@@ -12,6 +12,8 @@
         qmlformat.enable = true;
       };
 
+      settings.formatter.shfmt.includes = [ "*.zsh" ];
+
       settings.excludes = [
         "*.lock"
         ".git/**"

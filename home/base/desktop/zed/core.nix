@@ -24,7 +24,6 @@
 
     userSettings = {
       format_on_save = "on";
-      prettier.allowed = false;
 
       autosave = "on_focus_change";
 

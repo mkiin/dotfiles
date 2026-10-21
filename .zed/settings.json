@@ -1,0 +1,28 @@
+{
+  "languages": {
+    "Nix": {
+      "formatter": {
+        "external": {
+          "command": "nix",
+          "arguments": ["fmt", "--", "--stdin", "{buffer_path}"]
+        }
+      }
+    },
+    "Lua": {
+      "formatter": {
+        "external": {
+          "command": "nix",
+          "arguments": ["fmt", "--", "--stdin", "{buffer_path}"]
+        }
+      }
+    },
+    "Shell Script": {
+      "formatter": {
+        "external": {
+          "command": "nix",
+          "arguments": ["fmt", "--", "--stdin", "{buffer_path}"]
+        }
+      }
+    }
+  }
+}

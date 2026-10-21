@@ -2,14 +2,7 @@
 
 let
   oxcLanguage = {
-    formatter = [
-      {
-        language_server.name = "oxfmt";
-      }
-      {
-        code_action = "source.fixAll.oxc";
-      }
-    ];
+    formatter.language_server.name = "oxfmt";
 
     language_servers = [
       "typescript-ls"
@@ -50,22 +43,33 @@ in
 
       Lua.formatter.external = {
         command = "stylua";
-        arguments = [ "-" ];
+        arguments = [
+          "--stdin-filepath"
+          "{buffer_path}"
+          "-"
+        ];
       };
 
       Luau = {
         formatter.external = {
           command = "stylua";
-          arguments = [ "-" ];
+          arguments = [
+            "--stdin-filepath"
+            "{buffer_path}"
+            "-"
+          ];
         };
 
         language_servers = [ "luau-lsp" ];
       };
 
-      Shell = {
+      "Shell Script" = {
         formatter.external = {
           command = "shfmt";
-          arguments = [ ];
+          arguments = [
+            "--filename"
+            "{buffer_path}"
+          ];
         };
 
         language_servers = [ "bash-language-server" ];
