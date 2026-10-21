@@ -1,13 +1,10 @@
 {
-  inputs,
-  pkgs,
   config,
   lib,
   ...
 }:
 {
   imports = [
-    inputs.noctalia.homeModules.default
     ./bar.nix
     ./plugins.nix
     ./shell.nix
@@ -32,11 +29,6 @@
   config.programs.noctalia = {
     enable = true;
     systemd.enable = false;
-    package = inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs (old: {
-      patches = (old.patches or [ ]) ++ [
-        ./../../../../patches/noctalia-control-center-video-wallpaper.patch
-      ];
-    });
 
     settings = {
       idle.behavior = {
