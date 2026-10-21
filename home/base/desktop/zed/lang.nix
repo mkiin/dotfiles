@@ -41,13 +41,16 @@ in
         language_servers = [ "clangd" ];
       };
 
-      Lua.formatter.external = {
-        command = "stylua";
-        arguments = [
-          "--stdin-filepath"
-          "{buffer_path}"
-          "-"
-        ];
+      Lua = {
+        formatter.external = {
+          command = "stylua";
+          arguments = [
+            "--stdin-filepath"
+            "{buffer_path}"
+            "-"
+          ];
+        };
+        language_servers = [ "lua-language-server" ];
       };
 
       Luau = {
@@ -59,7 +62,6 @@ in
             "-"
           ];
         };
-
         language_servers = [ "luau-lsp" ];
       };
 
@@ -71,7 +73,6 @@ in
             "{buffer_path}"
           ];
         };
-
         language_servers = [ "bash-language-server" ];
       };
 
@@ -83,7 +84,6 @@ in
           command = "nixfmt";
           arguments = [ ];
         };
-
         language_servers = [ "nixd" ];
       };
 
@@ -102,7 +102,31 @@ in
     };
 
     lsp = {
+      rust-analyzer.binary.path = "${pkgs.rust-analyzer}/bin/rust-analyzer";
+      rust-analyzer.initialization_options.check.command = "clippy";
+
+      clangd.binary.path = "${pkgs.clang-tools}/bin/clangd";
+
+      lua-language-server.binary.path = "${pkgs.lua-language-server}/bin/lua-language-server";
+
       luau-lsp.settings.binary.path = "${pkgs.luau-lsp}/bin/luau-lsp";
+
+      bash-language-server.binary = {
+        path = "${pkgs.bash-language-server}/bin/bash-language-server";
+        arguments = [ "start" ];
+      };
+
+      nixd.binary.path = "${pkgs.nixd}/bin/nixd";
+
+      ty.binary = {
+        path = "${pkgs.ty}/bin/ty";
+        arguments = [ "server" ];
+      };
+
+      ruff.binary = {
+        path = "${pkgs.ruff}/bin/ruff";
+        arguments = [ "server" ];
+      };
 
       oxlint.binary = {
         path = "${pkgs.oxlint}/bin/oxlint";
@@ -120,8 +144,6 @@ in
         disableNestedConfig = false;
         unusedDisableDirectives = "deny";
       };
-
-      rust-analyzer.initialization_options.check.command = "clippy";
     };
   };
 }
