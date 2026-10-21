@@ -81,9 +81,9 @@ in
 
         # Default / fallback fonts
         "browser.display.use_document_fonts" = 1;
-        "font.name.serif.ja" = "BIZ UDMincho";
-        "font.name.sans-serif.ja" = "BIZ UDGothic";
-        "font.name.monospace.ja" = "UDEV Gothic";
+        "font.name.serif.ja" = "Noto Serif";
+        "font.name.sans-serif.ja" = "Noto Sans";
+        "font.name.monospace.ja" = "JetBrainsMono Nerd Font";
         "font.default.ja" = "sans-serif";
 
         "font.name.serif.x-western" = "Noto Serif";

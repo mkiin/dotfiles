@@ -22,7 +22,7 @@ end)
 
 config.font = wezterm.font_with_fallback({
 	"JetBrainsMono Nerd Font",
-	"UDEV Gothic",
+	"UDEV Gothic NF",
 	"DejaVu Sans Mono",
 })
 

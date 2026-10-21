@@ -8,7 +8,7 @@ in
     enable = true;
 
     settings = {
-      font_family = "JetBrains Mono Nerd Font";
+      font_family = "JetBrainsMono Nerd Font";
       font_size = 14.0;
       window_margin_width = 21.75;
       background_opacity = 0.9;

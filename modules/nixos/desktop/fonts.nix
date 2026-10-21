@@ -22,8 +22,6 @@ in
         noto-fonts-color-emoji
 
         udev-gothic-nf
-        biz-ud-gothic
-        (google-fonts.override { fonts = [ "BIZUDMincho" ]; })
 
         inter
         geist-font
@@ -32,6 +30,8 @@ in
       enableDefaultPackages = false;
 
       fontconfig = {
+        aliases."JetBrainsMono Nerd Font".accept = [ "UDEV Gothic NF" ];
+
         defaultFonts = {
           serif = [
             "Noto Serif CJK JP"
@@ -39,7 +39,6 @@ in
 
           sansSerif = [
             "Noto Sans CJK JP"
-            "BIZ UDGothic"
           ];
 
           monospace = [
