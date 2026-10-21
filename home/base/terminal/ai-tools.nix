@@ -32,6 +32,7 @@ in
     settings = {
       sandbox_mode = "danger-full-access";
       approval_policy = "never";
+      tui.auto_recap = false;
     };
   };
 
