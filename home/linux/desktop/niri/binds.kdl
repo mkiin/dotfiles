@@ -42,8 +42,8 @@ Mod+BracketLeft { consume-or-expel-window-left; }
 Mod+BracketRight { consume-or-expel-window-right; }
 
 // Monitor focus
-Mod+Ctrl+H { focus-monitor-left; }
-Mod+Ctrl+L { focus-monitor-right; }
+Mod+U { focus-monitor-left; }
+Mod+I { focus-monitor-right; }
 
 // Resize
 Mod+Minus { set-column-width "-10%"; }
