@@ -25,8 +25,8 @@ input {
 	}
 	mouse {
 		accel-profile "flat"
-		accel-speed 0.1
-		scroll-factor 1.0
+		accel-speed 0.5
+		scroll-factor 2.0
 	}
 	touchpad {
 		tap
