@@ -67,7 +67,10 @@
         layer = "overlay";
       };
 
-      hooks.started = [ "noctalia msg greeter-sync" ];
+      hooks = {
+        started = [ "noctalia msg greeter-sync" ];
+        wallpaper_changed = [ "noctalia msg templates-apply" ];
+      };
 
       weather = {
         enabled = true;

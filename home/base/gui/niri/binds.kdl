@@ -17,6 +17,7 @@ Mod+Z { spawn-sh "noctalia msg screenshot-region"; }
 Mod+C { close-window; }
 Mod+V { toggle-window-floating; }
 Mod+F { fullscreen-window; }
+Mod+O { toggle-overview; }
 
 // Noctalia
 Mod+A { spawn-sh "noctalia msg panel-toggle launcher"; }

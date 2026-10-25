@@ -71,6 +71,7 @@
         addons = {
           classicui = {
             globalSection = {
+              Theme = "noctalia";
               VerticalCandidateList = false;
               WheelForPaging = true;
               PerScreenDPI = false;

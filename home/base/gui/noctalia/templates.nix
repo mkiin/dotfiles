@@ -16,8 +16,11 @@
         "gtk4"
       ];
       community_ids = [
+        "bat"
         "discord"
+        "fcitx5"
         "obsidian"
+        "papirus-icons"
         "zed"
       ];
     };

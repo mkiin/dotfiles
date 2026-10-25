@@ -1,4 +1,9 @@
-{ pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   # replace cat
   programs.bat = {
@@ -7,6 +12,7 @@
     config = {
       pager = "less -FR";
       style = "numbers,changes,header";
+      theme = "noctalia";
     };
 
     extraPackages = with pkgs.bat-extras; [
@@ -14,6 +20,14 @@
       batman
     ];
   };
+
+  # Noctalia edits bat/config; retain all Nix options in a writable copy.
+  xdg.configFile."bat/config".enable = lib.mkForce false;
+  home.activation.initNoctaliaBatConfig = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+    run ${pkgs.coreutils}/bin/install -Dm644 \
+      ${config.xdg.configFile."bat/config".source} \
+      ${lib.escapeShellArg "${config.xdg.configHome}/bat/config"}
+  '';
 
   # replace ls
   programs.eza = {

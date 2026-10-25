@@ -3,13 +3,8 @@ window-rule {
 	open-maximized true
 	geometry-corner-radius 20
 	clip-to-geometry true
+	tiled-state true
 	draw-border-with-background false
-}
-
-window-rule {
-	match app-id=r#"^com\.mitchellh\.ghostty$"#
-	match app-id=r#"^dev\.zed\.Zed$"#
-	open-maximized-to-edges false
 }
 
 window-rule {
