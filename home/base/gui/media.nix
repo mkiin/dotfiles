@@ -4,7 +4,6 @@
   programs.imv.enable = true;
 
   home.packages = with pkgs; [
-    audacity
     playerctl
   ];
 }
