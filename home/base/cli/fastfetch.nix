@@ -1,30 +1,17 @@
 {
-  inputs,
-  pkgs,
   config,
   myvars,
   ...
 }:
-let
-  fastfetch-unwrapped = pkgs.fastfetch-unwrapped.overrideAttrs {
-    version = "2.69.0";
-    src = inputs.fastfetch-src;
-  };
-
-  fastfetch = pkgs.fastfetch.override {
-    inherit fastfetch-unwrapped;
-  };
-in
 {
   programs.fastfetch = {
     enable = true;
-    package = fastfetch;
     settings = {
       "$schema" = "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json";
 
       logo = {
         type = "kitty";
-        source = "${config.home.homeDirectory}/${myvars.dotfilesdir}/assets/doro-normal.GIF";
+        source = "${config.home.homeDirectory}/${myvars.dotfilesdir}/assets/remielle.gif";
         height = 10;
         preserveAspectRatio = true;
         padding = {
