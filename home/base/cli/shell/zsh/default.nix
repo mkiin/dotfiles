@@ -1,6 +1,5 @@
-{ config, pkgs, ... }:
+{ config, ... }:
 {
-  home.sessionVariables.SHELL = "${pkgs.zsh}/bin/zsh";
 
   xdg.configFile."zsh/function.zsh".source = ./function.zsh;
   programs.zsh = {
