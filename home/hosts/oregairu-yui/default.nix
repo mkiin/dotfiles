@@ -6,7 +6,6 @@
 {
   imports = [
     ../../linux/desktop.nix
-    ./kanshi.nix
     ./noctalia.nix
   ];
 
@@ -27,6 +26,7 @@
   };
 
   modules.desktop.niri.enable = true;
+  modules.desktop.niri.extraOutputs = builtins.readFile ./niri-outputs.kdl;
   modules.desktop.pyprland.enable = false;
 
   home.packages = with pkgs; [

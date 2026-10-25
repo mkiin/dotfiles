@@ -8,7 +8,6 @@
     ../../base/gui/media.nix
     ../../base/gui/themes
     ../../base/gui/desktop-apps/nikke
-    ./kanshi.nix
   ];
 
   programs.ssh = {
@@ -28,6 +27,7 @@
   };
 
   modules.desktop.niri.enable = true;
+  modules.desktop.niri.extraOutputs = builtins.readFile ./niri-outputs.kdl;
   modules.desktop.niri.extraBinds = builtins.readFile ./niri-binds.kdl;
   modules.desktop.nvidia.enable = true;
   modules.desktop.pyprland.enable = false;

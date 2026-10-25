@@ -7,7 +7,6 @@
     ../base/gui/zed
     ../base/gui/gtk.nix
     ../base/gui/niri
-    ../base/gui/kanshi
     ../base/gui/wayland.nix
     ../base/gui/clipboard.nix
     ../base/gui/fcitx5.nix
