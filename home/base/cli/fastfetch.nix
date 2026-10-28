@@ -11,11 +11,11 @@
 
       logo = {
         type = "kitty";
-        source = "${config.home.homeDirectory}/${myvars.dotfilesdir}/assets/remielle.gif";
+        source = "${config.home.homeDirectory}/${myvars.dotfilesdir}/assets/yukinoshita-yukino.png";
         height = 10;
         preserveAspectRatio = true;
         padding = {
-          top = 3;
+          top = 5;
         };
         animationFrame = 0;
       };
