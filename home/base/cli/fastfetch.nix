@@ -11,12 +11,13 @@
 
       logo = {
         type = "kitty";
-        source = "${config.home.homeDirectory}/${myvars.dotfilesdir}/assets/yukinoshita-yukino.png";
-        height = 10;
+        source = "${config.home.homeDirectory}/${myvars.dotfilesdir}/assets/yukinoshita-yukino-crouching.png";
+        height = 16;
         preserveAspectRatio = true;
         padding = {
-          top = 5;
+          top = 1;
         };
+        printRemaining = false;
         animationFrame = 0;
       };
 
@@ -32,7 +33,7 @@
       modules = [
         {
           type = "custom";
-          format = "\n";
+          format = "";
         }
         {
           type = "custom";
@@ -111,6 +112,10 @@
         {
           type = "custom";
           key = "╰───────────╯";
+        }
+        {
+          type = "custom";
+          format = "";
         }
       ];
     };

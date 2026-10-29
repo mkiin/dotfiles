@@ -1,10 +1,8 @@
 diff --git a/src/shell/wallpaper/wallpaper.cpp b/src/shell/wallpaper/wallpaper.cpp
 --- a/src/shell/wallpaper/wallpaper.cpp
 +++ b/src/shell/wallpaper/wallpaper.cpp
-@@ -327,5 +327,5 @@ std::string Wallpaper::currentPath() const {
-       return inst->currentPath;
-     }
-   }
--  return {};
-+  return m_config != nullptr ? m_config->getGreeterSyncWallpaperPath() : std::string{};
+@@ -360,3 +360,3 @@ std::string Wallpaper::currentPath() const {
+   const WallpaperInstance* inst = currentInstance();
+-  return inst != nullptr ? inst->currentPath : std::string{};
++  return inst != nullptr ? inst->currentPath : (m_config != nullptr ? m_config->getGreeterSyncWallpaperPath() : std::string{});
  }
