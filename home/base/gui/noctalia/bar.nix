@@ -116,6 +116,11 @@
       actions.left = "panel-toggle control-center network";
     };
 
+    screenshot.actions = {
+      left = "screenshot-fullscreen";
+      middle = "screenshot-annotate";
+    };
+
     screen-recorder = {
       type = "noctalia/screen_recorder:recorder";
     };
