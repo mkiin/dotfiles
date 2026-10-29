@@ -36,7 +36,7 @@ jobs:
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
       - name: Compare NixOS systems
-        uses: natsukium/nix-diff-action@v1.1.1
+        uses: natsukium/nix-diff-action@v1.1.2
         with:
           attributes: |
             - displayName: oregairu-yukino
