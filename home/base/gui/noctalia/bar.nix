@@ -20,7 +20,7 @@
       capsule_thickness = 1.0;
       capsule_padding = 10.00;
       capsule_opacity = 0.8;
-      capsule_border = "outline";
+      capsule_border = "outline_variant";
 
       start = [
         "control-center"
@@ -55,7 +55,7 @@
           ];
           padding = 10;
           widget_spacing = 15;
-          border = "outline";
+          border = "outline_variant";
           opacity = 0.8;
         }
         {
@@ -66,7 +66,7 @@
           ];
           padding = 7;
           widget_spacing = 4;
-          border = "outline";
+          border = "outline_variant";
           opacity = 0.8;
         }
       ];
