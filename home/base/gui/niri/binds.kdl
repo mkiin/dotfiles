@@ -31,20 +31,20 @@ Mod+H { focus-column-left; }
 Mod+J { focus-window-or-workspace-down; }
 Mod+K { focus-window-or-workspace-up; }
 Mod+L { focus-column-right; }
+Mod+U { focus-monitor-left; }
+Mod+I { focus-monitor-right; }
 
 // Move
 Mod+Shift+H { move-column-left; }
 Mod+Shift+J { move-window-down-or-to-workspace-down; }
 Mod+Shift+K { move-window-up-or-to-workspace-up; }
 Mod+Shift+L { move-column-right; }
+Mod+Shift+U { move-window-to-monitor-left; }
+Mod+Shift+I { move-window-to-monitor-right; }
 
 // Consume / Expel
 Mod+BracketLeft { consume-or-expel-window-left; }
 Mod+BracketRight { consume-or-expel-window-right; }
-
-// Monitor focus
-Mod+U { focus-monitor-left; }
-Mod+I { focus-monitor-right; }
 
 // Resize
 Mod+Minus { set-column-width "-10%"; }
@@ -52,4 +52,5 @@ Mod+Equal { set-column-width "+10%"; }
 Mod+Shift+Minus { set-window-height "-10%"; }
 Mod+Shift+Equal { set-window-height "+10%"; }
 
+// Help
 Mod+Shift+Slash { show-hotkey-overlay; }

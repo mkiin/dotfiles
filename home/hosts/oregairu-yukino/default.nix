@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, ... }:
 {
   imports = [
     ../../linux/desktop.nix
@@ -26,9 +26,13 @@
     suspendTimeout = 3600;
   };
 
-  modules.desktop.niri.enable = true;
-  modules.desktop.niri.extraOutputs = builtins.readFile ./niri-outputs.kdl;
-  modules.desktop.niri.extraBinds = builtins.readFile ./niri-binds.kdl;
+  modules.desktop.hyprland.enable = true;
+  wayland.windowManager.hyprland.extraLuaFiles.monitors = {
+    content = ./monitors.lua;
+    autoLoad = false;
+  };
+  wayland.windowManager.hyprland.extraConfig = lib.mkAfter (builtins.readFile ./keybinds.lua);
+  services.hypridle.enable = lib.mkForce false;
   modules.desktop.nvidia.enable = true;
   modules.desktop.pyprland.enable = false;
 
