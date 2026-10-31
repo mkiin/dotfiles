@@ -47,6 +47,7 @@
     ui_font_family = lib.mkDefault "Geist";
     ui_font_size = lib.mkDefault 18.0;
 
+    buffer_font_family = "Geist Mono";
     buffer_font_fallbacks = [ "UDEV Gothic NF" ];
     buffer_font_size = lib.mkDefault 16.0;
 

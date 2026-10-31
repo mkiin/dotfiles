@@ -11,7 +11,7 @@
 
       logo = {
         type = "kitty";
-        source = "${config.home.homeDirectory}/${myvars.dotfilesdir}/assets/yukinoshita-yukino-crouching.png";
+        source = "${config.home.homeDirectory}/${myvars.dotfilesdir}/assets/remielle.gif";
         height = 16;
         preserveAspectRatio = true;
         padding = {

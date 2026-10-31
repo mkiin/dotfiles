@@ -18,9 +18,8 @@ hl.bind(mod .. " + W", hl.dsp.exec_cmd("noctalia msg wallpaper-next"))
 hl.bind(mod .. " + SHIFT + W", hl.dsp.exec_cmd("noctalia msg panel-toggle wallpaper"))
 
 -- Capture
-
-hl.bind(mod .. " + Z", hl.dsp.exec_cmd("noctalia msg screenshot-region"))
-hl.bind(mod .. " + SHIFT + Z", hl.dsp.exec_cmd("noctalia msg screenshot-window"))
+hl.bind(mod .. " + Z", hl.dsp.exec_cmd("noctalia msg screenshot-window"))
+hl.bind(mod .. " + SHIFT + Z", hl.dsp.exec_cmd("noctalia msg screenshot-region"))
 
 -- Window
 
