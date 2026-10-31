@@ -1,14 +1,5 @@
 local mod = require("vars").mainMod
-local ipc = "noctalia msg "
 
-local function run(keys, command)
-	hl.bind(mod .. " + " .. keys, hl.dsp.exec_cmd(command))
-end
-
-run("X", ipc .. "plugin noctalia/screen_recorder:service all toggle")
-run("R", ipc .. "plugin noctalia/screen_recorder:service all replay-toggle")
-run("T", ipc .. "plugin noctalia/screen_recorder:service all replay-save")
-
-run("SHIFT + M", "pypr lost_windows")
-run("SHIFT + F", "pypr toggle fetch")
-run("SHIFT + B", "pypr toggle btop")
+hl.bind(mod .. " + X", hl.dsp.exec_cmd("noctalia msg plugin noctalia/screen_recorder:service all toggle"))
+hl.bind(mod .. " + R", hl.dsp.exec_cmd("noctalia msg plugin noctalia/screen_recorder:service all replay-toggle"))
+hl.bind(mod .. " + G", hl.dsp.exec_cmd("noctalia msg plugin noctalia/screen_recorder:service all replay-save"))

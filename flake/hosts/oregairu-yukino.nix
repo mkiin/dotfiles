@@ -24,10 +24,11 @@
       ../../modules/nixos/desktop
 
       {
-        programs.niri.enable = true;
+        programs.hyprland.enable = true;
         modules.desktop.wayland.enable = true;
         modules.desktop.fonts.enable = true;
         modules.desktop.gaming.enable = true;
+        services.displayManager.noctalia-greeter.settings.session.default = "hyprland-uwsm";
       }
 
       inputs.home-manager.nixosModules.home-manager
