@@ -19,16 +19,10 @@ hl.config({
 		},
 		blur = {
 			enabled = true,
-			size = 3, -- 背景の輪郭が文字に干渉しない程度に広くぼかす
+			xray = true,
+			size = 3,
 			passes = 2,
-			-- contrast = 1.5,
-			-- brightness = 0.9, -- 透過背景を暗くして明るい文字とのコントラストを確保
-			-- vibrancy = 0.15,
-			-- vibrancy_darkness = 0.2,
-			noise = 0.01,
-			new_optimizations = true,
-			ignore_opacity = false,
-			xray = false,
+			vibrancy = 0.1696,
 		},
 	},
 	animations = { enabled = true },

@@ -6,7 +6,7 @@ hl.config({
 		kb_options = "caps:none",
 		repeat_rate = 40,
 		repeat_delay = 250,
-		follow_mouse = 1,
+		follow_mouse = 0,
 		accel_profile = "flat",
 		sensitivity = 1.0,
 		scroll_factor = 2,

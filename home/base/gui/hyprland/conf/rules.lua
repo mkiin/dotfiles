@@ -5,10 +5,22 @@ hl.window_rule({
 })
 
 hl.window_rule({
+	name = "suppress-x11-configure-requests",
+	match = { xwayland = true },
+	suppress_event = "x11configurerequest",
+})
+
+hl.window_rule({
+	name = "ghostty-no-blur",
+	match = { class = "^com\\.mitchellh\\.ghostty$" },
+	no_blur = true,
+})
+
+hl.window_rule({
 	name = "nautilus-floating",
 	match = { class = "^org\\.gnome\\.Nautilus$" },
 	float = true,
-	size = { "monitor_w * 0.4", "monitor_h * 0.4" },
+	size = { "monitor_w * 0.45", "monitor_h * 0.46" },
 	center = true,
 })
 
