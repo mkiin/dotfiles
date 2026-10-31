@@ -1,4 +1,7 @@
-{ ... }:
+{ config, lib, ... }:
+let
+  cfg = config.modules.desktop;
+in
 {
   programs.noctalia.settings.theme = {
     source = "community";
@@ -11,10 +14,11 @@
         "btop"
         "ghostty"
         "kitty"
-        "niri"
         "gtk3"
         "gtk4"
-      ];
+      ]
+      ++ lib.optional (cfg.hyprland.enable or false) "hyprland"
+      ++ lib.optional cfg.niri.enable "niri";
       community_ids = [
         "bat"
         "discord"

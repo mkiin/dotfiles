@@ -2,7 +2,7 @@
 {
   programs.noctalia.settings.shell = {
     greeter_sync.auto_sync = true;
-    font_family = "SF Pro Text";
+    font_family = "Geist";
     settings_window_translucent = true;
     polkit_agent = true;
 
