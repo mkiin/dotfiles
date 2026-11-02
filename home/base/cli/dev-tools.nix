@@ -53,6 +53,12 @@
     enableNushellIntegration = true;
   };
 
+  xdg.configFile."direnv/direnv.toml".text = ''
+    [global]
+    hide_env_diff = true
+    log_format = "-"
+  '';
+
   home.file.".npmrc".text = ''
     prefix=${config.home.homeDirectory}/.npm
     min-release-age=2
