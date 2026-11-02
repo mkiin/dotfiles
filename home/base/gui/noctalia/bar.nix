@@ -1,8 +1,13 @@
 { ... }:
 {
   programs.noctalia.settings = {
+    bar.order = [
+      "slate"
+      "capsule"
+    ];
+
     bar.capsule = {
-      enabled = true;
+      enabled = false;
 
       position = "top";
       margin_edge = 18;
@@ -71,8 +76,119 @@
         }
       ];
     };
+
+    bar.slate = {
+      enabled = true;
+      position = "top";
+      margin_edge = 3;
+      margin_ends = 160;
+      thickness = 40;
+      padding = 16;
+      radius = 20;
+      background_opacity = 1.0;
+      compositor_blur = false;
+      capsule = false;
+      capsule_thickness = 0.7;
+      widget_spacing = 14;
+
+      start = [
+        "launcher"
+        "workspaces_slate"
+        "group:sysmon"
+        "group:player"
+      ];
+      center = [ "clock_slate" ];
+      end = [
+        "tray"
+        "wallpaper"
+        "network_slate"
+        "volume_slate"
+        "notifications"
+        "bluetooth"
+        "brightness"
+        "battery"
+        "session"
+      ];
+
+      capsule_group = [
+        {
+          id = "sysmon";
+          members = [
+            "ram"
+            "cpu"
+          ];
+          padding = 10;
+          widget_spacing = 10;
+          opacity = 0.0;
+        }
+        {
+          id = "player";
+          members = [
+            "media_slate"
+            "audio_vis_slate"
+          ];
+          padding = 4;
+          widget_spacing = "auto";
+          opacity = 0.0;
+        }
+      ];
+    };
   };
   programs.noctalia.settings.widget = {
+    ram = {
+      label_min_width = 50;
+      visualization = "none";
+    };
+    cpu = {
+      label_min_width = 25;
+      visualization = "none";
+    };
+
+    workspaces_slate = {
+      type = "workspaces";
+      show_labels = true;
+      labels_only_when_occupied = false;
+      focused_output_only = true;
+      anchor = true;
+    };
+
+    clock_slate = {
+      type = "clock";
+      format = "{:%H:%M}";
+      actions.left = "panel-toggle control-center calendar";
+    };
+
+    media_slate = {
+      type = "media";
+      album_art_only = false;
+      hide_artist = true;
+      hide_when_no_media = true;
+      min_length = 0;
+      max_length = 160;
+    };
+
+    audio_vis_slate = {
+      type = "audio_visualizer";
+      width = 150;
+      bands = 40;
+      show_when_idle = false;
+    };
+
+    network_slate = {
+      type = "network";
+      show_label = false;
+      actions.left = "panel-toggle control-center network";
+    };
+
+    volume_slate = {
+      type = "volume";
+      show_label = false;
+      actions = {
+        left = "panel-toggle control-center audio";
+        right = "volume-mute";
+      };
+    };
+
     wallpaper = {
       type = "custom_button";
       glyph = "photo";
