@@ -8,7 +8,7 @@
 
     settings = {
       "$schema" = "https://starship.rs/config-schema.json";
-      format = "$directory$git_branch$character";
+      format = "$directory$git_branch$git_status$character";
       add_newline = false;
 
       directory = {
