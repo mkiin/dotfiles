@@ -44,6 +44,8 @@
         "volume_capsule"
         "network_capsule"
         "group:tools"
+        "brightness"
+        "battery"
         "session"
       ];
 
