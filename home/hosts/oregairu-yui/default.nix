@@ -6,7 +6,6 @@
 {
   imports = [
     ../../linux/desktop.nix
-    ./noctalia.nix
   ];
 
   programs.ssh = {

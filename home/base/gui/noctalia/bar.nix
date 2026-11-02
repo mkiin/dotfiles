@@ -28,21 +28,21 @@
       capsule_border = "outline_variant";
 
       start = [
-        "control-center"
-        "weather"
-        "taskbar"
+        "control-center_capsule"
+        "weather_capsule"
+        "taskbar_capsule"
       ];
 
       center = [
-        "clock"
-        "workspaces"
+        "clock_capsule"
+        "workspaces_capsule"
         "group:player"
       ];
 
       end = [
         "tray"
-        "volume"
-        "network"
+        "volume_capsule"
+        "network_capsule"
         "group:tools"
         "session"
       ];
@@ -54,9 +54,9 @@
             "wallpaper"
             "notifications"
             "clipboard"
-            "screenshot"
-            "screen-recorder"
-            "desktop-widgets"
+            "screenshot_capsule"
+            "screen-recorder_capsule"
+            "desktop-widgets_capsule"
           ];
           padding = 10;
           widget_spacing = 15;
@@ -66,8 +66,8 @@
         {
           id = "player";
           members = [
-            "media"
-            "audio-vis"
+            "media_capsule"
+            "audio_vis_capsule"
           ];
           padding = 7;
           widget_spacing = 4;
@@ -92,7 +92,7 @@
       widget_spacing = 14;
 
       start = [
-        "launcher"
+        "launcher_slate"
         "workspaces_slate"
         "group:sysmon"
         "group:player"
@@ -114,8 +114,8 @@
         {
           id = "sysmon";
           members = [
-            "ram"
-            "cpu"
+            "ram_slate"
+            "cpu_slate"
           ];
           padding = 10;
           widget_spacing = 10;
@@ -133,160 +133,174 @@
         }
       ];
     };
-  };
-  programs.noctalia.settings.widget = {
-    ram = {
-      label_min_width = 50;
-      visualization = "none";
-    };
-    cpu = {
-      label_min_width = 25;
-      visualization = "none";
-    };
-
-    workspaces_slate = {
-      type = "workspaces";
-      show_labels = true;
-      labels_only_when_occupied = false;
-      focused_output_only = true;
-      anchor = true;
-    };
-
-    clock_slate = {
-      type = "clock";
-      format = "{:%H:%M}";
-      actions.left = "panel-toggle control-center calendar";
-    };
-
-    media_slate = {
-      type = "media";
-      album_art_only = false;
-      hide_artist = true;
-      hide_when_no_media = true;
-      min_length = 0;
-      max_length = 160;
-    };
-
-    audio_vis_slate = {
-      type = "audio_visualizer";
-      width = 150;
-      bands = 40;
-      show_when_idle = false;
-    };
-
-    network_slate = {
-      type = "network";
-      show_label = false;
-      actions.left = "panel-toggle control-center network";
-    };
-
-    volume_slate = {
-      type = "volume";
-      show_label = false;
-      actions = {
-        left = "panel-toggle control-center audio";
-        right = "volume-mute";
+    widget = {
+      ram_slate = {
+        type = "ram";
+        label_min_width = 50;
+        visualization = "none";
       };
-    };
-
-    wallpaper = {
-      type = "custom_button";
-      glyph = "photo";
-      tooltip = "Wallpaper";
-      actions.left = "panel-toggle mkiin/wallpaper-picker:picker";
-    };
-
-    launcher = {
-      # custom_image = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-      custom_image_colorize = true;
-    };
-
-    weather = {
-      show_condition = false;
-    };
-
-    clock = {
-      format = "{:%I:%M %p}";
-      actions.left = "panel-toggle control-center calendar";
-    };
-
-    workspaces = {
-      show_labels = false;
-      show_tooltip = false;
-      labels_only_when_occupied = true;
-      anchor = true;
-      focused_output_only = true;
-    };
-
-    volume = {
-      show_label = true;
-
-      actions = {
-        left = "panel-toggle control-center audio";
-        right = "volume-mute";
+      cpu_slate = {
+        type = "cpu";
+        label_min_width = 25;
+        visualization = "none";
       };
-    };
 
-    network = {
-      show_label = true;
-      actions.left = "panel-toggle control-center network";
-    };
+      workspaces_slate = {
+        type = "workspaces";
+        show_labels = true;
+        labels_only_when_occupied = false;
+        focused_output_only = true;
+        anchor = true;
+      };
 
-    screenshot.actions = {
-      left = "screenshot-fullscreen";
-      middle = "screenshot-annotate";
-    };
+      clock_slate = {
+        type = "clock";
+        format = "{:%H:%M}";
+        actions.left = "panel-toggle control-center calendar";
+      };
 
-    screen-recorder = {
-      type = "noctalia/screen_recorder:recorder";
-    };
+      media_slate = {
+        type = "media";
+        album_art_only = false;
+        hide_artist = true;
+        hide_when_no_media = true;
+        min_length = 0;
+        max_length = 160;
+      };
 
-    desktop-widgets = {
-      type = "custom_button";
-      glyph = "layout-dashboard";
-      actions.left = "desktop-widgets-toggle";
-    };
+      audio_vis_slate = {
+        type = "audio_visualizer";
+        width = 150;
+        bands = 40;
+        show_when_idle = false;
+      };
 
-    session = {
-      icon_color = "error";
-    };
+      network_slate = {
+        type = "network";
+        show_label = false;
+        actions.left = "panel-toggle control-center network";
+      };
 
-    taskbar = {
-      group_by_workspace = false;
-      show_all_outputs = true;
-      only_active_workspace = false;
-      show_window_title = false;
-      show_active_indicator = true;
-      icon_scale = 1.0;
-      item_spacing = 6;
-      active_indicator_color = "primary";
-      active_opacity = 1.0;
-      inactive_opacity = 0.75;
-    };
+      volume_slate = {
+        type = "volume";
+        show_label = false;
+        actions = {
+          left = "panel-toggle control-center audio";
+          right = "volume-mute";
+        };
+      };
 
-    audio-vis = {
-      type = "audio_visualizer";
-      width = 100;
-      bands = 16;
-      mirrored = true;
-      centered = true;
-      show_when_idle = true;
-      color_1 = "primary";
-      color_2 = "secondary";
-    };
+      wallpaper = {
+        type = "custom_button";
+        glyph = "photo";
+        tooltip = "Wallpaper";
+        actions.left = "panel-toggle mkiin/wallpaper-picker:picker";
+      };
 
-    media = {
-      album_art_only = true;
-      # hide_album_art = false;
-      hide_artist = true;
-      min_length = 100;
-      max_length = 180;
-      art_size = 16;
-      title_scroll = "on_hover";
-      hide_when_no_media = false;
-    };
-    control-center = {
-      actions.right = "panel-toggle launcher";
+      launcher_slate = {
+        type = "launcher";
+        # custom_image = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+        custom_image_colorize = true;
+      };
+
+      weather_capsule = {
+        type = "weather";
+        show_condition = false;
+      };
+
+      clock_capsule = {
+        type = "clock";
+        format = "{:%I:%M %p}";
+        actions.left = "panel-toggle control-center calendar";
+      };
+
+      workspaces_capsule = {
+        type = "workspaces";
+        show_labels = false;
+        show_tooltip = false;
+        labels_only_when_occupied = true;
+        anchor = true;
+        focused_output_only = true;
+      };
+
+      volume_capsule = {
+        type = "volume";
+        show_label = true;
+
+        actions = {
+          left = "panel-toggle control-center audio";
+          right = "volume-mute";
+        };
+      };
+
+      network_capsule = {
+        type = "network";
+        show_label = true;
+        actions.left = "panel-toggle control-center network";
+      };
+
+      screenshot_capsule = {
+        type = "screenshot";
+        actions = {
+          left = "screenshot-fullscreen";
+          middle = "screenshot-annotate";
+        };
+      };
+
+      screen-recorder_capsule = {
+        type = "noctalia/screen_recorder:recorder";
+      };
+
+      desktop-widgets_capsule = {
+        type = "custom_button";
+        glyph = "layout-dashboard";
+        actions.left = "desktop-widgets-toggle";
+      };
+
+      session = {
+        icon_color = "error";
+      };
+
+      taskbar_capsule = {
+        type = "taskbar";
+        group_by_workspace = false;
+        show_all_outputs = true;
+        only_active_workspace = false;
+        show_window_title = false;
+        show_active_indicator = true;
+        icon_scale = 1.0;
+        item_spacing = 6;
+        active_indicator_color = "primary";
+        active_opacity = 1.0;
+        inactive_opacity = 0.75;
+      };
+
+      audio_vis_capsule = {
+        type = "audio_visualizer";
+        width = 100;
+        bands = 16;
+        mirrored = true;
+        centered = true;
+        show_when_idle = true;
+        color_1 = "primary";
+        color_2 = "secondary";
+      };
+
+      media_capsule = {
+        type = "media";
+        album_art_only = true;
+        # hide_album_art = false;
+        hide_artist = true;
+        min_length = 100;
+        max_length = 180;
+        art_size = 16;
+        title_scroll = "on_hover";
+        hide_when_no_media = false;
+      };
+      control-center_capsule = {
+        type = "control-center";
+        actions.right = "panel-toggle launcher";
+      };
     };
   };
 }
