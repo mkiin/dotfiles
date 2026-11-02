@@ -7,6 +7,7 @@
     ../../base/gui/media.nix
     ../../base/gui/themes
     ../../base/gui/desktop-apps/nikke
+    ./nikke-development.nix
   ];
 
   programs.ssh = {
