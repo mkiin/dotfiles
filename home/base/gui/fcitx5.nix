@@ -86,6 +86,7 @@ in
           classicui = {
             globalSection = {
               Theme = "noctalia";
+              DarkTheme = "noctalia";
               VerticalCandidateList = false;
               WheelForPaging = true;
               PerScreenDPI = false;

@@ -137,13 +137,15 @@
     };
     widget = {
       ram_slate = {
-        type = "ram";
-        label_min_width = 50;
+        type = "sysmon";
+        stat = "ram_used";
+        # label_min_width = 50;
         visualization = "none";
       };
       cpu_slate = {
-        type = "cpu";
-        label_min_width = 25;
+        type = "sysmon";
+        stat = "cpu_usage";
+        # label_min_width = 25;
         visualization = "none";
       };
 
