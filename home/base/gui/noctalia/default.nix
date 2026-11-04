@@ -7,6 +7,8 @@
 {
   imports = [
     ./bar.nix
+    ./desktop.nix
+    ./lockscreen.nix
     ./plugins.nix
     ./shell.nix
     ./templates.nix
@@ -89,16 +91,6 @@
         # longitude = 141.3544;
       };
 
-      lockscreen = {
-        enabled = true;
-        lock_before_suspend = true;
-        blurred_desktop = false;
-        blur_intensity = 0.0;
-        allow_empty_password = true;
-      };
-
-      desktop_widgets.enabled = true;
-      lockscreen_widgets.enabled = true;
     };
   };
 }
