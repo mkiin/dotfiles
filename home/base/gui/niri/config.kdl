@@ -14,10 +14,6 @@ environment {
 
 input {
 	keyboard {
-		xkb {
-			layout "us"
-			options "caps:none"
-		}
 		repeat-delay 250
 		repeat-rate 40
 		numlock

@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  osConfig,
+  ...
+}:
 {
   options.modules.desktop.niri.enable = lib.mkEnableOption "personal niri configuration";
   options.modules.desktop.niri.extraBinds = lib.mkOption {
@@ -18,14 +23,19 @@
       systemd.enable = false;
       portalPackage = null;
       checkConfig = true;
-      extraConfig =
-        builtins.readFile ./config.kdl
-        + builtins.readFile ./rules.kdl
-        + config.modules.desktop.niri.extraOutputs
-        + "\nbinds {\n"
-        + builtins.readFile ./binds.kdl
-        + config.modules.desktop.niri.extraBinds
-        + "\n}\n";
+      settings.input.keyboard.xkb = {
+        layout = osConfig.services.xserver.xkb.layout;
+        options = "caps:none";
+      };
+      extraConfig = ''
+        include "${./config.kdl}"
+      ''
+      + builtins.readFile ./rules.kdl
+      + config.modules.desktop.niri.extraOutputs
+      + "\nbinds {\n"
+      + builtins.readFile ./binds.kdl
+      + config.modules.desktop.niri.extraBinds
+      + "\n}\n";
     };
   };
 }

@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  osConfig,
   ...
 }:
 let
@@ -30,6 +31,8 @@ in
       portalPackage = null;
       systemd.enable = false;
       configType = "lua";
+
+      settings.config.input.kb_layout = osConfig.services.xserver.xkb.layout;
 
       extraLuaFiles = lib.genAttrs luaModules (name: {
         content = ./conf + "/${name}.lua";

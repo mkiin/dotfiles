@@ -2,7 +2,6 @@ hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
 
 hl.config({
 	input = {
-		kb_layout = "us",
 		kb_options = "caps:none",
 		repeat_rate = 40,
 		repeat_delay = 250,

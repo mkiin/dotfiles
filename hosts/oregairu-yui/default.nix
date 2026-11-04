@@ -12,6 +12,9 @@
 
   _module.args.hostVars.primaryOutput = null;
 
+  services.xserver.xkb.layout = "jp";
+  console.useXkbConfig = true;
+
   networking.hostName = "oregairu-yui";
 
   services.openssh.settings = {

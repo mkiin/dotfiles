@@ -1,4 +1,12 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  lib,
+  osConfig,
+  ...
+}:
+let
+  layout = osConfig.services.xserver.xkb.layout;
+in
 {
   i18n.inputMethod = {
     enable = true;
@@ -15,12 +23,18 @@
 
       settings = {
         globalOptions = {
+          "Hotkey/TriggerKeys" = lib.mkIf (layout == "jp") {
+            "0" = "Zenkaku_Hankaku";
+          };
+
           "Hotkey/ActivateKeys" = {
             "0" = "Alt+Alt_R";
+            "1" = lib.mkIf (layout == "jp") "Henkan";
           };
 
           "Hotkey/DeactivateKeys" = {
             "0" = "Alt+Alt_L";
+            "1" = lib.mkIf (layout == "jp") "Muhenkan";
           };
 
           "Hotkey/PrevCandidate" = {
@@ -51,12 +65,12 @@
         inputMethod = {
           "Groups/0" = {
             Name = "Default";
-            "Default Layout" = "us";
+            "Default Layout" = layout;
             DefaultIM = "mozc";
           };
 
           "Groups/0/Items/0" = {
-            Name = "keyboard-us";
+            Name = "keyboard-${layout}";
           };
 
           "Groups/0/Items/1" = {

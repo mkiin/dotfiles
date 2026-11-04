@@ -32,7 +32,7 @@ in
       settings = {
         session.default = lib.mkDefault "niri";
         user.default = myvars.username;
-        keyboard.layout = "us";
+        keyboard.layout = config.services.xserver.xkb.layout;
         output.name = lib.mkIf (hostVars.primaryOutput != null) hostVars.primaryOutput;
 
         appearance = {
