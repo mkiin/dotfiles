@@ -32,10 +32,6 @@ in
       }
       // userReadable;
 
-      "nix-access-tokens" = {
-        file = "${mysecrets}/nix-access-tokens.age";
-      }
-      // userReadable;
     };
   };
 }
