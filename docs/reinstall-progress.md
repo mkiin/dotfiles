@@ -4,10 +4,13 @@
 
 ## 現在の範囲
 
-- Yui用の独立Installerとlock。URLはnixos-unstable、固定はlockで管理する。
+- Yukino・Yui用の独立Installerとlock。URLはnixos-unstable、固定はlockで管理する。
 - Installerから本番と共通のユーザー・SSH・ロケールモジュールをimportする。
   Installerだけに必要な初期認証とネットワーク設定はconfiguration.nixに置く。
 - Yuiの実測値に基づくパーティション定義をhosts/oregairu-yui/disko.nixへ直接記述する。
+- 提示画像のディスク指定・容量に基づきhosts/oregairu-yukino/disko.nixを追加。
+  ESPは1G、rootは940603124Kのext4、swapは35108800K。
+  実機初期化前のby-idとディスク構成の照合はまだ必要。
 - 不要なNixアクセストークンのagenix定義・利用設定を削除する。
 - CIの非公開input用SSH鍵受け渡しを削除する。
 
@@ -17,6 +20,9 @@ enroll・初期パスワード生成の独自スクリプトと専用CIジョブ
 
 ## 今回の検証
 
+- 画像の値を反映後、Yukino・Yui Installerのtoplevel実ビルド: 両方とも終了0。
+  Yukinoは `/nix/store/v391l8s3pis77id05wphg08qnqrx0kcb-nixos-system-oregairu-yukino-26.11.20260730.1559d3d`。
+  YukinoのDiskoスクリプトも評価済み。ディスク初期化・実機適用は実施していない。
 - 共通モジュール再利用後のYui Installer実ビルド: 終了0。
   `/nix/store/dn17b2k9jbb0lr6s5yzv6lws0q88apvs-nixos-system-oregairu-yui-26.11.20260730.1559d3d` を生成。
   実機起動・ログインは未検証。
@@ -31,7 +37,7 @@ enroll・初期パスワード生成の独自スクリプトと専用CIジョブ
 1. Yuiの実ホスト鍵による2ファイルの復号確認。
 2. 標準agenixによる安全な再暗号化・失敗時の復旧手順と実Secretsの公開移行。
 3. 本番のmysecrets input・引数・lockノードの除去。
-4. Yukinoのディスク実測、Disko定義、Installerへの追加。
+4. Yukino実機でのディスクby-id・構成の最終照合。
 5. 両本番ホストへのDisko組み込みと旧UUID整理、認証なしでのビルド。
 6. 公開差分・履歴の監査とGitHub Actionsの結果確認。
 7. バックアップ・復元確認後のYukino実機作業、再起動・ログイン・Secrets・デスクトップの検証。

@@ -8,18 +8,21 @@
   };
 
   outputs = { nixpkgs, disko, ... }: {
-    nixosConfigurations.oregairu-yui = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs.myvars = import ../vars;
-      modules = [
-        disko.nixosModules.disko
-        ../hosts/oregairu-yui/disko.nix
-        ./configuration.nix
-        ../modules/nixos/base/user-group.nix
-        ../modules/nixos/base/ssh.nix
-        ../modules/nixos/base/i18n.nix
-        { networking.hostName = "oregairu-yui"; }
-      ];
-    };
+    nixosConfigurations = nixpkgs.lib.genAttrs [ "oregairu-yukino" "oregairu-yui" ] (
+      hostName:
+      nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs.myvars = import ../vars;
+        modules = [
+          disko.nixosModules.disko
+          ../hosts/${hostName}/disko.nix
+          ./configuration.nix
+          ../modules/nixos/base/user-group.nix
+          ../modules/nixos/base/ssh.nix
+          ../modules/nixos/base/i18n.nix
+          { networking.hostName = hostName; }
+        ];
+      }
+    );
   };
 }
