@@ -19,6 +19,8 @@
     };
 
     modules = [
+      inputs.disko.nixosModules.disko
+      ../../hosts/oregairu-yui/disko.nix
       ../../secrets
       ../../hosts/oregairu-yui
       ../../modules/nixos/desktop

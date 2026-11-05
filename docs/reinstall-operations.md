@@ -7,7 +7,9 @@ Installerでのみ初期パスワードとSSHパスワード認証を設定し�
 本番では従来どおりagenixのパスワードファイルを使う。
 
 パーティションは各ホストの `disko.nix` に直接記述する。
-YukinoとYuiの両方を定義済み。本番へのDisko組み込みは未完了。
+YukinoとYuiの両方を定義済み。本番とInstallerで同じdisko.nixをimportする。
+本番hardware-configuration.nixの旧fileSystems・swapDevicesは削除済み。
+Diskoの作成するパーティションラベルでマウントするため、フォーマット前の既存環境へは直接switchしない。
 
 ## 初期パスワード
 
