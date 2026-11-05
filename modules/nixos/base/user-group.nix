@@ -2,6 +2,7 @@
   pkgs,
   config,
   myvars,
+  options,
   ...
 }:
 {
@@ -18,7 +19,7 @@
   users.users."${myvars.username}" = {
     home = "/home/${myvars.username}";
     shell = pkgs.zsh;
-    hashedPasswordFile = config.age.secrets."user-password".path;
+    hashedPasswordFile = if options ? age then config.age.secrets."user-password".path else null;
     isNormalUser = true;
     openssh.authorizedKeys.keys = myvars.mainSshAuthorizedKeys;
 

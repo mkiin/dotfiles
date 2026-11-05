@@ -1,9 +1,38 @@
-{ pkgs, lib, ... }:
 {
-  imports = [
-    ./modules/user.nix
-    ./modules/network.nix
+  pkgs,
+  lib,
+  myvars,
+  ...
+}:
+let
+  initialHashedPassword = lib.removeSuffix "\n" (builtins.readFile ./initial-password-hash);
+in
+{
+  assertions = [
+    {
+      assertion = lib.hasPrefix "$y$" initialHashedPassword || lib.hasPrefix "$6$" initialHashedPassword;
+      message = "Set installer/initial-password-hash with mkpasswd.";
+    }
   ];
+
+  users.users.${myvars.username} = {
+    uid = 1000;
+    inherit initialHashedPassword;
+  };
+  networking.networkmanager.enable = true;
+  services.openssh = {
+    hostKeys = [
+      {
+        path = "/etc/ssh/ssh_host_ed25519_key";
+        type = "ed25519";
+      }
+    ];
+    settings = {
+      PermitRootLogin = "no";
+      PasswordAuthentication = true;
+      KbdInteractiveAuthentication = false;
+    };
+  };
 
   nix.settings.experimental-features = [
     "nix-command"
@@ -11,7 +40,7 @@
   ];
   nix.settings.trusted-users = [
     "root"
-    "mkiin"
+    myvars.username
   ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
