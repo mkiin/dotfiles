@@ -23,6 +23,9 @@ jobs:
       - name: Check flake
         run: nix flake check --show-trace
 
+      - name: Check installer
+        run: nix flake check ./installer --show-trace
+
   build:
     name: Build NixOS
     runs-on: ubuntu-latest

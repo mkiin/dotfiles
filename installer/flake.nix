@@ -14,7 +14,8 @@
       systems = [ "x86_64-linux" ];
       imports = [
         ../flake/writers.nix
-        ./apps.nix
+        ./apps
+        ./checks.nix
       ];
 
       flake.nixosConfigurations = inputs.nixpkgs.lib.genAttrs [ "oregairu-yukino" "oregairu-yui" ] (
