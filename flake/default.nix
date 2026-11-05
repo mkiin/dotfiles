@@ -18,6 +18,5 @@
   _module.args = {
     myvars = import ../vars;
     mylib = import ../lib { inherit lib; };
-    mysecrets = inputs.mysecrets;
   };
 }

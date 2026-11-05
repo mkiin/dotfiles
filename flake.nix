@@ -19,6 +19,10 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
+    disko = {
+      url = "github:nix-community/disko/v1.13.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     flake-parts.url = "github:hercules-ci/flake-parts";
     nvimx.url = "github:myuron/nvimx";
     hyprland.url = "github:hyprwm/Hyprland";
@@ -53,11 +57,6 @@
     agent-skills = {
       url = "github:Kyure-A/agent-skills-nix";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    mysecrets = {
-      url = "git+ssh://git@github.com/mkiin/nix-secrets.git?shallow=1";
-      flake = false;
     };
 
     fastfetch-src = {
