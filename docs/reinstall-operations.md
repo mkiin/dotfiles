@@ -1,57 +1,168 @@
-# 再インストール操作仕様
+# Yukino再インストール手順
 
-## 構成
+操作場所を各段階に記載する。コマンドが失敗したら次へ進まない。
+USB起動後にSSDを初期化するのはInstallerの実行時だけ。本番への切替では再初期化しない。
 
-Installerは既存のユーザー・SSH・ロケールモジュールを相対importする。
-Installerでのみ初期パスワードとSSHパスワード認証を設定し、Home Managerとagenixは導入しない。
-本番では従来どおりagenixのパスワードファイルを使う。
+## 1. USB起動前: Yui
 
-パーティションは各ホストの `disko.nix` に直接記述する。
-YukinoとYuiの両方を定義済み。本番とInstallerで同じdisko.nixをimportする。
-本番hardware-configuration.nixの旧fileSystems・swapDevicesは削除済み。
-Diskoの作成するパーティションラベルでマウントするため、フォーマット前の既存環境へは直接switchしない。
+バックアップ・復元確認はユーザーから完了報告済み。
+初期パスワードはYuiの `~/.local/state/dotfiles-installer/initial-password` で確認する。
+パスワードや秘密鍵をチャットへ貼らない。Yukinoの復旧完了までYuiのホスト鍵を保持する。
 
-## 初期パスワード
+この手順は公開mainブランチを使用する。
 
-既存lockのnixpkgsに含まれるmkpasswdを使い、端末で対話入力する。
-パスワードはコマンド引数やGitへ入れず、生成したハッシュのみ追加する。
+## 2. USB起動後: Yukinoで構成取得・初期OS導入
 
-以下の取得先は現在のInstaller lockの固定先。
+UEFIでMinimal ISOを起動し、ネット接続する。まず読み取り専用の確認を実行する。
+公開GitHubからInstallerを取得するため、GitHubログインと手動cloneは不要。
 
 ```sh
-nix --option access-tokens '' shell github:NixOS/nixpkgs/1559d3daa3ecc813a650b79375ea61b6741b8746#mkpasswd
-mkpasswd --method=yescrypt >installer/initial-password-hash
-git add installer/initial-password-hash
+nix --extra-experimental-features 'nix-command flakes' --option access-tokens '' run \
+  'github:mkiin/dotfiles/main?dir=installer#install' -- \
+  oregairu-yukino --dry-run
+lsblk -o NAME,SIZE,MODEL,SERIAL,FSTYPE,MOUNTPOINTS
 ```
 
-今回すでに生成した専用パスワードはYuiの
-`~/.local/state/dotfiles-installer/initial-password` にある。
-平文をログやチャットに貼らない。本番パスワードとは別にする。
-
-## Secretsの移行
-
-安全なYuiのホスト鍵で移行する。旧Yukino鍵と `mkiin@recovery` は移行後の受信者から除外する。
-不要なNixアクセストークンは移行せず、パスワードとrcloneの2ファイルを対象とする。
-元のnix-secretsは復旧用に保持する。専用回復鍵は後日対応とし、Yukino復旧までYuiの鍵を保持する。
-
-復号確認には標準のageを直接使う。以下のコマンドは値を表示・保存せず、終了コード0なら成功。
+表示されたSSDと `/dev/disk/by-id/nvme-eui.000000000000000100a075244c33c582` を照合する。
+対象が違う場合は実行しない。以下はSSDを消去する。
 
 ```sh
-nix --option access-tokens '' shell github:NixOS/nixpkgs/1559d3daa3ecc813a650b79375ea61b6741b8746#age
-sudo "$(command -v age)" -d -i /etc/ssh/ssh_host_ed25519_key ../nix-secrets/user-password.age >/dev/null
-sudo "$(command -v age)" -d -i /etc/ssh/ssh_host_ed25519_key ../nix-secrets/rclone-r2.conf.age >/dev/null
+nix --extra-experimental-features 'nix-command flakes' --option access-tokens '' run \
+  'github:mkiin/dotfiles/main?dir=installer#install' -- \
+  oregairu-yukino
 ```
 
-新しいYukinoのホスト公開鍵はSSHでYuiへ取得し、指紋をYukinoのローカル画面と照合する。
-Yui上で通常のagenixを使い、一時作業コピー内のルールに新しい公開鍵を登録して再暗号化する。
-秘密鍵は転送しない。公開鍵と暗号化済みファイルのみやり取りする。
+Installerは対象SSDの表示と確認入力、Disko、nixos-installを順に実行する。
+確認には表示されたby-idのフルパスを入力する。マウント中のディスク・有効なswapは消去しない。
+ローカルcloneがある場合の入口は `nix run ./installer#install -- oregairu-yukino`。
 
-全ファイルの復号と受信者の確認が済むまで、本番の作業ツリーへ反映しない。
-途中で失敗した一時コピーは破棄し、元の暗号文からやり直す。
-独自enroll・自動ロールバック処理は削除済みであり、標準ツールによる具体的な移行手順はまだ未完了。
+インストール途中の通信断などで停止し、/mntと/mnt/bootが対象SSDからマウント済みの場合:
 
-## 実機作業の前提
+```sh
+nix --extra-experimental-features 'nix-command flakes' --option access-tokens '' run \
+  'github:mkiin/dotfiles/main?dir=installer#install' -- \
+  oregairu-yukino --resume
+```
 
-Yuiでの実復号、Yukino実機でのディスク指定の照合、バックアップ・復元確認が必要。
-VM試験は省略するが、成功扱いにはしない。
-現時点では実機初期化・インストールへ進める状態ではない。
+--resumeは両マウントの親ディスクを照合し、Diskoを再実行せずnixos-installだけを再試行する。
+マウントが失われた場合は停止する。ISO再起動後は既存パーティションを次でマウントしてから再試行する。
+--resumeは親ディスクも照合する。初期化モードを再実行しない。
+
+```sh
+sudo mount /dev/disk/by-partlabel/disk-system-root /mnt
+sudo mount --mkdir /dev/disk/by-partlabel/disk-system-ESP /mnt/boot
+```
+
+導入成功後にUSBを抜いて再起動し、mkiinと初期パスワードでログインする。
+ネット接続を確認し、`ip -br address` でYukinoのIPを確認する。
+
+## 3. 新ホスト公開鍵取得: YuiからYukinoへ接続
+
+Yukinoのローカル端末で指紋を表示する。
+
+```sh
+ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub
+```
+
+Yuiで実行する。IPは実値へ変更する。
+
+```sh
+cd /home/mkiin/ghq/github.com/mkiin/dotfiles
+yukino=mkiin@192.168.1.100
+host_key=$(mktemp)
+ssh "$yukino" 'cat /etc/ssh/ssh_host_ed25519_key.pub' >"$host_key"
+ssh-keygen -lf "$host_key"
+```
+
+SSH初回接続の指紋もYukino画面と照合してから承認し、初期パスワードで接続する。
+旧ホスト鍵によるknown_hostsの警告が出た場合は、指紋を照合してから該当する旧エントリを削除する。
+YuiのSSHサーバーは鍵認証のみのため、この手順ではYuiを接続元にする。
+送るのは公開鍵と暗号文だけで、ホスト秘密鍵は移動しない。
+
+## 4. 登録・再暗号化: Yuiの一時コピーで実行
+
+Yuiのdotfilesはcommit済みで変更のない状態から開始する。
+同じ公開鍵がすでに登録され、agenixの受信者検査も成功する場合は再暗号化を省略する。
+
+```sh
+rekey_dir=$(mktemp -d /dev/shm/yukino-rekey.XXXXXX)
+cp secrets/agenix-rules.nix secrets/user-password.age secrets/rclone-r2.conf.age "$rekey_dir/"
+wl-copy <"$host_key"
+```
+
+一時コピーのagenix-rules.nixをエディタで開き、取得した公開鍵をyukinoとしてlet内へ追加する。
+Yuiの公開鍵は維持し、recipientsを `[ yui yukino ]` にする。
+Yukinoが登録済みで鍵を再生成した場合は、古いyukinoの値を新しい鍵へ置き換える。
+漏洩した旧Yukino鍵と旧回復鍵は追加しない。
+
+```sh
+nvim "$rekey_dir/agenix-rules.nix"
+```
+
+```sh
+sudo env TMPDIR=/dev/shm AGENIX_RULES="$rekey_dir/agenix-rules.nix" \
+  nix --option access-tokens '' run --inputs-from . agenix -- \
+  -r -i /etc/ssh/ssh_host_ed25519_key
+sudo chown --reference=secrets/default.nix "$rekey_dir/user-password.age" "$rekey_dir/rclone-r2.conf.age"
+AGENIX_RULES="$rekey_dir/agenix-rules.nix" nix --option access-tokens '' run --inputs-from . agenix -- -c
+sudo nix --option access-tokens '' shell --inputs-from . nixpkgs#age -c \
+  age -d -i /etc/ssh/ssh_host_ed25519_key "$rekey_dir/user-password.age" >/dev/null
+sudo nix --option access-tokens '' shell --inputs-from . nixpkgs#age -c \
+  age -d -i /etc/ssh/ssh_host_ed25519_key "$rekey_dir/rclone-r2.conf.age" >/dev/null
+```
+
+失敗時は一時コピーを破棄する。この段階では本番作業ツリーを一切変更していない。
+agenixの一時平文はtmpfsを使うが、未暗号化swapへ退避される可能性はある。
+
+## 5. 新Yukinoで復号確認
+
+Yuiから暗号文とルールをYukinoの一時ディレクトリへ転送する。
+
+```sh
+ssh "$yukino" 'mkdir -p ~/.cache/agenix-enroll'
+scp "$rekey_dir/agenix-rules.nix" "$rekey_dir/user-password.age" "$rekey_dir/rclone-r2.conf.age" \
+  "$yukino:/home/mkiin/.cache/agenix-enroll/"
+```
+
+Yukinoの端末で実行する。両方の終了コード0を確認するまで本番へ進まない。
+
+```sh
+sudo /run/current-system/sw/bin/age -d -i /etc/ssh/ssh_host_ed25519_key ~/.cache/agenix-enroll/user-password.age >/dev/null
+sudo /run/current-system/sw/bin/age -d -i /etc/ssh/ssh_host_ed25519_key ~/.cache/agenix-enroll/rclone-r2.conf.age >/dev/null
+```
+
+転送失敗時は同じ3ファイルの転送をやり直す。本番作業ツリーはまだ変更していない。
+
+## 6. 本番へ切替: Yukino
+
+初期OSにはGitがある。公開ブランチを取得し、検証済みの3ファイルを反映する。
+
+```sh
+mkdir -p ~/ghq/github.com/mkiin
+cd ~/ghq/github.com/mkiin
+git clone --branch main https://github.com/mkiin/dotfiles.git
+cd dotfiles
+cp ~/.cache/agenix-enroll/agenix-rules.nix ~/.cache/agenix-enroll/user-password.age ~/.cache/agenix-enroll/rclone-r2.conf.age secrets/
+git add secrets/agenix-rules.nix secrets/user-password.age secrets/rclone-r2.conf.age
+nix --option access-tokens '' --accept-flake-config build \
+  .#nixosConfigurations.oregairu-yukino.config.system.build.toplevel --no-link
+sudo nixos-rebuild switch --flake .#oregairu-yukino
+```
+
+GitHubへのcommit・push・ユーザーSSH鍵の登録は本番切替の条件ではない。
+ビルド失敗時は修正後にビルドを再試行し、Diskoは実行しない。
+暗号文を元へ戻す場合は、3ファイルだけ `git restore --source=HEAD --staged --worktree --` で戻す。
+switch失敗時は初期OSの世代を保持して原因を解消する。成功後も動作確認までは世代削除・GCをしない。
+
+再起動し、本番パスワードでのローカルログイン・sudo・ネットワーク・Secrets・GPU・デスクトップを確認する。
+本番のSSHは鍵認証へ戻る。本番用ユーザー鍵の整備はホスト鍵の登録とは別作業。
+
+## 7. 復旧後の反映
+
+Yuiでも検証済みの一時コピー3ファイルをsecretsへ反映してcommit・pushする。
+反映途中で失敗したら、同じ3ファイルをHEADからrestoreして一時コピーからやり直す。
+push後、別のHTTPS cloneで受信者検査と評価を実行し、ローカル変更への依存がないことを確認する。
+確認後に一時ディレクトリと公開鍵の一時ファイルを削除する。
+元のnix-secretsは移行直後には削除しない。
+
+VM試験はユーザー判断で省略済み。実機の起動・ログイン試験の成功を事前に主張しない。

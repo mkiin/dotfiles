@@ -1,6 +1,5 @@
 {
   myvars,
-  mysecrets,
   inputs,
   ...
 }:
@@ -22,13 +21,13 @@ in
 
     secrets = {
       "user-password" = {
-        file = "${mysecrets}/user-password.age";
+        file = ./user-password.age;
         mode = "0400";
         owner = "root";
       };
 
       "rclone-r2.conf" = {
-        file = "${mysecrets}/rclone-r2.conf.age";
+        file = ./rclone-r2.conf.age;
       }
       // userReadable;
 

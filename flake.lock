@@ -762,23 +762,6 @@
         "type": "github"
       }
     },
-    "mysecrets": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1791658453,
-        "narHash": "sha256-qeihYu4rydNsjG5PyF2fA6++8OqAcZsfNHDiqIczYww=",
-        "ref": "refs/heads/main",
-        "rev": "37e947475c27486b4918bf95cf06567d43875dba",
-        "shallow": true,
-        "type": "git",
-        "url": "ssh://git@github.com/mkiin/nix-secrets.git"
-      },
-      "original": {
-        "shallow": true,
-        "type": "git",
-        "url": "ssh://git@github.com/mkiin/nix-secrets.git"
-      }
-    },
     "nixos-hardware": {
       "inputs": {
         "nixpkgs": "nixpkgs_4"
@@ -1011,7 +994,6 @@
         "home-manager": "home-manager",
         "hyprland": "hyprland",
         "llm-agents": "llm-agents",
-        "mysecrets": "mysecrets",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_5",
         "nvimx": "nvimx",

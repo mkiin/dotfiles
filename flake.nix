@@ -59,11 +59,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    mysecrets = {
-      url = "git+ssh://git@github.com/mkiin/nix-secrets.git?shallow=1";
-      flake = false;
-    };
-
     fastfetch-src = {
       url = "github:fastfetch-cli/fastfetch/2.69.0";
       flake = false;

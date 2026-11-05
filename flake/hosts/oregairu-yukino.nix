@@ -2,7 +2,6 @@
   inputs,
   myvars,
   mylib,
-  mysecrets,
   ...
 }:
 {
@@ -14,7 +13,6 @@
         inputs
         myvars
         mylib
-        mysecrets
         ;
     };
 
