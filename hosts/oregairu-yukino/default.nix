@@ -5,6 +5,8 @@
 #
 #############################################################
 {
+  networking.hostName = "oregairu-yukino";
+
   imports = [
     ./hardware-configuration.nix
     ./hardware-amd.nix

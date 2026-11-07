@@ -5,6 +5,25 @@
 - 依頼された変更に絞り、関係のない設定変更や追加作業をしない。
 - **README.md**は作業メモではない。編集および作成を禁ずる
 
+## Flake App のコマンド
+
+リポジトリのルートで実行する。ビルド・適用の案内には既存の App を使う。
+
+```sh
+# ビルドのみ
+nix run .#build -- oregairu-yukino
+
+# ビルド成功後に本番構成を適用（App 内で sudo を実行）
+nix run .#switch -- oregairu-yukino
+
+# ISO から最小 NixOS をインストール（対象 SSD のデータを消去する）
+sudo nix --extra-experimental-features 'nix-command flakes' run .#install -- \
+  oregairu-yukino /dev/disk/by-id/<SSD-ID>
+```
+
+`build` と `switch` はホスト名を省略すると現在のホスト名を使う。
+`install` の手順と disko の dry-run は `INSTALL.md` を参照する。
+
 ## ユーザーが必ずぶちぎれる言動
 
 - 保身に走る言い訳

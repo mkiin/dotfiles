@@ -13,7 +13,7 @@
       X11Forwarding = lib.mkDefault false;
       # root user is used for remote deployment, so we need to allow it
       PermitRootLogin = lib.mkDefault "prohibit-password";
-      PasswordAuthentication = false; # disable password login
+      PasswordAuthentication = lib.mkDefault false; # disable password login
     };
     openFirewall = true;
   };

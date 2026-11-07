@@ -2,7 +2,6 @@
   inputs,
   myvars,
   mylib,
-  mysecrets,
   ...
 }:
 {
@@ -14,11 +13,12 @@
         inputs
         myvars
         mylib
-        mysecrets
         ;
     };
 
     modules = [
+      inputs.disko.nixosModules.disko
+      ../../hosts/oregairu-yui/disko.nix
       ../../secrets
       ../../hosts/oregairu-yui
       ../../modules/nixos/desktop

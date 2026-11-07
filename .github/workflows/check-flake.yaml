@@ -23,8 +23,6 @@ jobs:
           persist-credentials: false
 
       - uses: ./.github/actions/setup-nix
-        with:
-          ssh-private-key: ${{ secrets.NIX_SECRETS_SSH_KEY }}
 
       - name: Update flake.lock
         run: nix flake update
