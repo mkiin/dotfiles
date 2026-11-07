@@ -2,6 +2,7 @@
   pkgs,
   lib,
   myvars,
+  inputs,
   ...
 }:
 let
@@ -54,6 +55,7 @@ in
     "sdhci_pci"
   ];
   environment.systemPackages = with pkgs; [
+    inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
     git
     age
     vim
