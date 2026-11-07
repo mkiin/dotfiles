@@ -20,6 +20,9 @@ in
     uid = 1000;
     inherit initialHashedPassword;
   };
+  systemd.tmpfiles.rules = [
+    "Z ${myvars.linuxhomedir}/ghq - ${myvars.username} ${myvars.username} -"
+  ];
   networking.networkmanager.enable = true;
   hardware.enableRedistributableFirmware = true;
   services.openssh = {
