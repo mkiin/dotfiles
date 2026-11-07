@@ -1,3 +1,4 @@
+{ config, ... }:
 {
   disko.devices.disk.system = {
     type = "disk";
@@ -6,6 +7,7 @@
       type = "gpt";
       partitions = {
         ESP = {
+          device = config.disko.devices.disk.system.device + "-part1";
           priority = 1;
           size = "1G";
           type = "EF00";
@@ -20,6 +22,7 @@
           };
         };
         root = {
+          device = config.disko.devices.disk.system.device + "-part2";
           priority = 2;
           size = "239780964K";
           content = {
@@ -29,6 +32,7 @@
           };
         };
         swap = {
+          device = config.disko.devices.disk.system.device + "-part3";
           priority = 3;
           size = "9227472K";
           content.type = "swap";
