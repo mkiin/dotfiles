@@ -97,7 +97,7 @@ reboot
 `mkiin` と初期パスワードでログインする。必要なら `nmtui` でネットワークに接続する。
 
 ```bash
-sudo chown -R mkiin:mkiin /home/mkiin/ghq/github.com/mkiin/dotfiles
+sudo chown -R mkiin:mkiin /home/mkiin/ghq
 cd /home/mkiin/ghq/github.com/mkiin/dotfiles
 vim '+1read /etc/ssh/ssh_host_ed25519_key.pub' secrets/agenix-rules.nix # let の直後に公開鍵を読み込む。編集後 :wq で保存
 ```

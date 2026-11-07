@@ -21,6 +21,7 @@ in
     inherit initialHashedPassword;
   };
   networking.networkmanager.enable = true;
+  hardware.enableRedistributableFirmware = true;
   services.openssh = {
     hostKeys = [
       {
