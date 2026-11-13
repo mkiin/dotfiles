@@ -151,7 +151,7 @@
 
       workspaces_slate = {
         type = "workspaces";
-        show_labels = true;
+        show_labels = false;
         labels_only_when_occupied = false;
         focused_output_only = true;
         anchor = true;
