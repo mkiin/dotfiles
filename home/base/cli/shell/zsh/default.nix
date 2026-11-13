@@ -51,7 +51,7 @@
         lg = "lazygit";
         ff = "fastfetch";
         pn = "pnpm";
-        nk = "nikke kill";
+        nk = "systemctl --user stop nikke.service";
         vim = "nvim";
         zd = "zeditor";
 

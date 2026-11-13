@@ -3,7 +3,7 @@
   fetchurl,
 }:
 let
-  version = "11.0-13";
+  version = "11.0-16";
 in
 stdenvNoCC.mkDerivation {
   pname = "dwproton";
@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation {
 
   src = fetchurl {
     url = "https://git.dawn.wine/dawn-winery/dwproton/releases/download/dwproton-${version}/dwproton-${version}-x86_64.tar.xz";
-    hash = "sha256-lMkSsyBeH5o7lmFOo9w5+jVCETIB4G44LbD3w8XSQfQ=";
+    hash = "sha256-ZXsOZu+wqYJCFbwIh6aPdYNVUXzE6qsxZMAZu2y5Umg=";
   };
 
   dontConfigure = true;
