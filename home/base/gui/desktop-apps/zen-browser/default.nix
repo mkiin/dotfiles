@@ -34,6 +34,12 @@ in
     };
 
     profiles.default = {
+      userChrome = ''
+        #import-button {
+          display: none !important;
+        }
+      '';
+
       extensions.packages = [
         missav-keep-playing
       ];
@@ -51,6 +57,8 @@ in
         "findbar.highlightAll" = true;
 
         # Zen
+        "zen.view.use-single-toolbar" = false;
+        "zen.view.compact.hide-toolbar" = false;
         "zen.workspaces.continue-where-left-off" = true;
         "zen.urlbar.behavior" = "float";
 
