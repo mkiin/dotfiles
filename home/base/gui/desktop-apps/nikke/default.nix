@@ -12,6 +12,22 @@ let
   installer = "${nikkeHome}/installer/nikke-installer.exe";
   launcher = "${prefix}/drive_c/NIKKE/Launcher/nikke_launcher.exe";
 
+  ldconfigReal = pkgs.runCommand "nikke-ldconfig-real" { } ''
+    mkdir -p "$out/bin"
+    ln -s ${lib.getBin pkgs.pkgsi686Linux.glibc}/bin/ldconfig "$out/bin/ldconfig.real"
+  '';
+  umu = pkgs.umu-launcher.override {
+    # Preserve the FHS ldconfig wrapper and let pressure-vessel inspect its ELF target.
+    extraProfile = ''
+      export PATH="${
+        lib.makeBinPath [
+          pkgs.getent
+          ldconfigReal
+        ]
+      }:$PATH"
+    '';
+  };
+
   environment = [
     "GAMEID=umu-nikke"
     "PROTON_USE_WOW64=1"
@@ -38,7 +54,7 @@ let
     executable:
     lib.concatStringsSep " " [
       "${pkgs.steam.run}/bin/steam-run"
-      "${pkgs.umu-launcher}/bin/umu-run"
+      "${umu}/bin/umu-run"
       ''"${executable}"''
     ];
 in
