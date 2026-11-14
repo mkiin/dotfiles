@@ -4,7 +4,7 @@ local lazy = require("lazy")
 
 lazy.setup({
 	spec = {
-		{ import = "plugin" },
+		{ import = "plugins" },
 	},
 	defaults = { lazy = true },
 	checker = { enabled = false },

@@ -5,8 +5,92 @@
       url = "github:folke/lazy.nvim";
       flake = false;
     };
-    tokyonight-nvim = {
-      url = "github:folke/tokyonight.nvim";
+    barbar-nvim = {
+      url = "github:romgrk/barbar.nvim";
+      flake = false;
+    };
+    blink-cmp = {
+      url = "github:saghen/blink.cmp/refs/tags/v1.10.2";
+      flake = false;
+    };
+    catppuccin = {
+      url = "github:catppuccin/nvim";
+      flake = false;
+    };
+    flash-nvim = {
+      url = "github:folke/flash.nvim";
+      flake = false;
+    };
+    flatten-nvim = {
+      url = "github:willothy/flatten.nvim";
+      flake = false;
+    };
+    gitsigns-nvim = {
+      url = "github:lewis6991/gitsigns.nvim";
+      flake = false;
+    };
+    guess-indent-nvim = {
+      url = "github:NMAC427/guess-indent.nvim";
+      flake = false;
+    };
+    lazydev-nvim = {
+      url = "github:folke/lazydev.nvim";
+      flake = false;
+    };
+    lualine-nvim = {
+      url = "github:nvim-lualine/lualine.nvim";
+      flake = false;
+    };
+    mini-ai = {
+      url = "github:nvim-mini/mini.ai/stable";
+      flake = false;
+    };
+    mini-extra = {
+      url = "github:nvim-mini/mini.extra/stable";
+      flake = false;
+    };
+    mini-icons = {
+      url = "github:nvim-mini/mini.icons/stable";
+      flake = false;
+    };
+    mini-move = {
+      url = "github:nvim-mini/mini.move/stable";
+      flake = false;
+    };
+    mini-pairs = {
+      url = "github:nvim-mini/mini.pairs/stable";
+      flake = false;
+    };
+    mini-surround = {
+      url = "github:nvim-mini/mini.surround/stable";
+      flake = false;
+    };
+    noice-nvim = {
+      url = "github:folke/noice.nvim";
+      flake = false;
+    };
+    nui-nvim = {
+      url = "github:MunifTanjim/nui.nvim";
+      flake = false;
+    };
+    nvim-lspconfig = {
+      url = "github:neovim/nvim-lspconfig";
+      flake = false;
+    };
+    persistence-nvim = {
+      url = "github:folke/persistence.nvim";
+      flake = false;
+    };
+    snacks-nvim = {
+      url = "github:folke/snacks.nvim";
+      flake = false;
+    };
+    term-edit-nvim = {
+      url = "github:chomosuke/term-edit.nvim/refs/tags/v1.4.0";
+      flake = false;
+    };
+    which-key-nvim = {
+      url = "github:folke/which-key.nvim";
       flake = false;
     };
   };

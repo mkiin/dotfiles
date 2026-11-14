@@ -10,19 +10,410 @@
   },
   "localPlugins": {},
   "plugins": {
-    "tokyonight.nvim": {
+    "barbar.nvim": {
+      "branch": null,
+      "build": {
+        "kind": "none"
+      },
+      "commit": null,
+      "dependencies": [
+        "gitsigns.nvim",
+        "mini.icons"
+      ],
+      "inputName": "barbar-nvim",
+      "pin": null,
+      "resolvedRef": null,
+      "source": {
+        "owner": "romgrk",
+        "repo": "barbar.nvim",
+        "type": "github"
+      },
+      "tag": null,
+      "version": null
+    },
+    "blink.cmp": {
+      "branch": null,
+      "build": {
+        "kind": "none"
+      },
+      "commit": null,
+      "dependencies": [
+        "lazydev.nvim"
+      ],
+      "inputName": "blink-cmp",
+      "pin": null,
+      "resolvedRef": "refs/tags/v1.10.2",
+      "source": {
+        "owner": "saghen",
+        "repo": "blink.cmp",
+        "type": "github"
+      },
+      "tag": null,
+      "version": "1.*"
+    },
+    "catppuccin": {
       "branch": null,
       "build": {
         "kind": "none"
       },
       "commit": null,
       "dependencies": [],
-      "inputName": "tokyonight-nvim",
+      "inputName": "catppuccin",
+      "pin": null,
+      "resolvedRef": null,
+      "source": {
+        "owner": "catppuccin",
+        "repo": "nvim",
+        "type": "github"
+      },
+      "tag": null,
+      "version": null
+    },
+    "flash.nvim": {
+      "branch": null,
+      "build": {
+        "kind": "none"
+      },
+      "commit": null,
+      "dependencies": [],
+      "inputName": "flash-nvim",
       "pin": null,
       "resolvedRef": null,
       "source": {
         "owner": "folke",
-        "repo": "tokyonight.nvim",
+        "repo": "flash.nvim",
+        "type": "github"
+      },
+      "tag": null,
+      "version": null
+    },
+    "flatten.nvim": {
+      "branch": null,
+      "build": {
+        "kind": "none"
+      },
+      "commit": null,
+      "dependencies": [],
+      "inputName": "flatten-nvim",
+      "pin": null,
+      "resolvedRef": null,
+      "source": {
+        "owner": "willothy",
+        "repo": "flatten.nvim",
+        "type": "github"
+      },
+      "tag": null,
+      "version": null
+    },
+    "gitsigns.nvim": {
+      "branch": null,
+      "build": {
+        "kind": "none"
+      },
+      "commit": null,
+      "dependencies": [],
+      "inputName": "gitsigns-nvim",
+      "pin": null,
+      "resolvedRef": null,
+      "source": {
+        "owner": "lewis6991",
+        "repo": "gitsigns.nvim",
+        "type": "github"
+      },
+      "tag": null,
+      "version": null
+    },
+    "guess-indent.nvim": {
+      "branch": null,
+      "build": {
+        "kind": "none"
+      },
+      "commit": null,
+      "dependencies": [],
+      "inputName": "guess-indent-nvim",
+      "pin": null,
+      "resolvedRef": null,
+      "source": {
+        "owner": "NMAC427",
+        "repo": "guess-indent.nvim",
+        "type": "github"
+      },
+      "tag": null,
+      "version": null
+    },
+    "lazydev.nvim": {
+      "branch": null,
+      "build": {
+        "kind": "none"
+      },
+      "commit": null,
+      "dependencies": [],
+      "inputName": "lazydev-nvim",
+      "pin": null,
+      "resolvedRef": null,
+      "source": {
+        "owner": "folke",
+        "repo": "lazydev.nvim",
+        "type": "github"
+      },
+      "tag": null,
+      "version": null
+    },
+    "lualine.nvim": {
+      "branch": null,
+      "build": {
+        "kind": "none"
+      },
+      "commit": null,
+      "dependencies": [
+        "mini.icons"
+      ],
+      "inputName": "lualine-nvim",
+      "pin": null,
+      "resolvedRef": null,
+      "source": {
+        "owner": "nvim-lualine",
+        "repo": "lualine.nvim",
+        "type": "github"
+      },
+      "tag": null,
+      "version": null
+    },
+    "mini.ai": {
+      "branch": "stable",
+      "build": {
+        "kind": "none"
+      },
+      "commit": null,
+      "dependencies": [
+        "mini.extra"
+      ],
+      "inputName": "mini-ai",
+      "pin": null,
+      "resolvedRef": null,
+      "source": {
+        "owner": "nvim-mini",
+        "repo": "mini.ai",
+        "type": "github"
+      },
+      "tag": null,
+      "version": null
+    },
+    "mini.extra": {
+      "branch": "stable",
+      "build": {
+        "kind": "none"
+      },
+      "commit": null,
+      "dependencies": [],
+      "inputName": "mini-extra",
+      "pin": null,
+      "resolvedRef": null,
+      "source": {
+        "owner": "nvim-mini",
+        "repo": "mini.extra",
+        "type": "github"
+      },
+      "tag": null,
+      "version": null
+    },
+    "mini.icons": {
+      "branch": "stable",
+      "build": {
+        "kind": "none"
+      },
+      "commit": null,
+      "dependencies": [],
+      "inputName": "mini-icons",
+      "pin": null,
+      "resolvedRef": null,
+      "source": {
+        "owner": "nvim-mini",
+        "repo": "mini.icons",
+        "type": "github"
+      },
+      "tag": null,
+      "version": null
+    },
+    "mini.move": {
+      "branch": "stable",
+      "build": {
+        "kind": "none"
+      },
+      "commit": null,
+      "dependencies": [],
+      "inputName": "mini-move",
+      "pin": null,
+      "resolvedRef": null,
+      "source": {
+        "owner": "nvim-mini",
+        "repo": "mini.move",
+        "type": "github"
+      },
+      "tag": null,
+      "version": null
+    },
+    "mini.pairs": {
+      "branch": "stable",
+      "build": {
+        "kind": "none"
+      },
+      "commit": null,
+      "dependencies": [],
+      "inputName": "mini-pairs",
+      "pin": null,
+      "resolvedRef": null,
+      "source": {
+        "owner": "nvim-mini",
+        "repo": "mini.pairs",
+        "type": "github"
+      },
+      "tag": null,
+      "version": null
+    },
+    "mini.surround": {
+      "branch": "stable",
+      "build": {
+        "kind": "none"
+      },
+      "commit": null,
+      "dependencies": [],
+      "inputName": "mini-surround",
+      "pin": null,
+      "resolvedRef": null,
+      "source": {
+        "owner": "nvim-mini",
+        "repo": "mini.surround",
+        "type": "github"
+      },
+      "tag": null,
+      "version": null
+    },
+    "noice.nvim": {
+      "branch": null,
+      "build": {
+        "kind": "none"
+      },
+      "commit": null,
+      "dependencies": [
+        "nui.nvim"
+      ],
+      "inputName": "noice-nvim",
+      "pin": null,
+      "resolvedRef": null,
+      "source": {
+        "owner": "folke",
+        "repo": "noice.nvim",
+        "type": "github"
+      },
+      "tag": null,
+      "version": null
+    },
+    "nui.nvim": {
+      "branch": null,
+      "build": {
+        "kind": "none"
+      },
+      "commit": null,
+      "dependencies": [],
+      "inputName": "nui-nvim",
+      "pin": null,
+      "resolvedRef": null,
+      "source": {
+        "owner": "MunifTanjim",
+        "repo": "nui.nvim",
+        "type": "github"
+      },
+      "tag": null,
+      "version": null
+    },
+    "nvim-lspconfig": {
+      "branch": null,
+      "build": {
+        "kind": "none"
+      },
+      "commit": null,
+      "dependencies": [
+        "blink.cmp"
+      ],
+      "inputName": "nvim-lspconfig",
+      "pin": null,
+      "resolvedRef": null,
+      "source": {
+        "owner": "neovim",
+        "repo": "nvim-lspconfig",
+        "type": "github"
+      },
+      "tag": null,
+      "version": null
+    },
+    "persistence.nvim": {
+      "branch": null,
+      "build": {
+        "kind": "none"
+      },
+      "commit": null,
+      "dependencies": [],
+      "inputName": "persistence-nvim",
+      "pin": null,
+      "resolvedRef": null,
+      "source": {
+        "owner": "folke",
+        "repo": "persistence.nvim",
+        "type": "github"
+      },
+      "tag": null,
+      "version": null
+    },
+    "snacks.nvim": {
+      "branch": null,
+      "build": {
+        "kind": "none"
+      },
+      "commit": null,
+      "dependencies": [],
+      "inputName": "snacks-nvim",
+      "pin": null,
+      "resolvedRef": null,
+      "source": {
+        "owner": "folke",
+        "repo": "snacks.nvim",
+        "type": "github"
+      },
+      "tag": null,
+      "version": null
+    },
+    "term-edit.nvim": {
+      "branch": null,
+      "build": {
+        "kind": "none"
+      },
+      "commit": null,
+      "dependencies": [],
+      "inputName": "term-edit-nvim",
+      "pin": null,
+      "resolvedRef": "refs/tags/v1.4.0",
+      "source": {
+        "owner": "chomosuke",
+        "repo": "term-edit.nvim",
+        "type": "github"
+      },
+      "tag": null,
+      "version": "1.*"
+    },
+    "which-key.nvim": {
+      "branch": null,
+      "build": {
+        "kind": "none"
+      },
+      "commit": null,
+      "dependencies": [],
+      "inputName": "which-key-nvim",
+      "pin": null,
+      "resolvedRef": null,
+      "source": {
+        "owner": "folke",
+        "repo": "which-key.nvim",
         "type": "github"
       },
       "tag": null,

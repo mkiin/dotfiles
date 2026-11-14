@@ -9,7 +9,8 @@
     oxfmt
 
     # Rust
-    rust-analyzer
+    cargo
+    rustc
     rustfmt
     clippy
 

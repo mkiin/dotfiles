@@ -1,0 +1,245 @@
+local restoreCursor = vim.api.nvim_create_augroup("restoreCursor", { clear = true })
+vim.api.nvim_create_autocmd("BufReadPost", {
+	callback = function()
+		local ml = vim.fn.line([['"]])
+		local eol = vim.fn.line("$")
+		if 1 < ml and ml <= eol then
+			vim.cmd.normal({ [[g`"]], bang = true })
+		end
+	end,
+	group = restoreCursor,
+})
+
+vim.api.nvim_create_autocmd("BufWinEnter", {
+	callback = function()
+		local wh = vim.fn.winheight(0)
+		local cl = vim.fn.line(".")
+		if tb(vim.fn.empty(vim.bo.buftype)) and cl > wh / 3 * 2 then
+			vim.cmd.normal({ "zz", bang = true })
+			for _ = 0, (wh / 6) do
+				vim.cmd.normal({ t("<C-y>"), bang = true })
+			end
+		end
+	end,
+	group = restoreCursor,
+})
+
+local augroup = vim.api.nvim_create_augroup("numbertoggle", { clear = true })
+vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "InsertLeave", "CmdlineLeave", "WinEnter" }, {
+	pattern = "*",
+	group = augroup,
+	callback = function()
+		if vim.o.nu and vim.api.nvim_get_mode().mode ~= "i" then
+			vim.opt.relativenumber = true
+			vim.opt.cursorline = true
+			vim.opt.cursorcolumn = true
+		end
+	end,
+})
+
+vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost", "InsertEnter", "CmdlineEnter", "WinLeave" }, {
+	pattern = "*",
+	group = augroup,
+	callback = function()
+		if vim.o.nu then
+			vim.opt.relativenumber = false
+			vim.opt.cursorline = true
+			vim.opt.cursorcolumn = false
+			vim.cmd("redraw")
+		end
+	end,
+})
+
+-- Idle timer: fires User IdleTick event every 1000ms while cursor is idle
+local idle_timer_group = vim.api.nvim_create_augroup("idle_timer", { clear = true })
+if _G.nvim_idle_timer then
+	_G.nvim_idle_timer:stop()
+	_G.nvim_idle_timer:close()
+end
+local idle_timer = assert(vim.uv.new_timer())
+_G.nvim_idle_timer = idle_timer
+
+local function stop_idle_timer()
+	if idle_timer:is_active() then
+		idle_timer:stop()
+	end
+end
+
+local function start_idle_timer()
+	stop_idle_timer()
+	idle_timer:start(
+		1000,
+		1000,
+		vim.schedule_wrap(function()
+			if vim.fn.mode() ~= "c" and vim.api.nvim_get_mode().blocking == false then
+				vim.api.nvim_exec_autocmds("User", { pattern = "IdleTick" })
+			end
+		end)
+	)
+end
+
+-- Start timer on CursorHold
+vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+	pattern = "*",
+	group = idle_timer_group,
+	callback = start_idle_timer,
+	desc = "Start idle timer on CursorHold",
+})
+
+-- Stop timer when cursor moves or mode changes
+vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI", "InsertEnter", "InsertLeave", "CmdlineEnter" }, {
+	pattern = "*",
+	group = idle_timer_group,
+	callback = stop_idle_timer,
+	desc = "Stop idle timer on cursor move",
+})
+
+-- Check if file is modified on various events including IdleTick
+local function checktime_if_safe()
+	if vim.fn.mode() ~= "c" then
+		vim.cmd.checktime()
+	end
+end
+
+vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "CursorHold", "CursorHoldI", "WinEnter" }, {
+	pattern = "*",
+	callback = checktime_if_safe,
+	desc = "check if file is modified",
+})
+
+vim.api.nvim_create_autocmd("User", {
+	pattern = "IdleTick",
+	callback = checktime_if_safe,
+	desc = "check if file is modified on idle tick",
+})
+
+vim.api.nvim_create_autocmd("Filetype", {
+	pattern = "*",
+	callback = function()
+		vim.opt_local.fo:remove({ "c", "r", "o" })
+	end,
+	desc = "disable comment in newline",
+})
+
+local folding = vim.api.nvim_create_augroup("folding", { clear = true })
+vim.api.nvim_create_autocmd({ "BufReadPost", "FileReadPost", "BufNewFile" }, {
+	pattern = "*",
+	callback = function()
+		vim.defer_fn(function()
+			vim.cmd.normal({ "zR", bang = true })
+		end, 0)
+	end,
+	group = folding,
+})
+
+-- FileWritePre covers `:write other/path` from a buffer with a different name
+vim.api.nvim_create_autocmd({ "BufWritePre", "FileWritePre" }, {
+	pattern = "*",
+	callback = function(args)
+		-- URL-like names (oil://, oil-ssh://, scp://, ...) are handled by their own writers
+		if args.match:match("^%a[%w+.-]*://") then
+			return
+		end
+		vim.fn.mkdir(vim.fs.dirname(vim.fn.fnamemodify(args.match, ":p")), "p")
+	end,
+	desc = "create missing parent directories on write",
+})
+
+-- Neovim appends to its log file, so cap it between runs to avoid unbounded growth.
+local LOG_SIZE_LIMIT = 10 * 1024 * 1024
+for _, path in ipairs({
+	vim.env.NVIM_LOG_FILE or vim.fs.joinpath(vim.fn.stdpath("log"), "nvim.log"),
+}) do
+	local stat = vim.uv.fs_stat(path)
+	if stat and stat.size > LOG_SIZE_LIMIT then
+		vim.uv.fs_unlink(path)
+	end
+end
+
+vim.api.nvim_create_autocmd("TermOpen", {
+	pattern = "*",
+	callback = function()
+		vim.cmd.startinsert()
+	end,
+})
+
+local restore_terminal_mode = vim.api.nvim_create_augroup("restore_terminal_mode", { clear = true })
+vim.api.nvim_create_autocmd({ "TermEnter", "TermLeave" }, {
+	pattern = "term://*",
+	callback = function()
+		if vim.bo.filetype ~= "snacks_terminal" then
+			vim.b.term_mode = vim.fn.mode()
+		end
+	end,
+	group = restore_terminal_mode,
+})
+
+vim.api.nvim_create_autocmd("BufEnter", {
+	pattern = "term://*",
+	callback = function()
+		if vim.bo.filetype ~= "snacks_terminal" and vim.b.term_mode == "t" then
+			vim.cmd.startinsert()
+		end
+	end,
+	group = restore_terminal_mode,
+})
+
+vim.api.nvim_create_autocmd("CmdlineEnter", {
+	callback = function()
+		if tb(vim.fn.executable("ugrep")) then
+			vim.opt.grepprg = "ugrep -RInk -j -u --tabs=1 --ignore-files"
+			vim.opt.grepformat = "%f:%l:%c:%m,%f+%l+%c+%m,%-G%f\\|%l\\|%c\\|%m"
+		end
+	end,
+})
+
+vim.api.nvim_create_autocmd("ModeChanged", {
+	pattern = "c:*",
+	callback = function()
+		local cmd = vim.fn.histget(":", -1)
+		if cmd ~= nil and (cmd == "x" or cmd == "xa" or cmd:match("^w?q?a?!?$")) then
+			vim.fn.histdel(":", -1)
+		end
+	end,
+})
+
+vim.api.nvim_create_autocmd("ColorScheme", {
+	callback = function(args)
+		vim.g.colors_name = args.match
+	end,
+})
+
+vim.api.nvim_create_autocmd("VimEnter", {
+	callback = function(args)
+		vim.schedule(function()
+			vim.g.colorterm = os.getenv("COLORTERM")
+			if
+				vim.tbl_contains({ "truecolor", "24bit", "rxvt", "" }, vim.g.colorterm)
+				and tb(vim.fn.exists("+termguicolors"))
+				and not is_vscode()
+			then
+				vim.o.termguicolors = true
+				vim.env.NVIM_TUI_ENABLE_TRUE_COLOR = 1
+			end
+		end)
+	end,
+})
+
+-- Close special buffers (quickfix, chat windows, etc.) when quitting the last normal window
+vim.api.nvim_create_autocmd("QuitPre", {
+	callback = function()
+		local dominated_by_special_buffers = vim.iter(vim.api.nvim_list_wins())
+			:map(function(win)
+				return vim.api.nvim_win_get_buf(win)
+			end)
+			:filter(function(buf)
+				return buf ~= vim.api.nvim_get_current_buf()
+			end)
+			:all(function(buf)
+				return vim.bo[buf].buftype ~= ""
+			end)
+		if dominated_by_special_buffers then
+			vim.cmd("only!")
+		end
+	end,
+})

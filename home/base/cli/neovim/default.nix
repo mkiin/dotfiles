@@ -2,6 +2,7 @@
   inputs,
   myvars,
   config,
+  pkgs,
   ...
 }:
 {
@@ -14,12 +15,22 @@
 
   programs.nvimx = {
     enable = true;
-    configDir = ./lua;
+    configDir = ./.;
     lockDir = ./nvimx-lock;
+    extraWrapperArgs = [
+      "--set"
+      "NVIM_CONFIG_SOURCE"
+      "${config.home.homeDirectory}/${myvars.dotfilesdir}/home/base/cli/neovim"
+    ];
+    extraPackages = with pkgs; [
+      git
+      ripgrep
+      fd
+    ];
 
     lock = {
       projectDir = "${config.home.homeDirectory}/${myvars.dotfilesdir}";
-      configDirRelative = "home/base/cli/neovim/lua";
+      configDirRelative = "home/base/cli/neovim";
       lockDirRelative = "home/base/cli/neovim/nvimx-lock";
     };
   };
