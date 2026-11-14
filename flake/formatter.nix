@@ -33,6 +33,12 @@
         statix.enable = false;
         convco = {
           enable = true;
+          # shortcut: nixpkgs の convco が libgit2 依存を補うまでの回避策。
+          package = pkgs.convco.overrideAttrs (old: {
+            buildInputs = old.buildInputs ++ [
+              (pkgs.libgit2.override { withExperimentalSha256 = true; })
+            ];
+          });
           settings.configPath = pkgs.writeText "convco.json" (
             builtins.toJSON {
               types =
