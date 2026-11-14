@@ -1,7 +1,11 @@
 {
   "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
-  "diagnostics.globals": ["vim", "hl"],
-  "workspace.library": ["/run/current-system/sw/share/hypr/stubs"],
+  "diagnostics.globals": ["vim", "hl", "Snacks", "tb", "t", "_l"],
+  "workspace.library": [
+    "/run/current-system/sw/share/hypr/stubs",
+    "~/.local/share/nvim/lua-library",
+    "${3rd}/luv/library"
+  ],
   "workspace.useGitIgnore": true,
   "workspace.ignoreDir": [".git", ".direnv", "result", "node_modules", "matugen/**", "wallust/**"]
 }

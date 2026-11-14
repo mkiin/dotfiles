@@ -3,10 +3,27 @@
   myvars,
   config,
   pkgs,
+  lib,
   ...
 }:
+let
+  nvim = config.programs.nvimx;
+  luaLibrary = pkgs.symlinkJoin {
+    name = "neovim-lua-library";
+    paths = map (path: "${path}/lua") (
+      [
+        "${nvim.package}/share/nvim/runtime"
+        "${nvim.env.farm}/lazy.nvim"
+      ]
+      ++ lib.attrValues nvim.env.pluginDrvs
+    );
+  };
+in
 {
   imports = [ inputs.nvimx.homeModules.nvimx ];
+
+  # Both editors read the same locked runtime and plugin definitions through LuaLS.
+  xdg.dataFile."nvim/lua-library".source = luaLibrary;
 
   home.sessionVariables = {
     EDITOR = "nvim";

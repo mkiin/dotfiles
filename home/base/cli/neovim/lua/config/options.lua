@@ -4,8 +4,9 @@ vim.opt.exrc = true
 vim.opt.secure = true
 
 vim.opt.backup = true
-vim.opt.backupdir = vim.fn.expand(vim.fn.stdpath("cache") .. "/.vim_backup")
-vim.fn.mkdir(vim.opt.backupdir:get()[1], "p")
+local backupdir = vim.fn.stdpath("cache") .. "/.vim_backup"
+vim.opt.backupdir = backupdir
+vim.fn.mkdir(backupdir, "p")
 vim.opt.swapfile = false
 vim.opt.writebackup = true
 vim.opt.autoread = true
@@ -18,7 +19,7 @@ vim.opt.shortmess:append("I")
 vim.opt.wrap = false
 vim.opt.number = true
 vim.opt.cursorline = true
-vim.opt.cursorcolumn = true
+vim.opt.cursorcolumn = false
 vim.opt.virtualedit = "onemore"
 vim.opt.visualbell = true
 vim.opt.errorbells = false
@@ -53,11 +54,11 @@ vim.opt.scrolloff = 4
 vim.opt.list = true
 
 vim.opt.listchars = {
-	tab = "▸▹┊",
-	trail = "▫",
-	nbsp = "␣",
-	extends = "❯",
-	precedes = "❮",
+  tab = "▸▹┊",
+  trail = "▫",
+  nbsp = "␣",
+  extends = "❯",
+  precedes = "❮",
 }
 
 vim.opt.guicursor:append({ "t:blinkon0" })

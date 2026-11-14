@@ -32,7 +32,7 @@
 
       window-decoration = "none";
       window-padding-balance = true;
-      window-padding-color = "extend";
+      window-padding-color = "background";
       window-padding-x = 36;
       window-padding-y = 36;
       window-theme = "ghostty";

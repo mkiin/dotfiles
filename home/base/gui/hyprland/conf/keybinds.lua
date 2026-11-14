@@ -25,30 +25,30 @@ hl.bind(mod .. " + SHIFT + Z", hl.dsp.exec_cmd("noctalia msg screenshot-region")
 
 hl.bind(mod .. " + C", hl.dsp.window.close())
 hl.bind(mod .. " + V", function()
-	local window = hl.get_active_window()
-	if not window then
-		return
-	end
+  local window = hl.get_active_window()
+  if not window then
+    return
+  end
 
-	local was_floating = window.floating
-	local monitor = hl.get_active_monitor()
-	hl.dispatch(hl.dsp.window.float({ action = "toggle", window = window }))
+  local was_floating = window.floating
+  local monitor = hl.get_active_monitor()
+  hl.dispatch(hl.dsp.window.float({ action = "toggle", window = window }))
 
-	if not was_floating and monitor then
-		hl.dispatch(hl.dsp.window.resize({
-			x = math.floor(monitor.width * 0.8),
-			y = math.floor(monitor.height * 0.8),
-			relative = false,
-			window = window,
-		}))
-		-- hl.dispatch(hl.dsp.window.center({ window = window }))
-		-- hl.dispatch(hl.dsp.window.move({
-		-- 	x = window.at.x,
-		-- 	y = monitor.y + monitor.reserved.top + 12,
-		-- 	relative = false,
-		-- 	window = window,
-		-- }))
-	end
+  if not was_floating and monitor then
+    hl.dispatch(hl.dsp.window.resize({
+      x = math.floor(monitor.width * 0.8),
+      y = math.floor(monitor.height * 0.8),
+      relative = false,
+      window = window,
+    }))
+    -- hl.dispatch(hl.dsp.window.center({ window = window }))
+    -- hl.dispatch(hl.dsp.window.move({
+    --   x = window.at.x,
+    --   y = monitor.y + monitor.reserved.top + 12,
+    --   relative = false,
+    --   window = window,
+    -- }))
+  end
 end)
 hl.bind(mod .. " + F", hl.dsp.window.fullscreen())
 
@@ -101,47 +101,47 @@ hl.bind(mod .. " + SHIFT + 0", hl.dsp.window.move({ workspace = 10 }))
 -- Resize
 
 hl.bind(mod .. " + minus", function()
-	local monitor = hl.get_active_monitor()
-	if monitor then
-		hl.dispatch(hl.dsp.window.resize({ x = math.floor(monitor.width * -0.1), y = 0, relative = true }))
-	end
+  local monitor = hl.get_active_monitor()
+  if monitor then
+    hl.dispatch(hl.dsp.window.resize({ x = math.floor(monitor.width * -0.1), y = 0, relative = true }))
+  end
 end, { repeating = true })
 
 hl.bind(mod .. " + equal", function()
-	local monitor = hl.get_active_monitor()
-	if monitor then
-		hl.dispatch(hl.dsp.window.resize({ x = math.floor(monitor.width * 0.1), y = 0, relative = true }))
-	end
+  local monitor = hl.get_active_monitor()
+  if monitor then
+    hl.dispatch(hl.dsp.window.resize({ x = math.floor(monitor.width * 0.1), y = 0, relative = true }))
+  end
 end, { repeating = true })
 
 hl.bind(mod .. " + SHIFT + minus", function()
-	local monitor = hl.get_active_monitor()
-	if monitor then
-		hl.dispatch(hl.dsp.window.resize({ x = 0, y = math.floor(monitor.height * -0.1), relative = true }))
-	end
+  local monitor = hl.get_active_monitor()
+  if monitor then
+    hl.dispatch(hl.dsp.window.resize({ x = 0, y = math.floor(monitor.height * -0.1), relative = true }))
+  end
 end, { repeating = true })
 
 hl.bind(mod .. " + SHIFT + equal", function()
-	local monitor = hl.get_active_monitor()
-	if monitor then
-		hl.dispatch(hl.dsp.window.resize({ x = 0, y = math.floor(monitor.height * 0.1), relative = true }))
-	end
+  local monitor = hl.get_active_monitor()
+  if monitor then
+    hl.dispatch(hl.dsp.window.resize({ x = 0, y = math.floor(monitor.height * 0.1), relative = true }))
+  end
 end, { repeating = true })
 
 -- Mouse
 
 hl.bind(
-	mod .. " + mouse_down",
-	hl.dsp.focus({
-		workspace = "m+1",
-	})
+  mod .. " + mouse_down",
+  hl.dsp.focus({
+    workspace = "m+1",
+  })
 )
 
 hl.bind(
-	mod .. " + mouse_up",
-	hl.dsp.focus({
-		workspace = "m-1",
-	})
+  mod .. " + mouse_up",
+  hl.dsp.focus({
+    workspace = "m-1",
+  })
 )
 
 hl.bind(mod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })

@@ -2,18 +2,18 @@ vim.g.completion_trigger_character = "."
 
 -- hjkl
 vim.keymap.set({ "n", "x" }, "j", function()
-	if vim.v.count > 0 or #vim.fn.reg_recording() > 0 or #vim.fn.reg_executing() > 0 then
-		-- @see https://eiji.page/blog/neovim-remeber-jump-jk/
-		return "m'" .. vim.v.count1 .. "j"
-	end
-	return "gj"
+  if vim.v.count > 0 or #vim.fn.reg_recording() > 0 or #vim.fn.reg_executing() > 0 then
+    -- @see https://eiji.page/blog/neovim-remeber-jump-jk/
+    return "m'" .. vim.v.count1 .. "j"
+  end
+  return "gj"
 end, { expr = true })
 vim.keymap.set({ "n", "x" }, "k", function()
-	if vim.v.count > 0 or #vim.fn.reg_recording() > 0 or #vim.fn.reg_executing() > 0 then
-		-- @see https://eiji.page/blog/neovim-remeber-jump-jk/
-		return "m'" .. vim.v.count1 .. "k"
-	end
-	return "gk"
+  if vim.v.count > 0 or #vim.fn.reg_recording() > 0 or #vim.fn.reg_executing() > 0 then
+    -- @see https://eiji.page/blog/neovim-remeber-jump-jk/
+    return "m'" .. vim.v.count1 .. "k"
+  end
+  return "gk"
 end, { expr = true })
 
 -- disable keys
@@ -22,7 +22,6 @@ end, { expr = true })
 -- vim.keymap.set("n", "K", "<Nop>")
 -- vim.keymap.set("n", "L", "<Nop>")
 vim.keymap.set({ "n", "v" }, "s", "<Nop>")
-vim.keymap.set({ "n", "v" }, "S", "<Nop>")
 
 -- remap H M L
 vim.keymap.set("n", "gH", "H")
@@ -32,6 +31,8 @@ vim.keymap.set("n", "gL", "L")
 -- split window
 vim.keymap.set("n", "ss", "<cmd>split<cr>")
 vim.keymap.set("n", "sv", "<cmd>vsplit<cr>")
+vim.keymap.set("n", "sq", "<cmd>close<cr>", { desc = "Close window" })
+vim.keymap.set("n", "sqo", "<cmd>only<cr>", { desc = "Close other windows" })
 
 -- move window
 vim.keymap.set("n", "sh", "<C-w>h")
@@ -57,29 +58,27 @@ vim.keymap.set("n", "tq", "<cmd>tabclose<cr>", { silent = true })
 -- vim.keymap.set("i", "<Right>", "<C-g>u<Right>")
 
 -- terminal mode
-vim.keymap.set("t", "<C-k>", [[<C-\><C-n>]])
+vim.keymap.set("t", "<C-k>", [[<C-\><C-n>]], { desc = "Exit terminal mode" })
 
 -- command mode
 --- Emacs style from yutkat
 vim.keymap.set("c", "<C-a>", "<Home>", { silent = false })
-if not vim.g.vscode then
-	vim.keymap.set("c", "<C-e>", "<End>", { silent = false })
-end
+vim.keymap.set("c", "<C-e>", "<End>", { silent = false })
 vim.keymap.set("c", "<C-f>", "<right>", { silent = false })
 vim.keymap.set("c", "<C-b>", "<left>", { silent = false })
 vim.keymap.set("c", "<C-d>", "<DEL>", { silent = false })
 
 -- toggle 0 made by ycino
 vim.keymap.set("n", "0", function()
-	return string.match((vim.fn.getline(".") --[[@as string]]):sub(0, vim.fn.col(".") - 1), "^%s+$") and "0" or "^"
+  return string.match((vim.fn.getline(".") --[[@as string]]):sub(0, vim.fn.col(".") - 1), "^%s+$") and "0" or "^"
 end, { expr = true, silent = true })
 
 -- Automatically indent with i and A made by ycino
 vim.keymap.set("n", "i", function()
-	return vim.fn.len(vim.fn.getline(".")) ~= 0 and "i" or '"_cc'
+  return vim.fn.getline(".") ~= "" and "i" or '"_cc'
 end, { expr = true, silent = true })
 vim.keymap.set("n", "A", function()
-	return vim.fn.len(vim.fn.getline(".")) ~= 0 and "A" or '"_cc'
+  return vim.fn.getline(".") ~= "" and "A" or '"_cc'
 end, { expr = true, silent = true })
 
 -- custom
@@ -94,18 +93,21 @@ vim.keymap.set("n", "gq", "<cmd>nohlsearch<cr><esc>")
 vim.keymap.set("n", "U", "<C-r>") -- redo by U
 vim.keymap.set("n", "M", "%") -- jump to matching bracket by M
 vim.keymap.set("x", "p", "P") -- {visual}p to put without yank to unnamed register https://github.com/Shougo/shougo-s-github/blob/21a3f500cdc2b37c8d184edbf640d9e17458358a/vim/rc/mappings.rc.vim#L190-L191
-vim.keymap.set("x", "y", "mzy`z") -- keep cursor position after yank in visual mode
+vim.keymap.set("x", "y", function()
+  vim.fn.setpos("'z", vim.fn.getpos("v"))
+  return "y`z"
+end, { expr = true, desc = "Yank and return to selection start" })
 vim.keymap.set("i", "<C-k>", function() -- capitalize word
-	local line = vim.fn.getline(".")
-	local col = vim.fn.getpos(".")[3]
-	local substring = line:sub(1, col - 1)
-	local result = vim.fn.matchstr(substring, [[\v<(\k(<)@!)*$]])
-	return "<C-w>" .. result:upper()
+  local line = vim.fn.getline(".")
+  local col = vim.fn.getpos(".")[3]
+  local substring = line:sub(1, col - 1)
+  local result = vim.fn.matchstr(substring, [[\v<(\k(<)@!)*$]])
+  return "<C-w>" .. result:upper()
 end, { expr = true })
 
 -- replace
-vim.keymap.set("x", "S", 'y:%s/<C-r><C-r>"//g<Left><Left>')
-vim.keymap.set("n", "S", 'yiw:%s/<C-r><C-r>"//g<Left><Left>')
+vim.keymap.set("x", "R", 'y:%s/<C-r><C-r>"//g<Left><Left>')
+vim.keymap.set("n", "R", 'yiw:%s/<C-r><C-r>"//g<Left><Left>')
 
 -- indent in visual mode
 vim.keymap.set("x", "<", "<gv")
@@ -114,7 +116,7 @@ vim.keymap.set("x", ">", ">gv")
 
 -- tips from monaqa san: https://zenn.dev/vim_jp/articles/2024-06-05-vim-middle-class-features
 for _, quote in ipairs({ '"', "'", "`" }) do
-	vim.keymap.set({ "x", "o" }, "a" .. quote, "2i" .. quote)
+  vim.keymap.set({ "x", "o" }, "a" .. quote, "2i" .. quote)
 end
 
 vim.keymap.set("", "<c-i>", "<c-i>")

@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <title>Lua 設定の動作モデル — dotfiles</title>
+  <style>
+    :root { color-scheme: dark; --bg: #1e1e2e; --panel: #181825; --text: #cdd6f4; --muted: #a6adc8; --line: #45475a; --blue: #89b4fa; --green: #a6e3a1; --peach: #fab387; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.85 system-ui, sans-serif; }
+    main { max-width: 1040px; margin: auto; padding: 56px 28px 80px; }
+    a { color: var(--blue); text-underline-offset: 4px; }
+    a:focus-visible, summary:focus-visible { outline: 3px solid var(--peach); outline-offset: 5px; }
+    .eyebrow { color: var(--blue); font: 12px/1.5 ui-monospace, monospace; letter-spacing: .15em; }
+    h1 { font-size: clamp(30px, 5vw, 48px); line-height: 1.4; letter-spacing: -.04em; margin: 20px 0; }
+    h2 { font-size: 25px; line-height: 1.5; margin: 0 0 22px; }
+    h3 { font-size: 18px; margin: 0 0 8px; }
+    p { margin: 0 0 16px; }
+    .lead { max-width: 760px; color: var(--muted); font-size: 18px; }
+    nav { display: flex; flex-wrap: wrap; gap: 12px 24px; margin: 30px 0 48px; font-size: 14px; }
+    section { padding: 32px 0; border-top: 1px solid var(--line); scroll-margin-top: 16px; }
+    .cards, .branches { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .card, .node, .callout { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 22px; min-width: 0; }
+    .card { border-top: 3px solid var(--blue); }
+    .card.indent { border-top-color: var(--green); }
+    .badge { display: inline-block; color: var(--muted); font-size: 12px; margin-bottom: 10px; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .88em; }
+    code { color: var(--peach); overflow-wrap: anywhere; }
+    pre { margin: 16px 0; padding: 18px; border-radius: 8px; background: var(--panel); border: 1px solid var(--line); overflow-x: auto; line-height: 1.7; }
+    pre code { color: var(--text); overflow-wrap: normal; }
+    .comment { color: var(--green); }
+    .arrow { color: var(--blue); text-align: center; padding: 10px; font-size: 22px; line-height: 1.2; }
+    .node { text-align: center; }
+    .node small { display: block; color: var(--muted); margin-top: 4px; }
+    .flow { margin: 24px 0; }
+    .flow > .node { max-width: 700px; margin: auto; }
+    .callout { border-left: 3px solid var(--blue); margin: 20px 0; }
+    .muted, figcaption { color: var(--muted); font-size: 14px; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+    th, td { border-bottom: 1px solid var(--line); padding: 14px 12px; vertical-align: top; }
+    th { color: var(--blue); }
+    details { border-bottom: 1px solid var(--line); padding: 18px 0; }
+    summary { cursor: pointer; font-weight: 650; }
+    details > p { margin: 14px 0 0; }
+    li { margin: 8px 0; }
+    footer { margin-top: 32px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 640px) { main { padding: 32px 18px 56px; } .cards, .branches { grid-template-columns: 1fr; } .card, .node { padding: 18px; } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    @media print { :root { --bg: white; --panel: #f5f5f5; --text: #111; --muted: #444; --line: #ccc; --blue: #174b91; --green: #24652b; --peach: #754000; } main { padding: 0; } nav { display: none; } section { break-inside: avoid; } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">DOTFILES / LUA TOOLING</div>
+    <h1>Lua の設定は、<br>2か所で考える。</h1>
+    <p class="lead">字下げは <code>.editorconfig</code>。型解析は <code>.luarc.json</code>。Neovim と Zed は、このリポジトリの同じルールと同じ型定義を使います。</p>
+    <nav aria-label="目次">
+      <a href="#files">残す設定</a><a href="#model">動作モデル</a><a href="#types">型注釈</a><a href="#priority">設定の優先順位</a><a href="#indent">スペースとタブ</a><a href="#faq">疑問と確認方法</a>
+    </nav>
+  </header>
+
+  <section id="files">
+    <h2>01 / 触る設定は、役割の違う2つ</h2>
+    <div class="cards">
+      <article class="card indent">
+        <span class="badge">入力・整形</span>
+        <h3><a href="../.editorconfig">.editorconfig</a></h3>
+        <p>Lua / Luau を「スペース2個」で字下げする、repo 共通の指定です。</p>
+        <p class="muted">Neovim の EditorConfig、Zed、StyLua が読みます。StyLua 専用の設定ファイルは追加していません。</p>
+      </article>
+      <article class="card">
+        <span class="badge">補完・診断・型情報</span>
+        <h3><a href="../.luarc.json">.luarc.json</a></h3>
+        <p>LuaLS に「どのコードや型定義を知っておくべきか」を伝えます。</p>
+        <p class="muted">Neovim と Zed から起動する LuaLS が読みます。エディタごとの同じ設定の重複を避けています。</p>
+      </article>
+    </div>
+    <p class="muted" style="margin-top:18px">一括整形の対象・除外は、既存の <a href="../flake/formatter.nix">flake/formatter.nix</a> にあります。Matugen などのテンプレートはここで除外します。専用の .styluaignore は置きません。</p>
+  </section>
+
+  <section id="model">
+    <h2>02 / 実行する仕組みと、読む仕組み</h2>
+    <p>Neovim は設定の Lua を実行してプラグインを動かします。一方、LuaLS はソースと注釈を読んで、補完候補や診断をエディタへ返します。Zed で Neovim の設定を開いても、Neovim のプラグインは実行されません。</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>名前</th><th>仕事</th><th>動く場所</th></tr></thead>
+        <tbody>
+          <tr><td>nvimx / Nix</td><td>lock に固定したプラグインを用意し、Neovim と共通の型定義を配置する。</td><td>ビルド・設定適用時</td></tr>
+          <tr><td>lazy.nvim</td><td>プラグイン定義を読み、指定したタイミングでロードして設定する。</td><td>Neovim 内</td></tr>
+          <tr><td>lazydev.nvim</td><td>Neovim から使う LuaLS に、必要なライブラリを動的に知らせる。</td><td>Neovim 内</td></tr>
+          <tr><td>LuaLS</td><td>Lua の構文、変数、型、API を解析して補完・診断を返す。</td><td>エディタが起動する別プロセス</td></tr>
+          <tr><td>StyLua</td><td>Lua を読み直し、整った書式へ書き換える。</td><td>Zed の保存時・整形コマンド実行時</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <figure class="flow" aria-label="共通の型定義を両エディタの LuaLS が読む流れ">
+      <div class="node"><strong>Nix の lock にあるプラグイン ＋ Neovim 本体</strong><small>動作に使うものと同じバージョンの Lua ソース</small></div>
+      <div class="arrow" aria-hidden="true">↓</div>
+      <div class="node"><strong>~/.local/share/nvim/lua-library</strong><small>Lua ファイルをまとめた参照先。Home Manager が配置する。</small></div>
+      <div class="arrow" aria-hidden="true">↓</div>
+      <div class="node"><strong>repo ルートの .luarc.json</strong><small>workspace.library に共通の参照先を指定</small></div>
+      <div class="arrow" aria-hidden="true">↙　↘</div>
+      <div class="branches">
+        <div class="node"><strong>Neovim → LuaLS</strong><small>補完・診断・型情報を返す</small></div>
+        <div class="node"><strong>Zed → LuaLS</strong><small>同じ型定義で補完・診断・型情報を返す</small></div>
+      </div>
+      <figcaption>両エディタが一つの LuaLS プロセスを共有するわけではありません。それぞれの LuaLS が、同じ定義を参照します。</figcaption>
+    </figure>
+    <p>共通ライブラリの生成元は <a href="../home/base/cli/neovim/default.nix">Neovim の Nix 設定</a> です。既存の nvimx の成果物から Lua ディレクトリだけをまとめるため、別バージョンの型定義を追加で取得する必要がありません。</p>
+  </section>
+
+  <section id="types">
+    <h2>03 / 型注釈は、LuaLS に渡す説明書</h2>
+    <pre><code><span class="comment">---@type LazySpec</span>
+return {
+  "nvim-lualine/lualine.nvim",
+  event = "VeryLazy",
+  opts = { options = { theme = "catppuccin-nvim" } },
+}</code></pre>
+    <p><code>---@type LazySpec</code> は「次の値は LazySpec という型として扱って」と LuaLS に伝えます。Lua の実行時にはコメントとして無視されます。プラグインをロードしたり、値を変換したり、実行時に検証したりはしません。</p>
+    <p><code>LazySpec</code> という名前の定義は、lazy.nvim の <code>lua/lazy/types.lua</code> にある <code>---@alias</code> から来ます。LuaLS がこのファイルを読めないと、注釈の名前だけが見えて「未知の型・エイリアス」と診断します。</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>注釈</th><th>伝える内容</th><th>例</th></tr></thead>
+        <tbody>
+          <tr><td><code>@type</code></td><td>この値の型</td><td><code>---@type LazySpec</code></td></tr>
+          <tr><td><code>@class</code></td><td>型の名前や構造を定義する</td><td><code>---@class snacks.dashboard.Config</code></td></tr>
+          <tr><td><code>@alias</code></td><td>既存の型・型の組み合わせに名前を付ける</td><td><code>---@alias LazySpec ...</code></td></tr>
+          <tr><td><code>@param</code> / <code>@return</code></td><td>関数の引数と戻り値の型</td><td><code>---@param str string</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout"><strong>グローバル変数と型名は別です。</strong><br><code>diagnostics.globals</code> に <code>Snacks</code> を登録すると「この変数名は存在する」と伝えられますが、その API の構造までは分かりません。<code>LazySpec</code> をここに登録しても型定義の代わりにはなりません。型を解決するには、定義元をライブラリとして読む必要があります。</div>
+    <p>この repo では、プラグイン定義の戻り値に <code>LazySpec</code> を付けています。Dashboard のような設定データや LSP 設定には、その値に対応する型を付けています。同じ注釈名を全ファイルへ貼るのではなく、値の役割に合わせています。</p>
+  </section>
+
+  <section id="priority">
+    <h2>04 / なぜ lazydev だけでは足りなかったか</h2>
+    <p>lazydev は Neovim のプラグインです。Zed でファイルを開いても、lazydev によるライブラリ登録は起きません。そのため、Zed が使う LuaLS にも明示的な参照先が必要でした。</p>
+    <p>さらに、LuaLS は同じ設定キーに対して次の順序を優先します。ライブラリ配列が自動で足し合わされると思うと、期待と食い違います。</p>
+    <ol>
+      <li><code>--configpath</code> で指定した設定ファイル</li>
+      <li>ワークスペースの <code>.luarc.json</code></li>
+      <li>エディタから渡された設定（lazydev が渡す設定もこの側）</li>
+    </ol>
+    <p>元のルート設定には Hyprland の stub だけが <code>workspace.library</code> に入っていました。これが lazydev のライブラリ指定より優先され、Neovim 用の定義を読めなくする原因になっていました。</p>
+    <pre><code>"workspace.library": [
+  "/run/current-system/sw/share/hypr/stubs",
+  "~/.local/share/nvim/lua-library",
+  "&#36;{3rd}/luv/library"
+]</code></pre>
+    <p>現在はルート設定に Hyprland と Neovim の両方の参照先があります。<code>&#36;{3rd}/luv/library</code> は LuaLS に同梱された libuv の型定義です。Neovim 用の入れ子の <code>.luarc.json</code> と、重複した LuaLS グローバル設定は置いていません。</p>
+    <p>この repo のライブラリ指定は <code>.luarc.json</code> が担当します。lazydev は引き続き、共通の静的設定がない別の Neovim 関連プロジェクトなどで、必要な型を動的に登録する役目を持ちます。</p>
+  </section>
+
+  <section id="indent">
+    <h2>05 / 自分の repo はスペース。外では、その repo に従う</h2>
+    <pre><code>root = true
+
+[*.{lua,luau}]
+indent_style = space
+indent_size = 2</code></pre>
+    <p>この <code>.editorconfig</code> は repo 配下の Lua / Luau に適用されます。Neovim には EditorConfig の読み込み機能があり、guess-indent は EditorConfig の字下げ指定があると、それを優先して推測で上書きしません。</p>
+    <p>外部の repo では、その repo の EditorConfig があれば従います。指定がなければ guess-indent がファイルを調べ、タブならタブ、スペース4個なら4個に合わせます。新規ファイルなど推測材料がない場合は、Neovim の既定設定であるスペース2個が出発点です。</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>タイミング</th><th>担当</th><th>起きること</th></tr></thead>
+        <tbody>
+          <tr><td>入力する</td><td>EditorConfig・guess-indent</td><td>Tab キーや改行時に、どう字下げを挿入するかを決める。</td></tr>
+          <tr><td>整形する</td><td>StyLua</td><td>既存のコードを解析し、スペース2個の書式へ書き換える。</td></tr>
+          <tr><td>空白を見る</td><td>Neovim の list / listchars</td><td>既存のタブや行末空白に表示用の記号を付ける。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted" style="margin-top:16px"><code>expandtab</code> を有効にしても既存タブは変換されません。今回の置換は StyLua による整形で行っています。Zed は保存時に StyLua を使いますが、Neovim に Lua の保存時自動整形は追加していません。</p>
+    <pre><code><span class="comment"># テンプレートを除外して Lua を一括整形</span>
+nix fmt -- --formatters stylua
+
+<span class="comment"># 書き換えず、整形済みか確認</span>
+nix fmt -- --fail-on-change --formatters stylua</code></pre>
+    <p class="muted">テンプレートは素の Lua ではないため、一括整形には除外設定を持つ treefmt を使います。通常の Lua ファイルを直接 StyLua で整形する場合も、字下げ指定は同じ EditorConfig から読みます。</p>
+  </section>
+
+  <section id="faq">
+    <h2>06 / 疑問と確認方法</h2>
+    <details>
+      <summary>$schema の URL に vscode-lua とあるのはなぜ？</summary>
+      <p>LuaLS の設定ファイルを説明する JSON Schema が、そのリポジトリに置かれているためです。設定名の補完や値の検証に使われます。VSCode を使う設定でも、VSCode 分岐を有効にする指定でもありません。</p>
+    </details>
+    <details>
+      <summary>削除した vim.g.vscode の分岐は何をしていた？</summary>
+      <p>VSCode の Neovim 拡張内で動く場合に、補完・LSP・UI などを通常の Neovim と切り替えるための分岐でした。この使い方をしないため削除しています。Zed で設定ファイルを編集することとは関係ありません。</p>
+    </details>
+    <details>
+      <summary>変更した Lua が、通常起動した Neovim に反映されない</summary>
+      <p>この構成では Nix が設定を Nix store にコピーし、Neovim はそのスナップショットを読みます。作業ツリーを編集しただけでは適用済み設定は変わりません。Nix の設定を適用し、Neovim を再起動します。共通ライブラリの配置にも Home Manager の適用が必要です。</p>
+    </details>
+    <details>
+      <summary>Zed で、まだ LazySpec が未知と言われる</summary>
+      <p><code>~/.local/share/nvim/lua-library/lazy/types.lua</code> が存在するか確認します。次に repo ルートの <code>.luarc.json</code> を確認し、Zed の Lua 言語サーバーを再起動します。この共通ライブラリは Nix 設定を適用した環境に配置されます。他の環境で clone しただけでは存在しません。</p>
+    </details>
+    <details>
+      <summary>Neovim で実際の入力設定を確認したい</summary>
+      <p><code>:verbose setlocal expandtab? shiftwidth? tabstop?</code> でバッファの値と設定元を調べられます。<code>:LazyDev</code> は Neovim 内で lazydev が把握しているライブラリを調べる手段です。<code>.luarc.json</code> が優先する静的ライブラリとは分けて確認してください。</p>
+    </details>
+    <details>
+      <summary>Ghostty の帯と lualine の色は、型設定と関係する？</summary>
+      <p>それぞれ別の表示設定です。Ghostty は <code>window-padding-color = background</code> にして上端セルの色の延長を止めました。lualine は実在する <code>catppuccin-nvim</code> テーマを指定し、auto テーマへのフォールバックを解消しています。</p>
+    </details>
+  </section>
+
+  <section aria-labelledby="sources-title">
+    <h2 id="sources-title">公式ドキュメント</h2>
+    <ul>
+      <li><a href="https://github.com/JohnnyMorganz/StyLua#finding-the-configuration">StyLua: 設定の探索と EditorConfig</a></li>
+      <li><a href="https://luals.github.io/wiki/configuration/">LuaLS: 設定ファイルと優先順位</a></li>
+      <li><a href="https://luals.github.io/wiki/annotations/">LuaLS: 型注釈</a></li>
+      <li><a href="https://zed.dev/docs/languages/lua">Zed: LuaLS・型定義・StyLua</a></li>
+      <li><a href="https://github.com/folke/lazydev.nvim">lazydev.nvim: Neovim 用 LuaLS の設定支援</a></li>
+    </ul>
+  </section>
+  <footer>このリポジトリの構成に合わせた説明です。本文・図はオフラインで読めます。外部通信が必要なのは公式ドキュメントを開くときだけです。</footer>
+</main>
+</body>
+</html>

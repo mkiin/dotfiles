@@ -1,0 +1,5 @@
+root = true
+
+[*.{lua,luau}]
+indent_style = space
+indent_size = 2

@@ -1,18 +1,19 @@
+---@type LazySpec
 return {
-	"nvim-mini/mini.surround",
-	branch = "stable",
-	lazy = false,
-	priority = 900,
-	main = "mini.surround",
-	opts = {
-		mappings = {
-			add = "gsa",
-			delete = "gsd",
-			replace = "gsr",
-			find = "gsf",
-			find_left = "gsF",
-			highlight = "gsh",
-			update_n_lines = "gsn",
-		},
-	},
+  "nvim-mini/mini.surround",
+  branch = "stable",
+  lazy = false,
+  priority = 900,
+  main = "mini.surround",
+  opts = {
+    mappings = {
+      add = "gsa",
+      delete = "gsd",
+      replace = "gsr",
+      find = "gsf",
+      find_left = "gsF",
+      highlight = "gsh",
+      update_n_lines = "gsn",
+    },
+  },
 }
