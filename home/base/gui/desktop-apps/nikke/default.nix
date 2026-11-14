@@ -12,20 +12,17 @@ let
   installer = "${nikkeHome}/installer/nikke-installer.exe";
   launcher = "${prefix}/drive_c/NIKKE/Launcher/nikke_launcher.exe";
 
-  ldconfigReal = pkgs.runCommand "nikke-ldconfig-real" { } ''
-    mkdir -p "$out/bin"
-    ln -s ${lib.getBin pkgs.pkgsi686Linux.glibc}/bin/ldconfig "$out/bin/ldconfig.real"
-  '';
   umu = pkgs.umu-launcher.override {
-    # Preserve the FHS ldconfig wrapper and let pressure-vessel inspect its ELF target.
-    extraProfile = ''
-      export PATH="${
-        lib.makeBinPath [
-          pkgs.getent
-          ldconfigReal
-        ]
-      }:$PATH"
-    '';
+    extraPkgs = p: [
+      p.getent
+      # Preserve the FHS ldconfig wrapper and expose its ELF target for inspection.
+      (p.linkFarm "nikke-ldconfig-real" [
+        {
+          name = "bin/ldconfig.real";
+          path = "${p.pkgsi686Linux.glibc.bin}/bin/ldconfig";
+        }
+      ])
+    ];
   };
 
   environment = [
@@ -38,7 +35,7 @@ let
     "PROTON_NO_ESYNC=1"
   ];
 
-  service = {
+  preLaunchConfig = {
     Type = "exec";
     ExitType = "cgroup";
     KillMode = "control-group";
@@ -46,6 +43,10 @@ let
     Restart = "no";
     WorkingDirectory = config.home.homeDirectory;
     Environment = environment;
+    # Force Wine's registry update even when Nix normalizes wine.inf timestamps.
+    ExecStartPre = [
+      "${pkgs.coreutils}/bin/env PROTON_VERB=run ${exec "wineboot"} -u"
+    ];
     StandardOutput = "journal";
     StandardError = "journal";
   };
@@ -53,7 +54,6 @@ let
   exec =
     executable:
     lib.concatStringsSep " " [
-      "${pkgs.steam.run}/bin/steam-run"
       "${umu}/bin/umu-run"
       ''"${executable}"''
     ];
@@ -74,7 +74,7 @@ in
       ];
       Conflicts = [ "nikke-install.service" ];
     };
-    Service = service // {
+    Service = preLaunchConfig // {
       ExecStart = exec launcher;
     };
   };
@@ -86,9 +86,12 @@ in
       After = [ "graphical-session.target" ];
       Conflicts = [ "nikke.service" ];
     };
-    Service = service // {
+    Service = preLaunchConfig // {
       Environment = environment ++ [ "PROTON_VERB=run" ];
-      ExecStartPre = ''${pkgs.coreutils}/bin/test -f "${installer}"'';
+      ExecStartPre = [
+        ''${pkgs.coreutils}/bin/test -f "${installer}"''
+      ]
+      ++ preLaunchConfig.ExecStartPre;
       ExecStart = exec installer;
     };
   };
