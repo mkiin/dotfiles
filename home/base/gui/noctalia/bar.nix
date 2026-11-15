@@ -194,13 +194,6 @@
         };
       };
 
-      wallpaper = {
-        type = "custom_button";
-        glyph = "photo";
-        tooltip = "Wallpaper";
-        actions.left = "panel-toggle mkiin/wallpaper-picker:picker";
-      };
-
       launcher_slate = {
         type = "launcher";
         # custom_image = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";

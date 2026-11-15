@@ -1,24 +1,12 @@
-{
-  config,
-  myvars,
-  pkgs,
-  ...
-}:
-let
-  videoDir = "${config.home.homeDirectory}/${myvars.dotfilesdir}/wallpaper/videos";
-in
+{ pkgs, ... }:
 {
   home.packages = with pkgs; [
     gpu-screen-recorder
-    mpvpaper
-    mpv
-    socat
   ];
 
   programs.noctalia.settings = {
     plugins = {
       enabled = [
-        "mkiin/wallpaper-picker"
         "noctalia/bitwarden"
         "noctalia/screen_recorder"
         "tranzem/media-lyrics"
@@ -37,12 +25,6 @@ in
           location = "https://github.com/noctalia-dev/community-plugins";
           enabled = true;
         }
-        {
-          name = "mkiin";
-          kind = "git";
-          location = "https://github.com/mkiin/noctalia-plugins";
-          enabled = true;
-        }
       ];
     };
 
@@ -50,10 +32,6 @@ in
       video_source = "focused";
       frame_rate = 30;
       audio_codec = "aac";
-    };
-
-    plugin_settings."mkiin/wallpaper-picker" = {
-      video_directory = videoDir;
     };
   };
 }

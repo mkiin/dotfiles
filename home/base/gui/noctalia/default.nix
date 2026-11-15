@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 {
@@ -31,9 +30,6 @@
 
   config.programs.noctalia = {
     enable = true;
-    package = pkgs.noctalia.overrideAttrs (old: {
-      patches = (old.patches or [ ]) ++ [ ./current-wallpaper-path.patch ];
-    });
     systemd.enable = false;
 
     settings = {

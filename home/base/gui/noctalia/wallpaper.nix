@@ -1,6 +1,6 @@
 { config, myvars, ... }:
 let
-  wallpaperDir = "${config.home.homeDirectory}/${myvars.dotfilesdir}/wallpaper/images";
+  wallpaperDir = "${config.home.homeDirectory}/${myvars.dotfilesdir}/wallpaper";
 in
 {
   programs.noctalia.settings.wallpaper = {
