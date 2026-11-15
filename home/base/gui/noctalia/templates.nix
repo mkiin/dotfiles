@@ -13,7 +13,6 @@ in
       builtin_ids = [
         "btop"
         "ghostty"
-        "kitty"
         "gtk3"
         "gtk4"
       ]

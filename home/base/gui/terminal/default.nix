@@ -4,7 +4,6 @@ let
   terminals = {
     ghostty = ./ghostty;
     wezterm = ./wezterm;
-    kitty = ./kitty.nix;
   };
 in
 {

@@ -27,8 +27,8 @@ in
       ];
 
       scratchpads.fetch = {
-        command = "kitty --class fetch-scratch --hold fastfetch";
-        class = "fetch-scratch";
+        command = "${pkgs.ghostty}/bin/ghostty --class=com.mitchellh.ghostty.fetch --wait-after-command=true -e fastfetch";
+        class = "com.mitchellh.ghostty.fetch";
         size = "830px 520px";
         margin = 300;
         animation = "fromTop";
@@ -37,8 +37,8 @@ in
       };
 
       scratchpads.btop = {
-        command = "kitty --class btop-scratch --override font_size=11 --hold btop";
-        class = "btop-scratch";
+        command = "${pkgs.ghostty}/bin/ghostty --class=com.mitchellh.ghostty.btop --font-size=11 --wait-after-command=true -e btop";
+        class = "com.mitchellh.ghostty.btop";
         size = "820px 540px";
         margin = 300;
         animation = "fromTop";
