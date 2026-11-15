@@ -17,6 +17,10 @@
       url = "github:catppuccin/nvim";
       flake = false;
     };
+    conform-nvim = {
+      url = "github:stevearc/conform.nvim";
+      flake = false;
+    };
     flash-nvim = {
       url = "github:folke/flash.nvim";
       flake = false;

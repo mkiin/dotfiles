@@ -81,10 +81,10 @@ hl.bind(mod .. " + 0", hl.dsp.focus({ workspace = 10 }))
 
 -- Move
 
-hl.bind(mod .. " + SHIFT + H", hl.dsp.window.move({ direction = "l" }))
+hl.bind(mod .. " + SHIFT + H", hl.dsp.window.move({ workspace = "m-1" }))
 hl.bind(mod .. " + SHIFT + J", hl.dsp.window.move({ direction = "d" }))
 hl.bind(mod .. " + SHIFT + K", hl.dsp.window.move({ direction = "u" }))
-hl.bind(mod .. " + SHIFT + L", hl.dsp.window.move({ direction = "r" }))
+hl.bind(mod .. " + SHIFT + L", hl.dsp.window.move({ workspace = "m+1" }))
 hl.bind(mod .. " + SHIFT + U", hl.dsp.window.move({ monitor = "l" }))
 hl.bind(mod .. " + SHIFT + I", hl.dsp.window.move({ monitor = "r" }))
 hl.bind(mod .. " + SHIFT + 1", hl.dsp.window.move({ workspace = 1 }))

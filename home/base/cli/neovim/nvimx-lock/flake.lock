@@ -49,6 +49,22 @@
         "type": "github"
       }
     },
+    "conform-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786458409,
+        "narHash": "sha256-7VkQLpkDak/O5tphT/EWX/rE9r0Dd2UCF5CFbl4rK+A=",
+        "owner": "stevearc",
+        "repo": "conform.nvim",
+        "rev": "016802de402556da54c36bd7359b441266b01cdd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "stevearc",
+        "repo": "conform.nvim",
+        "type": "github"
+      }
+    },
     "flash-nvim": {
       "flake": false,
       "locked": {
@@ -332,6 +348,7 @@
         "barbar-nvim": "barbar-nvim",
         "blink-cmp": "blink-cmp",
         "catppuccin": "catppuccin",
+        "conform-nvim": "conform-nvim",
         "flash-nvim": "flash-nvim",
         "flatten-nvim": "flatten-nvim",
         "gitsigns-nvim": "gitsigns-nvim",

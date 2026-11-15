@@ -34,7 +34,7 @@ return {
       desc = "File explorer",
     },
     {
-      "<leader>tt",
+      "<leader>t",
       function()
         Snacks.terminal.toggle()
       end,

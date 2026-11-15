@@ -1,7 +1,26 @@
 ---@type snacks.dashboard.Config
 return {
   enabled = true,
-  formats = {},
+  formats = {
+    file = function(item)
+      local filename = item.file
+      if not filename then
+        return {}
+      end
+      if item.icon == "directory" then
+        return { vim.fn.fnamemodify(filename, ":~"), hl = "file" }
+      end
+      local root = Snacks.git.get_root(filename)
+      local path = root and vim.fs.relpath(root, filename) or filename
+      local tail = vim.fn.fnamemodify(path, ":h:t")
+      local file = vim.fn.fnamemodify(path, ":t")
+      return {
+        { root and vim.fn.fnamemodify(root, ":t") .. " · " or "", hl = "dir" },
+        { tail ~= "." and tail .. "/" or "", hl = "dir" },
+        { file, hl = "file" },
+      }
+    end,
+  },
   sections = {
     { section = "header" },
     { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
@@ -12,14 +31,14 @@ return {
   autokeys = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
   preset = {
     keys = {
-      { icon = "", desc = "New file", key = "e", action = ":enew | startinsert" },
-      { icon = "󰈙", desc = "Files", key = "f", action = ":lua Snacks.picker.smart()" },
-      { icon = "", desc = "Grep", key = "g", action = ":lua Snacks.picker.grep()" },
-      { icon = "", desc = "Recent files", key = "r", action = ":lua Snacks.picker.recent()" },
-      { icon = "", desc = "Dotfiles", key = "d", action = ":ConfigFiles" },
-      { icon = "", desc = "Restore session", key = "s", section = "session" },
-      { icon = "󰒲", desc = "Lazy", key = "z", action = ":Lazy" },
-      { icon = "󰅚", desc = "Quit", key = "q", action = ":qa" },
+      { icon = " ", desc = "New file", key = "e", action = ":enew | startinsert" },
+      { icon = " ", desc = "Files", key = "f", action = ":lua Snacks.picker.smart()" },
+      { icon = " ", desc = "Grep", key = "g", action = ":lua Snacks.picker.grep()" },
+      { icon = " ", desc = "Recent files", key = "r", action = ":lua Snacks.picker.recent()" },
+      { icon = " ", desc = "Dotfiles", key = "d", action = ":ConfigFiles" },
+      { icon = " ", desc = "Restore session", key = "s", section = "session" },
+      { icon = "󰒲 ", desc = "Lazy", key = "z", action = ":Lazy" },
+      { icon = " ", desc = "Quit", key = "q", action = ":qa" },
     },
   },
 }
