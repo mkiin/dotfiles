@@ -13,13 +13,13 @@
       shown_boxes = "cpu mem net proc";
       update_ms = 1000;
 
-      cpu_single_graph = false;
+      cpu_single_graph = true;
       show_gpu_info = "Auto";
       show_coretemp = true;
       show_cpu_watts = true;
       clock_format = "%X";
 
-      mem_graphs = true;
+      mem_graphs = false;
       show_disks = true;
       show_swap = true;
 

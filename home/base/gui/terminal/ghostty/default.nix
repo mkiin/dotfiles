@@ -31,10 +31,10 @@
       mouse-hide-while-typing = true;
 
       window-decoration = "none";
-      window-padding-balance = true;
+      window-padding-balance = "equal";
       window-padding-color = "background";
-      window-padding-x = 36;
-      window-padding-y = 36;
+      window-padding-x = 12;
+      window-padding-y = 12;
       window-theme = "ghostty";
       window-show-tab-bar = "never";
       window-new-tab-position = "end";
