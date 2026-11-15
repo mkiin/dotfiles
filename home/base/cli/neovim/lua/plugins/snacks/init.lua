@@ -19,8 +19,8 @@ return {
       picker = { enabled = true, ui_select = true },
       dashboard = require("plugins.snacks.dashboard"),
       terminal = {
-        start_insert = false,
-        auto_insert = false,
+        start_insert = true,
+        auto_insert = true,
         win = { position = "float", width = 0.8, height = 0.8 },
       },
     }
@@ -56,7 +56,7 @@ return {
       desc = "Files",
     },
     {
-      ",<space>",
+      ",g",
       function()
         Snacks.picker.grep({ hidden = true })
       end,

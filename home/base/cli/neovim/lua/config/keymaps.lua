@@ -32,7 +32,7 @@ vim.keymap.set("n", "gL", "L")
 vim.keymap.set("n", "ss", "<cmd>split<cr>")
 vim.keymap.set("n", "sv", "<cmd>vsplit<cr>")
 vim.keymap.set("n", "sq", "<cmd>close<cr>", { desc = "Close window" })
-vim.keymap.set("n", "sqo", "<cmd>only<cr>", { desc = "Close other windows" })
+vim.keymap.set("n", "so", "<cmd>only<cr>", { desc = "Close other windows" })
 
 -- move window
 vim.keymap.set("n", "sh", "<C-w>h")
