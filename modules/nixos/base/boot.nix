@@ -1,7 +1,7 @@
 { lib, ... }:
 {
   boot.loader.systemd-boot = {
-    # we use Git for version control, so we don't need to keep too many generations.
+    # Keep boot files bounded while retaining rollback choices.
     configurationLimit = lib.mkDefault 5;
     # pick the highest resolution for systemd-boot's console.
     consoleMode = lib.mkDefault "max";

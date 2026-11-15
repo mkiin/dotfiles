@@ -14,6 +14,7 @@
       # root user is used for remote deployment, so we need to allow it
       PermitRootLogin = lib.mkDefault "prohibit-password";
       PasswordAuthentication = lib.mkDefault false; # disable password login
+      KbdInteractiveAuthentication = lib.mkDefault false;
     };
     openFirewall = true;
   };

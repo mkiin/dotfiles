@@ -10,7 +10,7 @@ in
   dotfilesdir = "ghq/github.com/mkiin/dotfiles";
 
   mainSshAuthorizedKeys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHtFtnjls1G8D96vYcXS97wR88MuYxPP8JueOPd7LVq/ mkiin@oregairu-yukino"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHMx2dRGve60InCdio56Go1Rm+B7vVcHZb9UlQoHeO4K mkiin@oregairu-yukino"
   ];
 
   secondaryAuthorizedKeys = [
