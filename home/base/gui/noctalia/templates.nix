@@ -19,7 +19,6 @@ in
       ++ lib.optional (cfg.hyprland.enable or false) "hyprland"
       ++ lib.optional cfg.niri.enable "niri";
       community_ids = [
-        "bat"
         "discord"
         "fcitx5"
         "obsidian"

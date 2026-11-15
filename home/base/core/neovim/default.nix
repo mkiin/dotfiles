@@ -37,7 +37,7 @@ in
     extraWrapperArgs = [
       "--set"
       "NVIM_CONFIG_SOURCE"
-      "${config.home.homeDirectory}/${myvars.dotfilesdir}/home/base/cli/neovim"
+      "${config.home.homeDirectory}/${myvars.dotfilesdir}/home/base/core/neovim"
     ];
     extraPackages = with pkgs; [
       git
@@ -47,8 +47,8 @@ in
 
     lock = {
       projectDir = "${config.home.homeDirectory}/${myvars.dotfilesdir}";
-      configDirRelative = "home/base/cli/neovim";
-      lockDirRelative = "home/base/cli/neovim/nvimx-lock";
+      configDirRelative = "home/base/core/neovim";
+      lockDirRelative = "home/base/core/neovim/nvimx-lock";
     };
   };
 }

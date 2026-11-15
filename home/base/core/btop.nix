@@ -1,9 +1,9 @@
-{ ... }:
+{ config, ... }:
 {
   programs.btop = {
     enable = true;
     settings = {
-      color_theme = "noctalia";
+      color_theme = if config.programs.noctalia.enable or false then "noctalia" else "Default";
       theme_background = false;
       truecolor = true;
       rounded_corners = true;
