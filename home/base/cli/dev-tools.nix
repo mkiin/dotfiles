@@ -19,18 +19,9 @@
     clang-tools
 
     # Lua
-    lua-language-server
     luau-lsp
-    stylua
-
-    # Shell
-    bash-language-server
-    shellcheck
-    shfmt
 
     # Nix
-    nixd
-    nixfmt
     statix
 
     # Python
