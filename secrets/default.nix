@@ -1,36 +1,28 @@
 {
-  myvars,
+  config,
   inputs,
+  lib,
+  myvars,
   ...
 }:
-
-let
-  userReadable = {
-    mode = "0400";
-    owner = myvars.username;
-  };
-in
 {
-  imports = [
-    inputs.agenix.nixosModules.default
-  ];
-  age = {
-    identityPaths = [
-      "/etc/ssh/ssh_host_ed25519_key"
-    ];
+  imports = [ inputs.agenix.nixosModules.default ];
 
-    secrets = {
-      "user-password" = {
-        file = ./user-password.age;
-        mode = "0400";
-        owner = "root";
-      };
+  options.modules.secrets.desktop.enable = lib.mkEnableOption "desktop secrets";
 
-      "rclone-r2.conf" = {
-        file = ./rclone-r2.conf.age;
-      }
-      // userReadable;
+  config = {
+    age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 
+    age.secrets."user-password" = {
+      file = ./user-password.age;
+      mode = "0400";
+      owner = "root";
+    };
+
+    age.secrets."rclone-r2.conf" = lib.mkIf config.modules.secrets.desktop.enable {
+      file = ./rclone-r2.conf.age;
+      mode = "0400";
+      owner = myvars.username;
     };
   };
 }

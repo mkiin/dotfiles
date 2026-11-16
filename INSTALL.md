@@ -27,7 +27,7 @@ ISO から取得する変更は事前に commit・push しておく。
 ssh-keygen -t ed25519 -a 256 \
   -C agenix-recovery -f /mnt/recovery/recovery_key # パスフレーズを設定
 cat /mnt/recovery/recovery_key.pub
-vim secrets/agenix-rules.nix # recovery_key に公開鍵を登録し、recipients に追加
+vim secrets/agenix-rules.nix # recovery_key に公開鍵を登録し、desktopRecipients に追加
 ```
 
 リポジトリのルートから実行する。
@@ -103,7 +103,7 @@ vim '+1read /etc/ssh/ssh_host_ed25519_key.pub' secrets/agenix-rules.nix # let �
 
 ```nix
   oregairu-yukino = "ssh-ed25519 ..."; # 読み込んだ行をこの形に整える。鍵は省略せず、古い Yukino の宣言は削除
-  recipients = [
+  desktopRecipients = [
     oregairu-yui # Yui と復旧鍵の値は変更しない
     oregairu-yukino # なければ追加
     recovery_key
