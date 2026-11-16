@@ -63,8 +63,8 @@ hl.bind(mod .. " + SHIFT + D", hl.dsp.exec_cmd("noctalia msg dock-toggle"))
 -- Focus
 
 hl.bind(mod .. " + H", hl.dsp.focus({ workspace = "m-1" }))
-hl.bind(mod .. " + J", hl.dsp.focus({ direction = "d" }))
-hl.bind(mod .. " + K", hl.dsp.focus({ direction = "u" }))
+hl.bind(mod .. " + J", hl.dsp.window.cycle_next({ next = false }))
+hl.bind(mod .. " + K", hl.dsp.window.cycle_next({ next = true }))
 hl.bind(mod .. " + L", hl.dsp.focus({ workspace = "m+1" }))
 hl.bind(mod .. " + U", hl.dsp.focus({ monitor = "l" }))
 hl.bind(mod .. " + I", hl.dsp.focus({ monitor = "r" }))
