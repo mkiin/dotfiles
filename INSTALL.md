@@ -27,6 +27,22 @@
    ls -l /dev/disk/by-id/
    ```
 
+### USB から起動した NixOS のハードウェア設定を取得する
+
+1. 操作元の PC の dotfiles ディレクトリで実行する。`<usb_ip>` には USB 起動中のインストール先の IP アドレスを指定する。
+
+   ```bash
+   ssh nixos@<usb_ip> 'nixos-generate-config --show-hardware-config --no-filesystems'
+   ```
+
+   パスワードを求められたら、`passwd` で設定したパスワードを入力する。
+
+2. 表示された設定を `hosts/<target_host>/hardware-configuration.nix` に保存する。既存ファイルがある場合は、差分を確認して反映する。
+
+   ```bash
+   vim hosts/<target_host>/hardware-configuration.nix
+   ```
+
 ### NixOS がインストール済みのデバイスで準備する
 
 1. dotfiles のディレクトリで、インストール先の `disko.nix` を開く。
