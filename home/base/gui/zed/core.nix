@@ -8,6 +8,7 @@
     extensions = [
       "kanagawa-themes"
       "colored-zed-icons-theme"
+      "git-firefly"
       "oxc"
       "dockerfile"
       "just"
