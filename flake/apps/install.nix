@@ -8,6 +8,11 @@
       ...
     }:
     {
+      apps.remote-install = {
+        type = "app";
+        program = lib.getExe pkgs.nixos-anywhere;
+      };
+
       apps.install = {
         type = "app";
         program = toString (
