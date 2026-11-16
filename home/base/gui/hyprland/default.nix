@@ -2,10 +2,19 @@
   config,
   lib,
   osConfig,
+  pkgs,
   ...
 }:
 let
   cfg = config.modules.desktop.hyprland;
+
+  screenshotWindow = pkgs.writeShellApplication {
+    name = "screenshot-window-by-app";
+    runtimeInputs = [ pkgs.python3 ];
+    text = ''
+      exec python3 ${./screenshot-window.py} "$@"
+    '';
+  };
 
   luaModules = [
     "vars"
@@ -25,6 +34,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    home.packages = [ screenshotWindow ];
     wayland.windowManager.hyprland = {
       enable = true;
       package = null;
