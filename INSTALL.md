@@ -1,5 +1,7 @@
 # NixOS のインストール
 
+コマンドの `<...>` は実際の値に置き換える。`<target_host>` には、インストール先に対応する `hosts/` 内のディレクトリ名を使う。
+
 ## nixos-anywhere を利用する場合
 
 ### インストール先のデバイスで USB から NixOS を起動する
@@ -27,50 +29,45 @@
 
 ### NixOS がインストール済みのデバイスで準備する
 
-1. dotfiles のディレクトリで agenix を使える Bash を開く。このデバイスでのインストール作業には、以降も同じ端末を使う。
+1. dotfiles のディレクトリで、インストール先の `disko.nix` を開く。
 
    ```bash
-   cd ~/ghq/github.com/mkiin/dotfiles
-   nix shell --inputs-from . agenix#agenix -c bash
-   ```
-
-2. `hosts/` の一覧からインストール先のホスト名を入力し、そのデバイスの `disko.nix` を開く。
-
-   ```bash
-   ls hosts/
-   read -rp 'インストール先のホスト名: ' target_host
-   vim "hosts/$target_host/disko.nix"
+   vim hosts/<target_host>/disko.nix
    ```
 
    `disko.devices.disk.system` の `device` に、先ほど控えた SSD のパスを書いて保存する。
 
-3. 一時ディレクトリを作り、その中にインストール先の SSH ホスト鍵を生成する。
+2. 一時ディレクトリを作り、その中にインストール先の SSH ホスト鍵を生成する。以降も同じ端末を使う。
 
    ```bash
    work=$(mktemp -d -p "$XDG_RUNTIME_DIR")
    install -d -m 755 "$work/extra" "$work/extra/etc" "$work/extra/etc/ssh"
    key="$work/extra/etc/ssh/ssh_host_ed25519_key"
-   ssh-keygen -t ed25519 -N '' -C "$target_host" -f "$key"
+   ssh-keygen -t ed25519 -N '' -C <target_host> -f "$key"
    ```
 
-4. 公開鍵を表示し、`secrets/agenix-rules.nix` を開く。
+3. 公開鍵を表示し、`secrets/agenix-rules.nix` を開く。
 
    ```bash
    cat "$key.pub"
    vim secrets/agenix-rules.nix
    ```
 
-5. インストール先に応じて公開鍵を登録する。再インストールの場合は、そのデバイスの古い公開鍵を置き換える。
+4. インストール先に応じて公開鍵を登録する。再インストールの場合は、そのデバイスの古い公開鍵を置き換える。
 
    - デスクトップの場合は、インストール先のホスト名に公開鍵を割り当て、その名前を `desktopRecipients` に含める。
    - サーバーの場合は、公開鍵を二重引用符で囲んで `serverRecipients` に書く。
 
-6. `secrets/` に移り、操作しているデバイスの SSH ホスト秘密鍵を指定する。
+5. `secrets/` に移る。
 
    ```bash
    cd secrets
-   identity=/etc/ssh/ssh_host_ed25519_key
-   agenix_bin=$(command -v agenix)
+   ```
+
+6. 操作しているデバイスの SSH ホスト秘密鍵で各ファイルを復号し、`agenix-rules.nix` に登録した公開鍵で暗号化し直す。
+
+   ```bash
+   sudo TMPDIR=/run agenix -r -i /etc/ssh/ssh_host_ed25519_key
    ```
 
    <details>
@@ -82,28 +79,31 @@
    lsblk -p -o NAME,SIZE,MODEL,LABEL,MOUNTPOINTS
    ```
 
-   USB を読み取り専用でマウントし、復旧鍵を指定する。
+   確認したパーティションを読み取り専用でマウントする。
 
    ```bash
-   read -rp '復旧用 USB のパーティション（/dev/…）: ' recovery_partition
-   pkexec "$(command -v mkdir)" -p /mnt/recovery
-   pkexec "$(command -v mount)" -o ro "$recovery_partition" /mnt/recovery
-   identity=/mnt/recovery/recovery_key
+   sudo mkdir -p /mnt/recovery
+   sudo mount -o ro /dev/<partition> /mnt/recovery
+   ```
+
+   復号に USB の秘密鍵を使って、もう一度実行する。
+
+   ```bash
+   sudo TMPDIR=/run agenix -r -i /mnt/recovery/recovery_key
+   ```
+
+   USB をアンマウントして抜く。
+
+   ```bash
+   sudo umount /mnt/recovery
    ```
 
    </details>
 
-7. `agenix -r` で、`agenix-rules.nix` にあるすべてのファイルを暗号化し直す。各ファイルには、そのファイルの `publicKeys` に登録した公開鍵が使われる。
+7. 暗号化し直したファイルの所有者とグループを `agenix-rules.nix` に揃える。
 
    ```bash
-   pkexec --keep-cwd "$(command -v env)" TMPDIR=/run \
-     "$agenix_bin" -r -i "$identity"
-   ```
-
-   再暗号化したファイルの所有者とグループを `agenix-rules.nix` に揃える。
-
-   ```bash
-   pkexec --keep-cwd "$(command -v chown)" --reference=agenix-rules.nix -- ./*.age
+   sudo chown --reference=agenix-rules.nix ./*.age
    ```
 
 8. dotfiles のルートに戻る。
@@ -112,28 +112,16 @@
    cd ..
    ```
 
-   復旧用 USB を使った場合は、アンマウントして抜く。
-
-   ```bash
-   pkexec "$(command -v umount)" /mnt/recovery
-   ```
-
 ### NixOS がインストール済みのデバイスからインストールを実行する
 
-1. USB から起動したインストール先の IP アドレスを入力する。
+`<usb_ip>` に USB から起動したときの IP アドレスを指定する。このコマンドは `disko.nix` で指定した SSD を消去し、NixOS と生成したホスト鍵をインストールする。
 
-   ```bash
-   read -rp 'インストール先の IP アドレス: ' usb_ip
-   ```
+```bash
+nix run .#remote-install -- --flake .#<target_host> --target-host nixos@<usb_ip> \
+  --build-on local --no-substitute-on-destination --extra-files "$work/extra"
+```
 
-2. 次のコマンドを実行する。`remote-install` は `disko.nix` で指定した SSD を消去して NixOS をインストールし、生成したホスト鍵をインストール先の `/etc/ssh/` にコピーする。
-
-   ```bash
-   nix run .#remote-install -- --flake ".#$target_host" --target-host "nixos@$usb_ip" \
-     --build-on local --no-substitute-on-destination --extra-files "$work/extra"
-   ```
-
-   SSH のパスワードを求められたら、USB から起動した `nixos` ユーザーに設定したパスワードを入力する。
+SSH のパスワードを求められたら、USB から起動した `nixos` ユーザーに設定したパスワードを入力する。
 
 ### インストール先のデバイスで SSD から NixOS を起動する
 
@@ -148,25 +136,21 @@
 
 ### NixOS がインストール済みのデバイスに SSH ホスト公開鍵を登録する
 
-1. インストールに使った端末に、SSD から起動したインストール先の IP アドレスを入力する。
+`<target_ip>` には、SSD から起動したときの IP アドレスを使う。
+
+1. 再インストールで同じ IP アドレスを使う場合は、古い公開鍵を削除する。
 
    ```bash
-   read -rp 'インストール先の IP アドレス: ' target_ip
+   ssh-keygen -R <target_ip>
    ```
 
-2. 再インストールで同じ IP アドレスを使う場合は、古い公開鍵を削除する。
+2. 新しい公開鍵の先頭に IP アドレスを付け、`~/.ssh/known_hosts` に追記する。
 
    ```bash
-   ssh-keygen -R "$target_ip"
+   echo "<target_ip> $(cat "$key.pub")" >> ~/.ssh/known_hosts
    ```
 
-3. インストール先の IP アドレスと新しい公開鍵を `~/.ssh/known_hosts` に書き込む。
-
-   ```bash
-   awk -v host="$target_ip" '{print host, $1, $2}' "$key.pub" >> ~/.ssh/known_hosts
-   ```
-
-4. 一時ディレクトリとその中の秘密鍵を削除する。
+3. 一時ディレクトリとその中の秘密鍵を削除する。
 
    ```bash
    rm -r -- "$work"
@@ -174,14 +158,10 @@
 
 ### NixOS がインストール済みのデバイスから設定を更新する
 
-インストール先に SSH で `root` としてログインできる場合は、dotfiles のディレクトリで Bash を開き、更新するデバイスのホスト名と IP アドレスを指定する。
+インストール先に SSH で `root` としてログインできる場合は、dotfiles のディレクトリで実行する。
 
 ```bash
-cd ~/ghq/github.com/mkiin/dotfiles
-bash
-read -rp '更新するデバイスのホスト名: ' target_host
-read -rp '更新するデバイスの IP アドレス: ' target_ip
-nix run .#remote-switch -- "$target_host" --target "$target_ip"
+nix run .#remote-switch -- <target_host> --target <target_ip>
 ```
 
 ## インストール先のデバイスだけで作業する場合
@@ -197,7 +177,7 @@ nix run .#remote-switch -- "$target_host" --target "$target_ip"
 - 復旧鍵で復号できる `user-password.age` と `rclone-r2.conf.age`
 - `installer/initial-password-hash` に設定した初期パスワード
 
-対象 SSD が `hosts/<host>/disko.nix` のパーティション構成を収容できることを確認する。
+対象 SSD が `hosts/<target_host>/disko.nix` のパーティション構成を収容できることを確認する。
 必要な個人ファイルをバックアップする。
 別のハードウェアに導入する場合は、対象ホストの hardware configuration を見直す。
 新しいホストや設定ファイルを追加した場合は、対象ファイルを `git add` する。
@@ -216,21 +196,17 @@ cat /mnt/recovery/recovery_key.pub
 vim secrets/agenix-rules.nix # recovery_key に公開鍵を登録し、desktopRecipients に追加
 ```
 
-リポジトリのルートから実行する。
+dotfiles の `secrets/` に移り、登録した公開鍵で暗号化し直す。復旧鍵で両方のファイルを復号する。
 
 ```bash
 cd secrets
-sudo nix shell --inputs-from .. github:ryantm/agenix#agenix \
-  -c agenix -r -i /etc/ssh/ssh_host_ed25519_key
-
-nix shell --inputs-from .. github:ryantm/agenix#agenix \
-  -c agenix -d user-password.age -i /mnt/recovery/recovery_key > /dev/null
-nix shell --inputs-from .. github:ryantm/agenix#agenix \
-  -c agenix -d rclone-r2.conf.age -i /mnt/recovery/recovery_key > /dev/null
+sudo TMPDIR=/run agenix -r -i /etc/ssh/ssh_host_ed25519_key
+sudo chown --reference=agenix-rules.nix ./*.age
+agenix -d user-password.age -i /mnt/recovery/recovery_key > /dev/null
+agenix -d rclone-r2.conf.age -i /mnt/recovery/recovery_key > /dev/null
 cd ..
 ```
 
-`401 Bad credentials` が出た場合は、`nix --option access-tokens '' shell ...` で再実行する。
 両方の復号成功を確認し、公開鍵の宣言と `.age` を commit・push する。
 復旧秘密鍵は USB に保管し、repo や SSD にコピーしない。
 
@@ -254,29 +230,21 @@ lsblk -o NAME,SIZE,MODEL,TYPE,MOUNTPOINTS
 ls -l /dev/disk/by-id/
 ```
 
-`hosts/` の一覧からインストール先のホスト名を入力する。SSD にはディスク全体を指す `/dev/disk/by-id/` のパスを指定する。
-
-```bash
-ls hosts/
-read -rp 'インストール先のホスト名: ' target_host
-read -rp 'インストール先の SSD（/dev/disk/by-id/…）: ' target_disk
-```
-
-対象 SSD のマウントと swap を解除する。
+対象 SSD のマウントと swap を解除する。`<ssd_id>` には、`/dev/disk/by-id/` の一覧からディスク全体を指す ID を指定する。
 
 消去せず事前確認する場合：
 
 ```bash
 sudo mkdir -p /mnt/disko-install-root
 nix --extra-experimental-features 'nix-command flakes' run .#install -- --dry-run \
-  "$target_host" "$target_disk" # disko.nix の SSD ID は更新される
+  <target_host> /dev/disk/by-id/<ssd_id> # disko.nix の SSD ID は更新される
 ```
 
 **以下のコマンドは対話確認なしで、対象 SSD の既存パーティションとデータを消去する。**
 
 ```bash
 sudo nix --extra-experimental-features 'nix-command flakes' run .#install -- \
-  "$target_host" "$target_disk"
+  <target_host> /dev/disk/by-id/<ssd_id>
 ```
 
 インストール成功後に再起動し、SSD 上の最小 OS を起動する。
@@ -300,34 +268,33 @@ vim secrets/agenix-rules.nix
 
 ### 5. USB をマウントし Secrets を再暗号化
 
+復旧用 USB のパーティション名を調べる。
+
 ```bash
-lsblk -f
-ls -l /dev/disk/by-id/
-sudo mkdir -p /mnt/recovery
-printf '復旧用 USB のパーティション（/dev/disk/by-id/…）: '
-read -r recovery_partition
-sudo mount -o ro "$recovery_partition" /mnt/recovery
-ls /mnt/recovery/recovery_key
+lsblk -fp
 ```
+
+確認したパーティションを読み取り専用でマウントする。
+
+```bash
+sudo mkdir -p /mnt/recovery
+sudo mount -o ro /dev/<partition> /mnt/recovery
+```
+
+復旧鍵で各ファイルを復号し、登録した公開鍵で暗号化し直す。パスフレーズを求められたら入力する。
 
 ```bash
 cd secrets
-TMPDIR="$XDG_RUNTIME_DIR" agenix -r -i /mnt/recovery/recovery_key # 復旧鍵のパスフレーズを入力
-agenix -c
-```
-
-鍵の読み取り権限がない場合は、次で再暗号化する。
-
-```bash
-sudo env TMPDIR=/run agenix -r -i /mnt/recovery/recovery_key
+sudo TMPDIR=/run agenix -r -i /mnt/recovery/recovery_key
+sudo chown --reference=agenix-rules.nix ./*.age
 agenix -c
 ```
 
 両方の鍵で復号できることを確認する。
 
 ```bash
-agenix -d user-password.age -i /mnt/recovery/recovery_key > /dev/null
-agenix -d rclone-r2.conf.age -i /mnt/recovery/recovery_key > /dev/null
+sudo agenix -d user-password.age -i /mnt/recovery/recovery_key > /dev/null
+sudo agenix -d rclone-r2.conf.age -i /mnt/recovery/recovery_key > /dev/null
 sudo agenix -d user-password.age -i /etc/ssh/ssh_host_ed25519_key > /dev/null
 sudo agenix -d rclone-r2.conf.age -i /etc/ssh/ssh_host_ed25519_key > /dev/null
 sudo umount /mnt/recovery
