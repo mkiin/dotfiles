@@ -1,0 +1,4 @@
+{ ... }:
+{
+  imports = [ ../../linux/server.nix ];
+}
