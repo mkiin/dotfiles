@@ -4,6 +4,8 @@
   ...
 }:
 {
+  programs.zsh.initContent = "fastfetch";
+
   programs.fastfetch = {
     enable = true;
     settings = {
