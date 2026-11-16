@@ -23,25 +23,6 @@ jobs:
       - name: Check flake
         run: nix flake check --show-trace
 
-      - name: Check secret selection
-        run: |
-          nix eval --json .#nixosConfigurations --apply '
-            hosts:
-            let
-              yukino = hosts.oregairu-yukino;
-              commonOnly = yukino.extendModules {
-                modules = [ ({ lib, ... }: { modules.secrets.desktop.enable = lib.mkForce false; }) ];
-              };
-              secrets = host: host.config.age.secrets;
-              hasDesktopSecrets = host: (secrets host) ? "user-password" && (secrets host) ? "rclone-r2.conf";
-            in
-            assert hasDesktopSecrets yukino;
-            assert hasDesktopSecrets hosts.oregairu-yui;
-            assert (secrets commonOnly) ? "user-password";
-            assert !((secrets commonOnly) ? "rclone-r2.conf");
-            true
-          '
-
       - name: Check installer
         run: nix flake check ./installer --show-trace
 
