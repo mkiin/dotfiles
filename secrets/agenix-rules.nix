@@ -7,8 +7,9 @@ let
     oregairu-yukino
     recovery_key
   ];
-  # Add a server's host public key here when provisioning it.
-  serverRecipients = [ ];
+  serverRecipients = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH2zfFjD2OhKxu7xJBYfGl5zkqZg0aLI0aTAqx/iomuR"
+  ];
 in
 {
   "user-password.age".publicKeys = desktopRecipients ++ serverRecipients;
