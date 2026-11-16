@@ -3,6 +3,7 @@
   inputs,
   lib,
   myvars,
+  pkgs,
   ...
 }:
 let
@@ -16,6 +17,10 @@ in
 
   config = mkMerge [
     {
+      environment.systemPackages = [
+        inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
+      ];
+
       age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 
       age.secrets."user-password" = {
