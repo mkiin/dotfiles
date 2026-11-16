@@ -18,24 +18,7 @@ hl.bind(mod .. " + W", hl.dsp.exec_cmd("noctalia msg wallpaper-next"))
 hl.bind(mod .. " + SHIFT + W", hl.dsp.exec_cmd("noctalia msg panel-toggle wallpaper"))
 
 -- Capture
-hl.bind(mod .. " + Z", function()
-  local window = hl.get_active_window()
-  if not window then
-    return
-  end
-
-  local app = window.class:gsub("[/%c]", "_"):gsub("^%s+", ""):gsub("%s+$", "")
-  if #app > 200 then
-    -- Keep the directory name within filesystem limits without splitting UTF-8.
-    app = app:sub(1, assert(utf8.offset(app, 0, 201)) - 1)
-  end
-  if app == "" or app == "." or app == ".." then
-    app = "unknown"
-  end
-
-  local directory = "~/Pictures/Screenshots/" .. app
-  hl.exec_cmd("noctalia msg screenshot-window --save-to-file --directory '" .. directory:gsub("'", "'\\''") .. "'")
-end)
+hl.bind(mod .. " + Z", hl.dsp.exec_cmd("screenshot-window-by-app"))
 hl.bind(mod .. " + SHIFT + Z", hl.dsp.exec_cmd("noctalia msg screenshot-region"))
 
 -- Window

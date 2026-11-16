@@ -2,10 +2,40 @@
   config,
   lib,
   osConfig,
+  pkgs,
   ...
 }:
 let
   cfg = config.modules.desktop.hyprland;
+
+  screenshotAppName = pkgs.writeShellApplication {
+    name = "screenshot-app-name";
+    runtimeInputs = [
+      pkgs.gjs
+      pkgs.steam-acf
+      pkgs.systemd
+    ];
+    text = ''
+      exec gjs -m ${pkgs.writeText "screenshot-app-name.js" ''
+        import {resolveAppName} from 'file://${./app-name.js}';
+        if (ARGV.length !== 1) throw new Error('Usage: screenshot-app-name <window-json>');
+        print(resolveAppName(JSON.parse(ARGV[0])));
+      ''} "$@"
+    '';
+  };
+
+  screenshotWindow = pkgs.writeShellApplication {
+    name = "screenshot-window-by-app";
+    runtimeInputs = [
+      pkgs.nushell
+      osConfig.programs.hyprland.package
+      config.programs.noctalia.package
+      screenshotAppName
+    ];
+    text = ''
+      exec nu --no-config-file ${./screenshot-window.nu} "$@"
+    '';
+  };
 
   luaModules = [
     "vars"
@@ -25,6 +55,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    home.packages = [
+      screenshotWindow
+      screenshotAppName
+    ];
+
     wayland.windowManager.hyprland = {
       enable = true;
       package = null;
