@@ -65,45 +65,63 @@
    - デスクトップの場合は、インストール先のホスト名に公開鍵を割り当て、その名前を `desktopRecipients` に含める。
    - サーバーの場合は、公開鍵を二重引用符で囲んで `serverRecipients` に書く。
 
-6. 復旧用 USB を NixOS がインストール済みのデバイスに挿し、パーティション名を調べる。
+6. `secrets/` に移り、操作しているデバイスの SSH ホスト秘密鍵を指定する。
+
+   ```bash
+   cd secrets
+   identity=/etc/ssh/ssh_host_ed25519_key
+   agenix_bin=$(command -v agenix)
+   ```
+
+   <details>
+   <summary>このホスト鍵で既存の .age ファイルを復号できない場合</summary>
+
+   復旧用 USB を挿し、パーティションを調べる。
 
    ```bash
    lsblk -p -o NAME,SIZE,MODEL,LABEL,MOUNTPOINTS
    ```
 
-7. パーティションのパスを入力し、USB を読み取り専用でマウントする。
+   USB を読み取り専用でマウントし、復旧鍵を指定する。
 
    ```bash
    read -rp '復旧用 USB のパーティション（/dev/…）: ' recovery_partition
-   sudo mkdir -p /mnt/recovery
-   sudo mount -o ro "$recovery_partition" /mnt/recovery
+   pkexec "$(command -v mkdir)" -p /mnt/recovery
+   pkexec "$(command -v mount)" -o ro "$recovery_partition" /mnt/recovery
+   identity=/mnt/recovery/recovery_key
    ```
 
-8. USB に `recovery_key` があることを確認する。
+   </details>
+
+7. インストール先に合わせて、次のどちらかを実行する。指定した秘密鍵で既存のファイルを復号し、`agenix-rules.nix` に登録した公開鍵で暗号化し直す。
+
+   **サーバーにインストールする場合**は、`user-password.age` だけを更新する。
 
    ```bash
-   ls -l /mnt/recovery/recovery_key
+   pkexec --keep-cwd "$(command -v env)" TMPDIR=/run EDITOR=: \
+     "$agenix_bin" -e user-password.age -i "$identity"
+   pkexec --keep-cwd "$(command -v chown)" --reference=agenix-rules.nix user-password.age
    ```
 
-9. `secrets/` に移り、USB の秘密鍵を使って `user-password.age` を暗号化し直す。パスフレーズを求められたら、復旧鍵のものを入力する。
+   **デスクトップにインストールする場合**は、`user-password.age` と `rclone-r2.conf.age` を更新する。
 
    ```bash
-   cd secrets
-   TMPDIR="$XDG_RUNTIME_DIR" EDITOR=: agenix -e user-password.age -i /mnt/recovery/recovery_key
+   pkexec --keep-cwd "$(command -v env)" TMPDIR=/run \
+     "$agenix_bin" -r -i "$identity"
+   pkexec --keep-cwd "$(command -v chown)" --reference=agenix-rules.nix user-password.age rclone-r2.conf.age
    ```
 
-   インストール先がデスクトップの場合は、同じディレクトリで `rclone-r2.conf.age` も暗号化し直す。
+8. dotfiles のルートに戻る。
 
    ```bash
-   TMPDIR="$XDG_RUNTIME_DIR" EDITOR=: agenix -e rclone-r2.conf.age -i /mnt/recovery/recovery_key
+   cd ..
    ```
 
-10. dotfiles のルートに戻り、復旧用 USB をアンマウントして抜く。
+   復旧用 USB を使った場合は、アンマウントして抜く。
 
-    ```bash
-    cd ..
-    sudo umount /mnt/recovery
-    ```
+   ```bash
+   pkexec "$(command -v umount)" /mnt/recovery
+   ```
 
 ### NixOS がインストール済みのデバイスからインストールを実行する
 
