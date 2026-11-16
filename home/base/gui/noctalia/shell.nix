@@ -6,6 +6,11 @@
     settings_window_translucent = true;
     polkit_agent = true;
 
+    screenshot = {
+      directory = "~/Pictures/Screenshots";
+      save_to_file = true;
+    };
+
     session = {
       show_shortcuts = false;
       actions = [
