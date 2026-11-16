@@ -166,33 +166,24 @@ reboot
 
 1. NixOS Minimal ISO を書き込んだ USB メモリを iroha に挿す。電源を入れ、起動メニューで USB メモリを選んで NixOS を起動する。
 
-2. NixOS が起動したら、端末で有線 LAN の IPv4 アドレスを調べる。
+2. iroha の端末で、USB から起動した NixOS の `nixos` ユーザーにパスワードを設定する。
+
+   ```bash
+   passwd
+   ```
+
+3. 有線 LAN の IPv4 アドレスを調べる。
 
    ```bash
    ip -br -4 addr
    ```
 
-3. 容量と型番からインストール先の SSD を特定する。`/dev/disk/by-id/` の一覧で、その SSD を指すパスを控える。
+4. 容量と型番からインストール先の SSD を特定する。`/dev/disk/by-id/` の一覧で、その SSD を指すパスを控える。
 
    ```bash
    lsblk -d -o NAME,SIZE,MODEL
    ls -l /dev/disk/by-id/
    ```
-
-4. root のシェルを開く。
-
-   ```bash
-   sudo -i
-   ```
-
-5. root の SSH 用ディレクトリを作り、`authorized_keys` をエディタで開く。
-
-   ```bash
-   install -d -m 700 /root/.ssh
-   nano /root/.ssh/authorized_keys
-   ```
-
-6. yukino の `vars/default.nix` で `mainSshAuthorizedKeys` にある `ssh-ed25519` で始まる公開鍵をコピーする。iroha で開いたファイルに、引用符を除いて1行で貼り付ける。Ctrl+O、Enter で保存し、Ctrl+X で閉じる。
 
 ### yukino でインストールの準備をする
 
@@ -274,9 +265,11 @@ reboot
 2. yukino で次のコマンドを実行する。`remote-install` は `disko.nix` で指定した SSD を消去して NixOS をインストールし、先ほど作った SSH ホスト鍵を iroha の `/etc/ssh/` にコピーする。
 
    ```bash
-   nix run .#remote-install -- --flake .#oregairu-iroha --target-host "root@$usb_ip" \
+   nix run .#remote-install -- --flake .#oregairu-iroha --target-host "nixos@$usb_ip" \
      --build-on local --no-substitute-on-destination --extra-files "$work/extra"
    ```
+
+   SSH のパスワードを求められたら、iroha で `nixos` ユーザーに設定したパスワードを入力する。
 
 ### SSD から起動した iroha の公開鍵を yukino に登録する
 
