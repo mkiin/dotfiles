@@ -7,6 +7,15 @@
           enable = true;
           package = pkgs.nixfmt;
         };
+        oxfmt = {
+          enable = true;
+          includes = [
+            "*.js"
+            "*.jsx"
+            "*.mjs"
+            "*.cjs"
+          ];
+        };
         stylua.enable = true;
         shfmt.enable = true;
         qmlformat.enable = true;
