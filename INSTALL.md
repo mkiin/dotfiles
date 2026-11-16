@@ -159,95 +159,73 @@ reboot
 再インストール前のパスワードでログインする。
 公開鍵と Secrets の差分を確認し、commit・push する。
 
-## Yukino からのリモートインストール
+## Yukino から G5 に NixOS をインストールする
 
-対象は `nixosConfigurations.<host>` に登録済みのサーバー。以下のホスト名は
-`oregairu-iroha`。実行前に本番構成・実機のハードウェア設定・disko の単一
-`system` ディスクを用意し、SSD 全体の by-id を指定する。インストールする
-構成は共通の `user-password` だけを復号する。以下の操作はリポジトリの
-ルートで行う。USB 起動環境に本番用の dotfiles を置く必要はない。
+1. G5 を NixOS の USB から起動する。IP アドレスとインストール先の SSD の ID を調べる。
 
-1. G5 を NixOS Minimal ISO で UEFI 起動し、Live の root に Yukino の
-   **ログイン公開鍵**を登録する。G5 本体で LAN IP、SSD の by-id、Live の
-   指紋を確認する。
-
-   ```sh
-   ip -br addr
-   lsblk -d -o NAME,SIZE,MODEL,SERIAL
+   ```bash
+   ip -br -4 addr
+   lsblk -d -o NAME,SIZE,MODEL
    ls -l /dev/disk/by-id/
-   ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub
    ```
 
-2. Yukino 側で Live 環境専用の SSH エイリアスを設定する。`HostName` は
-   手順1の LAN IP。初回の SSH で本体に表示された指紋と一致することを確認
-   する。Live ISO の再起動で鍵が変わった場合も本体で照合し直す。
+2. USB から起動した NixOS で、Yukino のログイン用 SSH 公開鍵を `/root/.ssh/authorized_keys` に貼り付ける。
 
-   ```sshconfig
-   Host iroha-live
-     HostName <G5のLAN-IP>
-     HostKeyAlias iroha-live
-     HostKeyAlgorithms ssh-ed25519
-     User root
+   ```bash
+   sudo -i
+   install -d -m 700 /root/.ssh
+   nano /root/.ssh/authorized_keys
    ```
 
-   ```sh
-   ssh -o StrictHostKeyChecking=ask root@iroha-live true
-   ssh -o BatchMode=yes -o StrictHostKeyChecking=yes root@iroha-live true
+3. Yukino の dotfiles で `nixosConfigurations.oregairu-iroha` を用意し、`hosts/oregairu-iroha/disko.nix` に手順1の SSD の `/dev/disk/by-id/…` を指定する。新規ファイルは `git add` する。
+
+4. Yukino の dotfiles のルートで、Iroha の SSH ホスト鍵を作る。
+
+   ```bash
+   nix shell --inputs-from . agenix#agenix -c bash
+   work=$(mktemp -d -p "$XDG_RUNTIME_DIR")
+   install -d -m 755 "$work/extra" "$work/extra/etc" "$work/extra/etc/ssh"
+   key="$work/extra/etc/ssh/ssh_host_ed25519_key"
+   ssh-keygen -t ed25519 -N '' -C oregairu-iroha -f "$key"
+   cat "$key.pub"
    ```
 
-3. 今回の本番ホスト鍵を作る。表示された**公開鍵だけ**を
-   `secrets/agenix-rules.nix` の `serverRecipients` に登録する。
-   再インストールなら同じホストの古い鍵と置き換える。秘密鍵は Yukino の
-   `$XDG_RUNTIME_DIR/dotfiles-install-oregairu-iroha/` に一時保存される。
-   `prepare` は処理中の鍵を上書きしない。
+5. 表示した公開鍵を `secrets/agenix-rules.nix` の `serverRecipients` に書く。再インストール時は Iroha の古い公開鍵を置き換える。
 
-   ```sh
-   nix run .#remote-install -- prepare oregairu-iroha
+6. Yukino で復旧用 USB を `/mnt/recovery` にマウントする。USB の秘密鍵で `user-password.age` を復号し、Iroha の新しい秘密鍵でも開けるように暗号化し直す。
+
+   ```bash
+   cd secrets
+   TMPDIR="$XDG_RUNTIME_DIR" EDITOR=: agenix -e user-password.age -i /mnt/recovery/recovery_key
+   cd ..
    ```
 
-4. 復旧 USB を Yukino に接続する。**以下は指定した G5 の SSD を消去する。**
-   `--erase` に渡した by-id が flake のディスクと一致し、Live 上で実在する
-   内蔵ディスクと確認できた場合のみ続行する。
+7. Yukino で手順1の IP アドレスを入力し、G5 の SSD を消去して NixOS をインストールする。
 
-   ```sh
-   nix run .#remote-install -- apply oregairu-iroha iroha-live \
-     --erase /dev/disk/by-id/<SSD-ID> --recovery-key /mnt/recovery/recovery_key
+   ```bash
+   read -rp 'USB から起動した G5 の IP アドレス: ' usb_ip
+   nix run .#remote-install -- --flake .#oregairu-iroha --target-host "root@$usb_ip" \
+     --build-on local --extra-files "$work/extra"
    ```
 
-   app は USB の鍵で `secrets/user-password.age` だけを再暗号化し、本番鍵で
-   復号できることを確認する。平文をファイルに保存せず、復旧鍵は転送しない。
-   Yukino でビルドし、Live 環境への認証済み SSH 経路を通して
-   `nixos-anywhere --extra-files` で本番ホスト鍵を配置する。成功後、
-   本番 SSH 照合用の公開鍵を `~/.ssh/dotfiles-hosts/oregairu-iroha` に保存し、
-   一時秘密鍵を削除する。公開鍵のルールと暗号ファイルの差分を確認し、Git に残す。
+8. G5 を SSD から起動する。Yukino に G5 の SSH ホスト公開鍵を登録する。
 
-   インストール前に失敗した場合は原因を直し、同じセッションで `apply` を
-   再実行できる。SSD 書き込み後に切断した場合は、再度消去する前に G5 の起動状態を
-   本体で確認する。SSD からすでに起動している場合は、手順3の公開鍵を
-   `<本番ホスト名> ssh-ed25519 <公開鍵本体>` の形式で上記の照合用ファイルに
-   保存すれば、再インストールせず接続できる。処理を中止した場合は、一時ディレクトリを
-   削除し、未適用の受信者・暗号ファイルの変更を確認する。
+   ```bash
+   read -rp 'SSD から起動した G5 の IP アドレス: ' iroha_ip
+   # 再インストール時のみ、次の行を実行する
+   # ssh-keygen -R "$iroha_ip"
+   awk -v host="$iroha_ip" '{print host, $1, $2}' "$key.pub" >> ~/.ssh/known_hosts
+   rm -r -- "$work"
+   git add secrets/agenix-rules.nix secrets/user-password.age
+   git commit -m "Update Iroha SSH host public key"
+   ```
 
-## Yukino からの remote switch
+9. Yukino で復旧用 USB をアンマウントする。
 
-G5 が SSD の本番 OS で起動したら、登録済みの本番ホスト鍵と照合して接続する。
-初回は `mkiin` でのログインとパスワード付き sudo も確認する。
-たとえば SSH 設定に次の本番用エイリアスを置けば、通常の SSH でも同じ公開鍵を使える。
+## Yukino から Iroha の NixOS 設定を更新する
 
-```sshconfig
-Host oregairu-iroha
-  HostName <G5の本番LAN-IP>
-  HostKeyAlias oregairu-iroha
-  UserKnownHostsFile ~/.ssh/dotfiles-hosts/oregairu-iroha
-  StrictHostKeyChecking yes
+`192.168.1.50` を Iroha の IP アドレスに置き換え、Yukino の dotfiles のルートで実行する。
+
+```bash
+nix run .#remote-switch -- oregairu-iroha --target 192.168.1.50
 ```
-
-```sh
-ssh mkiin@oregairu-iroha
-nix run .#remote-switch -- oregairu-iroha
-```
-
-`remote-switch` は Yukino でビルドし、`root@oregairu-iroha` で
-`nixos-rebuild switch` を実行する。本番 SSH 鍵とホスト名が一致しない場合は
-停止する。接続先を別の LAN IP または SSH エイリアスにする場合は
-`--target <接続先>` を指定する。通常の更新に復旧 USB は使わない。
