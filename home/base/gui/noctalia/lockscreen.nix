@@ -184,7 +184,7 @@
           rotation = 0.0;
           settings = {
             background = false;
-            image_path = "/home/mkiin/ghq/github.com/mkiin/dotfiles/assets/doro-sleeping.GIF";
+            image_path = "/home/mkiin/ghq/github.com/mkiin/dotfiles/assets/doro-sleeping.gif";
             opacity = 1.0;
           };
         };
