@@ -10,15 +10,10 @@ let
 
   screenshotWindow = pkgs.writeShellApplication {
     name = "screenshot-window-by-app";
-    runtimeInputs = with pkgs; [
-      jq
-      gawk
-      coreutils
-      gnugrep
-      gnused
-      findutils
-    ];
-    text = builtins.readFile ./screenshot-window.sh;
+    runtimeInputs = [ pkgs.nushell ];
+    text = ''
+      exec nu ${./screenshot-window.nu} "$@"
+    '';
   };
 
   luaModules = [
