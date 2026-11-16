@@ -24,7 +24,7 @@
         swap = {
           device = config.disko.devices.disk.system.device + "-part2";
           priority = 2;
-          size = "16G";
+          size = "4G";
           content.type = "swap";
         };
         root = {
