@@ -2,19 +2,17 @@
 
 ## nixos-anywhere を利用する場合
 
-### yukino から iroha に NixOS をインストールする
+### インストール先のデバイスで USB から NixOS を起動する
 
-#### iroha で USB から NixOS を起動する
+1. NixOS Minimal ISO を書き込んだ USB メモリを挿す。電源を入れ、起動メニューで USB メモリを選んで NixOS を起動する。
 
-1. NixOS Minimal ISO を書き込んだ USB メモリを iroha に挿す。電源を入れ、起動メニューで USB メモリを選んで NixOS を起動する。
-
-2. iroha の端末で、USB から起動した NixOS の `nixos` ユーザーにパスワードを設定する。
+2. 端末で `nixos` ユーザーのパスワードを設定する。
 
    ```bash
    passwd
    ```
 
-3. 有線 LAN の IPv4 アドレスを調べる。
+3. 有線 LAN の IPv4 アドレスを控える。
 
    ```bash
    ip -br -4 addr
@@ -27,48 +25,53 @@
    ls -l /dev/disk/by-id/
    ```
 
-#### yukino でインストールの準備をする
+### NixOS がインストール済みのデバイスで準備する
 
-1. dotfiles のディレクトリに移り、agenix を使える Bash を開く。以降の yukino の操作はこの端末で行う。
+1. dotfiles のディレクトリで agenix を使える Bash を開く。このデバイスでのインストール作業には、以降も同じ端末を使う。
 
    ```bash
    cd ~/ghq/github.com/mkiin/dotfiles
    nix shell --inputs-from . agenix#agenix -c bash
    ```
 
-2. `hosts/oregairu-iroha/disko.nix` を開く。
+2. `hosts/` の一覧からインストール先のホスト名を入力し、そのデバイスの `disko.nix` を開く。
 
    ```bash
-   vim hosts/oregairu-iroha/disko.nix
+   ls hosts/
+   read -rp 'インストール先のホスト名: ' target_host
+   vim "hosts/$target_host/disko.nix"
    ```
 
-   `disko.devices.disk.system` の `device` に iroha で控えた `/dev/disk/by-id/` から始まるパスを書き、保存して閉じる。
+   `disko.devices.disk.system` の `device` に、先ほど控えた SSD のパスを書いて保存する。
 
-3. 一時ディレクトリを作り、その中に iroha の SSH ホスト鍵を生成する。
+3. 一時ディレクトリを作り、その中にインストール先の SSH ホスト鍵を生成する。
 
    ```bash
    work=$(mktemp -d -p "$XDG_RUNTIME_DIR")
    install -d -m 755 "$work/extra" "$work/extra/etc" "$work/extra/etc/ssh"
    key="$work/extra/etc/ssh/ssh_host_ed25519_key"
-   ssh-keygen -t ed25519 -N '' -C oregairu-iroha -f "$key"
+   ssh-keygen -t ed25519 -N '' -C "$target_host" -f "$key"
    ```
 
-4. 生成した公開鍵を表示し、`secrets/agenix-rules.nix` を開く。
+4. 公開鍵を表示し、`secrets/agenix-rules.nix` を開く。
 
    ```bash
    cat "$key.pub"
    vim secrets/agenix-rules.nix
    ```
 
-5. `serverRecipients` の角括弧の中に、表示した公開鍵を二重引用符で囲んで書く。再インストールの場合は iroha の古い公開鍵を置き換える。ファイルを保存して閉じる。
+5. インストール先に応じて公開鍵を登録する。再インストールの場合は、そのデバイスの古い公開鍵を置き換える。
 
-6. 復旧用 USB を yukino に挿す。次の一覧で USB のパーティション名を調べる。
+   - デスクトップの場合は、インストール先のホスト名に公開鍵を割り当て、その名前を `desktopRecipients` に含める。
+   - サーバーの場合は、公開鍵を二重引用符で囲んで `serverRecipients` に書く。
+
+6. 復旧用 USB を NixOS がインストール済みのデバイスに挿し、パーティション名を調べる。
 
    ```bash
    lsblk -p -o NAME,SIZE,MODEL,LABEL,MOUNTPOINTS
    ```
 
-7. パーティションのパスを入力する。`/mnt/recovery` を作り、そこに USB を読み取り専用でマウントする。
+7. パーティションのパスを入力し、USB を読み取り専用でマウントする。
 
    ```bash
    read -rp '復旧用 USB のパーティション（/dev/…）: ' recovery_partition
@@ -82,81 +85,95 @@
    ls -l /mnt/recovery/recovery_key
    ```
 
-9. USB の秘密鍵で `user-password.age` を復号し、iroha の新しい鍵でも復号できるように暗号化し直す。パスフレーズを求められたら、USB の秘密鍵に設定したものを入力する。
+9. `secrets/` に移り、USB の秘密鍵を使って `user-password.age` を暗号化し直す。パスフレーズを求められたら、復旧鍵のものを入力する。
 
    ```bash
    cd secrets
    TMPDIR="$XDG_RUNTIME_DIR" EDITOR=: agenix -e user-password.age -i /mnt/recovery/recovery_key
-   cd ..
    ```
 
-10. 復旧用 USB をアンマウントしてから抜く。
+   インストール先がデスクトップの場合は、同じディレクトリで `rclone-r2.conf.age` も暗号化し直す。
+
+   ```bash
+   TMPDIR="$XDG_RUNTIME_DIR" EDITOR=: agenix -e rclone-r2.conf.age -i /mnt/recovery/recovery_key
+   ```
+
+10. dotfiles のルートに戻り、復旧用 USB をアンマウントして抜く。
 
     ```bash
+    cd ..
     sudo umount /mnt/recovery
     ```
 
-#### yukino から iroha の SSD にインストールする
+### NixOS がインストール済みのデバイスからインストールを実行する
 
-1. USB から NixOS を起動したときに調べた iroha の IP アドレスを入力する。
+1. USB から起動したインストール先の IP アドレスを入力する。
 
    ```bash
-   read -rp 'iroha の IP アドレス: ' usb_ip
+   read -rp 'インストール先の IP アドレス: ' usb_ip
    ```
 
-2. yukino で次のコマンドを実行する。`remote-install` は `disko.nix` で指定した SSD を消去して NixOS をインストールし、先ほど作った SSH ホスト鍵を iroha の `/etc/ssh/` にコピーする。
+2. 次のコマンドを実行する。`remote-install` は `disko.nix` で指定した SSD を消去して NixOS をインストールし、生成したホスト鍵をインストール先の `/etc/ssh/` にコピーする。
 
    ```bash
-   nix run .#remote-install -- --flake .#oregairu-iroha --target-host "nixos@$usb_ip" \
+   nix run .#remote-install -- --flake ".#$target_host" --target-host "nixos@$usb_ip" \
      --build-on local --no-substitute-on-destination --extra-files "$work/extra"
    ```
 
-   SSH のパスワードを求められたら、iroha で `nixos` ユーザーに設定したパスワードを入力する。
+   SSH のパスワードを求められたら、USB から起動した `nixos` ユーザーに設定したパスワードを入力する。
 
-#### SSD から起動した iroha の公開鍵を yukino に登録する
+### インストール先のデバイスで SSD から NixOS を起動する
 
-1. インストールが終わったら、iroha からインストール用 USB を抜き、SSD から NixOS を起動する。
-2. iroha の端末で有線 LAN の IPv4 アドレスを調べる。
+1. インストールが終わったら、インストール用 USB を抜いて SSD から NixOS を起動する。
+2. 有線 LAN の IPv4 アドレスを控える。
 
    ```bash
    ip -br -4 addr
    ```
 
-3. yukino の端末にそのアドレスを入力する。
+3. デスクトップの場合は `mkiin` でログインし、インストールに使った dotfiles を `~/ghq/github.com/mkiin/dotfiles` に置く。
+
+### NixOS がインストール済みのデバイスに SSH ホスト公開鍵を登録する
+
+1. インストールに使った端末に、SSD から起動したインストール先の IP アドレスを入力する。
 
    ```bash
-   read -rp 'SSD から起動した iroha の IP アドレス: ' iroha_ip
+   read -rp 'インストール先の IP アドレス: ' target_ip
    ```
 
-4. 再インストールで同じ IP アドレスを使う場合は、yukino から古い公開鍵を削除する。
+2. 再インストールで同じ IP アドレスを使う場合は、古い公開鍵を削除する。
 
    ```bash
-   ssh-keygen -R "$iroha_ip"
+   ssh-keygen -R "$target_ip"
    ```
 
-5. iroha の IP アドレスと新しい公開鍵を yukino の `~/.ssh/known_hosts` に書き込む。
+3. インストール先の IP アドレスと新しい公開鍵を `~/.ssh/known_hosts` に書き込む。
 
    ```bash
-   awk -v host="$iroha_ip" '{print host, $1, $2}' "$key.pub" >> ~/.ssh/known_hosts
+   awk -v host="$target_ip" '{print host, $1, $2}' "$key.pub" >> ~/.ssh/known_hosts
    ```
 
-6. yukino から一時ディレクトリとその中の秘密鍵を削除する。
+4. 一時ディレクトリとその中の秘密鍵を削除する。
 
    ```bash
    rm -r -- "$work"
    ```
 
-### yukino から iroha の設定を更新する
+### NixOS がインストール済みのデバイスから設定を更新する
 
-yukino の dotfiles のディレクトリで実行する。`192.168.1.50` は iroha の IP アドレスに置き換える。
+インストール先に SSH で `root` としてログインできる場合は、dotfiles のディレクトリで Bash を開き、更新するデバイスのホスト名と IP アドレスを指定する。
 
 ```bash
-nix run .#remote-switch -- oregairu-iroha --target 192.168.1.50
+cd ~/ghq/github.com/mkiin/dotfiles
+bash
+read -rp '更新するデバイスのホスト名: ' target_host
+read -rp '更新するデバイスの IP アドレス: ' target_ip
+nix run .#remote-switch -- "$target_host" --target "$target_ip"
 ```
 
-## インストール先の端末だけで作業する場合
+## インストール先のデバイスだけで作業する場合
 
-以下は `oregairu-yukino` の例。`oregairu-yui` も同じ手順でインストールする。
+デスクトップに最小構成をインストールし、SSD から起動して普段使う構成を適用する。
 
 ### 1. 準備
 
@@ -176,7 +193,7 @@ ISO から取得する変更は事前に commit・push しておく。
 ### 2. 復旧鍵の初回準備
 
 復旧鍵で両方の Secrets を復号確認済みなら、セクション3へ進む。
-現在の Secrets を復号できる既存 NixOS 上で、USB をマウントして実行する。
+初めて復旧鍵を用意するときは、NixOS がインストール済みで、現在の `.age` ファイルを復号できるデバイスを使う。そこに復旧用 USB をマウントする。
 以下の `/mnt/recovery` は実際の USB のマウント先に読み替える。
 
 ```bash
@@ -224,7 +241,14 @@ lsblk -o NAME,SIZE,MODEL,TYPE,MOUNTPOINTS
 ls -l /dev/disk/by-id/
 ```
 
-対象 SSD の by-id を確認する。USB やパーティションの ID を指定しない。
+`hosts/` の一覧からインストール先のホスト名を入力する。SSD にはディスク全体を指す `/dev/disk/by-id/` のパスを指定する。
+
+```bash
+ls hosts/
+read -rp 'インストール先のホスト名: ' target_host
+read -rp 'インストール先の SSD（/dev/disk/by-id/…）: ' target_disk
+```
+
 対象 SSD のマウントと swap を解除する。
 
 消去せず事前確認する場合：
@@ -232,14 +256,14 @@ ls -l /dev/disk/by-id/
 ```bash
 sudo mkdir -p /mnt/disko-install-root
 nix --extra-experimental-features 'nix-command flakes' run .#install -- --dry-run \
-  oregairu-yukino /dev/disk/by-id/<SSD-ID> # disko.nix の SSD ID は更新される
+  "$target_host" "$target_disk" # disko.nix の SSD ID は更新される
 ```
 
 **以下のコマンドは対話確認なしで、対象 SSD の既存パーティションとデータを消去する。**
 
 ```bash
 sudo nix --extra-experimental-features 'nix-command flakes' run .#install -- \
-  oregairu-yukino /dev/disk/by-id/<SSD-ID>
+  "$target_host" "$target_disk"
 ```
 
 インストール成功後に再起動し、SSD 上の最小 OS を起動する。
@@ -254,17 +278,12 @@ reboot
 
 ```bash
 cd /home/mkiin/ghq/github.com/mkiin/dotfiles
-vim '+1read /etc/ssh/ssh_host_ed25519_key.pub' secrets/agenix-rules.nix # let の直後に公開鍵を読み込む。編集後 :wq で保存
+hostname
+cat /etc/ssh/ssh_host_ed25519_key.pub
+vim secrets/agenix-rules.nix
 ```
 
-```nix
-  oregairu-yukino = "ssh-ed25519 ..."; # 読み込んだ行をこの形に整える。鍵は省略せず、古い Yukino の宣言は削除
-  desktopRecipients = [
-    oregairu-yui # Yui と復旧鍵の値は変更しない
-    oregairu-yukino # なければ追加
-    recovery_key
-  ];
-```
+表示したホスト名に新しい公開鍵を割り当て、その名前を `desktopRecipients` に含める。再インストールの場合は、このデバイスの公開鍵だけを置き換える。
 
 ### 5. USB をマウントし Secrets を再暗号化
 
@@ -272,7 +291,9 @@ vim '+1read /etc/ssh/ssh_host_ed25519_key.pub' secrets/agenix-rules.nix # let �
 lsblk -f
 ls -l /dev/disk/by-id/
 sudo mkdir -p /mnt/recovery
-sudo mount -o ro /dev/disk/by-id/<USB-PARTITION-ID> /mnt/recovery
+printf '復旧用 USB のパーティション（/dev/disk/by-id/…）: '
+read -r recovery_partition
+sudo mount -o ro "$recovery_partition" /mnt/recovery
 ls /mnt/recovery/recovery_key
 ```
 
@@ -303,7 +324,7 @@ cd .. # リポジトリのルートに戻る
 ### 6. 本番構成を適用
 
 ```bash
-nix run .#switch -- oregairu-yukino
+nix run .#switch
 ```
 
 適用成功後に再起動する。
