@@ -1,6 +1,7 @@
 # NixOS Installation
 
-対象は `oregairu-yukino` と `oregairu-yui`。以下は Yukino の例。
+手順1〜6では `oregairu-yukino` を例に、yukino または yui に NixOS をインストールする。
+iroha にインストールするときは「[yukino から iroha に NixOS をインストールする](#yukino-から-iroha-に-nixos-をインストールする)」を参照する。
 
 ## 1. 準備
 
@@ -159,40 +160,96 @@ reboot
 再インストール前のパスワードでログインする。
 公開鍵と Secrets の差分を確認し、commit・push する。
 
-## Yukino から G5 に NixOS をインストールする
+## yukino から iroha に NixOS をインストールする
 
-1. G5 を NixOS の USB から起動する。IP アドレスとインストール先の SSD の ID を調べる。
+### iroha で USB から NixOS を起動する
+
+1. NixOS Minimal ISO を書き込んだ USB メモリを iroha に挿す。電源を入れ、起動メニューで USB メモリを選んで NixOS を起動する。
+
+2. NixOS が起動したら、端末で有線 LAN の IPv4 アドレスを調べる。
 
    ```bash
    ip -br -4 addr
+   ```
+
+3. 容量と型番からインストール先の SSD を特定する。`/dev/disk/by-id/` の一覧で、その SSD を指すパスを控える。
+
+   ```bash
    lsblk -d -o NAME,SIZE,MODEL
    ls -l /dev/disk/by-id/
    ```
 
-2. USB から起動した NixOS で、Yukino のログイン用 SSH 公開鍵を `/root/.ssh/authorized_keys` に貼り付ける。
+4. root のシェルを開く。
 
    ```bash
    sudo -i
+   ```
+
+5. root の SSH 用ディレクトリを作り、`authorized_keys` をエディタで開く。
+
+   ```bash
    install -d -m 700 /root/.ssh
    nano /root/.ssh/authorized_keys
    ```
 
-3. Yukino の dotfiles で `nixosConfigurations.oregairu-iroha` を用意し、`hosts/oregairu-iroha/disko.nix` に手順1の SSD の `/dev/disk/by-id/…` を指定する。新規ファイルは `git add` する。
+6. yukino の `vars/default.nix` で `mainSshAuthorizedKeys` にある `ssh-ed25519` で始まる公開鍵をコピーする。iroha で開いたファイルに、引用符を除いて1行で貼り付ける。Ctrl+O、Enter で保存し、Ctrl+X で閉じる。
 
-4. Yukino の dotfiles のルートで、Iroha の SSH ホスト鍵を作る。
+### yukino でインストールの準備をする
+
+1. dotfiles のディレクトリに移り、agenix を使える Bash を開く。以降の yukino の操作はこの端末で行う。
 
    ```bash
+   cd ~/ghq/github.com/mkiin/dotfiles
    nix shell --inputs-from . agenix#agenix -c bash
+   ```
+
+2. `hosts/oregairu-iroha/disko.nix` を開く。
+
+   ```bash
+   vim hosts/oregairu-iroha/disko.nix
+   ```
+
+   `disko.devices.disk.system` の `device` に iroha で控えた `/dev/disk/by-id/` から始まるパスを書き、保存して閉じる。
+
+3. 一時ディレクトリを作り、その中に iroha の SSH ホスト鍵を生成する。
+
+   ```bash
    work=$(mktemp -d -p "$XDG_RUNTIME_DIR")
    install -d -m 755 "$work/extra" "$work/extra/etc" "$work/extra/etc/ssh"
    key="$work/extra/etc/ssh/ssh_host_ed25519_key"
    ssh-keygen -t ed25519 -N '' -C oregairu-iroha -f "$key"
-   cat "$key.pub"
    ```
 
-5. 表示した公開鍵を `secrets/agenix-rules.nix` の `serverRecipients` に書く。再インストール時は Iroha の古い公開鍵を置き換える。
+4. 生成した公開鍵を表示し、`secrets/agenix-rules.nix` を開く。
 
-6. Yukino で復旧用 USB を `/mnt/recovery` にマウントする。USB の秘密鍵で `user-password.age` を復号し、Iroha の新しい秘密鍵でも開けるように暗号化し直す。
+   ```bash
+   cat "$key.pub"
+   vim secrets/agenix-rules.nix
+   ```
+
+5. `serverRecipients` の角括弧の中に、表示した公開鍵を二重引用符で囲んで書く。再インストールの場合は iroha の古い公開鍵を置き換える。ファイルを保存して閉じる。
+
+6. 復旧用 USB を yukino に挿す。次の一覧で USB のパーティション名を調べる。
+
+   ```bash
+   lsblk -p -o NAME,SIZE,MODEL,LABEL,MOUNTPOINTS
+   ```
+
+7. パーティションのパスを入力する。`/mnt/recovery` を作り、そこに USB を読み取り専用でマウントする。
+
+   ```bash
+   read -rp '復旧用 USB のパーティション（/dev/…）: ' recovery_partition
+   sudo mkdir -p /mnt/recovery
+   sudo mount -o ro "$recovery_partition" /mnt/recovery
+   ```
+
+8. USB に `recovery_key` があることを確認する。
+
+   ```bash
+   ls -l /mnt/recovery/recovery_key
+   ```
+
+9. USB の秘密鍵で `user-password.age` を復号し、iroha の新しい鍵でも復号できるように暗号化し直す。パスフレーズを求められたら、USB の秘密鍵に設定したものを入力する。
 
    ```bash
    cd secrets
@@ -200,31 +257,63 @@ reboot
    cd ..
    ```
 
-7. Yukino で手順1の IP アドレスを入力し、G5 の SSD を消去して NixOS をインストールする。
+10. 復旧用 USB をアンマウントしてから抜く。
+
+    ```bash
+    sudo umount /mnt/recovery
+    ```
+
+### yukino から iroha の SSD にインストールする
+
+1. USB から NixOS を起動したときに調べた iroha の IP アドレスを入力する。
 
    ```bash
-   read -rp 'USB から起動した G5 の IP アドレス: ' usb_ip
+   read -rp 'iroha の IP アドレス: ' usb_ip
+   ```
+
+2. yukino で次のコマンドを実行する。`remote-install` は `disko.nix` で指定した SSD を消去して NixOS をインストールし、先ほど作った SSH ホスト鍵を iroha の `/etc/ssh/` にコピーする。
+
+   ```bash
    nix run .#remote-install -- --flake .#oregairu-iroha --target-host "root@$usb_ip" \
-     --build-on local --extra-files "$work/extra"
+     --build-on local --no-substitute-on-destination --extra-files "$work/extra"
    ```
 
-8. G5 を SSD から起動する。Yukino に G5 の SSH ホスト公開鍵を登録する。
+### SSD から起動した iroha の公開鍵を yukino に登録する
+
+1. インストールが終わったら、iroha からインストール用 USB を抜き、SSD から NixOS を起動する。
+2. iroha の端末で有線 LAN の IPv4 アドレスを調べる。
 
    ```bash
-   read -rp 'SSD から起動した G5 の IP アドレス: ' iroha_ip
-   # 再インストール時のみ、次の行を実行する
-   # ssh-keygen -R "$iroha_ip"
-   awk -v host="$iroha_ip" '{print host, $1, $2}' "$key.pub" >> ~/.ssh/known_hosts
-   rm -r -- "$work"
-   git add secrets/agenix-rules.nix secrets/user-password.age
-   git commit -m "Update Iroha SSH host public key"
+   ip -br -4 addr
    ```
 
-9. Yukino で復旧用 USB をアンマウントする。
+3. yukino の端末にそのアドレスを入力する。
 
-## Yukino から Iroha の NixOS 設定を更新する
+   ```bash
+   read -rp 'SSD から起動した iroha の IP アドレス: ' iroha_ip
+   ```
 
-`192.168.1.50` を Iroha の IP アドレスに置き換え、Yukino の dotfiles のルートで実行する。
+4. 再インストールで同じ IP アドレスを使う場合は、yukino から古い公開鍵を削除する。
+
+   ```bash
+   ssh-keygen -R "$iroha_ip"
+   ```
+
+5. iroha の IP アドレスと新しい公開鍵を yukino の `~/.ssh/known_hosts` に書き込む。
+
+   ```bash
+   awk -v host="$iroha_ip" '{print host, $1, $2}' "$key.pub" >> ~/.ssh/known_hosts
+   ```
+
+6. yukino から一時ディレクトリとその中の秘密鍵を削除する。
+
+   ```bash
+   rm -r -- "$work"
+   ```
+
+## yukino から iroha の設定を更新する
+
+yukino の dotfiles のディレクトリで実行する。`192.168.1.50` は iroha の IP アドレスに置き換える。
 
 ```bash
 nix run .#remote-switch -- oregairu-iroha --target 192.168.1.50
