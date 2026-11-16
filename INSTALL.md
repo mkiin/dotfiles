@@ -74,7 +74,7 @@
    ```
 
    <details>
-   <summary>このホスト鍵で既存の .age ファイルを復号できない場合</summary>
+   <summary>このホスト鍵で復号できない .age ファイルがある場合</summary>
 
    復旧用 USB を挿し、パーティションを調べる。
 
@@ -93,22 +93,17 @@
 
    </details>
 
-7. インストール先に合わせて、次のどちらかを実行する。指定した秘密鍵で既存のファイルを復号し、`agenix-rules.nix` に登録した公開鍵で暗号化し直す。
-
-   **サーバーにインストールする場合**は、`user-password.age` だけを更新する。
-
-   ```bash
-   pkexec --keep-cwd "$(command -v env)" TMPDIR=/run EDITOR=: \
-     "$agenix_bin" -e user-password.age -i "$identity"
-   pkexec --keep-cwd "$(command -v chown)" --reference=agenix-rules.nix user-password.age
-   ```
-
-   **デスクトップにインストールする場合**は、`user-password.age` と `rclone-r2.conf.age` を更新する。
+7. `agenix -r` で、`agenix-rules.nix` にあるすべてのファイルを暗号化し直す。各ファイルには、そのファイルの `publicKeys` に登録した公開鍵が使われる。
 
    ```bash
    pkexec --keep-cwd "$(command -v env)" TMPDIR=/run \
      "$agenix_bin" -r -i "$identity"
-   pkexec --keep-cwd "$(command -v chown)" --reference=agenix-rules.nix user-password.age rclone-r2.conf.age
+   ```
+
+   再暗号化したファイルの所有者とグループを `agenix-rules.nix` に揃える。
+
+   ```bash
+   pkexec --keep-cwd "$(command -v chown)" --reference=agenix-rules.nix -- ./*.age
    ```
 
 8. dotfiles のルートに戻る。
