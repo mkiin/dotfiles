@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 #############################################################
 #
 #  Yukino - my main computer, with NixOS + Ryzen7 7800x3D + RTX 5070ti GPU, for gaming & daily use.
@@ -6,6 +6,7 @@
 #############################################################
 {
   networking.hostName = "oregairu-yukino";
+  networking.networkmanager.enable = true;
 
   imports = [
     ./hardware-configuration.nix
@@ -13,10 +14,25 @@
     ./hardware-nvidia.nix
   ];
 
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.tmp.cleanOnBoot = true;
+
+  boot.supportedFilesystems = [
+    "ext4"
+    "btrfs"
+    "xfs"
+    "ntfs"
+    "fat"
+    "vfat"
+    "exfat"
+  ];
+
   _module.args.hostVars.primaryOutput = "DP-2";
 
   modules.zswap.enable = true;
 
+  powerManagement.cpuFreqGovernor = lib.mkDefault "performance";
   services.tuned.ppdSettings.main.default = "performance";
 
   networking.firewall.allowedTCPPorts = [ 5173 ];
