@@ -10,10 +10,15 @@ let
 
   screenshotWindow = pkgs.writeShellApplication {
     name = "screenshot-window-by-app";
-    runtimeInputs = [ pkgs.python3 ];
-    text = ''
-      exec python3 ${./screenshot-window.py} "$@"
-    '';
+    runtimeInputs = with pkgs; [
+      jq
+      gawk
+      coreutils
+      gnugrep
+      gnused
+      findutils
+    ];
+    text = builtins.readFile ./screenshot-window.sh;
   };
 
   luaModules = [
