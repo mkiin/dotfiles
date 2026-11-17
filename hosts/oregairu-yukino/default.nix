@@ -19,31 +19,7 @@
     command = "${pkgs.uwsm}/bin/uwsm start -e -D Hyprland hyprland.desktop";
   };
 
-  services.sunshine = {
-    enable = true;
-    autoStart = true;
-    openFirewall = false;
-    settings = {
-      capture = "wlr";
-      origin_web_ui_allowed = "pc";
-      output_name = "DP-2";
-    };
-  };
-
-  networking.firewall.interfaces.tailscale0 = {
-    allowedTCPPorts = [
-      47984
-      47989
-      48010
-    ];
-    allowedUDPPorts = [
-      47998
-      47999
-      48000
-      48002
-      48010
-    ];
-  };
+  modules.desktop.sunshine.enable = true;
 
   imports = [
     ./hardware-configuration.nix
