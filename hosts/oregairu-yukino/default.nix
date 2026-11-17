@@ -1,4 +1,9 @@
-{ lib, ... }:
+{
+  lib,
+  myvars,
+  pkgs,
+  ...
+}:
 #############################################################
 #
 #  Yukino - my main computer, with NixOS + Ryzen7 7800x3D + RTX 5070ti GPU, for gaming & daily use.
@@ -7,6 +12,37 @@
 {
   networking.hostName = "oregairu-yukino";
   networking.networkmanager.enable = true;
+  networking.networkmanager.connectionConfig."ethernet.wake-on-lan" = 64;
+
+  services.greetd.settings.initial_session = {
+    user = myvars.username;
+    command = "${pkgs.uwsm}/bin/uwsm start -e -D Hyprland hyprland.desktop";
+  };
+
+  services.sunshine = {
+    enable = true;
+    autoStart = true;
+    openFirewall = false;
+    settings = {
+      capture = "wlr";
+      origin_web_ui_allowed = "pc";
+    };
+  };
+
+  networking.firewall.interfaces.tailscale0 = {
+    allowedTCPPorts = [
+      47984
+      47989
+      48010
+    ];
+    allowedUDPPorts = [
+      47998
+      47999
+      48000
+      48002
+      48010
+    ];
+  };
 
   imports = [
     ./hardware-configuration.nix
