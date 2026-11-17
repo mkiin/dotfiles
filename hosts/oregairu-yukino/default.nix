@@ -26,6 +26,7 @@
     settings = {
       capture = "wlr";
       origin_web_ui_allowed = "pc";
+      output_name = "DP-2";
     };
   };
 
