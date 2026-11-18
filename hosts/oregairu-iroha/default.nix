@@ -5,6 +5,12 @@
   networking.hostName = "oregairu-iroha";
   networking.networkmanager.enable = true;
 
+  services.nextcloud = {
+    enable = true;
+    # TODO: use this node's full Tailscale DNS name before enabling Serve.
+    hostName = "localhost";
+  };
+
   users.users.${myvars.username}.openssh.authorizedKeys.keys = [
     myvars.sshPublicKeys.iphone13-termius
   ];
