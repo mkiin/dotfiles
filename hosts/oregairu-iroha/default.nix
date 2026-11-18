@@ -5,6 +5,8 @@
   networking.hostName = "oregairu-iroha";
   networking.networkmanager.enable = true;
 
+  services.tailscale.extraSetFlags = [ "--ssh" ];
+
   services.nextcloud = {
     enable = true;
     # TODO: use this node's full Tailscale DNS name before enabling Serve.
