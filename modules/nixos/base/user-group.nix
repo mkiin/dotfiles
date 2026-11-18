@@ -21,7 +21,6 @@
     shell = pkgs.zsh;
     hashedPasswordFile = if options ? age then config.age.secrets."user-password".path else null;
     isNormalUser = true;
-    openssh.authorizedKeys.keys = myvars.mainSshAuthorizedKeys;
 
     extraGroups = [
       myvars.username

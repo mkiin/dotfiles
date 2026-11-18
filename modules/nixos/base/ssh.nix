@@ -7,6 +7,7 @@
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;
+    authorizedKeysInHomedir = false;
     settings = {
       # Secure by default: X11 forwarding off everywhere; desktops re-enable it
       # in modules/nixos/desktop/ssh.nix (needed for GUI forwarding).

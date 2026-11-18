@@ -1,8 +1,5 @@
-{ lib, myvars, ... }:
+{ lib, ... }:
 {
-  # Remote deployment connects as root using the desktop's SSH key.
-  users.users.root.openssh.authorizedKeys.keys = myvars.mainSshAuthorizedKeys;
-
   security.sudo = {
     enable = true;
     wheelNeedsPassword = true;
