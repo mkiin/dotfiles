@@ -1,5 +1,9 @@
 # Repository Instructions
 
+## Dotfiles layout
+
+- “Ryan” refers to `ryan4yin/nix-config`, the reference for this repository's layout. When deciding where configuration belongs, inspect the corresponding files in the local checkout at `~/ghq/github.com/ryan4yin/nix-config`.
+
 ## Scope and packages
 
 - Before proposing a NixOS or Home Manager package, check whether it exists in the nixpkgs revision pinned by this repository's `flake.lock`. If it has no standalone attribute, also check collection packages and how to select their components.
