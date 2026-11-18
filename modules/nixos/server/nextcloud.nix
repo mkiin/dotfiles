@@ -21,19 +21,15 @@ in
       };
     };
 
-    services.nginx.virtualHosts.${cfg.hostName}.listen = [
-      {
-        addr = "127.0.0.1";
-        port = 8080;
-      }
-    ];
-
-    services.caddy = {
-      enable = true;
-      virtualHosts.${cfg.hostName}.extraConfig = ''
-        tls internal
-        reverse_proxy 127.0.0.1:8080
-      '';
+    services.nginx.virtualHosts.${cfg.hostName} = {
+      listen = [
+        {
+          addr = "127.0.0.1";
+          port = 8080;
+        }
+      ];
+      # Keep Nginx redirects relative to the HTTPS URL served by Tailscale.
+      extraConfig = "absolute_redirect off;";
     };
   };
 }
