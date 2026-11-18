@@ -3,6 +3,7 @@ let
 in
 {
   inherit username;
+  networking = import ./networking.nix;
   userfullname = "mkiin";
   useremail = "blckcaties@gmail.com";
   linuxhomedir = "/home/${username}";
