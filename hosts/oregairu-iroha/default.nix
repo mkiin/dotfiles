@@ -9,8 +9,12 @@
 
   services.nextcloud = {
     enable = true;
-    # TODO: use this node's full Tailscale DNS name before enabling Serve.
-    hostName = "localhost";
+    hostName = "nextcloud.tailb6cf85.ts.net";
+  };
+
+  services.tailscale.serve = {
+    enable = true;
+    services.nextcloud.endpoints."tcp:443" = "http://127.0.0.1:8080";
   };
 
   users.users.${myvars.username}.openssh.authorizedKeys.keys = [
