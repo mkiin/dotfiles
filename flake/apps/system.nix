@@ -80,9 +80,8 @@
           type = "app";
           program = toString (
             writeNu "remote-switch" ''
-              def main [host: string, --target: string] {
-                let address = $target | default $host
-                exec ${lib.getExe' pkgs.nixos-rebuild-ng "nixos-rebuild"} switch --flake $".#($host)" --target-host $"root@($address)"
+              def main [host: string] {
+                exec ${lib.getExe' pkgs.nixos-rebuild-ng "nixos-rebuild"} switch --flake $".#($host)" --target-host $"root@($host)"
               }
             ''
           );

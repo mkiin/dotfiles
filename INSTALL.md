@@ -174,10 +174,10 @@ SSH のパスワードを求められたら、USB から起動した `nixos` ユ
 
 ### NixOS がインストール済みのデバイスから設定を更新する
 
-インストール先に SSH で `root` としてログインできる場合は、dotfiles のディレクトリで実行する。
+操作元から `ssh root@<target_host>` で接続できる状態にして、dotfiles のディレクトリで実行する。ホスト名は flake の構成名と SSH の接続先を兼ねる。
 
 ```bash
-nix run .#remote-switch -- <target_host> --target <target_ip>
+nix run .#remote-switch -- <target_host>
 ```
 
 ## インストール先のデバイスだけで作業する場合
