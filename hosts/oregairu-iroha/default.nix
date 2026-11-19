@@ -1,4 +1,4 @@
-{ myvars, ... }:
+{ config, myvars, ... }:
 {
   imports = [ ./hardware-configuration.nix ];
 
@@ -9,8 +9,13 @@
 
   services.nextcloud = {
     enable = true;
-    # TODO: use this node's full Tailscale DNS name before enabling Serve.
+    # Set this to the Nextcloud service's full Tailscale DNS name.
     hostName = "localhost";
+  };
+
+  services.tailscale.serve = {
+    enable = config.services.nextcloud.hostName != "localhost";
+    services.nextcloud.endpoints."tcp:443" = "http://127.0.0.1:8080";
   };
 
   users.users.${myvars.username}.openssh.authorizedKeys.keys = [
