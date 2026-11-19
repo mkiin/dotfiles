@@ -1,4 +1,4 @@
-{ config, myvars, ... }:
+{ myvars, ... }:
 {
   imports = [ ./hardware-configuration.nix ];
 
@@ -9,12 +9,11 @@
 
   services.nextcloud = {
     enable = true;
-    # Set this to the Nextcloud service's full Tailscale DNS name.
-    hostName = "localhost";
+    hostName = "nextcloud.tailb6cf85.ts.net";
   };
 
   services.tailscale.serve = {
-    enable = config.services.nextcloud.hostName != "localhost";
+    enable = true;
     services.nextcloud.endpoints."tcp:443" = "http://127.0.0.1:8080";
   };
 

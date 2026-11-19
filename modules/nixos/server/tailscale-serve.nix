@@ -11,13 +11,15 @@ let
 
   mkServeCommand =
     name: service:
-    "${tailscale} ${lib.escapeShellArgs [
-      "serve"
-      "--yes"
-      "--service=svc:${name}"
-      "--https=443"
-      service.endpoints."tcp:443"
-    ]}";
+    "${tailscale} ${
+      lib.escapeShellArgs [
+        "serve"
+        "--yes"
+        "--service=svc:${name}"
+        "--https=443"
+        service.endpoints."tcp:443"
+      ]
+    }";
 in
 {
   config = lib.mkIf (serve.enable && serve.configFile == null) {
