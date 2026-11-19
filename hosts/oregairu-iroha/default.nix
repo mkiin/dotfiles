@@ -20,8 +20,6 @@
   users.users.${myvars.username}.openssh.authorizedKeys.keys = [
     myvars.sshPublicKeys.iphone13-termius
   ];
-  # remote-switch currently connects as root.
-  users.users.root.openssh.authorizedKeys.keys = [ myvars.sshPublicKeys.yukino ];
 
   # Wake yukino's wired NIC (enp10s0) from this LAN: wakeonlan 9c:6b:00:98:be:bc
   modules.wakeonlan.enable = true;
