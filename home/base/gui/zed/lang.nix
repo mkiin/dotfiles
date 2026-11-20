@@ -140,6 +140,7 @@ in
 
       oxlint.initialization_options.settings = {
         run = "onType";
+        typeAware = false;
         fixKind = "safe_fix";
         disableNestedConfig = false;
         unusedDisableDirectives = "deny";

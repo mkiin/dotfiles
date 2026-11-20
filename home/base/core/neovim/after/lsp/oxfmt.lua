@@ -3,12 +3,6 @@ local root_markers = { ".oxfmtrc.jsonc", ".oxfmtrc.json", "package.json", ".git"
 ---@type vim.lsp.Config
 return {
   filetypes = {
-    "javascript",
-    "javascriptreact",
-    "javascript.jsx",
-    "typescript",
-    "typescriptreact",
-    "typescript.tsx",
     "css",
     "scss",
     "less",

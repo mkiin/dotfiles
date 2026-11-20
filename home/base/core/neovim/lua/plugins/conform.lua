@@ -14,8 +14,9 @@ return {
       lsp_format = "fallback",
     },
     format_on_save = {
-      -- Only restrict LSP formatting; the external formatters above still take precedence.
-      name = "oxfmt",
+      filter = function(client)
+        return client.name == "tsrs" or client.name == "oxfmt"
+      end,
     },
   },
 }

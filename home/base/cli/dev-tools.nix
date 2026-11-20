@@ -5,6 +5,7 @@
     pnpm
     # JS / TS
     typescript
+    (callPackage ./packages/tsrs.nix { })
     oxlint
     oxfmt
 
