@@ -26,11 +26,7 @@ in
 
       Rust = {
         hard_tabs = false;
-        formatter.language_server.name = "rust-analyzer";
-        language_servers = [
-          "rust-analyzer"
-          "!rustc"
-        ];
+        enable_language_server = false;
       };
 
       C = {
@@ -111,9 +107,6 @@ in
           "--stdio"
         ];
       };
-
-      rust-analyzer.binary.path = "${pkgs.rust-analyzer}/bin/rust-analyzer";
-      rust-analyzer.initialization_options.check.command = "clippy";
 
       clangd.binary.path = "${pkgs.clang-tools}/bin/clangd";
 

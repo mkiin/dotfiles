@@ -12,12 +12,6 @@ in
     oxlint
     oxfmt
 
-    # Rust
-    cargo
-    rustc
-    rustfmt
-    clippy
-
     # C / C++
     gcc
     clang-tools
