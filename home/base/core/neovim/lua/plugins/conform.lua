@@ -21,6 +21,7 @@ return {
   cmd = "ConformInfo",
   opts = {
     formatters_by_ft = {
+      bash = { "shfmt" },
       lua = { "stylua" },
       luau = { "stylua" },
       nix = { "nixfmt" },
@@ -34,7 +35,6 @@ return {
       -- Pick one server when several support formatting in the same buffer.
       return {
         name = lsp_formatters[vim.bo[bufnr].filetype] or "oxfmt",
-        lsp_format = "prefer",
       }
     end,
   },
