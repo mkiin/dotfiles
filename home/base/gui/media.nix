@@ -4,6 +4,7 @@
   programs.imv.enable = true;
 
   home.packages = with pkgs; [
+    loupe
     playerctl
   ];
 }

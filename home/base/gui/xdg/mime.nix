@@ -4,7 +4,7 @@ let
   browser = [ "zen-beta.desktop" ];
   editor = [ "nvim.desktop" ];
   fileManager = [ "org.gnome.Nautilus.desktop" ];
-  imageViewer = [ "imv-dir.desktop" ];
+  imageViewer = [ "org.gnome.Loupe.desktop" ];
   mediaPlayer = [ "mpv.desktop" ];
 in
 {
