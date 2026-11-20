@@ -20,6 +20,7 @@
       "lua"
       "luau"
       "windows-batch"
+      # Registers typescript-ls. lang.nix points it at tsrs.
       "tsgo"
     ];
 

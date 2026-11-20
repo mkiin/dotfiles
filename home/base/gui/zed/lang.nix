@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 
 let
+  tsrs = pkgs.callPackage ../../cli/packages/tsrs.nix { };
+
   oxcLanguage = {
     formatter.language_server.name = "oxfmt";
 
@@ -102,6 +104,14 @@ in
     };
 
     lsp = {
+      "typescript-ls".binary = {
+        path = "${tsrs}/bin/tsrs";
+        arguments = [
+          "--lsp"
+          "--stdio"
+        ];
+      };
+
       rust-analyzer.binary.path = "${pkgs.rust-analyzer}/bin/rust-analyzer";
       rust-analyzer.initialization_options.check.command = "clippy";
 
