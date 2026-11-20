@@ -7,7 +7,6 @@
     ../../base/gui/media.nix
     ../../base/gui/themes
     ../../base/gui/desktop-apps/nikke
-    ./nextcloud-backup.nix
   ];
 
   programs.ssh = {
@@ -26,6 +25,7 @@
     suspendTimeout = 3600;
   };
 
+  modules.desktop.nextcloud-backup.enable = true;
   modules.desktop.hyprland.enable = true;
   wayland.windowManager.hyprland.extraLuaFiles.monitors = {
     content = ./monitors.lua;

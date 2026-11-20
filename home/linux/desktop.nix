@@ -2,6 +2,7 @@
 {
   imports = [
     ./core.nix
+    ./nextcloud-backup.nix
     ../base/cli
     ../base/gui/terminal
     ../base/gui/zed

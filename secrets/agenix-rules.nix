@@ -14,4 +14,5 @@ in
 {
   "user-password.age".publicKeys = desktopRecipients ++ serverRecipients;
   "rclone-r2.conf.age".publicKeys = desktopRecipients;
+  "nextcloud-app-password.age".publicKeys = desktopRecipients;
 }

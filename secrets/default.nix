@@ -32,6 +32,11 @@ in
 
     (mkIf cfg.desktop.enable {
       age.secrets = {
+        "nextcloud-app-password" = {
+          file = ./nextcloud-app-password.age;
+          mode = "0400";
+          owner = myvars.username;
+        };
         "rclone-r2.conf" = {
           file = ./rclone-r2.conf.age;
           mode = "0400";
