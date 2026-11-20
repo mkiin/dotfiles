@@ -23,10 +23,19 @@ in
     clang-tools
 
     # Lua
+    lua-language-server
+    stylua
     luau-lsp
 
     # Nix
+    nixd
+    nixfmt
     statix
+
+    # Shell
+    bash-language-server
+    shellcheck
+    shfmt
 
     # Python
     ruff

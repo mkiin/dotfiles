@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  tsrs = pkgs.callPackage ../../cli/packages/tsrs.nix { };
+  tsrs = pkgs.callPackage ../../core/packages/tsrs.nix { };
 
   oxcLanguage = {
     formatter.language_server.name = "oxfmt";

@@ -8,7 +8,7 @@
 }:
 let
   nvim = config.programs.nvimx;
-  tsrs = pkgs.callPackage ../../cli/packages/tsrs.nix { };
+  tsrs = pkgs.callPackage ../packages/tsrs.nix { };
   luaLibrary = pkgs.symlinkJoin {
     name = "neovim-lua-library";
     paths = map (path: "${path}/lua") (
@@ -41,13 +41,29 @@ in
       "${config.home.homeDirectory}/${myvars.dotfilesdir}/home/base/core/neovim"
       "--set-default"
       "OXLINT_TSGOLINT_PATH"
-      "${tsrs}/bin/tsrs-lint"
+      config.home.sessionVariables.OXLINT_TSGOLINT_PATH
     ];
     extraPackages = with pkgs; [
       git
       ripgrep
       fd
+
+      bash-language-server
+      clang-tools
+      lua-language-server
+      luau-lsp
+      nixd
+      oxfmt
+      oxlint
+      package-version-server
+      ruff
+      stylua
       tsrs
+      ty
+
+      nixfmt
+      shellcheck
+      shfmt
     ];
 
     lock = {
