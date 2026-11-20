@@ -13,11 +13,18 @@ return {
       end,
     })
     vim.lsp.enable({
+      "bashls",
+      "clangd",
       "lua_ls",
+      "luau_lsp",
       "nixd",
-      "tsc",
       "oxlint",
       "oxfmt",
+      "package_version_server",
+      "ruff",
+      "stylua",
+      "tsrs",
+      "ty",
     })
   end,
 }

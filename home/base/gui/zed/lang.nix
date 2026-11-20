@@ -1,6 +1,8 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 let
+  tsrs = pkgs.callPackage ../../core/packages/tsrs.nix { };
+
   oxcLanguage = {
     formatter.language_server.name = "oxfmt";
 
@@ -24,11 +26,7 @@ in
 
       Rust = {
         hard_tabs = false;
-        formatter.language_server.name = "rust-analyzer";
-        language_servers = [
-          "rust-analyzer"
-          "!rustc"
-        ];
+        enable_language_server = false;
       };
 
       C = {
@@ -102,8 +100,13 @@ in
     };
 
     lsp = {
-      rust-analyzer.binary.path = "${pkgs.rust-analyzer}/bin/rust-analyzer";
-      rust-analyzer.initialization_options.check.command = "clippy";
+      "typescript-ls".binary = {
+        path = "${tsrs}/bin/tsrs";
+        arguments = [
+          "--lsp"
+          "--stdio"
+        ];
+      };
 
       clangd.binary.path = "${pkgs.clang-tools}/bin/clangd";
 
@@ -131,6 +134,7 @@ in
       oxlint.binary = {
         path = "${pkgs.oxlint}/bin/oxlint";
         arguments = [ "--lsp" ];
+        env.OXLINT_TSGOLINT_PATH = config.home.sessionVariables.OXLINT_TSGOLINT_PATH;
       };
 
       oxfmt.binary = {

@@ -1,28 +1,35 @@
 { pkgs, config, ... }:
+let
+  tsrs = pkgs.callPackage ./packages/tsrs.nix { };
+in
 {
   home.packages = with pkgs; [
     nodejs-slim_24
     pnpm
     # JS / TS
     typescript
+    tsrs
     oxlint
     oxfmt
-
-    # Rust
-    cargo
-    rustc
-    rustfmt
-    clippy
 
     # C / C++
     gcc
     clang-tools
 
     # Lua
+    lua-language-server
+    stylua
     luau-lsp
 
     # Nix
+    nixd
+    nixfmt
     statix
+
+    # Shell
+    bash-language-server
+    shellcheck
+    shfmt
 
     # Python
     ruff
@@ -33,6 +40,9 @@
 
     package-version-server
   ];
+
+  # The pinned Oxlint uses this hook to start a custom type-aware backend.
+  home.sessionVariables.OXLINT_TSGOLINT_PATH = "${tsrs}/bin/tsrs-lint";
 
   programs.bun.enable = true;
   programs.uv.enable = true;
