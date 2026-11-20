@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 let
   oxcLanguage = {
@@ -131,6 +131,7 @@ in
       oxlint.binary = {
         path = "${pkgs.oxlint}/bin/oxlint";
         arguments = [ "--lsp" ];
+        env.OXLINT_TSGOLINT_PATH = config.home.sessionVariables.OXLINT_TSGOLINT_PATH;
       };
 
       oxfmt.binary = {
@@ -140,7 +141,6 @@ in
 
       oxlint.initialization_options.settings = {
         run = "onType";
-        typeAware = false;
         fixKind = "safe_fix";
         disableNestedConfig = false;
         unusedDisableDirectives = "deny";

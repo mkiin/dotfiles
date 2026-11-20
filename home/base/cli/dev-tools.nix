@@ -1,11 +1,14 @@
 { pkgs, config, ... }:
+let
+  tsrs = pkgs.callPackage ./packages/tsrs.nix { };
+in
 {
   home.packages = with pkgs; [
     nodejs-slim_24
     pnpm
     # JS / TS
     typescript
-    (callPackage ./packages/tsrs.nix { })
+    tsrs
     oxlint
     oxfmt
 
@@ -34,6 +37,9 @@
 
     package-version-server
   ];
+
+  # The pinned Oxlint uses this hook to start a custom type-aware backend.
+  home.sessionVariables.OXLINT_TSGOLINT_PATH = "${tsrs}/bin/tsrs-lint";
 
   programs.bun.enable = true;
   programs.uv.enable = true;

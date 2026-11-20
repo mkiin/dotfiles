@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
+  makeWrapper,
   versionCheckHook,
 }:
 
@@ -16,7 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   sourceRoot = "package";
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeWrapper
+  ];
   buildInputs = [ stdenv.cc.cc.lib ];
 
   dontConfigure = true;
@@ -29,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/bin" "$out/lib/tsrs"
     cp -a ./. "$out/lib/tsrs/"
     ln -s "$out/lib/tsrs/tsrs" "$out/bin/tsrs"
+    makeWrapper "$out/lib/tsrs/tsrs" "$out/bin/tsrs-lint" --add-flags --lint
 
     runHook postInstall
   '';
