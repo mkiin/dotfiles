@@ -247,7 +247,7 @@
       };
 
       screen-recorder_capsule = {
-        type = "noctalia/screen_recorder:recorder";
+        type = "mkiin/screen_recorder:recorder";
       };
 
       desktop-widgets_capsule = {
