@@ -71,7 +71,7 @@
       };
 
       dock = {
-        enabled = true;
+        enabled = false;
         layer = "overlay";
       };
 
