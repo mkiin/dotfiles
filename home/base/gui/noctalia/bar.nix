@@ -148,7 +148,6 @@ in
             "audio_vis_slate"
           ];
           padding = 4;
-          widget_spacing = "auto";
           opacity = 0.0;
         }
       ];
