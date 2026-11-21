@@ -1,4 +1,22 @@
-{ ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  screenshots = config.xdg.userDirs.extraConfig.SCREENSHOTS;
+  fullDirectory = lib.escapeShellArg "${screenshots}/full";
+  regionDirectory = lib.escapeShellArg "${screenshots}/region";
+  noctalia = lib.getExe config.programs.noctalia.package;
+  screenshotMenu = pkgs.writeShellScript "screenshot-menu" ''
+    choice=$(printf '%s\n' Fullscreen Region | ${noctalia} dmenu) || exit $?
+    case "$choice" in
+      Fullscreen) exec ${noctalia} msg screenshot-fullscreen --directory ${fullDirectory} pick ;;
+      Region) exec ${noctalia} msg screenshot-region --directory ${regionDirectory} ;;
+    esac
+  '';
+in
 {
   programs.noctalia.settings = {
     bar.order = [
@@ -239,9 +257,12 @@
       };
 
       screenshot_capsule = {
-        type = "screenshot";
+        type = "custom_button";
+        glyph = "screenshot";
+        tooltip = "Screenshot";
         actions = {
-          left = "screenshot-fullscreen";
+          left = "screenshot-fullscreen --directory ${fullDirectory}";
+          right = "exec ${screenshotMenu}";
           middle = "screenshot-annotate";
         };
       };

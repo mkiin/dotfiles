@@ -19,7 +19,10 @@ hl.bind(mod .. " + SHIFT + W", hl.dsp.exec_cmd("noctalia msg panel-toggle wallpa
 
 -- Capture
 hl.bind(mod .. " + Z", hl.dsp.exec_cmd("screenshot-window-by-app"))
-hl.bind(mod .. " + SHIFT + Z", hl.dsp.exec_cmd("noctalia msg screenshot-region"))
+hl.bind(
+  mod .. " + SHIFT + Z",
+  hl.dsp.exec_cmd("noctalia msg screenshot-region --directory ~/Pictures/Screenshots/region")
+)
 
 -- Window
 

@@ -11,7 +11,7 @@ Mod+W { spawn-sh "noctalia msg wallpaper-next"; }
 Mod+Shift+W { spawn-sh "noctalia msg panel-toggle wallpaper"; }
 
 // Capture
-Mod+Z { spawn-sh "noctalia msg screenshot-region"; }
+Mod+Z { spawn-sh "noctalia msg screenshot-region --directory ~/Pictures/Screenshots/region"; }
 
 // Window
 Mod+C { close-window; }
