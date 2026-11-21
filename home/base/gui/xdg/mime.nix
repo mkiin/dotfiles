@@ -5,7 +5,7 @@ let
   editor = [ "nvim.desktop" ];
   fileManager = [ "org.gnome.Nautilus.desktop" ];
   imageViewer = [ "org.gnome.Loupe.desktop" ];
-  mediaPlayer = [ "mpv.desktop" ];
+  videoPlayer = [ "org.gnome.Showtime.desktop" ];
 in
 {
   xdg.mimeApps = {
@@ -35,9 +35,8 @@ in
       "image/png" = imageViewer;
       "image/webp" = imageViewer;
 
-      # Media
-      "audio/*" = mediaPlayer;
-      "video/*" = mediaPlayer;
+      # Video
+      "video/*" = videoPlayer;
 
       # Directory
       "inode/directory" = fileManager;

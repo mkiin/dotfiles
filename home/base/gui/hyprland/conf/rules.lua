@@ -25,16 +25,8 @@ hl.window_rule({
 })
 
 hl.window_rule({
-  name = "imv-floating",
-  match = { class = "^imv$" },
-  float = true,
-  size = { 800, 600 },
-  center = true,
-})
-
-hl.window_rule({
-  name = "mpv-floating",
-  match = { class = "^mpv$" },
+  name = "media-floating",
+  match = { class = "^org\\.gnome\\.(Loupe|Showtime)$" },
   float = true,
   size = { 800, 600 },
   center = true,

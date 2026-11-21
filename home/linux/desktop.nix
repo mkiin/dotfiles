@@ -7,6 +7,7 @@
     ../base/gui/terminal
     ../base/gui/zed
     ../base/gui/gtk.nix
+    ../base/gui/media.nix
     ../base/gui/niri
     ../base/gui/wayland.nix
     ../base/gui/clipboard.nix

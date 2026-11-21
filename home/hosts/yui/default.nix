@@ -32,6 +32,5 @@
   home.packages = with pkgs; [
     brightnessctl
     moonlight-qt
-    playerctl
   ];
 }

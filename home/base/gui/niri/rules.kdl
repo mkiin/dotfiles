@@ -22,14 +22,8 @@ window-rule {
 }
 
 window-rule {
-	match app-id="^mpv$"
-	open-floating true
-	default-column-width { fixed 800; }
-	default-window-height { fixed 600; }
-}
-
-window-rule {
-	match app-id="^imv$"
+	match app-id=r#"^org\.gnome\.Loupe$"#
+	match app-id=r#"^org\.gnome\.Showtime$"#
 	open-floating true
 	default-column-width { fixed 800; }
 	default-window-height { fixed 600; }
