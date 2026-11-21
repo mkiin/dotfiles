@@ -100,8 +100,8 @@ in
     bar.slate = {
       enabled = true;
       position = "top";
-      margin_edge = 3;
-      margin_ends = 160;
+      margin_edge = 8;
+      margin_ends = 20;
       thickness = 40;
       padding = 16;
       radius = 20;
