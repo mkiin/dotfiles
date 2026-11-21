@@ -5,7 +5,7 @@
   ...
 }:
 {
-  flake.nixosConfigurations.oregairu-iroha = inputs.nixpkgs.lib.nixosSystem {
+  flake.nixosConfigurations.iroha = inputs.nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
 
     specialArgs = {
@@ -14,9 +14,9 @@
 
     modules = [
       inputs.disko.nixosModules.disko
-      ../../hosts/oregairu-iroha/disko.nix
+      ../../hosts/iroha/disko.nix
       ../../secrets
-      ../../hosts/oregairu-iroha
+      ../../hosts/iroha
       ../../modules/nixos/server
 
       inputs.home-manager.nixosModules.home-manager
@@ -28,7 +28,7 @@
           inherit inputs myvars mylib;
         };
         home-manager.users.${myvars.username}.imports = [
-          ../../home/hosts/oregairu-iroha
+          ../../home/hosts/iroha
         ];
       }
     ];

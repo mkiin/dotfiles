@@ -2,7 +2,7 @@
 {
   imports = [ ./hardware-configuration.nix ];
 
-  networking.hostName = "oregairu-iroha";
+  networking.hostName = "iroha";
   networking.networkmanager.enable = true;
 
   services.tailscale.extraSetFlags = [ "--ssh" ];

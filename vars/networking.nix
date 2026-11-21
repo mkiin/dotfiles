@@ -9,7 +9,7 @@
       dhcpIPv4 = "192.168.100.61";
       tailscaleIPv4 = "100.113.79.112";
     };
-    oregairu-iroha = {
+    iroha = {
       dhcpIPv4 = "192.168.100.67";
       tailscaleIPv4 = "100.70.243.82";
     };
