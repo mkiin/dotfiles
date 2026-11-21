@@ -1,22 +1,28 @@
-{ ... }:
+{
+  hostVars,
+  lib,
+  noctaliaWidgetLayout,
+  ...
+}:
 {
   programs.noctalia.settings = {
     lockscreen = {
       enabled = true;
+      monitors = lib.optional (hostVars.primaryOutput != null) hostVars.primaryOutput;
       lock_before_suspend = true;
       blurred_desktop = false;
       blur_intensity = 0.0;
       allow_empty_password = false;
     };
 
-    lockscreen_widgets = {
+    lockscreen_widgets = noctaliaWidgetLayout {
       enabled = true;
       schema_version = 2;
       widget_order = [
         "lockscreen-widget-0000000000000013"
         "lockscreen-widget-0000000000000005"
         "lockscreen-login-box@DP-3"
-        "lockscreen-login-box@DP-2"
+        "lockscreen-login-box"
         "lockscreen-login-box@DP-1"
         "lockscreen-widget-0000000000000001"
         "lockscreen-widget-0000000000000002"
@@ -35,6 +41,7 @@
       widget = {
         "lockscreen-login-box@DP-1" = {
           type = "login_box";
+          enabled = true;
           output = "DP-1";
           cx = 960.0;
           cy = 898.0;
@@ -55,15 +62,16 @@
             show_keyboard_layout = true;
             show_login_button = true;
             show_media = true;
+            show_media_controls = true;
             show_password_reveal = true;
             show_session_buttons = true;
             show_unlock_hint = true;
             show_weather = true;
           };
         };
-        "lockscreen-login-box@DP-2" = {
+        "lockscreen-login-box" = {
           type = "login_box";
-          output = "DP-2";
+          enabled = true;
           cx = 1280.0;
           cy = 1262.0;
           box_width = 810.0;
@@ -83,6 +91,7 @@
             show_keyboard_layout = false;
             show_login_button = true;
             show_media = true;
+            show_media_controls = true;
             show_password_reveal = true;
             show_session_buttons = true;
             show_unlock_hint = true;
@@ -91,6 +100,7 @@
         };
         "lockscreen-login-box@DP-3" = {
           type = "login_box";
+          enabled = true;
           output = "DP-3";
           cx = 960.0;
           cy = 898.0;
@@ -111,6 +121,7 @@
             show_keyboard_layout = true;
             show_login_button = true;
             show_media = true;
+            show_media_controls = true;
             show_password_reveal = true;
             show_session_buttons = true;
             show_unlock_hint = true;
@@ -119,7 +130,7 @@
         };
         "lockscreen-widget-0000000000000001" = {
           type = "calendar";
-          output = "DP-2";
+          enabled = true;
           cx = 400.0;
           cy = 816.0;
           box_width = 608.0;
@@ -138,7 +149,7 @@
         };
         "lockscreen-widget-0000000000000002" = {
           type = "clock";
-          output = "DP-2";
+          enabled = true;
           cx = 392.0;
           cy = 296.0;
           box_width = 528.0;
@@ -156,7 +167,7 @@
         };
         "lockscreen-widget-0000000000000003" = {
           type = "clock";
-          output = "DP-2";
+          enabled = true;
           cx = 400.0;
           cy = 400.0;
           box_width = 352.0;
@@ -174,7 +185,7 @@
         };
         "lockscreen-widget-0000000000000004" = {
           type = "sticker";
-          output = "DP-2";
+          enabled = true;
           cx = 1600.0;
           cy = 1024.0;
           box_width = 192.0;
@@ -190,7 +201,7 @@
         };
         "lockscreen-widget-0000000000000005" = {
           type = "audio_visualizer";
-          output = "DP-2";
+          enabled = true;
           cx = 1280.0;
           cy = 1040.0;
           box_width = 848.0;
@@ -210,7 +221,7 @@
         };
         "lockscreen-widget-0000000000000007" = {
           type = "fancy_audio_visualizer";
-          output = "DP-2";
+          enabled = true;
           cx = 2128.0;
           cy = 1160.0;
           box_width = 752.0;
@@ -227,7 +238,7 @@
         };
         "lockscreen-widget-000000000000000f" = {
           type = "sysmon";
-          output = "DP-2";
+          enabled = true;
           cx = 560.0;
           cy = 1164.0;
           box_width = 240.0;
@@ -247,7 +258,7 @@
         };
         "lockscreen-widget-0000000000000010" = {
           type = "sysmon";
-          output = "DP-2";
+          enabled = true;
           cx = 560.0;
           cy = 1280.0;
           box_width = 240.0;
@@ -267,7 +278,7 @@
         };
         "lockscreen-widget-0000000000000013" = {
           type = "clock";
-          output = "DP-2";
+          enabled = true;
           cx = 400.00003051757812;
           cy = 720.0;
           box_width = 1440.0;
@@ -277,7 +288,7 @@
           rotation = 1.5707963705062866;
           settings = {
             background = true;
-            background_opacity = 0.99;
+            background_opacity = 0.75;
             background_radius = 0;
             format = "";
             shadow = true;
@@ -285,7 +296,7 @@
         };
         "lockscreen-widget-0000000000000014" = {
           type = "weather";
-          output = "DP-2";
+          enabled = true;
           cx = 248.0;
           cy = 1244.0;
           box_width = 304.0;

@@ -25,6 +25,7 @@ in
     #     };
     #   };
     # };
+    home-manager.extraSpecialArgs = { inherit hostVars; };
     programs.gpu-screen-recorder.enable = true;
     services.displayManager.noctalia-greeter = {
       enable = true;

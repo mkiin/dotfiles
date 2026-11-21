@@ -1,5 +1,6 @@
 {
   config,
+  hostVars,
   lib,
   ...
 }:
@@ -26,6 +27,11 @@
       type = lib.types.ints.positive;
       description = "Seconds of idle before suspending.";
     };
+  };
+
+  config._module.args.noctaliaWidgetLayout = import ./widget-layout.nix {
+    inherit lib;
+    inherit (hostVars) primaryOutput;
   };
 
   config.programs.noctalia = {
