@@ -160,8 +160,8 @@
       clock_slate = {
         type = "clock";
         format = "{:%H:%M}";
-        scale = 1.1;
-        font_family = "Geist SemiBold";
+        scale = 1.2;
+        font_family = "Geist";
         actions.left = "panel-toggle control-center calendar";
       };
 
