@@ -25,6 +25,7 @@
     suspendTimeout = 3600;
   };
 
+  modules.desktop.wallpaper-sync.enable = true;
   modules.desktop.niri.enable = true;
   modules.desktop.niri.extraOutputs = builtins.readFile ./niri-outputs.kdl;
   modules.desktop.pyprland.enable = false;

@@ -25,6 +25,7 @@
   };
 
   modules.desktop.nextcloud-backup.enable = true;
+  modules.desktop.wallpaper-sync.enable = true;
   modules.desktop.hyprland.enable = true;
   wayland.windowManager.hyprland.extraLuaFiles.monitors = {
     content = ./monitors.lua;

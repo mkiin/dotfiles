@@ -7,8 +7,8 @@
 ### Home Manager desktop imports
 
 - Register Linux desktop features under `home/linux/` in the `imports` list of `home/linux/desktop.nix`, even when only one host uses the feature. Keep the feature implementation outside `home/hosts/`.
-- Desktop hosts import `home/linux/desktop.nix`. Direct imports of individual `home/linux/` feature modules from `home/hosts/` are forbidden. For an optional feature, declare a default-off enable option in the module and set it on the hosts that use it. For example, `desktop.nix` imports `./nextcloud-backup.nix` and Yukino sets `modules.desktop.nextcloud-backup.enable = true;`.
-- TODO: Add a lint check for imports from `home/hosts/` into `home/linux/`. Allow profile entry points such as `desktop.nix` and `server.nix`. Reject direct feature imports such as `../../linux/nextcloud-backup.nix`, and flag desktop feature modules missing from `desktop.nix`'s imports.
+- Desktop hosts import `home/linux/desktop.nix`. Direct imports of individual `home/linux/` feature modules from `home/hosts/` are forbidden. For an optional feature, declare a default-off enable option in the module and set it on the hosts that use it. For example, `desktop.nix` imports `./nextcloud/backup-media.nix` and Yukino sets `modules.desktop.nextcloud-backup.enable = true;`.
+- TODO: Add a lint check for imports from `home/hosts/` into `home/linux/`. Allow profile entry points such as `desktop.nix` and `server.nix`. Reject direct feature imports such as `../../linux/nextcloud/backup-media.nix`, and flag desktop feature modules missing from `desktop.nix`'s imports.
 
 ## Scope and packages
 

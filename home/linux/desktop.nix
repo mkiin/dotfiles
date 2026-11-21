@@ -2,7 +2,8 @@
 {
   imports = [
     ./core.nix
-    ./nextcloud-backup.nix
+    ./nextcloud/backup-media.nix
+    ./nextcloud/sync-wallpapers.nix
     ../base/cli
     ../base/gui/terminal
     ../base/gui/zed
