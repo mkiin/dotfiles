@@ -5,7 +5,7 @@
 
   # LAN leases observed on 2026-11-18. The router's DHCP pool is unknown.
   hostsAddr = {
-    oregairu-yukino = {
+    yukino = {
       dhcpIPv4 = "192.168.100.61";
       tailscaleIPv4 = "100.113.79.112";
     };

@@ -37,8 +37,8 @@ jobs:
         uses: natsukium/nix-diff-action@v1.2.1
         with:
           attributes: |
-            - displayName: oregairu-yukino
-              attribute: nixosConfigurations.oregairu-yukino.config.system.build.toplevel
+            - displayName: yukino
+              attribute: nixosConfigurations.yukino.config.system.build.toplevel
             - displayName: yui
               attribute: nixosConfigurations.yui.config.system.build.toplevel
           build: false

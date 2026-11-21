@@ -10,7 +10,7 @@
 #
 #############################################################
 {
-  networking.hostName = "oregairu-yukino";
+  networking.hostName = "yukino";
   users.users.${myvars.username}.openssh.authorizedKeys.keys = [ myvars.sshPublicKeys.yui ];
   networking.networkmanager.enable = true;
   networking.networkmanager.connectionConfig."ethernet.wake-on-lan" = 64;

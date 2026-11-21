@@ -1,7 +1,7 @@
 {
   imports = [
     ./installer.nix
-    ./oregairu-yukino.nix
+    ./yukino.nix
     ./yui.nix
     ./iroha.nix
   ];

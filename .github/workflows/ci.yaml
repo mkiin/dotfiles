@@ -41,8 +41,8 @@ jobs:
           name: mkiin-dotfiles
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
-      - name: Build NixOS (oregairu-yukino)
-        run: nix run .#build -- oregairu-yukino
+      - name: Build NixOS (yukino)
+        run: nix run .#build -- yukino
 
       - name: Build NixOS (yui)
         run: nix run .#build -- yui

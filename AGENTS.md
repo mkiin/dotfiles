@@ -51,16 +51,16 @@ Run commands from the repository root. Use the existing flake apps for build and
 
 ```sh
 # Build only.
-nix run .#build -- oregairu-yukino
+nix run .#build -- yukino
 
 # Apply the production configuration after a successful build.
 # This app invokes sudo internally; use graphical authentication when executing it.
-nix run .#switch -- oregairu-yukino
+nix run .#switch -- yukino
 
 # Install minimal NixOS from the ISO. This erases the target SSD.
 # Execute only when the user has explicitly authorized the installation and target disk.
 pkexec "$(command -v nix)" --extra-experimental-features 'nix-command flakes' run .#install -- \
-  oregairu-yukino /dev/disk/by-id/<SSD-ID>
+  yukino /dev/disk/by-id/<SSD-ID>
 ```
 
 The `build` and `switch` apps default to the current hostname when none is specified.
