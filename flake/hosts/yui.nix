@@ -5,7 +5,7 @@
   ...
 }:
 {
-  flake.nixosConfigurations.oregairu-yui = inputs.nixpkgs.lib.nixosSystem {
+  flake.nixosConfigurations.yui = inputs.nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
 
     specialArgs = {
@@ -18,9 +18,9 @@
 
     modules = [
       inputs.disko.nixosModules.disko
-      ../../hosts/oregairu-yui/disko.nix
+      ../../hosts/yui/disko.nix
       ../../secrets
-      ../../hosts/oregairu-yui
+      ../../hosts/yui
       ../../modules/nixos/desktop
       {
         modules.secrets.desktop.enable = true;
@@ -44,7 +44,7 @@
             ;
         };
         home-manager.users.${myvars.username}.imports = [
-          ../../home/hosts/oregairu-yui
+          ../../home/hosts/yui
         ];
       }
     ];

@@ -13,7 +13,7 @@
       dhcpIPv4 = "192.168.100.67";
       tailscaleIPv4 = "100.70.243.82";
     };
-    oregairu-yui = {
+    yui = {
       dhcpIPv4 = "192.168.100.69";
       tailscaleIPv4 = "100.125.172.47";
     };

@@ -15,7 +15,7 @@
   services.xserver.xkb.layout = "jp";
   console.useXkbConfig = true;
 
-  networking.hostName = "oregairu-yui";
+  networking.hostName = "yui";
 
   services.openssh.settings = {
     PermitRootLogin = "no";
