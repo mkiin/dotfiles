@@ -12,20 +12,34 @@
     };
 
     session = {
-      show_shortcuts = false;
+      show_shortcuts = true;
       actions = [
-        { action = "lock"; }
-        { action = "logout"; }
-        { action = "lock_and_suspend"; }
+        {
+          action = "lock";
+          shortcut = "l";
+        }
+        {
+          action = "logout";
+          shortcut = "o";
+        }
+        {
+          action = "lock_and_suspend";
+          shortcut = "z";
+        }
         {
           action = "command";
           label = "Hibernate";
+          shortcut = "h";
           glyph = "bedtime";
           command = "systemctl hibernate";
         }
-        { action = "reboot"; }
+        {
+          action = "reboot";
+          shortcut = "r";
+        }
         {
           action = "shutdown";
+          shortcut = "s";
           variant = "default";
         }
       ];
