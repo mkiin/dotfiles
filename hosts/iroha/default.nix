@@ -5,8 +5,6 @@
   networking.hostName = "iroha";
   networking.networkmanager.enable = true;
 
-  services.tailscale.extraSetFlags = [ "--ssh" ];
-
   services.nextcloud = {
     enable = true;
     hostName = "nextcloud.tailb6cf85.ts.net";
