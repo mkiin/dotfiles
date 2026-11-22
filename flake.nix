@@ -25,7 +25,8 @@
     };
     flake-parts.url = "github:hercules-ci/flake-parts";
     nvimx.url = "github:myuron/nvimx";
-    hyprland.url = "github:hyprwm/Hyprland";
+    # Avoid the UWSM startup regression in 9927f2e (Hyprland PR #17049).
+    hyprland.url = "github:hyprwm/Hyprland/489b111974fc1ecf7f4cd84e7d995ce84804e11e";
     aagl.url = "github:ezKEa/aagl-gtk-on-nix";
     llm-agents.url = "github:numtide/llm-agents.nix";
 
