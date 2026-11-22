@@ -16,11 +16,7 @@
   console.useXkbConfig = true;
 
   networking.hostName = "yui";
-
-  services.openssh.settings = {
-    PermitRootLogin = "no";
-    KbdInteractiveAuthentication = false;
-  };
+  services.openssh.enable = false;
 
   system.stateVersion = "26.05";
 }

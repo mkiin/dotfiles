@@ -11,6 +11,7 @@
 #############################################################
 {
   networking.hostName = "yukino";
+  services.openssh.enable = false;
   networking.networkmanager.enable = true;
   networking.networkmanager.connectionConfig."ethernet.wake-on-lan" = 64;
 

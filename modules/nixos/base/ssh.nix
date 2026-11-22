@@ -4,9 +4,8 @@
   # Secure by default: firewall ON everywhere unless a host explicitly disables it
   # (servers disable it in modules/nixos/server/{server,server-aarch64}.nix).
   networking.firewall.enable = lib.mkDefault true;
-  # Enable the OpenSSH daemon.
   services.openssh = {
-    enable = true;
+    enable = lib.mkDefault true;
     authorizedKeysInHomedir = false;
     settings = {
       # Secure by default: X11 forwarding off everywhere; desktops re-enable it
