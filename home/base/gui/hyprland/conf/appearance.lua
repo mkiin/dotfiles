@@ -26,7 +26,7 @@ hl.config({
     },
   },
   animations = { enabled = true },
-  dwindle = { preserve_split = true },
+  dwindle = { preserve_split = true, force_split = 2 },
   misc = {
     force_default_wallpaper = 0,
     disable_hyprland_logo = true,
