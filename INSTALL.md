@@ -62,32 +62,28 @@
    ssh-keygen -t ed25519 -N '' -C <target_host> -f "$key"
    ```
 
-3. 公開鍵を表示し、`secrets/agenix-rules.nix` を開く。
+3. 公開鍵を表示し、`secrets/default.nix` を開く。
 
    ```bash
    cat "$key.pub"
-   vim secrets/agenix-rules.nix
+   vim secrets/default.nix
    ```
 
 4. インストール先に応じて公開鍵を登録する。再インストールの場合は、そのデバイスの古い公開鍵を置き換える。
 
-   - デスクトップの場合は、インストール先のホスト名に公開鍵を割り当て、その名前を `desktopRecipients` に含める。
-   - サーバーの場合は、公開鍵を二重引用符で囲んで `serverRecipients` に書く。
+   - デスクトップの場合は、インストール先のホスト名に公開鍵を割り当て、その名前を `recipientAliases.desktops` に含める。
+   - サーバーの場合は、`recipientAliases` のホスト名に公開鍵を割り当て、その名前を `recipientAliases.servers` に含める。
 
-5. `secrets/` に移る。
+5. dotfilesのルートで作業する。新しいファイルを追加した場合は `git add` する。
 
-   ```bash
-   cd secrets
-   ```
-
-6. 操作しているデバイスの SSH ホスト秘密鍵で各ファイルを復号し、`agenix-rules.nix` に登録した公開鍵で暗号化し直す。
+6. 操作しているデバイスの SSH ホスト秘密鍵で各ファイルを復号し、`secrets/default.nix` に登録した公開鍵で暗号化し直す。
 
    ```bash
-   sudo TMPDIR=/run agenix -r -i /etc/ssh/ssh_host_ed25519_key
+   sudo nix-secrets rekey --flake ".#<target_host>" --storage ./secrets
    ```
 
    <details>
-   <summary>このホスト鍵で復号できない .age ファイルがある場合</summary>
+   <summary>このホスト鍵で復号できない .enc ファイルがある場合</summary>
 
    復旧用 USB を挿し、パーティションを調べる。
 
@@ -105,7 +101,8 @@
    復号に USB の秘密鍵を使って、もう一度実行する。
 
    ```bash
-   sudo TMPDIR=/run agenix -r -i /mnt/recovery/recovery_key
+   sudo nix-secrets rekey --flake ".#<target_host>" --storage ./secrets \
+     --identity /mnt/recovery/recovery_key
    ```
 
    USB をアンマウントして抜く。
@@ -116,17 +113,13 @@
 
    </details>
 
-7. 暗号化し直したファイルの所有者とグループを `agenix-rules.nix` に揃える。
+7. 暗号化し直したファイルの所有者とグループを `secrets/default.nix` に揃える。
 
    ```bash
-   sudo chown --reference=agenix-rules.nix ./*.age
+   sudo chown --reference=secrets/default.nix secrets/*.enc
    ```
 
-8. dotfiles のルートに戻る。
-
-   ```bash
-   cd ..
-   ```
+8. 変更した公開鍵と暗号化ファイルを確認する。
 
 ### NixOS がインストール済みのデバイスからインストールを実行する
 
@@ -190,7 +183,7 @@ nix run .#remote-switch -- <target_host>
 - インターネット接続
 - インストール対象の SSD（既存データはすべて失われる）
 - パスフレーズ付き復旧用 SSH 秘密鍵を保存した USB
-- 復旧鍵で復号できる `user-password.age` と `rclone-r2.conf.age`
+- 復旧鍵で復号できる `user-password.enc`・`rclone-r2.conf.enc`・`nextcloud-app-password.enc`
 - `installer/initial-password-hash` に設定した初期パスワード
 
 対象 SSD が `hosts/<target_host>/disko.nix` のパーティション構成を収容できることを確認する。
@@ -201,29 +194,25 @@ ISO から取得する変更は事前に commit・push しておく。
 
 ### 2. 復旧鍵の初回準備
 
-復旧鍵で両方の Secrets を復号確認済みなら、セクション3へ進む。
-初めて復旧鍵を用意するときは、NixOS がインストール済みで、現在の `.age` ファイルを復号できるデバイスを使う。そこに復旧用 USB をマウントする。
+復旧鍵を登録済みなら、手順3へ進む。
+初めて復旧鍵を用意するときは、NixOS がインストール済みで、現在の `.enc` ファイルを復号できるデバイスを使う。そこに復旧用 USB をマウントする。
 以下の `/mnt/recovery` は実際の USB のマウント先に読み替える。
 
 ```bash
 ssh-keygen -t ed25519 -a 256 \
-  -C agenix-recovery -f /mnt/recovery/recovery_key # パスフレーズを設定
+  -C nix-secrets-recovery -f /mnt/recovery/recovery_key # パスフレーズを設定
 cat /mnt/recovery/recovery_key.pub
-vim secrets/agenix-rules.nix # recovery_key に公開鍵を登録し、desktopRecipients に追加
+vim secrets/default.nix # recipientAliases.recovery に公開鍵を登録
 ```
 
-dotfiles の `secrets/` に移り、登録した公開鍵で暗号化し直す。復旧鍵で両方のファイルを復号する。
+dotfiles のルートで、デスクトップのホスト名を `<target_host>` に指定し、登録した公開鍵で暗号化し直す。
 
 ```bash
-cd secrets
-sudo TMPDIR=/run agenix -r -i /etc/ssh/ssh_host_ed25519_key
-sudo chown --reference=agenix-rules.nix ./*.age
-agenix -d user-password.age -i /mnt/recovery/recovery_key > /dev/null
-agenix -d rclone-r2.conf.age -i /mnt/recovery/recovery_key > /dev/null
-cd ..
+sudo nix-secrets rekey --flake ".#<target_host>" --storage ./secrets
+sudo chown --reference=secrets/default.nix secrets/*.enc
 ```
 
-両方の復号成功を確認し、公開鍵の宣言と `.age` を commit・push する。
+公開鍵の宣言と再暗号化した `.enc` ファイルを commit・push する。
 復旧秘密鍵は USB に保管し、repo や SSD にコピーしない。
 
 初期パスワードを設定し直す場合：
@@ -277,10 +266,10 @@ reboot
 cd /home/mkiin/ghq/github.com/mkiin/dotfiles
 hostname
 cat /etc/ssh/ssh_host_ed25519_key.pub
-vim secrets/agenix-rules.nix
+vim secrets/default.nix
 ```
 
-表示したホスト名に新しい公開鍵を割り当て、その名前を `desktopRecipients` に含める。再インストールの場合は、このデバイスの公開鍵だけを置き換える。
+表示したホスト名に新しい公開鍵を割り当て、その名前を `recipientAliases.desktops` に含める。再インストールの場合は、このデバイスの公開鍵だけを置き換える。
 
 ### 5. USB をマウントし Secrets を再暗号化
 
@@ -300,21 +289,23 @@ sudo mount -o ro /dev/<partition> /mnt/recovery
 復旧鍵で各ファイルを復号し、登録した公開鍵で暗号化し直す。パスフレーズを求められたら入力する。
 
 ```bash
-cd secrets
-sudo TMPDIR=/run agenix -r -i /mnt/recovery/recovery_key
-sudo chown --reference=agenix-rules.nix ./*.age
-agenix -c
+sudo nix-secrets rekey --flake ".#<target_host>" --storage ./secrets \
+  --identity /mnt/recovery/recovery_key
+sudo chown --reference=secrets/default.nix secrets/*.enc
 ```
 
-両方の鍵で復号できることを確認する。
+復旧用 USB をアンマウントする。
 
 ```bash
-sudo agenix -d user-password.age -i /mnt/recovery/recovery_key > /dev/null
-sudo agenix -d rclone-r2.conf.age -i /mnt/recovery/recovery_key > /dev/null
-sudo agenix -d user-password.age -i /etc/ssh/ssh_host_ed25519_key > /dev/null
-sudo agenix -d rclone-r2.conf.age -i /etc/ssh/ssh_host_ed25519_key > /dev/null
 sudo umount /mnt/recovery
-cd .. # リポジトリのルートに戻る
+```
+
+新しいホスト鍵で各ファイルを復号できることを確認する。
+
+```bash
+sudo age --decrypt -i /etc/ssh/ssh_host_ed25519_key secrets/user-password.enc > /dev/null
+sudo age --decrypt -i /etc/ssh/ssh_host_ed25519_key secrets/rclone-r2.conf.enc > /dev/null
+sudo age --decrypt -i /etc/ssh/ssh_host_ed25519_key secrets/nextcloud-app-password.enc > /dev/null
 ```
 
 ### 6. 本番構成を適用

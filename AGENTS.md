@@ -38,8 +38,12 @@
 
 ## Privileged commands
 
+- Write installation guides, runbooks, and command examples for the person following them at a terminal. Use `sudo` for commands the reader runs with administrator privileges, for example `sudo nix-secrets rekey`. Reserve `pkexec` for commands the agent executes itself.
+
+When the agent executes a command:
+
 - When an authorized task needs administrator privileges, execute the required command yourself through `pkexec` so that the graphical polkit authentication dialog appears. The user will enter their password in that dialog.
-- Do not ask the user to copy and run a command containing `sudo`, and do not request their password in chat or through tool input.
+- Do not hand an authorized operation back to the user as a `sudo` command or request their password in chat or through tool input.
 - Use an absolute executable path with `pkexec`. Keep builds and other unprivileged work under the normal user; elevate only the operation that requires it.
 - The existing `switch` app invokes `sudo` internally. Account for that when executing an authorized switch so authentication uses the graphical dialog rather than handing the command back to the user.
 - If graphical authentication is unavailable or canceled, report the blocker. Do not silently fall back to a terminal password prompt.
@@ -47,7 +51,7 @@
 
 ## Flake app commands
 
-Run commands from the repository root. Use the existing flake apps for build and deployment workflows, following the graphical authentication policy above when privileges are needed.
+Run these flake apps from the repository root. The examples below are for agent execution.
 
 ```sh
 # Build only.

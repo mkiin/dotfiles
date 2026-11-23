@@ -59,7 +59,7 @@ in
     "sdhci_pci"
   ];
   environment.systemPackages = with pkgs; [
-    inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
+    inputs.nix-secrets.packages.${pkgs.stdenv.hostPlatform.system}.default
     git
     age
     vim
