@@ -2,25 +2,6 @@
 
 コマンドの `<...>` は実際の値に置き換える。`<target_host>` には、インストール先に対応する `hosts/` 内のディレクトリ名を使う。
 
-## agenix からの移行
-
-既存の3つの暗号化ファイルは、内容を変更せず `.age` から `.enc` に改名している。
-SSHホスト鍵・復旧鍵・暗号化先は引き継ぐため、移行だけを理由に鍵を作り直す必要はない。
-本番パスワードはユーザー作成前に復号する。Nextcloudの参照先も新しい復号先へ更新する。
-手動で復号済みファイルを参照している場合は、通常の秘密情報は `/run/nix-secrets/secrets/<名前>`、
-ログイン用パスワードは `/run/nix-secrets-for-users/secrets/user-password` を使う。
-
-既存OSで新しいCLIを先に利用する場合は、dotfilesのルートで次のシェルを起動する。
-
-```bash
-nix shell --inputs-from . nix-secrets#default nixpkgs#age
-```
-
-以降のSecrets操作はdotfilesのルートで行う。
-`--flake` には `installer-<target_host>` ではなく本番構成の `<target_host>` を指定する。
-再暗号化の対象はそのホストに宣言されたSecretsのみ（デスクトップは3件、サーバーはパスワード1件）。
-共用ファイルの宛先には他のホストと復旧鍵も残す。
-
 ## nixos-anywhere を利用する場合
 
 ### インストール先のデバイスで USB から NixOS を起動する
@@ -98,7 +79,7 @@ nix shell --inputs-from . nix-secrets#default nixpkgs#age
 6. 操作しているデバイスの SSH ホスト秘密鍵で各ファイルを復号し、`secrets/default.nix` に登録した公開鍵で暗号化し直す。
 
    ```bash
-   pkexec "$(command -v nix-secrets)" rekey --flake "$PWD#<target_host>" --storage "$PWD/secrets"
+   sudo nix-secrets rekey --flake ".#<target_host>" --storage ./secrets
    ```
 
    <details>
@@ -120,7 +101,7 @@ nix shell --inputs-from . nix-secrets#default nixpkgs#age
    復号に USB の秘密鍵を使って、もう一度実行する。
 
    ```bash
-   pkexec "$(command -v nix-secrets)" rekey --flake "$PWD#<target_host>" --storage "$PWD/secrets" \
+   sudo nix-secrets rekey --flake ".#<target_host>" --storage ./secrets \
      --identity /mnt/recovery/recovery_key
    ```
 
@@ -135,7 +116,7 @@ nix shell --inputs-from . nix-secrets#default nixpkgs#age
 7. 暗号化し直したファイルの所有者とグループを `secrets/default.nix` に揃える。
 
    ```bash
-   pkexec "$(command -v chown)" --reference="$PWD/secrets/default.nix" "$PWD"/secrets/*.enc
+   sudo chown --reference=secrets/default.nix secrets/*.enc
    ```
 
 8. 変更した公開鍵と暗号化ファイルを確認する。
@@ -213,7 +194,7 @@ ISO から取得する変更は事前に commit・push しておく。
 
 ### 2. 復旧鍵の初回準備
 
-復旧鍵で3つのSecretsを復号確認済みなら、セクション3へ進む。
+復旧鍵を登録済みなら、手順3へ進む。
 初めて復旧鍵を用意するときは、NixOS がインストール済みで、現在の `.enc` ファイルを復号できるデバイスを使う。そこに復旧用 USB をマウントする。
 以下の `/mnt/recovery` は実際の USB のマウント先に読み替える。
 
@@ -221,20 +202,17 @@ ISO から取得する変更は事前に commit・push しておく。
 ssh-keygen -t ed25519 -a 256 \
   -C nix-secrets-recovery -f /mnt/recovery/recovery_key # パスフレーズを設定
 cat /mnt/recovery/recovery_key.pub
-vim secrets/default.nix # recipientAliases.recovery に公開鍵を登録（desktops に含まれている）
+vim secrets/default.nix # recipientAliases.recovery に公開鍵を登録
 ```
 
-dotfilesのルートで、登録した公開鍵で暗号化し直す。この節の `<target_host>` はデスクトップ構成（`yui` または `yukino`）を指定する。復旧鍵で3つのファイルを復号する。
+dotfiles のルートで、デスクトップのホスト名を `<target_host>` に指定し、登録した公開鍵で暗号化し直す。
 
 ```bash
-pkexec "$(command -v nix-secrets)" rekey --flake "$PWD#<target_host>" --storage "$PWD/secrets"
-pkexec "$(command -v chown)" --reference="$PWD/secrets/default.nix" "$PWD"/secrets/*.enc
-for secret in user-password rclone-r2.conf nextcloud-app-password; do
-  age --decrypt --identity /mnt/recovery/recovery_key "secrets/$secret.enc" > /dev/null || break
-done
+sudo nix-secrets rekey --flake ".#<target_host>" --storage ./secrets
+sudo chown --reference=secrets/default.nix secrets/*.enc
 ```
 
-3つの復号成功を確認し、公開鍵の宣言と `.enc` を commit・push する。
+公開鍵の宣言と再暗号化した `.enc` ファイルを commit・push する。
 復旧秘密鍵は USB に保管し、repo や SSD にコピーしない。
 
 初期パスワードを設定し直す場合：
@@ -308,24 +286,26 @@ sudo mkdir -p /mnt/recovery
 sudo mount -o ro /dev/<partition> /mnt/recovery
 ```
 
-最小OSにはGUI認証エージェントがないため、この段階では既存のインストール手順と同じく `sudo` を使う。
 復旧鍵で各ファイルを復号し、登録した公開鍵で暗号化し直す。パスフレーズを求められたら入力する。
 
 ```bash
-sudo nix-secrets rekey --flake "$PWD#<target_host>" --storage "$PWD/secrets" \
+sudo nix-secrets rekey --flake ".#<target_host>" --storage ./secrets \
   --identity /mnt/recovery/recovery_key
-sudo chown --reference="$PWD/secrets/default.nix" "$PWD"/secrets/*.enc
+sudo chown --reference=secrets/default.nix secrets/*.enc
 ```
 
-3つのファイルを、復旧鍵とホスト鍵のそれぞれで復号できることを確認する。エラーが出た場合は本番構成を適用せず、公開鍵と再暗号化の結果を見直す。
+復旧用 USB をアンマウントする。
 
 ```bash
-for secret in user-password rclone-r2.conf nextcloud-app-password; do
-  sudo age --decrypt --identity /mnt/recovery/recovery_key "secrets/$secret.enc" > /dev/null || break
-  sudo age --decrypt --identity /etc/ssh/ssh_host_ed25519_key \
-    "$PWD/secrets/$secret.enc" > /dev/null || break
-done
 sudo umount /mnt/recovery
+```
+
+新しいホスト鍵で各ファイルを復号できることを確認する。
+
+```bash
+sudo age --decrypt -i /etc/ssh/ssh_host_ed25519_key secrets/user-password.enc > /dev/null
+sudo age --decrypt -i /etc/ssh/ssh_host_ed25519_key secrets/rclone-r2.conf.enc > /dev/null
+sudo age --decrypt -i /etc/ssh/ssh_host_ed25519_key secrets/nextcloud-app-password.enc > /dev/null
 ```
 
 ### 6. 本番構成を適用
