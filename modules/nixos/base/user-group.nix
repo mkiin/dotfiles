@@ -19,7 +19,11 @@
   users.users."${myvars.username}" = {
     home = "/home/${myvars.username}";
     shell = pkgs.zsh;
-    hashedPasswordFile = if options ? age then config.age.secrets."user-password".path else null;
+    hashedPasswordFile =
+      if options.security ? nix-secrets then
+        config.security.nix-secrets.secrets.user-password.path
+      else
+        null;
     isNormalUser = true;
 
     extraGroups = [

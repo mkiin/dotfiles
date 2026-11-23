@@ -20,26 +20,6 @@
         "type": "github"
       }
     },
-    "agenix": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1792507013,
-        "narHash": "sha256-8tKjSQajD3mUND1GaAuaWTcuyUpgcGsh5V+l4ibzC7U=",
-        "owner": "ryantm",
-        "repo": "agenix",
-        "rev": "5e5b88a0c8e56f291a108c2fe9934054d9745b2e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ryantm",
-        "repo": "agenix",
-        "type": "github"
-      }
-    },
     "agent-skills": {
       "inputs": {
         "nixpkgs": [
@@ -781,6 +761,26 @@
         "type": "github"
       }
     },
+    "nix-secrets": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1795379759,
+        "narHash": "sha256-xwQP4fLPmXt67fMc5BaSKgrfsaSbv8tR+Z7kTSn6OqY=",
+        "owner": "unnamed-systems",
+        "repo": "nix-secrets",
+        "rev": "be3ce57ffaa4ad372b983928906344da592579a3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "unnamed-systems",
+        "repo": "nix-secrets",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1794042290,
@@ -985,7 +985,6 @@
     "root": {
       "inputs": {
         "aagl": "aagl",
-        "agenix": "agenix",
         "agent-skills": "agent-skills",
         "cloudflare-skills": "cloudflare-skills",
         "disko": "disko",
@@ -996,6 +995,7 @@
         "hyprland": "hyprland",
         "llm-agents": "llm-agents",
         "nixos-hardware": "nixos-hardware",
+        "nix-secrets": "nix-secrets",
         "nixpkgs": "nixpkgs_5",
         "nvimx": "nvimx",
         "ponytail-skill": "ponytail-skill",

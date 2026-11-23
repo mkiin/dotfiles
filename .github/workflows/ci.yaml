@@ -24,7 +24,10 @@ jobs:
         run: nix flake check --show-trace
 
       - name: Check installer
-        run: nix flake check ./installer --show-trace
+        run: |
+          for host in iroha yui yukino; do
+            nix eval --raw ".#nixosConfigurations.installer-$host.config.system.build.toplevel.drvPath"
+          done
 
   build:
     name: Build NixOS
