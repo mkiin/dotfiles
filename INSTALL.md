@@ -321,7 +321,7 @@ sudo chown --reference="$PWD/secrets/default.nix" "$PWD"/secrets/*.enc
 
 ```bash
 for secret in user-password rclone-r2.conf nextcloud-app-password; do
-  age --decrypt --identity /mnt/recovery/recovery_key "secrets/$secret.enc" > /dev/null || break
+  sudo age --decrypt --identity /mnt/recovery/recovery_key "secrets/$secret.enc" > /dev/null || break
   sudo age --decrypt --identity /etc/ssh/ssh_host_ed25519_key \
     "$PWD/secrets/$secret.enc" > /dev/null || break
 done
