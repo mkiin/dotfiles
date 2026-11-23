@@ -12,14 +12,8 @@
 
   services.vaultwarden = {
     enable = true;
+    host = "iroha";
     domain = "vaultwarden.tailb6cf85.ts.net";
-    backupDir = "/var/backup/vaultwarden";
-    config = {
-      ROCKET_ADDRESS = "127.0.0.1";
-      ROCKET_PORT = 8222;
-      SIGNUPS_ALLOWED = false;
-      INVITATIONS_ALLOWED = false;
-    };
   };
 
   services.tailscale.serve = {

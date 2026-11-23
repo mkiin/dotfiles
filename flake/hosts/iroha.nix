@@ -1,10 +1,15 @@
 {
   inputs,
+  self,
   myvars,
   mylib,
   ...
 }:
 {
+  flake.lib.vaultwarden = {
+    inherit (self.nixosConfigurations.iroha.config.services.vaultwarden) host domain;
+  };
+
   flake.nixosConfigurations.iroha = inputs.nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
 

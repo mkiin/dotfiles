@@ -1,4 +1,7 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
+let
+  cfg = inputs.self.lib.vaultwarden;
+in
 {
   home.packages = with pkgs; [
     gpu-screen-recorder
@@ -36,7 +39,7 @@
     };
 
     plugin_settings."noctalia/bitwarden" = {
-      server_url = "https://vaultwarden.tailb6cf85.ts.net";
+      server_url = "https://${cfg.domain}";
       vault_timeout = "custom";
       vault_timeout_custom_minutes = 15;
       clear_clipboard_seconds = 30;
