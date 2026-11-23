@@ -35,6 +35,13 @@
       ];
     };
 
+    plugin_settings."noctalia/bitwarden" = {
+      server_url = "https://vaultwarden.tailb6cf85.ts.net";
+      vault_timeout = "custom";
+      vault_timeout_custom_minutes = 15;
+      clear_clipboard_seconds = 30;
+    };
+
     plugin_settings."mkiin/screen_recorder" = {
       video_source = "focused";
       replay_enabled = true;

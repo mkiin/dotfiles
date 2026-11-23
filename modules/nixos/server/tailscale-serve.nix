@@ -28,6 +28,7 @@ in
     systemd.services.tailscale-serve.serviceConfig.ExecStart = lib.mkForce (
       pkgs.writeShellScript "tailscale-serve-apply" ''
         set -e
+        ${tailscale} wait --timeout=60s
         ${lib.concatStringsSep "\n" (lib.mapAttrsToList mkServeCommand serve.services)}
       ''
     );

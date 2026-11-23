@@ -10,9 +10,22 @@
     hostName = "nextcloud.tailb6cf85.ts.net";
   };
 
+  services.vaultwarden = {
+    enable = true;
+    domain = "vaultwarden.tailb6cf85.ts.net";
+    backupDir = "/var/backup/vaultwarden";
+    config = {
+      ROCKET_ADDRESS = "127.0.0.1";
+      ROCKET_PORT = 8222;
+      SIGNUPS_ALLOWED = false;
+      INVITATIONS_ALLOWED = false;
+    };
+  };
+
   services.tailscale.serve = {
     enable = true;
     services.nextcloud.endpoints."tcp:443" = "http://127.0.0.1:8080";
+    services.vaultwarden.endpoints."tcp:443" = "http://127.0.0.1:8222";
   };
 
   users.users.${myvars.username}.openssh.authorizedKeys.keys = [

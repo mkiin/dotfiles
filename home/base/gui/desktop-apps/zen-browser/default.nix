@@ -5,6 +5,7 @@
 }:
 
 let
+  bitwardenId = "{446900e4-71c2-419f-a6a7-df9c091e268b}";
   missav-keep-playing = import ./extensions/missav-keep-playing/xpi.nix {
     inherit pkgs;
   };
@@ -24,6 +25,12 @@ in
       DisableTelemetry = true;
       DisableFirefoxStudies = true;
       DisablePocket = true;
+
+      ExtensionSettings.${bitwardenId} = {
+        installation_mode = "force_installed";
+        install_url = "https://addons.mozilla.org/firefox/downloads/latest/bitwarden-password-manager/latest.xpi";
+      };
+      "3rdparty".Extensions.${bitwardenId}.environment.base = "https://vaultwarden.tailb6cf85.ts.net";
 
       EnableTrackingProtection = {
         Value = true;
