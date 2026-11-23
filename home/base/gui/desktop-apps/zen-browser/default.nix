@@ -25,6 +25,7 @@ in
       DisableTelemetry = true;
       DisableFirefoxStudies = true;
       DisablePocket = true;
+      PasswordManagerEnabled = false;
 
       ExtensionSettings.${bitwardenId} = {
         installation_mode = "force_installed";
