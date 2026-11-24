@@ -12,6 +12,7 @@
 {
   networking.hostName = "yukino";
   services.openssh.enable = false;
+  services.input-remapper.enable = true;
   networking.networkmanager.enable = true;
   networking.networkmanager.connectionConfig."ethernet.wake-on-lan" = 64;
 
