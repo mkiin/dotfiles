@@ -14,7 +14,9 @@
           }
         ];
         target_uinput = "keyboard";
-        output_symbol = "toggle(key(KEY_1).wait(500).key(KEY_2).wait(500))";
+        # key() waits once before release and once after. Keep taps visible across game frames.
+        macro_key_sleep_ms = 50;
+        output_symbol = "toggle(key(KEY_1).wait(400))";
       }
     ];
   };
