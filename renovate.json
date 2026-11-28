@@ -1,16 +1,28 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
-  "dependencyDashboard": false,
-  "enabledManagers": ["github-actions"],
+  "dependencyDashboard": { "enabled": false },
+  "enabledManagers": ["github-actions", "nix"],
   "labels": ["dependencies", "automated"],
-  "lockFileMaintenance": {
-    "enabled": false
+  "nix": {
+    "enabled": true,
+    "includePaths": ["flake.nix"],
+    "lockFileMaintenance": {
+      "enabled": true,
+      "timezone": "Asia/Tokyo",
+      "schedule": ["* 4-7 * * *"]
+    }
   },
   "packageRules": [
     {
       "matchManagers": ["github-actions"],
       "automerge": true
+    },
+    {
+      "description": "Update Nix inputs together in the root flake.lock",
+      "matchManagers": ["nix"],
+      "matchDatasources": ["git-refs"],
+      "enabled": false
     }
   ]
 }
