@@ -10,7 +10,7 @@
     "lockFileMaintenance": {
       "enabled": true,
       "timezone": "Asia/Tokyo",
-      "schedule": ["* 9-12 * * *"]
+      "schedule": ["* 4-7 * * *"]
     }
   },
   "packageRules": [
