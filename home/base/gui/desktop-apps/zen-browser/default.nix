@@ -27,6 +27,8 @@ in
       DisableFirefoxStudies = true;
       DisablePocket = true;
       PasswordManagerEnabled = false;
+      AutofillCreditCardEnabled = false;
+      AutofillAddressEnabled = false;
 
       ExtensionSettings.${bitwardenId} = {
         installation_mode = "force_installed";
